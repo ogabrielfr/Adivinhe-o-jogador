@@ -1,0 +1,115 @@
+@import 'tailwindcss';
+
+/* fontes servidas pelo próprio site: sem chamada a terceiros e sem quebrar offline */
+@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/newsreader/standard-italic.css';
+
+@theme {
+  /* relva sob refletor — verde profundo, nunca preto tingido */
+  --color-relva-900: #0c1711;
+  --color-relva-850: #0f1c16;
+  --color-relva-800: #12201a;
+  --color-relva-700: #1b2e25;
+  --color-relva-600: #274034;
+
+  /* linha de cal */
+  --color-cal: #f2f0e9;
+  --color-cal-500: #8fa096;
+  --color-cal-700: #5c6f64;
+
+  /* só três sinais semânticos, usados com parcimônia */
+  --color-acerto: #5bd08a;
+  --color-erro: #e5584a;
+  --color-dica: #e8c547;
+
+  --font-display: 'Archivo Variable', system-ui, sans-serif;
+  --font-sans: 'Archivo Variable', system-ui, sans-serif;
+  --font-nota: 'Newsreader Variable', Georgia, serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-relva-900);
+  color: var(--color-cal);
+  font-family: var(--font-sans);
+  font-stretch: 100%;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+/* --- eixos da Archivo usados como tratamento, não como enfeite --- */
+.t-camisa {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+
+.t-rotulo {
+  font-stretch: 87%;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.t-nota {
+  font-family: var(--font-nota);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* --- foco visível em tudo que recebe teclado --- */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-cal);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+input:focus-visible {
+  outline: none;
+}
+
+/* --- o único momento de movimento orquestrado: a revelação do resultado --- */
+@keyframes assentar {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.assentar {
+  animation: assentar 0.42s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+@keyframes tremer {
+  10%, 90% { transform: translateX(-2px); }
+  30%, 70% { transform: translateX(4px); }
+  50% { transform: translateX(-4px); }
+}
+
+.tremer {
+  animation: tremer 0.4s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
