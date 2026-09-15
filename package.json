@@ -9,7 +9,9 @@
     "validar-dados": "node scripts/validar-dados.mjs",
     "teste-visual": "node scripts/teste-visual.mjs",
     "catalogo": "node scripts/construir-catalogo.mjs",
-    "verificar": "node scripts/verificar-carreiras.mjs"
+    "verificar": "node scripts/verificar-carreiras.mjs",
+    "teste-nomes": "node scripts/teste-nomes.mjs",
+    "coletar": "node scripts/coletar-clubes.mjs"
   },
   "repository": {
     "type": "git",
