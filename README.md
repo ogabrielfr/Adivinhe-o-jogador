@@ -102,18 +102,24 @@ nunca os anos, que é onde erros de dados se escondem.
 
 ## Escudos
 
-`scripts/construir-catalogo.mjs` monta `public/escudos/` e gera
-`src/dados/clubes.ts` a partir de quatro repositórios públicos — **1080 clubes
-de 52 países**, sendo 49 brasileiros. O catálogo é de propósito muito maior que
-o uso atual: o escudo é a informação principal do jogo, e uma carreira costuma
-começar ou terminar num clube pequeno.
+`scripts/construir-catalogo.mjs` monta `public/escudos/` e o catálogo de clubes
+a partir de quatro repositórios públicos **e do Wikidata** — **4521 clubes
+de 66 países**, sendo **1141 brasileiros**. O catálogo é de propósito
+muito maior que o uso atual: o escudo é a informação principal do jogo, e uma
+carreira costuma começar ou terminar num clube pequeno.
+
+O catálogo se divide em dois arquivos, porque o jogo mostra uns dez escudos por
+dia e mandar milhares para o navegador seria peso morto:
+
+- `src/dados/clubes.ts` — só os clubes que algum jogador usa. É o que vai no pacote.
+- `scripts/catalogo-completo.json` — todos. É o índice para consultar ao escrever uma carreira nova.
+
+Ao acrescentar um jogador, rode `npm run catalogo` de novo para que os clubes
+novos dele entrem no pacote.
 
 Um clube que aparece em mais de uma fonte fica com a de melhor qualidade
-(SVG vetorial > PNG transparente > GIF/JPG legado). Os nomes chegam bagunçados
-("vascodagama", "FC Arouca", "Besiktas JK"), então `scripts/clubes-canonicos.mjs`
-fixa o id e o nome em português de todo clube que algum jogador usa. Os escudos
-são reduzidos para 256 px e os SVGs minificados — sem isso o catálogo passaria
-de 40 MB.
+(SVG vetorial > PNG transparente > GIF/JPG legado > Wikidata). Os escudos são
+reduzidos para 256 px e os SVGs minificados.
 
 | Fonte | Cobertura |
 | --- | --- |
@@ -121,14 +127,38 @@ de 40 MB.
 | [hugomiura/escudos-times-brasil-svg](https://github.com/hugomiura/escudos-times-brasil-svg) | Séries A e B do Brasil, em SVG |
 | [FCLOGO/fclogo.top](https://github.com/FCLOGO/fclogo.top) | Japão, MLS, Coreia, Arábia Saudita, México |
 | [sportlogos/football.db.logos](https://github.com/sportlogos/football.db.logos) | Argentina, Uruguai, Chile, Colômbia |
+| Wikidata + Commons + Wikipédia | estaduais brasileiros, Ásia, Golfo, resto do mundo |
+
+### A fonte do Wikidata
+
+`npm run coletar` monta `scripts/clubes-externos.json`, com a URL do escudo de
+cada clube. Ele tenta três origens, nesta ordem:
+
+1. `P154` (logo) no Wikimedia Commons — licença livre declarada;
+2. a imagem de topo do artigo na Wikipédia — pega muito clube cujo escudo está
+   no Commons sem estar ligado ao item, e é de longe o que mais rende;
+3. `P7223` (id do Transfermarkt), montando a URL do escudo no CDN deles.
+
+Dois cuidados que valem conhecer antes de mexer:
+
+- **A imagem de topo do artigo nem sempre é o escudo.** Em clube pequeno
+  costuma ser foto da sede ou do campo, e escudo errado é pior que escudo
+  ausente. `pareceEscudo()` barra pelo formato (brasão é SVG/PNG, foto é JPG) e
+  pelo nome do arquivo.
+- **Clube homônimo é a regra, não a exceção.** Há dez Guaranis e cinco
+  Botafogos, de cidades diferentes. Eles entram no catálogo chaveados pelo QID,
+  fora da deduplicação por nome — que junta "vasco" e "vascodagama" e
+  destruiria estes. O id sai desambiguado pela cidade quando colide.
 
 Clube sem escudo em nenhuma das fontes não quebra nada: `Escudo.tsx` desenha um
-brasão com as cores e as iniciais do clube. Hoje isso vale para 12 clubes em
-uso — Superliga Chinesa, Golfo e divisões de acesso europeias.
+brasão com as cores e as iniciais do clube.
 
 Os escudos são marcas registradas dos respectivos clubes, usados aqui para
-identificá-los. A camada de imagem está isolada num único componente, então
-trocar a origem não encosta no resto do jogo.
+identificá-los. As origens não têm o mesmo estatuto — 1473 vêm do Commons
+com licença livre, 1239 de upload local da Wikipédia marcado "Conteúdo
+restrito" e 1801 do Transfermarkt, sem licença. O campo `licenca` de
+`scripts/clubes-externos.json` registra qual é qual. A camada de imagem está
+isolada num único componente, então trocar a origem não encosta no resto do jogo.
 
 ## Publicação
 

@@ -174,10 +174,14 @@ const TETO_ESCUDO = 3 * 1024 * 1024
 
 async function baixar(url, destino) {
   if (existsSync(destino) && statSync(destino).size > 0) return true
-  for (let tentativa = 0; tentativa < 3; tentativa++) {
+  for (let tentativa = 0; tentativa < 5; tentativa++) {
     try {
       const r = await fetch(url, { headers: { 'User-Agent': AGENTE }, redirect: 'follow' })
-      if (r.status === 429 || r.status === 503) { await espera(2000 * 2 ** tentativa); continue }
+      if (r.status === 429 || r.status === 503) {
+        const pedido = Number(r.headers.get('retry-after')) * 1000
+        await espera(Math.min(pedido || 1500 * 2 ** tentativa, 20000))
+        continue
+      }
       if (!r.ok) return false
       // brasão não pesa megabytes; o que pesa é foto entrando por engano
       const anunciado = Number(r.headers.get('content-length'))
@@ -245,22 +249,37 @@ if (existsSync(ARQ_EXTERNOS)) {
    *    em latência, então em série isto passaria de uma hora. Com oito o
    *    Wikimedia começou a devolver 429; cinco passa limpo.
    */
-  const PARALELAS = 5
-  let proximo = 0, baixados = 0, falhas = 0
-  console.log(`\nbaixando escudos do Wikidata (${fila.length} clubes, ${repetidos} já no catálogo)...`)
+  /**
+   * Duas filas, uma por host, porque os limites são muito diferentes. O
+   * Wikimedia devolve 429 cedo — dividimos o IP de saída com outros — e o CDN
+   * do Transfermarkt não reclama. Numa fila só, todos os workers ficavam
+   * presos no backoff do Wikimedia e os mil e oitocentos do Transfermarkt,
+   * que saem em minutos, esperavam junto.
+   */
+  const ehWikimedia = (u) => u.includes('wikimedia.org') || u.includes('wikipedia.org')
+  const filas = [
+    { itens: fila.filter((c) => ehWikimedia(c.url)), paralelas: 2, i: 0 },
+    { itens: fila.filter((c) => !ehWikimedia(c.url)), paralelas: 6, i: 0 },
+  ]
+
+  let baixados = 0, falhas = 0
+  console.log(`\nbaixando escudos do Wikidata (${fila.length} clubes, ${repetidos} já no catálogo)`)
+  console.log(`  ${filas[0].itens.length} no Wikimedia (2 por vez) | ${filas[1].itens.length} no Transfermarkt (6 por vez)`)
 
   await Promise.all(
-    Array.from({ length: PARALELAS }, async () => {
-      while (proximo < fila.length) {
-        const c = fila[proximo++]
-        if (await baixar(c.url, c.arquivo)) {
-          c.ok = true
-          if (++baixados % 500 === 0) console.log(`  ${baixados}/${fila.length}`)
-        } else {
-          falhas++
+    filas.flatMap((f) =>
+      Array.from({ length: f.paralelas }, async () => {
+        while (f.i < f.itens.length) {
+          const c = f.itens[f.i++]
+          if (await baixar(c.url, c.arquivo)) {
+            c.ok = true
+            if (++baixados % 400 === 0) console.log(`  ${baixados}/${fila.length}`)
+          } else {
+            falhas++
+          }
         }
-      }
-    }),
+      }),
+    ),
   )
 
   // 3. registra na ordem original, fora da chave de deduplicação
@@ -296,10 +315,42 @@ for (const id of DESCARTAR) {
   if (entrada) candidatos.delete(entrada[0])
 }
 
-// clubes que nenhuma fonte cobre entram sem arquivo: o jogo desenha o brasão de reserva
+// clubes que nenhuma fonte cobre entram sem arquivo: o jogo desenha o brasão de
+// reserva. Só entram se continuarem descobertos — com o Wikidata vários deles
+// passaram a ter escudo de verdade, e o de reserva viraria um id duplicado.
 for (const [id, dados] of Object.entries(SEM_ESCUDO)) {
+  if ([...candidatos.values()].some((c) => c.id === id)) continue
   const c = { id, nome: dados.nome, pais: dados.pais, cores: dados.cores, fonte: 'reserva', qualidade: 9 }
   candidatos.set(chaveDedup(c), c)
+}
+
+/**
+ * O id vira nome de arquivo do escudo e chave do `CLUBE_POR_ID`, então dois
+ * clubes com o mesmo id significam um escudo sobrescrevendo o outro. Isso já
+ * acontecia com "santos": o Santos brasileiro e o Santos Laguna mexicano
+ * apontavam para o mesmo arquivo. A chave de deduplicação não pega porque ela
+ * separa por país, e o id não.
+ *
+ * O clube fixado em CANONICOS fica com o id — é o que os jogadores usam. Os
+ * outros ganham o sufixo do país.
+ */
+const porId = new Map()
+for (const c of candidatos.values()) {
+  if (!porId.has(c.id)) porId.set(c.id, [])
+  porId.get(c.id).push(c)
+}
+for (const [id, grupo] of porId) {
+  if (grupo.length < 2) continue
+  const canonico = CANONICOS[id]
+  const fica = grupo.find((c) => canonico && c.pais === canonico.pais) ?? grupo[0]
+  for (const c of grupo) {
+    if (c === fica) continue
+    let novo = `${c.id}-${c.pais.toLowerCase()}`
+    let n = 2
+    while (porId.has(novo) || [...candidatos.values()].some((o) => o.id === novo)) novo = `${c.id}-${c.pais.toLowerCase()}-${n++}`
+    console.log(`  id repetido "${id}": ${c.nome} [${c.pais}] vira "${novo}"`)
+    c.id = novo
+  }
 }
 
 // ----------------------------------------------------------- 6. otimização
@@ -316,8 +367,10 @@ const CONFIG_SVGO = {
     {
       name: 'preset-default',
       params: {
+        // removeViewBox saiu do preset-default no svgo 4: declarar aqui só
+        // gerava um aviso por arquivo, milhares deles. O viewBox é preservado
+        // por padrão, que é o que o escudo precisa para escalar.
         overrides: {
-          removeViewBox: false,
           convertPathData: { floatPrecision: 1 },
           cleanupNumericValues: { floatPrecision: 1 },
         },

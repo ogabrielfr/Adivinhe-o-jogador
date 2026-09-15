@@ -33,111 +33,130 @@ Site estático (Vite + React + TS + Tailwind), sem back-end e sem chave de API.
 
 ---
 
+## Rede: resolvido, com uma ressalva permanente
+
+O ambiente está em **Full** e o acesso funciona. Os dois `curl` da sessão
+anterior:
+
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" https://www.ogol.com.br          # 403
+curl -s -o /dev/null -w "%{http_code}\n" https://tmssl.akamaized.net/images/wappen/head/614.png  # 200
+```
+
+**O 403 do Ogol não é mais o ambiente — é o Cloudflare do próprio Ogol.** A
+resposta traz `cf-mitigated: challenge`, e a interstitial "Um momento…" não
+resolve nem em Chromium real com o proxy configurado (testado, 60s parado). O
+zerozero, do mesmo grupo, faz igual. O Transfermarkt devolve 405.
+
+Trocar de ambiente não muda isso. Não tente de novo por esse caminho.
+
+O que responde 200 da mesma máquina: `tmssl.akamaized.net`, Wikipédia,
+Wikidata (SPARQL e API), Commons e `ogabrielfr.github.io`.
+
+---
+
 ## Pronto e testado
 
 - Jogo completo: tela inicial, partida, derrota, vitória, compartilhamento estilo Wordle, streak e estatísticas em `localStorage`.
 - Sorteio diário determinístico por data, sem servidor, com reembaralhamento por ciclo para ninguém repetir antes da volta completa.
-- Catálogo de **1075 clubes de 52 países**, gerado por `npm run catalogo` a partir de quatro repositórios públicos, com escudos otimizados para 256 px (13 MB no total).
+- **Conferência das 45 carreiras contra o Wikidata**, rodada e relatada (ver abaixo).
+- **Catálogo de 4521 clubes de 66 países**, sendo 1141 brasileiros, contra 44 antes.
 - `npm run validar-dados` confere integridade e recusa dica que entregue nome de jogador ou clube visível.
+- `npm run teste-nomes` testa o comparador de nomes de clube.
 - `npm run teste-visual` roda a partida ponta a ponta no Chromium e salva capturas.
 
 ---
 
 ## Pontos em aberto, por prioridade
 
-### 1. Nenhuma carreira foi conferida (bloqueante)
+### 1. Corrigir as carreiras (a conferência já apontou o quê)
 
-**As 45 carreiras foram escritas de memória do modelo e há erros comprovados.**
-O cliente encontrou dois: Džeko sem o início na Bósnia e na Tchéquia e sem
-Fiorentina/Schalke; Keirrison sem a volta ao Coritiba, Londrina e Arouca.
-Ambos foram corrigidos com o que o cliente informou — **nada foi inventado para
-completar as lacunas**, então a carreira do Džeko segue incompleta no início de
-propósito.
+`npm run verificar` rodou contra o Wikidata. Resultado: **10 de 45 conferem,
+35 divergem, 0 erros de busca** — todos os 45 jogadores foram encontrados.
 
-Errar carreira é, nas palavras do cliente, "o pior erro possível para a UX desse
-jogo". Nenhuma outra correção deve ser feita de memória.
+Nenhuma correção foi aplicada. O relatório é a entrada de trabalho.
 
-**O que existe:** `npm run verificar` compara cada carreira com o Ogol e imprime
-as divergências sem alterar nada. **O script nunca rodou** — a sessão anterior
-estava num ambiente com egresso restrito e o Ogol devolvia 403. Os seletores do
-parser em `clubesDaPagina()` foram escritos a partir da estrutura pública do
-site e ainda não viram uma resposta real; espere ajustá-los na primeira execução.
-
-**Quando a conferência passar:** marque cada jogador com `verificado: true` e
-ligue `EXIGIR_VERIFICACAO` em `src/logica/diario.ts`. O sorteio passa a ignorar
-quem não foi conferido. Hoje está desligado porque ligar esvaziaria os três
-níveis.
-
-### 2. Cobertura de clubes brasileiros é insuficiente
-
-Hoje são **44 brasileiros**, e o cliente apontou com razão que é pouco. Um teste
-com 36 clubes que uma carreira brasileira comum atravessa teve **6 de cobertura**.
-
-Faltam, entre outros: Fortaleza, Cuiabá, Juventude, Guarani, Ituano, Mirassol,
-RB Bragantino, Atlético-GO, Remo, CSA, Novorizontino, Brusque, Confiança,
-Botafogo-SP, São Caetano, Inter de Limeira, XV de Piracicaba, Volta Redonda.
-
-**O que o cliente quer:** todas as primeiras divisões estaduais dos 27 estados,
-mais as divisões de acesso dos estados prioritários (SP, RJ, MG, RS, PR, SC, BA).
-Estimativa: 500 a 600 clubes brasileiros, contra os 44 de hoje.
-
-Isso importa porque **o escudo é a informação principal do jogo** e uma carreira
-costuma começar ou terminar num clube pequeno.
-
-**Fontes avaliadas:**
-
-| Fonte | Brasileiros | Serve? |
+| Categoria | Jogadores | O que fazer |
 | --- | --- | --- |
-| `hugomiura/escudos-times-brasil-svg` | 44 | Em uso. Séries A e B de 2015, em SVG |
-| `sportlogos/football.db.logos` | 24 | Em uso. GIF/JPG legado |
-| `salimt/football-datasets` (`team_details.csv`) | 70 | **Não resolve** — só Série A e B, sem Inter de Limeira |
-| Ogol / Transfermarkt, raspando as competições estaduais | ~600 | **Melhor caminho.** Ver abaixo |
+| `falta no nosso dado` | 33 | Caso grave. A fonte tem clube que não temos |
+| `fora de ordem` | 5 | Cronologia trocada |
+| `não confirmado pela fonte` | 8 | **Cuidado.** Costuma ser lacuna do Wikidata |
 
-`team_details.csv` (596 KB, sem LFS) traz 2175 clubes do mundo com `logo_url`
-apontando para `tmssl.akamaized.net`. Resolve bem a cobertura mundial e vale
-puxar, mas **não** resolve os estaduais brasileiros.
+**Dois erros de alta confiança, para começar por eles:**
 
-Para estaduais, o caminho é raspar as páginas de competição do Ogol ou do
-Transfermarkt (Paulista A1/A2/A3, Carioca, Mineiro, Gaúcho e assim por diante) e
-alimentar `scripts/construir-catalogo.mjs` com uma quinta fonte.
+- **Elkeson tem `gremio` na lista e ele nunca jogou no Grêmio.** Clube inventado.
+- **Drenthe tem `kayserispor`; a fonte diz Kayseri Erciyesspor.** São clubes
+  diferentes da mesma cidade.
 
-### 3. Rede
+**O padrão mais comum é falta de começo e de fim de carreira** — exatamente o
+que a memória do modelo corta. Džeko sem Željezničar, Teplice e Ústí nad Labem;
+Zidane sem o Cannes; Ibrahimović sem o Malmö; Drogba sem Le Mans e Guingamp;
+Thiago Silva sem Barcelona-SC, Pedrabranca, Juventude e Dínamo de Moscou.
 
-A sessão anterior rodou com egresso **Trusted**, que bloqueava tudo que
-interessa: Ogol, zerozero, Transfermarkt, Wikipédia, `tmssl.akamaized.net`, o CDN
-dos datasets e até `ogabrielfr.github.io` (não dava para conferir o site
-publicado). O cliente ia mudar o ambiente para **Full**.
+**"Não confirmado" não é sinônimo de errado.** O Arouca do Keirrison, que o
+cliente confirmou à mão, não está no Wikidata. Só remova clube com uma segunda
+fonte na mão.
 
-**Confirme antes de começar** que o acesso funciona:
+Quando a conferência passar: marque `verificado: true` e ligue
+`EXIGIR_VERIFICACAO` em `src/logica/diario.ts`.
 
-```bash
-curl -s -o /dev/null -w "%{http_code}\n" https://www.ogol.com.br
-curl -s -o /dev/null -w "%{http_code}\n" https://tmssl.akamaized.net/images/wappen/head/614.png
-```
+### 2. Onze clubes em uso ainda mostram brasão de reserva
 
-`200` nos dois significa que os itens 1 e 2 estão desbloqueados.
+`al-gharafa`, `colo-colo`, `shanghai-sipg`, `shandong-luneng`,
+`birmingham-city`, `brescia`, `guangzhou-evergrande`, `al-jazira`, `hercules`,
+`reading`, `sheffield-wednesday`.
+
+Eram 12 antes, e não é bug — `Escudo.tsx` desenha um brasão com as cores e as
+iniciais. Mas escudo é a informação principal do jogo, e agora ficou barato
+resolver: são quase todos de divisão de acesso europeia, e bastou eu não ter
+posto Espanha, Inglaterra, Itália, Portugal e Holanda em
+`scripts/paises-alvo.mjs` (elas já vinham do repositório europeu, que só cobre
+a temporada atual e o histórico recente).
+
+Para resolver: acrescente esses países a `paises-alvo.mjs`, rode
+`npm run coletar` e `npm run catalogo`. Falta um detalhe — o clube novo entraria
+com id derivado do nome (`hercules-cf`), não com o id curado (`hercules`) que os
+jogadores usam, então os de `SEM_ESCUDO` precisam procurar o escudo novo pelo
+nome. Pesa também no tamanho do repositório (ver abaixo).
+
+### 3. Tamanho do repositório
+
+`public/escudos/` foi de 13 MB para **64 MB** com os 4521 clubes. Está dentro
+dos limites do GitHub Pages com folga, e o pacote enviado ao navegador **não**
+cresceu — encolheu, porque `clubes.ts` passou a levar só os 101 clubes em uso
+(81,7 kB gzipados no total, contra ~99 kB antes).
+
+O custo é de repositório, não de carregamento: clone mais lento e 64 MB
+publicados a cada push. Se incomodar, o corte natural é gravar em
+`public/escudos/` só os clubes em uso e deixar o resto como metadado em
+`scripts/catalogo-completo.json`, que já tem a URL de origem de cada um.
+Deixei vendorizado porque o combinado era catálogo maior que o uso e porque o
+acesso a essas fontes se mostrou frágil.
 
 ### 4. Volume da biblioteca
 
-O cliente quer uma "biblioteca gigante" para variedade longa. A onda 1 tem 45
-jogadores (15 por nível), pensada para validar formato antes de escalar. O
-combinado era chegar a ~300 e depois a ~900 **depois** que ele testasse.
-
-Não escale antes de resolver o item 1: multiplicar carreiras não conferidas
-multiplica o problema.
+Continuam 45 jogadores (15 por nível). O combinado era chegar a ~300 e depois a
+~900 **depois** que o cliente testasse. Com o catálogo grande, o que travava do
+lado dos escudos deixou de travar: falta escrever carreira, e agora há como
+conferir cada uma antes de publicar.
 
 ### 5. Decisões de produto pendentes
 
-- **O nome do clube fica escondido**, revelado ao tocar no escudo e sempre no fim da partida. Foi escolha minha, ainda não validada pelo cliente.
+- **O nome do clube fica escondido**, revelado ao tocar no escudo e sempre no fim da partida. Escolha minha, ainda não validada pelo cliente.
 - **As respostas estão no pacote enviado ao navegador** (mesma escolha do Wordle original). Se virar problema, a saída é mover o sorteio para um endpoint.
 - **O jogo está no ar com os dados não conferidos.** Perguntei ao cliente se ele prefere ligar `EXIGIR_VERIFICACAO` e pôr uma tela de "biblioteca em conferência" até validarmos, e ele não respondeu — vale retomar.
+- **Licença dos escudos.** O catálogo mistura três origens: 1473 com licença livre declarada no Commons, 1239 de upload local da Wikipédia marcado "Conteúdo restrito" (uso justo) e 1801 do Transfermarkt, sem licença. Escudo é marca do clube em qualquer caso, e o projeto já os usava para identificação, mas agora a distinção está explícita no campo `licenca` de `scripts/clubes-externos.json`, caso o cliente queira restringir.
 
 ---
 
 ## Armadilhas conhecidas
 
-- **`npm run catalogo` demora ~2 minutos** (processa 1075 imagens com sharp). Rode em background.
-- **`src/dados/clubes.ts` é gerado.** Não edite à mão. Id e nome em português de clube em uso vivem em `scripts/clubes-canonicos.mjs`.
-- **Os nomes chegam bagunçados das fontes** ("vascodagama", "Besiktas JK", "FC Arouca"). A deduplicação ignora hífens e siglas societárias, mas não pega tudo — há uma lista `DESCARTAR` explícita para o resto.
+- **`npm run catalogo` demora bastante** (baixa milhares de imagens e processa com sharp). Rode em background. O `.cache/` guarda os originais, então a segunda vez é rápida.
+- **`npm run coletar` demora ~25 min** e refaz `scripts/clubes-externos.json` do zero. Só precisa rodar quando quiser ampliar países ou atualizar a fonte.
+- **`src/dados/clubes.ts` é gerado e só tem os clubes em uso.** O catálogo completo, para consultar ao escrever carreira nova, está em `scripts/catalogo-completo.json`. Ao acrescentar jogador, rode `npm run catalogo` de novo para os clubes novos entrarem no pacote.
+- **Clube homônimo é a armadilha do Brasil.** Há dez Guaranis e cinco Botafogos no catálogo, de cidades diferentes. O id sai desambiguado pela cidade quando o nome colide. Confira o id antes de usar.
+- **Imagem de topo de artigo da Wikipédia nem sempre é o escudo** — em clube pequeno costuma ser foto da sede. `pareceEscudo()` em `scripts/wikidata.mjs` barra isso pelo formato e pelo nome do arquivo.
+- **`pilicense=free` da API do MediaWiki não filtra o que promete**: continua devolvendo arquivo local marcado "Conteúdo restrito". A classificação confiável é pelo host da URL.
+- **Os nomes chegam bagunçados das fontes.** `scripts/nomes-clube.mjs` concentra a comparação, com teste em `npm run teste-nomes`. Se for mexer, rode o teste: ele guarda casos que já quebraram ("Bayern" × "Bayer 04 Leverkusen", "Botafogo" × "Botafogo-SP").
 - **`padding` percentual em CSS se resolve contra a largura do elemento pai**, não do próprio elemento. Isso já quebrou os escudos uma vez.
-- **12 clubes em uso não têm escudo em fonte nenhuma** (Superliga Chinesa, Golfo, divisões de acesso europeias). `Escudo.tsx` desenha um brasão com as cores e as iniciais. Não é bug.
+- **Clube sem escudo em fonte nenhuma não é bug**: `Escudo.tsx` desenha um brasão com as cores e as iniciais.
