@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { ESCUDOS } from '../dados/escudos'
+import { CLUBES } from '../dados/clubes'
 import { Escudo } from './Escudo'
 
 /**
@@ -9,7 +9,7 @@ import { Escudo } from './Escudo'
  */
 export function ParedeDeEscudos({ quantidade = 28 }: { quantidade?: number }) {
   const ids = useMemo(() => {
-    const todos = Object.keys(ESCUDOS)
+    const todos = CLUBES.filter((c) => c.escudo).map((c) => c.id)
     for (let i = todos.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
       ;[todos[i], todos[j]] = [todos[j], todos[i]]

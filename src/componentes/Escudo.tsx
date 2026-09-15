@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import { ESCUDOS } from '../dados/escudos'
 import { CLUBE_POR_ID } from '../dados/clubes'
 
 const BASE = import.meta.env.BASE_URL
@@ -59,7 +58,7 @@ export function Escudo({
   /** escudos decorativos só carregam quando entram em cena */
   adiar?: boolean
 }) {
-  const arquivo = ESCUDOS[id]
+  const arquivo = CLUBE_POR_ID.get(id)?.escudo
   return (
     <span
       className={`grid place-items-center rounded-xl bg-[#EDEBE4] shadow-[inset_0_0_0_1px_rgba(12,23,17,0.12)] ${className}`}

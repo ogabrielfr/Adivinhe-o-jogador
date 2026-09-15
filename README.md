@@ -18,7 +18,8 @@ npm run dev
 | `npm run dev` | sobe o servidor de desenvolvimento |
 | `npm run build` | verifica os tipos e gera `dist/` |
 | `npm run validar-dados` | confere a integridade da biblioteca de jogadores |
-| `npm run escudos` | rebaixa os escudos e regenera `src/dados/escudos.ts` |
+| `npm run catalogo` | rebaixa os escudos e regenera `src/dados/clubes.ts` |
+| `npm run verificar` | confere as carreiras contra fonte externa |
 | `npm run teste-visual` | roda a partida ponta a ponta no Chromium e salva capturas |
 
 O teste visual precisa do Chromium do Playwright (`npx playwright install chromium`)
@@ -50,22 +51,46 @@ A dica revela um fato marcante sem citar nome, clube, posição ou ano — o
 `validar-dados` recusa uma dica que mencione o nome do jogador ou de um clube
 que está à mostra.
 
+### Conferência das carreiras
+
+> **Nenhuma carreira desta onda foi conferida contra fonte externa.** Elas foram
+> escritas de memória, e já se sabe que isso produz erro: faltava o início de
+> Džeko na Bósnia e na Tchéquia, e a volta de Keirrison ao Coritiba.
+
+`npm run verificar` compara cada carreira com o Ogol e imprime as divergências,
+sem alterar nada. O script existe mas **nunca rodou**: o ambiente onde foi
+escrito bloqueia ogol.com.br, transfermarkt, zerozero e wikipedia no proxy de
+saída (HTTP 403), então os seletores do parser ainda não viram uma resposta
+real.
+
+Quando a conferência passar, marque cada jogador com `verificado: true` e ligue
+`EXIGIR_VERIFICACAO` em `src/logica/diario.ts` — o sorteio passa a ignorar
+quem não foi conferido.
+
 Os níveis são julgamento editorial sobre o que o torcedor brasileiro reconhece:
 
 - **Fácil** — reconhecimento imediato, carreira curta e icônica.
 - **Intermediário** — você conhece, mas precisa pensar.
 - **Difícil** — carreira errante ou jogador que o tempo apagou.
 
-Clubes aparecem só uma vez por jogador, mesmo quando houve uma segunda
-passagem, e a lista guarda apenas os clubes — nunca os anos, que é onde erros
-de dados se escondem.
+Um clube repetido na lista significa que o jogador voltou a ele, e o escudo
+aparece de novo na posição certa da carreira. A lista guarda apenas os clubes,
+nunca os anos, que é onde erros de dados se escondem.
 
 ## Escudos
 
-`scripts/baixar-escudos.mjs` monta `public/escudos/` a partir de quatro
-repositórios públicos e gera o mapa `src/dados/escudos.ts`. O casamento entre
-clube e arquivo é automático por nome, com um mapa de exceções em
-`scripts/fontes-escudos.mjs`.
+`scripts/construir-catalogo.mjs` monta `public/escudos/` e gera
+`src/dados/clubes.ts` a partir de quatro repositórios públicos — **1080 clubes
+de 52 países**, sendo 49 brasileiros. O catálogo é de propósito muito maior que
+o uso atual: o escudo é a informação principal do jogo, e uma carreira costuma
+começar ou terminar num clube pequeno.
+
+Um clube que aparece em mais de uma fonte fica com a de melhor qualidade
+(SVG vetorial > PNG transparente > GIF/JPG legado). Os nomes chegam bagunçados
+("vascodagama", "FC Arouca", "Besiktas JK"), então `scripts/clubes-canonicos.mjs`
+fixa o id e o nome em português de todo clube que algum jogador usa. Os escudos
+são reduzidos para 256 px e os SVGs minificados — sem isso o catálogo passaria
+de 40 MB.
 
 | Fonte | Cobertura |
 | --- | --- |
@@ -75,8 +100,8 @@ clube e arquivo é automático por nome, com um mapa de exceções em
 | [sportlogos/football.db.logos](https://github.com/sportlogos/football.db.logos) | Argentina, Uruguai, Chile, Colômbia |
 
 Clube sem escudo em nenhuma das fontes não quebra nada: `Escudo.tsx` desenha um
-brasão com as cores e as iniciais do clube. Hoje isso vale para 12 dos 99
-clubes — principalmente Superliga Chinesa e divisões de acesso europeias.
+brasão com as cores e as iniciais do clube. Hoje isso vale para 12 clubes em
+uso — Superliga Chinesa, Golfo e divisões de acesso europeias.
 
 Os escudos são marcas registradas dos respectivos clubes, usados aqui para
 identificá-los. A camada de imagem está isolada num único componente, então

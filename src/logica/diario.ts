@@ -49,10 +49,19 @@ function embaralhar<T>(lista: T[], s: number): T[] {
   return saida
 }
 
+/**
+ * Quando ligado, só jogadores com a carreira conferida contra fonte externa
+ * entram no sorteio. Está desligado porque a conferência ainda não rodou —
+ * ligar agora deixaria os três níveis vazios.
+ */
+export const EXIGIR_VERIFICACAO = false
+
+const elegivel = (j: Jogador) => !EXIGIR_VERIFICACAO || j.verificado === true
+
 const POR_NIVEL: Record<Nivel, Jogador[]> = {
-  facil: JOGADORES.filter((j) => j.nivel === 'facil'),
-  intermediario: JOGADORES.filter((j) => j.nivel === 'intermediario'),
-  dificil: JOGADORES.filter((j) => j.nivel === 'dificil'),
+  facil: JOGADORES.filter((j) => j.nivel === 'facil' && elegivel(j)),
+  intermediario: JOGADORES.filter((j) => j.nivel === 'intermediario' && elegivel(j)),
+  dificil: JOGADORES.filter((j) => j.nivel === 'dificil' && elegivel(j)),
 }
 
 /**

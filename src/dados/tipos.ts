@@ -15,13 +15,15 @@ export const DESCRICAO_NIVEL: Record<Nivel, string> = {
 }
 
 export interface Clube {
-  /** slug estável — também é o nome do arquivo do escudo */
+  /** slug estável, fixado em scripts/clubes-canonicos.mjs para os clubes em uso */
   id: string
   nome: string
-  /** ISO do país, usado no rótulo e no escudo de reserva */
+  /** sigla do país */
   pais: string
-  /** cores oficiais [primária, secundária] — usadas quando não há escudo real */
-  cores: [string, string]
+  /** arquivo em public/escudos; ausente quando nenhuma fonte cobre o clube */
+  escudo?: string
+  /** cores oficiais [primária, secundária], só nos clubes sem escudo */
+  cores?: [string, string]
 }
 
 export interface Jogador {
@@ -31,8 +33,18 @@ export interface Jogador {
   /** outras grafias aceitas como acerto (sem acento e caixa são tratados no código) */
   apelidos: string[]
   nivel: Nivel
-  /** ids de clube em ordem cronológica de carreira */
+  /**
+   * Ids de clube em ordem cronológica. Um clube repetido significa que o
+   * jogador voltou a ele, e o escudo aparece de novo na posição certa.
+   */
   clubes: string[]
   /** uma frase que revela algo marcante sem entregar nome, clube ou posição */
   dica: string
+  /**
+   * Carreira conferida contra uma fonte externa. Jogador sem esta marca não
+   * entra no sorteio diário — ver scripts/verificar-carreiras.mjs.
+   */
+  verificado?: boolean
+  /** de onde veio a conferência, quando houve */
+  fonte?: string
 }

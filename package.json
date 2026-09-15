@@ -6,9 +6,10 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "escudos": "node scripts/baixar-escudos.mjs",
     "validar-dados": "node scripts/validar-dados.mjs",
-    "teste-visual": "node scripts/teste-visual.mjs"
+    "teste-visual": "node scripts/teste-visual.mjs",
+    "catalogo": "node scripts/construir-catalogo.mjs",
+    "verificar": "node scripts/verificar-carreiras.mjs"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,8 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
     "playwright": "^1.63.0",
+    "sharp": "^0.35.4",
+    "svgo": "^4.1.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.3.0"

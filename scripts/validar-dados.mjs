@@ -11,7 +11,10 @@ const usados = new Set()
 
 for (const j of JOGADORES) {
   if (j.clubes.length < 2) erros.push(`${j.id}: menos de 2 clubes`)
-  if (new Set(j.clubes).size !== j.clubes.length) erros.push(`${j.id}: clube repetido`)
+  // clube repetido é válido (o jogador voltou), mas repetir em seguida não é
+  for (let i = 1; i < j.clubes.length; i++) {
+    if (j.clubes[i] === j.clubes[i - 1]) erros.push(`${j.id}: "${j.clubes[i]}" repetido em sequência`)
+  }
   for (const c of j.clubes) {
     usados.add(c)
     if (!idsClube.has(c)) erros.push(`${j.id}: clube desconhecido "${c}"`)
@@ -42,8 +45,8 @@ for (const [k, lista] of porPalpite) {
   if (lista.size > 1) avisos.push(`palpite ambíguo "${k}" → ${[...lista].join(', ')}`)
 }
 
-const orfaos = CLUBES.filter((c) => !usados.has(c.id)).map((c) => c.id)
-if (orfaos.length) avisos.push(`clubes no catálogo sem nenhum jogador: ${orfaos.join(', ')}`)
+// o catálogo é propositalmente maior que o uso: serve de biblioteca para novos jogadores
+const naoVerificados = JOGADORES.filter((j) => !j.verificado)
 
 // escudos presentes em disco
 const dir = new URL('../public/escudos/', import.meta.url)
@@ -58,6 +61,11 @@ function normalizar(s) {
 }
 
 console.log(`jogadores: ${JOGADORES.length} | clubes no catálogo: ${CLUBES.length} | clubes em uso: ${usados.size}`)
+console.log(
+  naoVerificados.length
+    ? `  CARREIRAS NÃO CONFERIDAS: ${naoVerificados.length}/${JOGADORES.length} — ${naoVerificados.map((j) => j.id).join(', ')}`
+    : '  todas as carreiras conferidas contra fonte externa',
+)
 for (const a of avisos) console.log(`  aviso  ${a}`)
 for (const e of erros) console.log(`  ERRO   ${e}`)
 if (erros.length) {

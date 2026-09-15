@@ -8,6 +8,13 @@ import type { Jogador } from './tipos'
  *   cronológica, sem repetir um clube ao qual o jogador voltou.
  * - `dica` revela um fato marcante sem citar nome, clube, posição ou ano.
  * - `apelidos` não precisa cobrir acentuação nem caixa: a comparação normaliza.
+ * - `verificado: true` marca a carreira conferida contra fonte externa.
+ *
+ * ATENÇÃO: nenhuma carreira desta onda foi conferida contra fonte externa — o
+ * ambiente não alcança Ogol, Transfermarkt nem Wikipédia. Os erros já
+ * encontrados (Džeko sem o início na Bósnia e na Tchéquia, Keirrison sem a
+ * volta ao Coritiba) indicam que outros devem existir. Rodar
+ * scripts/verificar-carreiras.mjs antes de confiar nesta lista.
  */
 export const JOGADORES: Jogador[] = [
   // ==================================================================
@@ -190,7 +197,7 @@ export const JOGADORES: Jogador[] = [
     nome: 'Edin Džeko',
     apelidos: ['dzeko', 'edin dzeko'],
     nivel: 'intermediario',
-    clubes: ['wolfsburg', 'manchester-city', 'roma', 'inter', 'fenerbahce'],
+    clubes: ['wolfsburg', 'manchester-city', 'roma', 'inter', 'fenerbahce', 'fiorentina', 'schalke'],
     dica: 'É o maior artilheiro da história de uma seleção dos Bálcãs e ganhou o apelido de Diamante na terra onde nasceu.',
   },
   {
@@ -329,8 +336,8 @@ export const JOGADORES: Jogador[] = [
     id: 'keirrison',
     nome: 'Keirrison',
     apelidos: ['keirrison', 'keirrison de souza carneiro'],
-    nivel: 'dificil',
-    clubes: ['coritiba', 'palmeiras', 'barcelona', 'benfica', 'fiorentina', 'santos', 'cruzeiro'],
+    nivel: 'intermediario',
+    clubes: ['coritiba', 'palmeiras', 'barcelona', 'benfica', 'fiorentina', 'santos', 'cruzeiro', 'coritiba', 'londrina', 'arouca'],
     dica: 'Foi artilheiro do Brasileirão e comprado por um gigante catalão, mas nunca chegou a entrar em campo por ele.',
   },
   {
