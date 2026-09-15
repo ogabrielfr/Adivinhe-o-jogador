@@ -112,3 +112,10 @@ export const SEM_ESCUDO = {
   'shandong-luneng': { nome: "Shandong Taishan", pais: 'CN', cores: ['#F58220', '#1A1A1A'] },
   'guangzhou-evergrande': { nome: "Guangzhou Evergrande", pais: 'CN', cores: ['#E30613', '#FFD700'] },
 }
+
+/**
+ * Duplicatas que a chave de deduplicação não pega, porque o football.db cola o
+ * nome inteiro ("vascodagama") ou acrescenta o estado ("interrs") e o resultado
+ * não bate com o id curto vindo do sprite brasileiro.
+ */
+export const DESCARTAR = ['interrs', 'santossp', 'vascodagama', 'sportrecife', 'atletico-pr', 'atleticomg', 'atleticogo', 'atleticopr', 'pontepreta', 'saopaulo']

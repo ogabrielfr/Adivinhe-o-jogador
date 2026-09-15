@@ -148,7 +148,7 @@ for (const p of andar(repo.db, (f) => /\.(png|gif|jpe?g)$/i.test(f))) {
 // ------------------------------- 5. ids e nomes fixados dos clubes em uso
 // FIXOS aponta id canônico -> caminho na fonte; garante que "flamengo",
 // "barcelona" etc. mantenham o id que os jogadores já referenciam.
-import { CANONICOS, SEM_ESCUDO } from './clubes-canonicos.mjs'
+import { CANONICOS, SEM_ESCUDO, DESCARTAR } from './clubes-canonicos.mjs'
 for (const [id, dados] of Object.entries(CANONICOS)) {
   const entrada = [...candidatos.entries()].find(([, c]) => c.id === dados.de)
   if (!entrada) {
@@ -159,6 +159,11 @@ for (const [id, dados] of Object.entries(CANONICOS)) {
   candidatos.delete(chave)
   const atualizado = { ...achado, id, nome: dados.nome, pais: dados.pais ?? achado.pais }
   candidatos.set(chaveDedup(atualizado), atualizado)
+}
+
+for (const id of DESCARTAR) {
+  const entrada = [...candidatos.entries()].find(([, c]) => c.id === id)
+  if (entrada) candidatos.delete(entrada[0])
 }
 
 // clubes que nenhuma fonte cobre entram sem arquivo: o jogo desenha o brasão de reserva
