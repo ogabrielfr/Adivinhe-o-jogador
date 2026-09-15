@@ -60,6 +60,24 @@ export async function buscar(termo, { idioma = 'pt', limite = 5 } = {}) {
 export const qidDe = (uri) => uri.split('/').pop()
 
 /**
+ * A imagem de topo de um artigo de clube costuma ser o escudo, mas nem sempre:
+ * em clube pequeno ela é foto da sede ou do campo. Escudo errado é pior que
+ * escudo ausente — o jogo desenha um brasão de reserva quando falta, e uma
+ * foto de arquibancada no lugar do brasão destrói a partida.
+ *
+ * O formato separa bem os dois casos: brasão é SVG ou PNG, foto é JPG. Os JPG
+ * só passam quando o nome do arquivo se assume como logo.
+ */
+const NOME_DE_ESCUDO = /logo|logotipo|escudo|brasao|bras[aã]o|crest|badge|emblem|shield|distintivo/i
+
+export function pareceEscudo(url) {
+  const arquivo = decodeURIComponent(url.split('?')[0].split('/').pop() ?? '')
+  if (/\.(svg|png|gif)$/i.test(arquivo)) return true
+  if (/\.(jpe?g|webp)$/i.test(arquivo)) return NOME_DE_ESCUDO.test(arquivo)
+  return false
+}
+
+/**
  * Imagem de topo dos artigos, em lote. `pilicense=free` restringe ao que está
  * sob licença livre — muito escudo está no Commons sem estar ligado ao item do
  * Wikidata, e é assim que ele aparece.
@@ -76,7 +94,8 @@ export async function imagensDeArtigos(idioma, titulos, { lote = 50 } = {}) {
       const json = await (await pedir(url)).json()
       for (const p of Object.values(json.query?.pages ?? {})) {
         // ?utm_source vem grudado e quebra a extensão na hora de salvar
-        if (p.original?.source) achados.set(p.title, p.original.source.split('?')[0])
+        const url = p.original?.source?.split('?')[0]
+        if (url && pareceEscudo(url)) achados.set(p.title, url)
       }
     } catch (erro) {
       console.warn(`  lote de imagens falhou (${idioma}, ${i}): ${erro.message}`)

@@ -19,7 +19,9 @@ npm run dev
 | `npm run build` | verifica os tipos e gera `dist/` |
 | `npm run validar-dados` | confere a integridade da biblioteca de jogadores |
 | `npm run catalogo` | rebaixa os escudos e regenera `src/dados/clubes.ts` |
-| `npm run verificar` | confere as carreiras contra fonte externa |
+| `npm run verificar` | confere as carreiras contra o Wikidata e relata as divergências |
+| `npm run teste-nomes` | testa o comparador de nomes de clube |
+| `npm run coletar` | remonta `scripts/clubes-externos.json` a partir do Wikidata |
 | `npm run teste-visual` | roda a partida ponta a ponta no Chromium e salva capturas |
 
 O teste visual precisa do Chromium do Playwright (`npx playwright install chromium`)
@@ -53,15 +55,36 @@ que está à mostra.
 
 ### Conferência das carreiras
 
-> **Nenhuma carreira desta onda foi conferida contra fonte externa.** Elas foram
-> escritas de memória, e já se sabe que isso produz erro: faltava o início de
-> Džeko na Bósnia e na Tchéquia, e a volta de Keirrison ao Coritiba.
+> **As carreiras desta onda foram escritas de memória e a conferência já
+> mostrou que isso produz erro.** Das 45, 10 batem com a fonte e 35 divergem —
+> 33 delas por clube faltando. Nenhuma correção foi aplicada ainda.
 
-`npm run verificar` compara cada carreira com o Ogol e imprime as divergências,
-sem alterar nada. O script existe mas **nunca rodou**: o ambiente onde foi
-escrito bloqueia ogol.com.br, transfermarkt, zerozero e wikipedia no proxy de
-saída (HTTP 403), então os seletores do parser ainda não viram uma resposta
-real.
+`npm run verificar` compara cada carreira com o **Wikidata** e imprime as
+divergências, sem alterar nada.
+
+A fonte não é o Ogol, apesar de ele ser a melhor referência para futebol
+brasileiro. O Ogol e o zerozero estão atrás do bot management do Cloudflare e
+devolvem `403 cf-mitigated: challenge` para qualquer cliente automatizado,
+inclusive Chromium real — a interstitial "Um momento…" não resolve. É controle
+de acesso do próprio site, não do ambiente. O Wikidata expõe carreira como dado
+estruturado (`P54` com os qualificadores de período), tem API pública e deixa
+cada conferência auditável por QID.
+
+O relatório separa três coisas, que pedem reações diferentes:
+
+| Saída | O que significa |
+| --- | --- |
+| `falta no nosso dado` | a fonte tem um clube que não temos — é o caso grave |
+| `fora de ordem` | a cronologia não bate; empate de ano é ignorado |
+| `não confirmado pela fonte` | temos um clube que a fonte não lista |
+
+**`não confirmado` não quer dizer errado.** O Wikidata é incompleto em fim de
+carreira e em clube pequeno — o Arouca do Keirrison, que o cliente confirmou,
+não está lá. Só remova um clube com uma segunda fonte na mão.
+
+`npm run teste-nomes` testa o comparador de nomes de clube, que é a peça de que
+tudo depende: ele precisa casar "Coritiba" com "Coritiba Foot Ball Club" sem
+casar "Botafogo" com "Botafogo-SP".
 
 Quando a conferência passar, marque cada jogador com `verificado: true` e ligue
 `EXIGIR_VERIFICACAO` em `src/logica/diario.ts` — o sorteio passa a ignorar
