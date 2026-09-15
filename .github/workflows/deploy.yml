@@ -2,7 +2,8 @@ name: Publicar no GitHub Pages
 
 on:
   push:
-    branches: [main]
+    # a branch de trabalho publica enquanto o jogo não vai para a main
+    branches: [main, claude/clever-goodall-pi4c71]
   workflow_dispatch:
 
 permissions:
