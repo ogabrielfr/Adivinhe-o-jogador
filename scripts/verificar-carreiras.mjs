@@ -6,13 +6,23 @@
  *   npm run verificar -- dzeko pato   # só esses
  *   npm run verificar -- --json       # saída para processar
  *
- * A fonte é o Wikidata (ver scripts/wikidata.mjs para o porquê de não ser o
- * Ogol). A carreira vem da propriedade P54 "membro de equipe desportiva", com
- * os qualificadores P580/P582 de início e fim dando a ordem cronológica.
+ * São TRÊS fontes, porque nenhuma sozinha basta — e isso não é teoria, é o que
+ * a primeira rodada mostrou:
  *
- * LIMITE IMPORTANTE: o Wikidata é incompleto no fim de carreira e em clubes
- * pequenos. "não tem na fonte" significa *não confirmado*, nunca "está errado".
- * Só remova um clube com uma segunda fonte na mão.
+ *   wd  Wikidata, propriedade P54. Estruturado e auditável por QID, mas
+ *       preenchido à mão e atrasado: não tinha o Grêmio do Elkeson nem o do
+ *       Diego Tardelli, que o nosso dado tinha certo.
+ *   wp  Infobox do artigo na Wikipédia. Mais completo que o P54 no futebol
+ *       brasileiro — tem o Arouca do Keirrison —, mas alguns artigos não têm
+ *       o campo e a carreira fica só na prosa (o do Džeko, por exemplo).
+ *   tm  Transfermarkt. A mais completa das três, inclusive em passagem curta
+ *       e fim de carreira. Depende de o WAF deixar passar.
+ *
+ * O relatório conta quantas fontes confirmam cada clube. Um clube nosso que
+ * nenhuma das três tem é forte candidato a erro; um que duas têm e a terceira
+ * não é lacuna da terceira, não erro nosso. É a diferença que faltava na
+ * primeira rodada, quando eu chamei o Grêmio do Elkeson de clube inventado
+ * baseado só no Wikidata — e estava errado.
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
@@ -21,9 +31,12 @@ import { JOGADORES } from '../src/dados/jogadores.ts'
 import { CLUBE_POR_ID } from '../src/dados/clubes.ts'
 import { consultar, buscar, qidDe } from './wikidata.mjs'
 import { mesmoClube } from './nomes-clube.mjs'
+import { carreiraDaWikipedia } from './wikipedia-carreira.mjs'
+import { idsDoTransfermarkt, carreiraDoTransfermarkt } from './transfermarkt.mjs'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
 const ARQUIVO_CACHE = join(raiz, 'scripts', 'jogadores-wikidata.json')
+const ARQUIVO_RELATORIO = join(raiz, 'scripts', 'relatorio-carreiras.json')
 
 const argumentos = process.argv.slice(2)
 const comoJson = argumentos.includes('--json')
@@ -59,6 +72,16 @@ async function qidDoJogador(jogador) {
  * P54 traz também seleções e categorias de base. O filtro tira as seleções
  * pela classe e a base pelo qualificador; o que sobra é clube profissional.
  */
+/** Título do artigo em português, para a camada da Wikipédia. */
+async function artigoDe(qid) {
+  const linhas = await consultar(`
+    SELECT ?artigo WHERE {
+      ?artigo schema:about wd:${qid} ; schema:isPartOf <https://pt.wikipedia.org/> .
+    } LIMIT 1`).catch(() => [])
+  if (!linhas.length) return null
+  return decodeURIComponent(linhas[0].artigo.split('/wiki/')[1] ?? '').replace(/_/g, ' ')
+}
+
 async function carreiraDe(qid) {
   const linhas = await consultar(`
     SELECT ?clube ?clubeLabel ?inicio ?fim WHERE {
@@ -99,6 +122,14 @@ async function carreiraDe(qid) {
 // ------------------------------------------------------------------ relatório
 const periodo = (p) => (p.inicio || p.fim ? ` (${p.inicio || '?'}–${p.fim || '?'})` : '')
 
+const SIGLAS = { wikidata: 'wd', wikipedia: 'wp', transfermarkt: 'tm' }
+
+/** Resolve os ids do Transfermarkt de todos de uma vez, antes do laço. */
+const qidsConhecidos = lista.map((j) => cache[j.id]?.qid).filter(Boolean)
+const idTm = qidsConhecidos.length
+  ? await idsDoTransfermarkt(qidsConhecidos).catch(() => new Map())
+  : new Map()
+
 const relatorio = []
 let conferem = 0
 
@@ -108,75 +139,72 @@ for (const j of lista) {
     const qid = await qidDoJogador(j)
     if (!qid) throw new Error('não achei o jogador no Wikidata')
 
-    const fonte = await carreiraDe(qid)
-    if (!fonte.length) throw new Error(`sem carreira registrada em ${qid}`)
+    if (!cache[j.id].artigo) cache[j.id].artigo = await artigoDe(qid)
+    const artigo = cache[j.id].artigo
+    const tm = idTm.get(qid) ?? (await idsDoTransfermarkt([qid]).catch(() => new Map())).get(qid)
 
-    // Para cada clube nosso, em que posições da fonte ele aparece. Um clube
-    // ao qual o jogador voltou aparece em mais de uma, e é isso que permite
-    // conferir a volta na posição certa.
-    const posicoes = local.map((l) =>
-      fonte.map((f, i) => (mesmoClube(l.nome, f.nome) ? i : -1)).filter((i) => i >= 0),
-    )
+    // as três fontes; null distingue "não consultei / não veio" de "veio vazia"
+    const wikidata = await carreiraDe(qid)
+    const wikipedia = artigo ? await carreiraDaWikipedia(artigo) : null
+    const transfermarkt = tm ? await carreiraDoTransfermarkt(tm) : null
 
-    const naoConfirmados = local.filter((_, i) => !posicoes[i].length)
-    const usadas = new Set(posicoes.flat())
-    const ausentes = fonte.filter((_, i) => !usadas.has(i))
-
-    /**
-     * A nossa ordem confere quando ela é uma subsequência da ordem da fonte:
-     * percorre os clubes confirmados escolhendo sempre a primeira posição
-     * ainda à frente. Se algum não cabe, a cronologia diverge ali.
-     */
-    const conflitos = []
-    let anterior = -1
-    let posAnterior = null
-    for (let i = 0; i < local.length; i++) {
-      if (!posicoes[i].length) continue
-      const escolha = posicoes[i].find((p) => p > anterior)
-      if (escolha === undefined) {
-        conflitos.push({ nome: local[i].nome, depoisDe: posAnterior })
-        continue
-      }
-      anterior = escolha
-      posAnterior = fonte[escolha]
+    const fontes = {
+      wikidata: wikidata.map((f) => f.nome + periodo(f)),
+      wikipedia,
+      transfermarkt,
     }
+    const nomesDe = { wikidata: wikidata.map((f) => f.nome), wikipedia, transfermarkt }
+    const disponiveis = Object.keys(nomesDe).filter((k) => nomesDe[k]?.length)
 
-    /**
-     * Empate de ano não é divergência: quando o jogador assina e é emprestado
-     * no mesmo ano, as duas fontes ordenam o par como quiserem. Só conta como
-     * problema o conflito entre passagens que começam em anos diferentes.
-     */
-    const conflitosReais = conflitos.filter((c) => {
-      if (!c.depoisDe) return true
-      const nosso = fonte.find((f) => mesmoClube(c.nome, f.nome))
-      return !nosso?.inicio || !c.depoisDe.inicio || nosso.inicio !== c.depoisDe.inicio
-    })
-    const ordemDiverge = conflitosReais.length > 0
-    const ordemEmpatada = !ordemDiverge && conflitos.length > 0
+    if (!disponiveis.length) throw new Error('nenhuma das três fontes respondeu')
+
+    /** Quais fontes confirmam este clube nosso. */
+    const confirmamNosso = (nome) =>
+      disponiveis.filter((k) => nomesDe[k].some((f) => mesmoClube(nome, f)))
+
+    /** Quais fontes trazem este clube que não temos. */
+    const quemTem = (nome) =>
+      disponiveis.filter((k) => nomesDe[k].some((f) => mesmoClube(nome, f)))
+
+    const nossos = local.map((l) => ({ nome: l.nome, por: confirmamNosso(l.nome) }))
+    const semNenhuma = nossos.filter((n) => !n.por.length)
+    const soUma = nossos.filter((n) => n.por.length === 1 && disponiveis.length > 1)
+
+    // clubes que alguma fonte tem e nós não; agrupa nomes equivalentes
+    const faltantes = []
+    for (const k of disponiveis) {
+      for (const f of nomesDe[k]) {
+        if (local.some((l) => mesmoClube(l.nome, f))) continue
+        const igual = faltantes.find((x) => mesmoClube(x.nome, f))
+        if (igual) { if (!igual.por.includes(k)) igual.por.push(k) }
+        else faltantes.push({ nome: f, por: [k] })
+      }
+    }
+    faltantes.sort((a, b) => b.por.length - a.por.length)
+    const fortes = faltantes.filter((f) => f.por.length >= 2)
+    const fracos = faltantes.filter((f) => f.por.length === 1)
 
     const item = {
-      id: j.id, nome: j.nome, qid,
-      local: local.map((l) => l.nome),
-      fonte: fonte.map((f) => f.nome + periodo(f)),
-      ausentes: ausentes.map((f) => f.nome + periodo(f)),
-      naoConfirmados: naoConfirmados.map((l) => l.nome),
-      ordemDiverge,
-      ordemEmpatada,
-      conflitosDeOrdem: conflitosReais.map((c) => c.nome),
+      id: j.id, nome: j.nome, qid, tm: tm ?? null, artigo,
+      disponiveis, local: local.map((l) => l.nome), fontes,
+      nossos, semNenhuma: semNenhuma.map((n) => n.nome), soUma: soUma.map((n) => n.nome),
+      fortes, fracos,
     }
     relatorio.push(item)
 
-    if (!ausentes.length && !naoConfirmados.length && !ordemDiverge) {
+    const marca = (f) => `${f.nome} [${f.por.map((k) => SIGLAS[k]).join('+')}]`
+    if (!fortes.length && !semNenhuma.length) {
       conferem++
-      log(`ok       ${j.id}  (${qid})`)
+      log(`ok       ${j.id}  (${disponiveis.map((k) => SIGLAS[k]).join(' ')})`)
+      if (fracos.length) log(`         só uma fonte tem: ${fracos.map(marca).join(', ')}`)
     } else {
-      log(`DIVERGE  ${j.id}  https://www.wikidata.org/wiki/${qid}`)
+      log(`DIVERGE  ${j.id}  wikidata.org/wiki/${qid}${tm ? `  tm/${tm}` : ''}`)
       log(`         nosso dado: ${item.local.join(' > ')}`)
-      log(`         wikidata:   ${item.fonte.join(' > ')}`)
-      if (ausentes.length) log(`         >> falta no nosso dado:  ${item.ausentes.join(', ')}`)
-      if (naoConfirmados.length) log(`         >> não confirmado pela fonte: ${item.naoConfirmados.join(', ')}`)
-      if (ordemDiverge) log(`         >> fora de ordem: ${item.conflitosDeOrdem.join(', ')}`)
-      if (ordemEmpatada) log(`         (ordem difere só em passagens do mesmo ano — provavelmente ok)`)
+      for (const k of disponiveis) log(`         ${SIGLAS[k]}: ${fontes[k].join(' > ')}`)
+      if (fortes.length) log(`         >> FALTA (2+ fontes):  ${fortes.map(marca).join(', ')}`)
+      if (fracos.length) log(`         >> falta (1 fonte):    ${fracos.map(marca).join(', ')}`)
+      if (semNenhuma.length) log(`         >> NENHUMA FONTE TEM:  ${semNenhuma.map((n) => n.nome).join(', ')}`)
+      if (soUma.length) log(`         >> só uma fonte tem:   ${soUma.map((n) => n.nome).join(', ')}`)
     }
   } catch (erro) {
     relatorio.push({ id: j.id, nome: j.nome, erro: erro.message, local: local.map((l) => l.nome) })
@@ -185,12 +213,16 @@ for (const j of lista) {
 }
 
 writeFileSync(ARQUIVO_CACHE, JSON.stringify(cache, null, 2) + '\n')
+// o relatório sai sempre em JSON também: é o que alimenta a página de revisão
+writeFileSync(ARQUIVO_RELATORIO, JSON.stringify(relatorio, null, 1) + '\n')
 
 if (comoJson) {
   console.log(JSON.stringify(relatorio, null, 2))
 } else {
   const comErro = relatorio.filter((r) => r.erro).length
-  console.log(`\n${conferem}/${lista.length} conferem  |  ${lista.length - conferem - comErro} divergem  |  ${comErro} com erro`)
-  console.log('\nLembre: "não confirmado" é lacuna do Wikidata com frequência, não erro nosso.')
+  console.log(`\n${conferem}/${lista.length} sem divergência forte  |  ${lista.length - conferem - comErro} divergem  |  ${comErro} com erro`)
+  console.log('\nLeitura: [wd] Wikidata, [wp] infobox da Wikipédia, [tm] Transfermarkt.')
+  console.log('Clube que NENHUMA fonte tem é candidato a erro nosso.')
+  console.log('Clube que só uma fonte tem costuma ser lacuna das outras duas, não erro.')
   console.log('Nada foi alterado. As correções são decisão sua, clube a clube.')
 }

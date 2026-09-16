@@ -50,8 +50,25 @@ zerozero, do mesmo grupo, faz igual. O Transfermarkt devolve 405.
 
 Trocar de ambiente não muda isso. Não tente de novo por esse caminho.
 
+**O Transfermarkt, ao contrário, dá para usar.** Ele fica atrás do AWS WAF, que
+amostra as requisições e devolve uma página "Human Verification" em vez de 200
+mais ou menos uma em cinco — repetir devagar resolve. O `robots.txt` deles
+declara `Allow: /` para agente genérico. Dois detalhes que custaram tempo:
+
+- **O pedido precisa sair por `curl`, não pelo `fetch` do Node.** Com os mesmos
+  cabeçalhos, o WAF recusa o fetch quase sempre e aceita o curl quase sempre.
+- **O id do jogador vem do Wikidata (P2446), não da busca deles.** Mais
+  confiável: o Elkeson está lá como "Ai Kesen", o nome com que se naturalizou
+  chinês.
+
+Busca do Google como fonte não serve: a página de resultados vem como casca de
+JavaScript (200 com 92 KB e nenhum resultado no HTML), e o resumo de IA é texto
+gerado sem citação estável — reintroduz exatamente o problema que a conferência
+existe para eliminar.
+
 O que responde 200 da mesma máquina: `tmssl.akamaized.net`, Wikipédia,
-Wikidata (SPARQL e API), Commons e `ogabrielfr.github.io`.
+Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
+`ogabrielfr.github.io`.
 
 ---
 
@@ -71,31 +88,46 @@ Wikidata (SPARQL e API), Commons e `ogabrielfr.github.io`.
 
 ### 1. Corrigir as carreiras (a conferência já apontou o quê)
 
-`npm run verificar` rodou contra o Wikidata. Resultado: **10 de 45 conferem,
-35 divergem, 0 erros de busca** — todos os 45 jogadores foram encontrados.
+`npm run verificar` compara cada carreira com **três fontes**, porque nenhuma
+sozinha basta:
 
-Nenhuma correção foi aplicada. O relatório é a entrada de trabalho.
+| | Fonte | Força | Fraqueza |
+| --- | --- | --- | --- |
+| `wd` | Wikidata, propriedade P54 | estruturado, auditável por QID | preenchido à mão e atrasado |
+| `wp` | Infobox do artigo na Wikipédia | melhor no futebol brasileiro | alguns artigos não têm o campo |
+| `tm` | Transfermarkt | a mais completa das três | depende de o WAF deixar passar |
 
-| Categoria | Jogadores | O que fazer |
+**Por que três e não uma.** A primeira rodada usou só o Wikidata e eu apontei o
+Grêmio do Elkeson como "clube inventado". Estava errado: o Elkeson jogou no
+Grêmio em 2021, o infobox da Wikipédia e o Transfermarkt têm a passagem, e era
+o P54 do Wikidata que estava incompleto. O mesmo valia para o Grêmio do Diego
+Tardelli. Uma fonte só não distingue erro nosso de lacuna dela.
+
+Resultado com as três: **12 de 45 sem divergência forte, 33 divergem, 0 erros
+de busca.** Nenhuma correção foi aplicada.
+
+O relatório separa por quantas fontes confirmam cada clube, que é o que permite
+agir sem chutar:
+
+| Saída | O que significa | Ação |
 | --- | --- | --- |
-| `falta no nosso dado` | 33 | Caso grave. A fonte tem clube que não temos |
-| `fora de ordem` | 5 | Cronologia trocada |
-| `não confirmado pela fonte` | 8 | **Cuidado.** Costuma ser lacuna do Wikidata |
+| `FALTA (2+ fontes)` | duas ou três têm um clube que não temos | acrescentar |
+| `NENHUMA FONTE TEM` | um clube nosso que nenhuma das três tem | candidato a erro nosso |
+| `falta (1 fonte)` | só uma fonte tem | quase sempre lacuna das outras duas |
+| `só uma fonte tem` | nosso clube confirmado por só uma | está certo; as outras é que falham |
 
-**Dois erros de alta confiança, para começar por eles:**
+**Os três clubes que nenhuma fonte confirma**, cada um com as três fontes de acordo:
 
-- **Elkeson tem `gremio` na lista e ele nunca jogou no Grêmio.** Clube inventado.
-- **Drenthe tem `kayserispor`; a fonte diz Kayseri Erciyesspor.** São clubes
-  diferentes da mesma cidade.
+- **`adriano` → Atlético Mineiro.** As três listam Athletico Paranaense (2014) e
+  nenhuma lista o Mineiro. Nosso dado tem os dois; o Mineiro parece ser confusão
+  com o Paranaense.
+- **`diego-tardelli` → Bahia.** Nenhuma das três tem. As três têm Santos, que
+  falta no nosso.
+- **`drenthe` → Kayserispor.** As três apontam **Kayseri Erciyesspor**, outro
+  clube da mesma cidade.
 
-**O padrão mais comum é falta de começo e de fim de carreira** — exatamente o
-que a memória do modelo corta. Džeko sem Željezničar, Teplice e Ústí nad Labem;
-Zidane sem o Cannes; Ibrahimović sem o Malmö; Drogba sem Le Mans e Guingamp;
-Thiago Silva sem Barcelona-SC, Pedrabranca, Juventude e Dínamo de Moscou.
-
-**"Não confirmado" não é sinônimo de errado.** O Arouca do Keirrison, que o
-cliente confirmou à mão, não está no Wikidata. Só remova clube com uma segunda
-fonte na mão.
+O padrão geral continua sendo **começo e fim de carreira faltando**, que é o que
+a memória do modelo corta.
 
 Quando a conferência passar: marque `verificado: true` e ligue
 `EXIGIR_VERIFICACAO` em `src/logica/diario.ts`.

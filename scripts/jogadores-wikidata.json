@@ -3,270 +3,315 @@
     "qid": "Q615",
     "rotulo": "Lionel Messi",
     "descricao": "futebolista argentino",
-    "termo": "Lionel Messi"
+    "termo": "Lionel Messi",
+    "artigo": "Lionel Messi"
   },
   "dzeko": {
     "qid": "Q153786",
     "rotulo": "Edin Džeko",
     "descricao": "futebolista bósnio",
-    "termo": "Edin Džeko"
+    "termo": "Edin Džeko",
+    "artigo": "Edin Džeko"
   },
   "keirrison": {
     "qid": "Q314225",
     "rotulo": "Keirrison",
     "descricao": "futebolista brasileiro",
-    "termo": "Keirrison"
+    "termo": "Keirrison",
+    "artigo": "Keirrison"
   },
   "cristiano-ronaldo": {
     "qid": "Q11571",
     "rotulo": "Cristiano Ronaldo",
     "descricao": "futebolista português",
-    "termo": "Cristiano Ronaldo"
+    "termo": "Cristiano Ronaldo",
+    "artigo": "Cristiano Ronaldo"
   },
   "neymar": {
     "qid": "Q142794",
     "rotulo": "Neymar",
     "descricao": "futebolista brasileiro",
-    "termo": "Neymar"
+    "termo": "Neymar",
+    "artigo": "Neymar"
   },
   "ronaldinho": {
     "qid": "Q39444",
     "rotulo": "Ronaldinho Gaúcho",
     "descricao": "futebolista brasileiro",
-    "termo": "Ronaldinho Gaúcho"
+    "termo": "Ronaldinho Gaúcho",
+    "artigo": "Ronaldinho Gaúcho"
   },
   "kaka": {
     "qid": "Q531814",
     "rotulo": "Kaká",
     "descricao": "futebolista brasileiro",
-    "termo": "Kaká"
+    "termo": "Kaká",
+    "artigo": "Kaká"
   },
   "ronaldo-fenomeno": {
     "qid": "Q529207",
     "rotulo": "Ronaldo Nazário",
     "descricao": "ex-futebolista e empresário brasileiro",
-    "termo": "Ronaldo Fenômeno"
+    "termo": "Ronaldo Fenômeno",
+    "artigo": "Ronaldo Nazário"
   },
   "zidane": {
     "qid": "Q1835",
     "rotulo": "Zinédine Zidane",
     "descricao": "treinador e ex-futebolista francês",
-    "termo": "Zinedine Zidane"
+    "termo": "Zinedine Zidane",
+    "artigo": "Zinédine Zidane"
   },
   "ibrahimovic": {
     "qid": "Q46896",
     "rotulo": "Zlatan Ibrahimović",
     "descricao": "futebolista sueco",
-    "termo": "Zlatan Ibrahimović"
+    "termo": "Zlatan Ibrahimović",
+    "artigo": "Zlatan Ibrahimović"
   },
   "beckham": {
     "qid": "Q10520",
     "rotulo": "David Beckham",
     "descricao": "futebolista inglês",
-    "termo": "David Beckham"
+    "termo": "David Beckham",
+    "artigo": "David Beckham"
   },
   "drogba": {
     "qid": "Q48892",
     "rotulo": "Didier Drogba",
     "descricao": "futebolista marfinense",
-    "termo": "Didier Drogba"
+    "termo": "Didier Drogba",
+    "artigo": "Didier Drogba"
   },
   "salah": {
     "qid": "Q1354960",
     "rotulo": "Mohamed Salah",
     "descricao": "futebolista egípcio",
-    "termo": "Mohamed Salah"
+    "termo": "Mohamed Salah",
+    "artigo": "Mohamed Salah"
   },
   "casemiro": {
     "qid": "Q616664",
     "rotulo": "Casemiro",
     "descricao": "futebolista brasileiro",
-    "termo": "Casemiro"
+    "termo": "Casemiro",
+    "artigo": "Casemiro"
   },
   "alisson": {
     "qid": "Q18237361",
     "rotulo": "Alisson Becker",
     "descricao": "futebolista brasileiro",
-    "termo": "Alisson Becker"
+    "termo": "Alisson Becker",
+    "artigo": "Alisson Becker"
   },
   "marcelo": {
     "qid": "Q38136",
     "rotulo": "Marcelo Vieira",
     "descricao": "Brazilian association football player",
-    "termo": "Marcelo"
+    "termo": "Marcelo",
+    "artigo": "Marcelo Vieira da Silva Júnior"
   },
   "gabigol": {
     "qid": "Q13646572",
     "rotulo": "Gabigol",
     "descricao": "futebolista brasileiro",
-    "termo": "Gabigol"
+    "termo": "Gabigol",
+    "artigo": "Gabigol"
   },
   "ze-roberto": {
     "qid": "Q57167",
     "rotulo": "Zé Roberto",
     "descricao": "futebolista brasileiro",
-    "termo": "Zé Roberto"
+    "termo": "Zé Roberto",
+    "artigo": "Zé Roberto (futebolista)"
   },
   "juninho-pernambucano": {
     "qid": "Q203451",
     "rotulo": "Juninho Pernambucano",
     "descricao": "futebolista brasileiro",
-    "termo": "Juninho Pernambucano"
+    "termo": "Juninho Pernambucano",
+    "artigo": "Juninho Pernambucano"
   },
   "sonny-anderson": {
     "qid": "Q313861",
     "rotulo": "Sonny Anderson",
     "descricao": "futebolista brasileiro",
-    "termo": "Sonny Anderson"
+    "termo": "Sonny Anderson",
+    "artigo": "Sonny Anderson"
   },
   "diego-ribas": {
     "qid": "Q109428",
     "rotulo": "Diego Ribas da Cunha",
     "descricao": "ex-futebolista brasileiro",
-    "termo": "Diego Ribas"
+    "termo": "Diego Ribas",
+    "artigo": "Diego Ribas"
   },
   "lucas-moura": {
     "qid": "Q312886",
     "rotulo": "Lucas Moura",
     "descricao": "futebolista brasileiro",
-    "termo": "Lucas Moura"
+    "termo": "Lucas Moura",
+    "artigo": "Lucas Moura"
   },
   "arturo-vidal": {
     "qid": "Q192671",
     "rotulo": "Arturo Vidal",
     "descricao": "futebolista chileno",
-    "termo": "Arturo Vidal"
+    "termo": "Arturo Vidal",
+    "artigo": "Arturo Vidal"
   },
   "hulk": {
     "qid": "Q62786",
     "rotulo": "Hulk",
     "descricao": "futebolista brasileiro",
-    "termo": "Hulk"
+    "termo": "Hulk",
+    "artigo": "Hulk (futebolista)"
   },
   "coutinho": {
     "qid": "Q311872",
     "rotulo": "Philippe Coutinho",
     "descricao": "futebolista brasileiro",
-    "termo": "Philippe Coutinho"
+    "termo": "Philippe Coutinho",
+    "artigo": "Philippe Coutinho"
   },
   "douglas-costa": {
     "qid": "Q391680",
     "rotulo": "Douglas Costa",
     "descricao": "futebolista brasileiro",
-    "termo": "Douglas Costa"
+    "termo": "Douglas Costa",
+    "artigo": "Douglas Costa"
   },
   "riquelme": {
     "qid": "Q192965",
     "rotulo": "Juan Román Riquelme",
     "descricao": "ex-futebolista argentino",
-    "termo": "Juan Román Riquelme"
+    "termo": "Juan Román Riquelme",
+    "artigo": "Juan Román Riquelme"
   },
   "everton-ribeiro": {
     "qid": "Q4025436",
     "rotulo": "Everton Ribeiro",
     "descricao": "futebolista brasileiro",
-    "termo": "Everton Ribeiro"
+    "termo": "Everton Ribeiro",
+    "artigo": "Éverton Ribeiro"
   },
   "thiago-silva": {
     "qid": "Q210453",
     "rotulo": "Thiago Silva",
     "descricao": "futebolista brasileiro",
-    "termo": "Thiago Silva"
+    "termo": "Thiago Silva",
+    "artigo": "Thiago Silva"
   },
   "firmino": {
     "qid": "Q602525",
     "rotulo": "Roberto Firmino",
     "descricao": "futebolista brasileiro",
-    "termo": "Roberto Firmino"
+    "termo": "Roberto Firmino",
+    "artigo": "Roberto Firmino"
   },
   "otamendi": {
     "qid": "Q182063",
     "rotulo": "Nicolás Otamendi",
     "descricao": "futebolista argentino",
-    "termo": "Nicolás Otamendi"
+    "termo": "Nicolás Otamendi",
+    "artigo": "Nicolás Otamendi"
   },
   "adriano": {
     "qid": "Q170452",
     "rotulo": "Adriano Imperador",
     "descricao": "ex-futebolista brasileiro",
-    "termo": "Adriano Imperador"
+    "termo": "Adriano Imperador",
+    "artigo": "Adriano Imperador"
   },
   "vagner-love": {
     "qid": "Q295880",
     "rotulo": "Vágner Love",
     "descricao": "ex-jogador brasileiro",
-    "termo": "Vágner Love"
+    "termo": "Vágner Love",
+    "artigo": "Vágner Love"
   },
   "jo": {
     "qid": "Q314099",
     "rotulo": "Jô",
     "descricao": "futebolista brasileiro",
-    "termo": "Jô"
+    "termo": "Jô",
+    "artigo": "Jô (futebolista)"
   },
   "nilmar": {
     "qid": "Q208687",
     "rotulo": "Nilmar",
     "descricao": "futebolista brasileiro",
-    "termo": "Nilmar"
+    "termo": "Nilmar",
+    "artigo": "Nilmar"
   },
   "pato": {
     "qid": "Q138075",
     "rotulo": "Alexandre Pato",
     "descricao": "futebolista brasileiro",
-    "termo": "Alexandre Pato"
+    "termo": "Alexandre Pato",
+    "artigo": "Alexandre Pato"
   },
   "bendtner": {
     "qid": "Q167240",
     "rotulo": "Nicklas Bendtner",
     "descricao": "futebolista dinamarquês",
-    "termo": "Nicklas Bendtner"
+    "termo": "Nicklas Bendtner",
+    "artigo": "Nicklas Bendtner"
   },
   "quaresma": {
     "qid": "Q188241",
     "rotulo": "Ricardo Quaresma",
     "descricao": "futebolista português",
-    "termo": "Ricardo Quaresma"
+    "termo": "Ricardo Quaresma",
+    "artigo": "Ricardo Quaresma"
   },
   "balotelli": {
     "qid": "Q129700",
     "rotulo": "Mario Balotelli",
     "descricao": "futebolista italiano",
-    "termo": "Mario Balotelli"
+    "termo": "Mario Balotelli",
+    "artigo": "Mario Balotelli"
   },
   "diego-tardelli": {
     "qid": "Q905206",
     "rotulo": "Diego Tardelli",
     "descricao": "futebolista brasileiro",
-    "termo": "Diego Tardelli"
+    "termo": "Diego Tardelli",
+    "artigo": "Diego Tardelli"
   },
   "elkeson": {
     "qid": "Q219298",
     "rotulo": "Ai Kesen",
     "descricao": "futebolista chinês",
-    "termo": "Elkeson"
+    "termo": "Elkeson",
+    "artigo": "Elkeson"
   },
   "rafael-sobis": {
     "qid": "Q350493",
     "rotulo": "Rafael Sóbis",
     "descricao": "futebolista brasileiro",
-    "termo": "Rafael Sóbis"
+    "termo": "Rafael Sóbis",
+    "artigo": "Rafael Sóbis"
   },
   "farfan": {
     "qid": "Q295311",
     "rotulo": "Jefferson Farfán",
     "descricao": "futebolista peruano",
-    "termo": "Jefferson Farfán"
+    "termo": "Jefferson Farfán",
+    "artigo": "Jefferson Farfán"
   },
   "denilson": {
     "qid": "Q311641",
     "rotulo": "Denílson de Oliveira",
     "descricao": "futebolista brasileiro",
-    "termo": "Denílson"
+    "termo": "Denílson",
+    "artigo": "Denílson"
   },
   "drenthe": {
     "qid": "Q287815",
     "rotulo": "Royston Drenthe",
     "descricao": "futebolista neerlandês",
-    "termo": "Royston Drenthe"
+    "termo": "Royston Drenthe",
+    "artigo": "Royston Drenthe"
   }
 }

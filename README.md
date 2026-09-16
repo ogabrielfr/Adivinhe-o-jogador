@@ -55,32 +55,37 @@ que está à mostra.
 
 ### Conferência das carreiras
 
-> **As carreiras desta onda foram escritas de memória e a conferência já
-> mostrou que isso produz erro.** Das 45, 10 batem com a fonte e 35 divergem —
-> 33 delas por clube faltando. Nenhuma correção foi aplicada ainda.
+> **As carreiras desta onda foram escritas de memória e a conferência mostrou
+> que isso produz erro.** Das 45, 12 passam sem divergência forte e 33 divergem.
+> Nenhuma correção foi aplicada ainda.
 
-`npm run verificar` compara cada carreira com o **Wikidata** e imprime as
-divergências, sem alterar nada.
+`npm run verificar` compara cada carreira com **três fontes** e imprime as
+divergências, sem alterar nada. Grava também `scripts/relatorio-carreiras.json`.
 
-A fonte não é o Ogol, apesar de ele ser a melhor referência para futebol
-brasileiro. O Ogol e o zerozero estão atrás do bot management do Cloudflare e
-devolvem `403 cf-mitigated: challenge` para qualquer cliente automatizado,
-inclusive Chromium real — a interstitial "Um momento…" não resolve. É controle
-de acesso do próprio site, não do ambiente. O Wikidata expõe carreira como dado
-estruturado (`P54` com os qualificadores de período), tem API pública e deixa
-cada conferência auditável por QID.
+| | Fonte | Força | Fraqueza |
+| --- | --- | --- | --- |
+| `wd` | Wikidata, propriedade P54 | estruturado, auditável por QID | preenchido à mão e atrasado |
+| `wp` | Infobox do artigo na Wikipédia | melhor no futebol brasileiro | alguns artigos não têm o campo |
+| `tm` | Transfermarkt | a mais completa das três | depende de o WAF deixar passar |
 
-O relatório separa três coisas, que pedem reações diferentes:
+**São três porque uma só não distingue erro nosso de lacuna da fonte.** Com
+apenas o Wikidata, o Grêmio do Elkeson parecia clube inventado — ele jogou lá em
+2021, e eram o infobox e o Transfermarkt que tinham a passagem. O mesmo com o
+Grêmio do Diego Tardelli e o Arouca do Keirrison.
+
+O relatório conta quantas fontes confirmam cada clube:
 
 | Saída | O que significa |
 | --- | --- |
-| `falta no nosso dado` | a fonte tem um clube que não temos — é o caso grave |
-| `fora de ordem` | a cronologia não bate; empate de ano é ignorado |
-| `não confirmado pela fonte` | temos um clube que a fonte não lista |
+| `FALTA (2+ fontes)` | duas ou três têm um clube que não temos — acrescentar |
+| `NENHUMA FONTE TEM` | um clube nosso que nenhuma tem — candidato a erro nosso |
+| `falta (1 fonte)` | só uma tem — quase sempre lacuna das outras duas |
+| `só uma fonte tem` | nosso clube confirmado por só uma — está certo |
 
-**`não confirmado` não quer dizer errado.** O Wikidata é incompleto em fim de
-carreira e em clube pequeno — o Arouca do Keirrison, que o cliente confirmou,
-não está lá. Só remova um clube com uma segunda fonte na mão.
+O Ogol seria a melhor referência para futebol brasileiro, mas ele e o zerozero
+estão atrás do bot management do Cloudflare e devolvem `403 cf-mitigated:
+challenge` a qualquer cliente automatizado, inclusive Chromium real. É controle
+de acesso do próprio site, não do ambiente.
 
 `npm run teste-nomes` testa o comparador de nomes de clube, que é a peça de que
 tudo depende: ele precisa casar "Coritiba" com "Coritiba Foot Ball Club" sem

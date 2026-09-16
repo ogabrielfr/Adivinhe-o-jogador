@@ -1,0 +1,5619 @@
+[
+ {
+  "id": "messi",
+  "nome": "Lionel Messi",
+  "qid": "Q615",
+  "tm": "28003",
+  "artigo": "Lionel Messi",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Barcelona",
+   "Paris Saint-Germain",
+   "Inter Miami"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Futbol Club Barcelona (2004–2021)",
+    "Paris Saint-Germain (2021–2023)",
+    "Club Internacional de Fútbol Miami (2023–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Newells Jv",
+    "Barcelona C",
+    "Barcelona",
+    "PSG",
+    "Miami"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Barcelona",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Paris Saint-Germain",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Inter Miami",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Paris Saint-Germain"
+  ],
+  "fortes": [],
+  "fracos": [
+   {
+    "nome": "Newells Jv",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "PSG",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cristiano-ronaldo",
+  "nome": "Cristiano Ronaldo",
+  "qid": "Q11571",
+  "tm": "8198",
+  "artigo": "Cristiano Ronaldo",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Sporting",
+   "Manchester United",
+   "Real Madrid",
+   "Juventus",
+   "Al-Nassr"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Sporting Clube de Portugal (2002–2003)",
+    "Manchester United Football Club (2003–2009)",
+    "Real Madrid Club de Fútbol (2009–2018)",
+    "Juventus Football Club (2018–2021)",
+    "Manchester United Football Club (2021–2022)",
+    "Al-Nassr (2023–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Nacional Form ",
+    "Nacional Sub 15",
+    "Sporting Sub 15",
+    "Sporting Sub 17",
+    "Sporting Sub 19",
+    "Sporting",
+    "Man Utd",
+    "Real Madrid",
+    "Juventus",
+    "Man Utd",
+    "Al Nassr"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Sporting",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Manchester United",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Real Madrid",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Juventus",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Nassr",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Manchester United"
+  ],
+  "fortes": [],
+  "fracos": [
+   {
+    "nome": "Nacional Form ",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Nacional Sub 15",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Man Utd",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "neymar",
+  "nome": "Neymar",
+  "qid": "Q142794",
+  "tm": "68290",
+  "artigo": "Neymar",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Santos",
+   "Barcelona",
+   "Paris Saint-Germain",
+   "Al-Hilal"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Santos Futebol Clube (2009–2013)",
+    "Futbol Club Barcelona (2013–2017)",
+    "Paris Saint-Germain (2017–2023)",
+    "Al-Hilal (2023–2025)",
+    "Santos Futebol Clube (2025–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Santos",
+    "Barcelona",
+    "PSG",
+    "Al Hilal",
+    "Santos"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Santos",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Barcelona",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Paris Saint-Germain",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Al-Hilal",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Paris Saint-Germain"
+  ],
+  "fortes": [],
+  "fracos": [
+   {
+    "nome": "PSG",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ronaldinho",
+  "nome": "Ronaldinho Gaúcho",
+  "qid": "Q39444",
+  "tm": "3373",
+  "artigo": "Ronaldinho Gaúcho",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Grêmio",
+   "Paris Saint-Germain",
+   "Barcelona",
+   "Milan",
+   "Flamengo",
+   "Atlético Mineiro"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Grêmio Foot-Ball Porto Alegrense (1998–2001)",
+    "Paris Saint-Germain (2001–2003)",
+    "Futbol Club Barcelona (2003–2008)",
+    "A.C. Milan (2008–2010)",
+    "Clube de Regatas do Flamengo (2011–2012)",
+    "Clube Atlético Mineiro (2012–2014)",
+    "Querétaro Fútbol Club (2014–2015)",
+    "Fluminense Football Club (2015–2015)",
+    "Ravenna Calcio (2026–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Grêmio",
+    "PSG",
+    "Barcelona",
+    "Milan",
+    "Clube de Regatas do Flamengo",
+    "Atletico Mg",
+    "Queretaro Fc",
+    "Fluminense",
+    "Ravenna Calcio"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Grêmio",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Paris Saint-Germain",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Barcelona",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Milan",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Flamengo",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Atlético Mineiro",
+    "por": [
+     "wikidata"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Paris Saint-Germain",
+   "Atlético Mineiro"
+  ],
+  "fortes": [
+   {
+    "nome": "Querétaro Fútbol Club",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Fluminense Football Club",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Ravenna Calcio",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "PSG",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Atletico Mg",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "kaka",
+  "nome": "Kaká",
+  "qid": "Q531814",
+  "tm": "3366",
+  "artigo": "Kaká",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "São Paulo",
+   "Milan",
+   "Real Madrid",
+   "Orlando City"
+  ],
+  "fontes": {
+   "wikidata": [
+    "São Paulo Futebol Clube (2001–2003)",
+    "A.C. Milan (2003–2009)",
+    "Real Madrid Club de Fútbol (2009–2013)",
+    "A.C. Milan (2013–2014)",
+    "São Paulo Futebol Clube (2014–2014)",
+    "Orlando City Soccer Club (2014–2017)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Sao Paulo",
+    "Milan",
+    "Real Madrid",
+    "Milan",
+    "Orlando",
+    "Sao Paulo"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "São Paulo",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Milan",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Real Madrid",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Orlando City",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [],
+  "fracos": []
+ },
+ {
+  "id": "ronaldo-fenomeno",
+  "nome": "Ronaldo Fenômeno",
+  "qid": "Q529207",
+  "tm": "3140",
+  "artigo": "Ronaldo Nazário",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Cruzeiro",
+   "PSV",
+   "Barcelona",
+   "Inter de Milão",
+   "Real Madrid",
+   "Milan",
+   "Corinthians"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Cruzeiro Esporte Clube (1993–1994)",
+    "PSV Eindhoven (1994–1996)",
+    "Futbol Club Barcelona (1996–1997)",
+    "Football Club Internazionale Milano (1997–2002)",
+    "Real Madrid Club de Fútbol (2002–2007)",
+    "A.C. Milan (2007–2008)",
+    "Sport Club Corinthians Paulista (2009–2011)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Sao Cristovao",
+    "Cruzeiro",
+    "PSV",
+    "Barcelona",
+    "Inter",
+    "Real Madrid",
+    "Milan",
+    "Corinthians"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Cruzeiro",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "PSV",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Barcelona",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Inter de Milão",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Real Madrid",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Milan",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Corinthians",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [],
+  "fracos": [
+   {
+    "nome": "Sao Cristovao",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "zidane",
+  "nome": "Zinedine Zidane",
+  "qid": "Q1835",
+  "tm": "3111",
+  "artigo": "Zinédine Zidane",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Bordeaux",
+   "Juventus",
+   "Real Madrid"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Association Sportive de Cannes Football (1989–1992)",
+    "Football Club des Girondins de Bordeaux (1992–1996)",
+    "Juventus Football Club (1996–2001)",
+    "Real Madrid Club de Fútbol (2001–2006)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "As Cannes Juv ",
+    "Cannes",
+    "Bordeaux",
+    "Juventus",
+    "Real Madrid"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Bordeaux",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Juventus",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Real Madrid",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Association Sportive de Cannes Football",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "As Cannes Juv ",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ibrahimovic",
+  "nome": "Zlatan Ibrahimović",
+  "qid": "Q46896",
+  "tm": "3455",
+  "artigo": "Zlatan Ibrahimović",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Ajax",
+   "Juventus",
+   "Inter de Milão",
+   "Barcelona",
+   "Milan",
+   "Paris Saint-Germain",
+   "Manchester United",
+   "LA Galaxy"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Malmö FF (1999–2001)",
+    "Amsterdamsche Football Club Ajax (2000–2004)",
+    "Juventus Football Club (2004–2006)",
+    "Football Club Internazionale Milano (2006–2009)",
+    "Futbol Club Barcelona (2009–2010)",
+    "A.C. Milan (2010–2012)",
+    "Paris Saint-Germain (2012–2016)",
+    "Manchester United Football Club (2016–2018)",
+    "Los Angeles Galaxy (2018–2019)",
+    "A.C. Milan (2020–2023)"
+   ],
+   "wikipedia": [
+    "Malmö",
+    "Ajax",
+    "Juventus",
+    "Internazionale",
+    "Barcelona",
+    "Milan",
+    "PSG",
+    "Manchester United",
+    "Los Angeles Galaxy",
+    "Milan"
+   ],
+   "transfermarkt": [
+    "Malmo Abi",
+    "Fbk Balkan",
+    "Malmö",
+    "Ajax",
+    "Juventus",
+    "Inter",
+    "Barcelona",
+    "Milan",
+    "PSG",
+    "Man Utd",
+    "La Galaxy",
+    "Milan"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Ajax",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Juventus",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Inter de Milão",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Barcelona",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Milan",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Paris Saint-Germain",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Manchester United",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "LA Galaxy",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Paris Saint-Germain"
+  ],
+  "fortes": [
+   {
+    "nome": "Malmö FF",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "PSG",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Internazionale",
+    "por": [
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Malmo Abi",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Fbk Balkan",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Man Utd",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "beckham",
+  "nome": "David Beckham",
+  "qid": "Q10520",
+  "tm": "3139",
+  "artigo": "David Beckham",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Manchester United",
+   "Real Madrid",
+   "LA Galaxy",
+   "Milan",
+   "Paris Saint-Germain"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Manchester United Football Club (1992–2003)",
+    "Preston North End Football Club (1994–1995)",
+    "Real Madrid Club de Fútbol (2003–2007)",
+    "Los Angeles Galaxy (2007–2012)",
+    "A.C. Milan (2009–2010)",
+    "Paris Saint-Germain (2013–2013)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Tottenham Juv ",
+    "Man Utd S18",
+    "Man Utd",
+    "Preston Ne",
+    "Real Madrid",
+    "La Galaxy",
+    "Milan",
+    "PSG"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Manchester United",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Real Madrid",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "LA Galaxy",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Milan",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Paris Saint-Germain",
+    "por": [
+     "wikidata"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Manchester United",
+   "Paris Saint-Germain"
+  ],
+  "fortes": [],
+  "fracos": [
+   {
+    "nome": "Preston North End Football Club",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Tottenham Juv ",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Man Utd S18",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Preston Ne",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "PSG",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "drogba",
+  "nome": "Didier Drogba",
+  "qid": "Q48892",
+  "tm": "3924",
+  "artigo": "Didier Drogba",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Olympique de Marseille",
+   "Chelsea",
+   "Shanghai Shenhua",
+   "Galatasaray"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Le Mans Football Club (1998–2002)",
+    "En avant Guingamp (2002–2003)",
+    "Olympique de Marseille (2003–2004)",
+    "Chelsea Football Club (2004–2012)",
+    "Shanghai Shenhua (2012–2013)",
+    "Galatasaray Spor Kulübü (2013–2014)",
+    "Chelsea Football Club (2014–2015)",
+    "CF Montréal (2015–2016)",
+    "Phoenix FC (2017–2018)"
+   ],
+   "wikipedia": [
+    "Le Mans",
+    "Guingamp",
+    "Olympique de Marseille",
+    "Chelsea",
+    "Shanghai Shenhua",
+    "Galatasaray",
+    "Chelsea",
+    "Montreal Impact",
+    "Phoenix Rising"
+   ],
+   "transfermarkt": [
+    "Levallois Sc",
+    "Le Mans Uc 72",
+    "Guingamp",
+    "Marselha",
+    "Chelsea",
+    "Shanghai Shenhua",
+    "Galatasaray",
+    "Chelsea",
+    "Montreal",
+    "Arizona United"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Olympique de Marseille",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Chelsea",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Shanghai Shenhua",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Galatasaray",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Le Mans Football Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "En avant Guingamp",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "CF Montréal",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Phoenix FC",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Levallois Sc",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Marselha",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Arizona United",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "salah",
+  "nome": "Mohamed Salah",
+  "qid": "Q1354960",
+  "tm": "148455",
+  "artigo": "Mohamed Salah",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Basel",
+   "Chelsea",
+   "Fiorentina",
+   "Roma",
+   "Liverpool"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Al-Mokawloon (2010–2012)",
+    "FC Basel 1893 (2012–2014)",
+    "Chelsea Football Club (2014–2015)",
+    "ACF Fiorentina (2015–2015)",
+    "Associazione Sportiva Roma (2015–2017)",
+    "Liverpool Football Club (2017–2026)",
+    "Trabzonspor (2026–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "El Mokawloon",
+    "Fc Basel",
+    "Chelsea",
+    "Fiorentina",
+    "Roma",
+    "Liverpool",
+    "Trabzonspor"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Basel",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Chelsea",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Fiorentina",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Roma",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Liverpool",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Trabzonspor",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Al-Mokawloon",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "El Mokawloon",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "casemiro",
+  "nome": "Casemiro",
+  "qid": "Q616664",
+  "tm": "16306",
+  "artigo": "Casemiro",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "São Paulo",
+   "Real Madrid",
+   "Porto",
+   "Manchester United"
+  ],
+  "fontes": {
+   "wikidata": [
+    "São Paulo Futebol Clube (2010–2013)",
+    "Real Madrid Club de Fútbol (2013–2022)",
+    "Futebol Clube do Porto (2014–2015)",
+    "Manchester United Football Club (2022–2026)",
+    "Club Internacional de Fútbol Miami (2026–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Sao Paulo",
+    "Rm Castilla",
+    "Real Madrid",
+    "Fc Porto",
+    "Real Madrid",
+    "Man Utd",
+    "Miami"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "São Paulo",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Real Madrid",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Porto",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Manchester United",
+    "por": [
+     "wikidata"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Manchester United"
+  ],
+  "fortes": [
+   {
+    "nome": "Club Internacional de Fútbol Miami",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Rm Castilla",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Man Utd",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "alisson",
+  "nome": "Alisson Becker",
+  "qid": "Q18237361",
+  "tm": "105470",
+  "artigo": "Alisson Becker",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Internacional",
+   "Roma",
+   "Liverpool"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Sport Club Internacional (2013–2016)",
+    "Associazione Sportiva Roma (2016–2018)",
+    "Liverpool Football Club (2018–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Internacional",
+    "Roma",
+    "Liverpool"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Internacional",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Roma",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Liverpool",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [],
+  "fracos": []
+ },
+ {
+  "id": "marcelo",
+  "nome": "Marcelo",
+  "qid": "Q38136",
+  "tm": "44501",
+  "artigo": "Marcelo Vieira da Silva Júnior",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Fluminense",
+   "Real Madrid",
+   "Olympiacos"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Fluminense Football Club (2005–2006)",
+    "Real Madrid Club de Fútbol (2007–2022)",
+    "Olympiacos FC (2022–2023)",
+    "Fluminense Football Club (2023–2025)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Fluminense",
+    "Real Madrid",
+    "Olympiacos FC",
+    "Fluminense"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Fluminense",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Real Madrid",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Olympiacos",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [],
+  "fracos": []
+ },
+ {
+  "id": "gabigol",
+  "nome": "Gabigol",
+  "qid": "Q13646572",
+  "tm": "244275",
+  "artigo": "Gabigol",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Santos",
+   "Inter de Milão",
+   "Benfica",
+   "Flamengo",
+   "Cruzeiro"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Santos Futebol Clube (2013–2016)",
+    "Football Club Internazionale Milano (2016–2020)",
+    "Sport Lisboa e Benfica (2017–2018)",
+    "Santos Futebol Clube (2018–2018)",
+    "Clube de Regatas do Flamengo (2019–2024)",
+    "Cruzeiro Esporte Clube (2025–?)",
+    "Santos Futebol Clube (2026–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Santos",
+    "Inter",
+    "Benfica",
+    "Santos",
+    "Clube de Regatas do Flamengo",
+    "Cruzeiro",
+    "Santos"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Santos",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Inter de Milão",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Benfica",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Flamengo",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Cruzeiro",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [],
+  "fracos": []
+ },
+ {
+  "id": "ze-roberto",
+  "nome": "Zé Roberto",
+  "qid": "Q57167",
+  "tm": "89",
+  "artigo": "Zé Roberto (futebolista)",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Portuguesa",
+   "Real Madrid",
+   "Flamengo",
+   "Bayer Leverkusen",
+   "Bayern de Munique",
+   "Santos",
+   "Hamburgo",
+   "Palmeiras"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Associação Portuguesa de Desportos (1994–1997)",
+    "Real Madrid Club de Fútbol (1997–1998)",
+    "Clube de Regatas do Flamengo (1998–1998)",
+    "Bayer 04 Leverkusen (1998–2002)",
+    "Bayern de Munique (2002–2006)",
+    "Club Nacional de Football (2006–2009)",
+    "Santos Futebol Clube (2006–2007)",
+    "Bayern de Munique (2007–2009)",
+    "Hamburger SV (2009–2011)",
+    "Al-Gharafa Sports Club (2011–2012)",
+    "Grêmio Foot-Ball Porto Alegrense (2012–2014)",
+    "Sociedade Esportiva Palmeiras (2015–2017)"
+   ],
+   "wikipedia": [
+    "Portuguesa-SP",
+    "Real Madrid",
+    "Flamengo",
+    "Bayer Leverkusen",
+    "Bayern de Munique",
+    "Nacional-URU",
+    "Santos",
+    "Bayern de Munique",
+    "Hamburgo",
+    "Al-Gharafa",
+    "Grêmio",
+    "Palmeiras"
+   ],
+   "transfermarkt": [
+    "Portuguesa",
+    "Real Madrid",
+    "Clube de Regatas do Flamengo",
+    "Leverkusen",
+    "Bayern",
+    "Nacional",
+    "Santos",
+    "Bayern",
+    "Hamburgo",
+    "Al-Gharafa Sports Club",
+    "Grêmio",
+    "Palmeiras"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Portuguesa",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Real Madrid",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Flamengo",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Bayer Leverkusen",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Bayern de Munique",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Santos",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Hamburgo",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Palmeiras",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Club Nacional de Football",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Gharafa Sports Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Grêmio Foot-Ball Porto Alegrense",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Portuguesa-SP",
+    "por": [
+     "wikipedia"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "juninho-pernambucano",
+  "nome": "Juninho Pernambucano",
+  "qid": "Q203451",
+  "tm": "5354",
+  "artigo": "Juninho Pernambucano",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Sport Recife",
+   "Vasco da Gama",
+   "Olympique Lyonnais",
+   "Al-Gharafa",
+   "New York Red Bulls"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Sport Club do Recife (1992–1995)",
+    "Club de Regatas Vasco da Gama (1995–2001)",
+    "Olympique Lyonnais (2001–2009)",
+    "Al-Gharafa Sports Club (2009–2011)",
+    "Club de Regatas Vasco da Gama (2011–2012)",
+    "Red Bull New York (2013–2013)",
+    "Club de Regatas Vasco da Gama (2013–2014)"
+   ],
+   "wikipedia": [
+    "Sport",
+    "Vasco",
+    "Lyon",
+    "Al-Gharafa",
+    "Vasco",
+    "New York Red Bulls",
+    "Vasco"
+   ],
+   "transfermarkt": [
+    "Sport Club do Recife",
+    "Club de Regatas Vasco da Gama",
+    "Lyon",
+    "Al-Gharafa Sports Club",
+    "Club de Regatas Vasco da Gama",
+    "New York",
+    "Club de Regatas Vasco da Gama"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Sport Recife",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Vasco da Gama",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Olympique Lyonnais",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Al-Gharafa",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "New York Red Bulls",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Olympique Lyonnais"
+  ],
+  "fortes": [
+   {
+    "nome": "Lyon",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Red Bull New York",
+    "por": [
+     "wikidata"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sonny-anderson",
+  "nome": "Sonny Anderson",
+  "qid": "Q313861",
+  "tm": "3500",
+  "artigo": "Sonny Anderson",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Vasco da Gama",
+   "Olympique de Marseille",
+   "Monaco",
+   "Barcelona",
+   "Olympique Lyonnais",
+   "Villarreal"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Club de Regatas Vasco da Gama (1987–1990)",
+    "Guarani Futebol Clube (1991–1992)",
+    "Association du Servette Football Club (1992–1993)",
+    "Olympique de Marseille (1994–1994)",
+    "Association Sportive de Monaco Football Club (1994–1997)",
+    "Futbol Club Barcelona (1997–1999)",
+    "Olympique Lyonnais (1999–2003)",
+    "Villarreal Club de Fútbol (2003–2004)",
+    "Al-Rayyan Sports Club (2004–2005)",
+    "Al-Gharafa Sports Club (2005–2006)"
+   ],
+   "wikipedia": [
+    "XV de Jaú",
+    "Vasco",
+    "Guarani",
+    "Servette",
+    "Olympique de Marseille",
+    "Monaco",
+    "Barcelona",
+    "Lyon",
+    "Villarreal",
+    "Al-Rayyan",
+    "Al-Gharafa"
+   ],
+   "transfermarkt": [
+    "Xv De Jau",
+    "Club de Regatas Vasco da Gama",
+    "Guarani",
+    "Servette Fc",
+    "Marselha",
+    "Monaco",
+    "Barcelona",
+    "Lyon",
+    "Villarreal",
+    "Al-Rayyan Sports Club",
+    "Al-Gharafa Sports Club"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Vasco da Gama",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Olympique de Marseille",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Monaco",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Barcelona",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Olympique Lyonnais",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Villarreal",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Olympique Lyonnais"
+  ],
+  "fortes": [
+   {
+    "nome": "Guarani Futebol Clube",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Association du Servette Football Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Rayyan Sports Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Gharafa Sports Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "XV de Jaú",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Lyon",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Marselha",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "diego-ribas",
+  "nome": "Diego Ribas",
+  "qid": "Q109428",
+  "tm": "4248",
+  "artigo": "Diego Ribas",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Santos",
+   "Porto",
+   "Werder Bremen",
+   "Juventus",
+   "Wolfsburg",
+   "Atlético de Madrid",
+   "Fenerbahçe",
+   "Flamengo"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Santos Futebol Clube (1997–2004)",
+    "Futebol Clube do Porto (2004–2006)",
+    "Werder Bremen (2006–2009)",
+    "Juventus Football Club (2009–2010)",
+    "VfL Wolfsburg (2010–2014)",
+    "Club Atlético de Madrid (2011–2012)",
+    "Fenerbahçe Spor Kulübü (2014–?)",
+    "Club Atlético de Madrid (2014–2014)",
+    "Clube de Regatas do Flamengo (2016–?)"
+   ],
+   "wikipedia": [
+    "Santos",
+    "Porto",
+    "Werder Bremen",
+    "Juventus",
+    "Wolfsburg",
+    "Atlético de Madrid",
+    "Fenerbahçe",
+    "Flamengo"
+   ],
+   "transfermarkt": [
+    "Santos",
+    "Fc Porto",
+    "Werder Bremen",
+    "Juventus",
+    "Wolfsburg",
+    "Atlético",
+    "Fenerbahçe Spor Kulübü",
+    "Clube de Regatas do Flamengo"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Santos",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Porto",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Werder Bremen",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Juventus",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Wolfsburg",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Atlético de Madrid",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Fenerbahçe",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Flamengo",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [],
+  "fracos": []
+ },
+ {
+  "id": "lucas-moura",
+  "nome": "Lucas Moura",
+  "qid": "Q312886",
+  "tm": "77100",
+  "artigo": "Lucas Moura",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "São Paulo",
+   "Paris Saint-Germain",
+   "Tottenham"
+  ],
+  "fontes": {
+   "wikidata": [
+    "São Paulo Futebol Clube (2010–2013)",
+    "Paris Saint-Germain (2013–2018)",
+    "Tottenham Hotspur Football Club (2018–2023)",
+    "São Paulo Futebol Clube (2023–?)"
+   ],
+   "wikipedia": [
+    "São Paulo",
+    "PSG",
+    "Tottenham",
+    "São Paulo"
+   ],
+   "transfermarkt": [
+    "Sao Paulo",
+    "PSG",
+    "Tottenham",
+    "Sao Paulo"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "São Paulo",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Paris Saint-Germain",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Tottenham",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Paris Saint-Germain"
+  ],
+  "fortes": [
+   {
+    "nome": "PSG",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": []
+ },
+ {
+  "id": "arturo-vidal",
+  "nome": "Arturo Vidal",
+  "qid": "Q192671",
+  "tm": "37666",
+  "artigo": "Arturo Vidal",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Colo-Colo",
+   "Bayer Leverkusen",
+   "Juventus",
+   "Bayern de Munique",
+   "Barcelona",
+   "Inter de Milão",
+   "Flamengo"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Club Social y Deportivo Colo-Colo (2005–2007)",
+    "Club Universidad de Chile (2007–2011)",
+    "Juventus Football Club (2011–2015)",
+    "Bayern de Munique (2015–2018)",
+    "Futbol Club Barcelona (2018–2020)",
+    "Football Club Internazionale Milano (2020–2022)",
+    "Clube de Regatas do Flamengo (2022–2023)",
+    "Club Athletico Paranaense (2023–2024)",
+    "Club Social y Deportivo Colo-Colo (2024–?)"
+   ],
+   "wikipedia": [
+    "Colo Colo",
+    "Bayer Leverkusen",
+    "Juventus",
+    "Bayern",
+    "Barcelona",
+    "Internazionale",
+    "Flamengo",
+    "Athletico Paranaense",
+    "Colo Colo"
+   ],
+   "transfermarkt": [
+    "Club Social y Deportivo Colo-Colo",
+    "Leverkusen",
+    "Juventus",
+    "Bayern",
+    "Barcelona",
+    "Inter",
+    "Clube de Regatas do Flamengo",
+    "Club Athletico Paranaense",
+    "Club Social y Deportivo Colo-Colo"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Colo-Colo",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Bayer Leverkusen",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Juventus",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Bayern de Munique",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Barcelona",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Inter de Milão",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Flamengo",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Club Athletico Paranaense",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Club Universidad de Chile",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Internazionale",
+    "por": [
+     "wikipedia"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "dzeko",
+  "nome": "Edin Džeko",
+  "qid": "Q153786",
+  "tm": "28396",
+  "artigo": "Edin Džeko",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Wolfsburg",
+   "Manchester City",
+   "Roma",
+   "Inter de Milão",
+   "Fenerbahçe",
+   "Fiorentina",
+   "Schalke 04"
+  ],
+  "fontes": {
+   "wikidata": [
+    "FK Željezničar Sarajevo (2003–2005)",
+    "FK Teplice (2005–2007)",
+    "FK Ústí nad Labem (2005–2005)",
+    "VfL Wolfsburg (2007–2011)",
+    "Manchester City Football Club (2011–2016)",
+    "Associazione Sportiva Roma (2015–2021)",
+    "Football Club Internazionale Milano (2021–2023)",
+    "Fenerbahçe Spor Kulübü (2023–2025)",
+    "ACF Fiorentina (2025–2026)",
+    "Fußball-Club Gelsenkirchen-Schalke 04 (2026–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Zeljeznicar",
+    "Teplice",
+    "Usti Nad Labem",
+    "Wolfsburg",
+    "Man City",
+    "Roma",
+    "Inter",
+    "Fenerbahçe Spor Kulübü",
+    "Fiorentina",
+    "Schalke"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Wolfsburg",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Manchester City",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Roma",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Inter de Milão",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Fenerbahçe",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Fiorentina",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Schalke 04",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Manchester City"
+  ],
+  "fortes": [
+   {
+    "nome": "FK Željezničar Sarajevo",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "FK Teplice",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "FK Ústí nad Labem",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Man City",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hulk",
+  "nome": "Hulk",
+  "qid": "Q62786",
+  "tm": "80562",
+  "artigo": "Hulk (futebolista)",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Vitória",
+   "Kawasaki Frontale",
+   "Tokyo Verdy",
+   "Porto",
+   "Zenit",
+   "Shanghai Port",
+   "Atlético Mineiro"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Esporte Clube Vitória (2004–2005)",
+    "Kawasaki Frontale (2005–2008)",
+    "Consadole Sapporo (2006–2006)",
+    "Tokyo Verdy (2007–2008)",
+    "Futebol Clube do Porto (2008–2012)",
+    "FC Zenit São Petersburgo (2012–2016)",
+    "Shanghai Port Football Club (2016–2020)",
+    "Clube Atlético Mineiro (2021–2026)",
+    "Fluminense Football Club (2026–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Kawasaki Frontale",
+    "Consadole Sapporo",
+    "Tokyo Verdy",
+    "Fc Porto",
+    "Zenit ",
+    "Shanghai Port Football Club",
+    "Atletico Mg",
+    "Fluminense"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Vitória",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Kawasaki Frontale",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Tokyo Verdy",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Porto",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Zenit",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Shanghai Port",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Atlético Mineiro",
+    "por": [
+     "wikidata"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Vitória",
+   "Atlético Mineiro"
+  ],
+  "fortes": [
+   {
+    "nome": "Consadole Sapporo",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Fluminense Football Club",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Atletico Mg",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "coutinho",
+  "nome": "Philippe Coutinho",
+  "qid": "Q311872",
+  "tm": "80444",
+  "artigo": "Philippe Coutinho",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Vasco da Gama",
+   "Inter de Milão",
+   "Espanyol",
+   "Liverpool",
+   "Barcelona",
+   "Bayern de Munique",
+   "Aston Villa"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Football Club Internazionale Milano (2008–2013)",
+    "Club de Regatas Vasco da Gama (2009–2010)",
+    "Reial Club Deportiu Espanyol de Barcelona (2012–2012)",
+    "Liverpool Football Club (2013–2018)",
+    "Futbol Club Barcelona (2018–2022)",
+    "Bayern de Munique (2019–2020)",
+    "Aston Villa Football Club (2022–2025)",
+    "Lekhwiya Sports Club (2023–2024)",
+    "Club de Regatas Vasco da Gama (2024–2026)",
+    "Santos Futebol Clube (2026–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Inter",
+    "Club de Regatas Vasco da Gama",
+    "Espanyol",
+    "Liverpool",
+    "Barcelona",
+    "Bayern",
+    "Aston Villa",
+    "Lekhwiya Sports Club",
+    "Club de Regatas Vasco da Gama",
+    "Santos"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Vasco da Gama",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Inter de Milão",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Espanyol",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Liverpool",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Barcelona",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Bayern de Munique",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Aston Villa",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Lekhwiya Sports Club",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Santos Futebol Clube",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": []
+ },
+ {
+  "id": "douglas-costa",
+  "nome": "Douglas Costa",
+  "qid": "Q391680",
+  "tm": "75615",
+  "artigo": "Douglas Costa",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Grêmio",
+   "Shakhtar Donetsk",
+   "Bayern de Munique",
+   "Juventus",
+   "LA Galaxy",
+   "Fluminense"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Grêmio Foot-Ball Porto Alegrense (2008–2010)",
+    "Futbolniy Klub Shakhtar (2010–2015)",
+    "Bayern de Munique (2015–2018)",
+    "Juventus Football Club (2017–2022)",
+    "Bayern de Munique (2020–2021)",
+    "Grêmio Foot-Ball Porto Alegrense (2021–2021)",
+    "Los Angeles Galaxy (2022–2023)",
+    "Fluminense Football Club (2024–2024)",
+    "Sydney Football Club (2024–2025)",
+    "Associazione Calcio Chievo Verona (2026–2026)",
+    "Al-Ittifaq F. C. (2026–?)"
+   ],
+   "wikipedia": [
+    "Grêmio",
+    "Shakhtar Donetsk",
+    "Bayern Munique",
+    "Juventus",
+    "Bayern Munique",
+    "Grêmio",
+    "Los Angeles Galaxy",
+    "Fluminense",
+    "Sydney",
+    "Chievo Verona",
+    "Al-Ittifaq"
+   ],
+   "transfermarkt": [
+    "Grêmio",
+    "Futbolniy Klub Shakhtar",
+    "Bayern",
+    "Juventus",
+    "Bayern",
+    "Grêmio",
+    "La Galaxy",
+    "Fluminense",
+    "Sydney Football Club",
+    "Chievo Verona",
+    "Al Ittifaq"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Grêmio",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Shakhtar Donetsk",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Bayern de Munique",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Juventus",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "LA Galaxy",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Fluminense",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Sydney Football Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Associazione Calcio Chievo Verona",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Ittifaq F. C.",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": []
+ },
+ {
+  "id": "riquelme",
+  "nome": "Juan Román Riquelme",
+  "qid": "Q192965",
+  "tm": "3854",
+  "artigo": "Juan Román Riquelme",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Boca Juniors",
+   "Barcelona",
+   "Villarreal"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Club Atlético Boca Juniors (1996–2002)",
+    "Futbol Club Barcelona (2002–2005)",
+    "Villarreal Club de Fútbol (2003–2007)",
+    "Club Atlético Boca Juniors (2007–2014)",
+    "Asociación Atlética Argentinos Juniors (2014–2015)"
+   ],
+   "wikipedia": [
+    "Boca Juniors",
+    "Barcelona",
+    "Villarreal",
+    "Boca Juniors",
+    "Argentinos Juniors"
+   ],
+   "transfermarkt": [
+    "Boca Juniors",
+    "Barcelona",
+    "Villarreal",
+    "Boca Juniors",
+    "Argentinos Jrs "
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Boca Juniors",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Barcelona",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Villarreal",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Asociación Atlética Argentinos Juniors",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Argentinos Jrs ",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "everton-ribeiro",
+  "nome": "Everton Ribeiro",
+  "qid": "Q4025436",
+  "tm": "52896",
+  "artigo": "Éverton Ribeiro",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Corinthians",
+   "Coritiba",
+   "Cruzeiro",
+   "Al-Ahli",
+   "Flamengo",
+   "Bahia"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Clube de Regatas do Flamengo",
+    "Sport Club Corinthians Paulista (2007–2011)",
+    "Associação Desportiva São Caetano (2008–2010)",
+    "Coritiba Foot Ball Club (2011–2012)",
+    "Cruzeiro Esporte Clube (2013–2014)",
+    "Al-Ahli (Emirados Árabes Unidos) (2015–?)",
+    "Esporte Clube Bahia (2024–?)"
+   ],
+   "wikipedia": [
+    "Corinthians",
+    "São Caetano",
+    "Coritiba",
+    "Cruzeiro",
+    "Al-Ahli",
+    "Flamengo",
+    "Bahia"
+   ],
+   "transfermarkt": [
+    "Corinthians",
+    "Associação Desportiva São Caetano",
+    "Coritiba",
+    "Cruzeiro",
+    "Al Ahli Uae ",
+    "Clube de Regatas do Flamengo",
+    "Esporte Clube Bahia"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Corinthians",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Coritiba",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Cruzeiro",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Ahli",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Flamengo",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Bahia",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Associação Desportiva São Caetano",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": []
+ },
+ {
+  "id": "thiago-silva",
+  "nome": "Thiago Silva",
+  "qid": "Q210453",
+  "tm": "29241",
+  "artigo": "Thiago Silva",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Fluminense",
+   "Porto",
+   "Milan",
+   "Paris Saint-Germain",
+   "Chelsea"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Fluminense Football Club (1998–2000)",
+    "Barcelona Esporte Clube (2000–2001)",
+    "Fluminense Football Club (2001–2001)",
+    "Pedrabranca Futebol Clube (2002–2003)",
+    "Esporte Clube Juventude (2003–2004)",
+    "Futebol Clube do Porto (2004–2005)",
+    "FC Dinamo Moscovo (2005–2005)",
+    "Fluminense Football Club (2006–2008)",
+    "A.C. Milan (2009–2012)",
+    "Paris Saint-Germain (2012–2020)",
+    "Chelsea Football Club (2020–2024)",
+    "Fluminense Football Club (2024–2025)",
+    "Futebol Clube do Porto (2026–2026)",
+    "Fluminense Football Club (2026–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Rs Futebol",
+    "Esporte Clube Juventude",
+    "Fc Porto",
+    "FC Dinamo Moscovo",
+    "Fluminense",
+    "Milan",
+    "PSG",
+    "Chelsea",
+    "Fluminense",
+    "Fc Porto",
+    "Fluminense"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Fluminense",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Porto",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Milan",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Paris Saint-Germain",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Chelsea",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Paris Saint-Germain"
+  ],
+  "fortes": [
+   {
+    "nome": "Esporte Clube Juventude",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "FC Dinamo Moscovo",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Barcelona Esporte Clube",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Pedrabranca Futebol Clube",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Rs Futebol",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "PSG",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "firmino",
+  "nome": "Roberto Firmino",
+  "qid": "Q602525",
+  "tm": "131789",
+  "artigo": "Roberto Firmino",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Figueirense",
+   "Hoffenheim",
+   "Liverpool",
+   "Al-Ahli"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Figueirense Futebol Clube (2009–2011)",
+    "TSG 1899 Hoffenheim (2011–2015)",
+    "Liverpool Football Club (2015–2023)",
+    "Al-Ahli (2023–2025)",
+    "Al-Sadd Sports Club (2025–?)"
+   ],
+   "wikipedia": [
+    "Figueirense",
+    "Hoffenheim",
+    "Liverpool",
+    "Al-Ahli-SAU",
+    "Al-Sadd"
+   ],
+   "transfermarkt": [
+    "Figueirense Futebol Clube",
+    "Tombense",
+    "Figueirense Futebol Clube",
+    "Hoffenheim",
+    "Liverpool",
+    "Al-Ahli",
+    "Al-Sadd Sports Club"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Figueirense",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Hoffenheim",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Liverpool",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Ahli",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Al-Sadd Sports Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Tombense",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "otamendi",
+  "nome": "Nicolás Otamendi",
+  "qid": "Q182063",
+  "tm": "54781",
+  "artigo": "Nicolás Otamendi",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Vélez Sarsfield",
+   "Porto",
+   "Valencia",
+   "Manchester City",
+   "Benfica"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Club Atlético Vélez Sársfield (2007–2010)",
+    "Futebol Clube do Porto (2010–2014)",
+    "Clube Atlético Mineiro (2014–2014)",
+    "Valencia Club de Fútbol (2014–2015)",
+    "Manchester City Football Club (2015–2020)",
+    "Sport Lisboa e Benfica (2020–2026)",
+    "Club Atlético River Plate (2026–?)"
+   ],
+   "wikipedia": [
+    "Vélez Sársfield",
+    "Porto",
+    "Atlético-MG",
+    "Valencia",
+    "Manchester City",
+    "Benfica",
+    "River Plate"
+   ],
+   "transfermarkt": [
+    "Velez Sarsfield",
+    "Fc Porto",
+    "Atletico Mg",
+    "Valencia",
+    "Man City",
+    "Benfica",
+    "River Plate"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Vélez Sarsfield",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Porto",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Valencia",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Manchester City",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Benfica",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Club Atlético River Plate",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Atlético-MG",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Clube Atlético Mineiro",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Man City",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "adriano",
+  "nome": "Adriano Imperador",
+  "qid": "Q170452",
+  "tm": "5876",
+  "artigo": "Adriano Imperador",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Flamengo",
+   "Inter de Milão",
+   "Fiorentina",
+   "Parma",
+   "São Paulo",
+   "Roma",
+   "Corinthians",
+   "Athletico Paranaense",
+   "Atlético Mineiro"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Clube de Regatas do Flamengo (2000–2001)",
+    "Football Club Internazionale Milano (2001–2002)",
+    "ACF Fiorentina (2002–2002)",
+    "Parma Calcio 1913 (2002–2004)",
+    "Football Club Internazionale Milano (2004–2009)",
+    "São Paulo Futebol Clube (2008–2008)",
+    "Clube de Regatas do Flamengo (2009–2010)",
+    "Associazione Sportiva Roma (2010–2011)",
+    "Sport Club Corinthians Paulista (2011–2012)",
+    "Clube de Regatas do Flamengo (2012–2012)",
+    "Club Athletico Paranaense (2014–2014)",
+    "Miami United Football Club (2016–2016)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Clube de Regatas do Flamengo",
+    "Inter",
+    "Florenz",
+    "Ac Parma",
+    "Inter",
+    "Sao Paulo",
+    "Clube de Regatas do Flamengo",
+    "Roma",
+    "Corinthians",
+    "Clube de Regatas do Flamengo",
+    "Club Athletico Paranaense",
+    "Miami United"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Flamengo",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Inter de Milão",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Fiorentina",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Parma",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "São Paulo",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Roma",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Corinthians",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Athletico Paranaense",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Atlético Mineiro",
+    "por": []
+   }
+  ],
+  "semNenhuma": [
+   "Atlético Mineiro"
+  ],
+  "soUma": [
+   "Fiorentina"
+  ],
+  "fortes": [
+   {
+    "nome": "Miami United Football Club",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Florenz",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vagner-love",
+  "nome": "Vágner Love",
+  "qid": "Q295880",
+  "tm": "18829",
+  "artigo": "Vágner Love",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Palmeiras",
+   "CSKA Moscou",
+   "Flamengo",
+   "Shandong Taishan",
+   "Corinthians",
+   "Beşiktaş",
+   "Monaco",
+   "Sport Recife"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Sociedade Esportiva Palmeiras (2002–2004)",
+    "PFC CSKA Moscovo (2004–2012)",
+    "Sociedade Esportiva Palmeiras (2009–2009)",
+    "Clube de Regatas do Flamengo (2010–2013)",
+    "PFC CSKA Moscovo (2013–2013)",
+    "Shandong Taishan Football Club (2013–2015)",
+    "Sport Club Corinthians Paulista (2015–2016)",
+    "Association Sportive de Monaco Football Club (2016–2016)",
+    "Aytemiz Alanyaspor (2016–2018)",
+    "Beşiktaş Jimnastik Kulübü (2018–2019)",
+    "Sport Club Corinthians Paulista (2019–2020)",
+    "FC Kairat (2020–2021)",
+    "Football Club Midtjylland (2022–2022)",
+    "Sport Club do Recife (2022–2023)",
+    "Atlético Clube Goianiense (2024–2024)",
+    "Avaí Futebol Clube (2024–2025)",
+    "Retrô Futebol Clube Brasil (2025–2026)"
+   ],
+   "wikipedia": [
+    "Palmeiras",
+    "CSKA Moscou",
+    "Palmeiras",
+    "Flamengo",
+    "CSKA Moscou",
+    "Shandong",
+    "Corinthians",
+    "Monaco",
+    "Alanyaspor",
+    "Besiktas",
+    "Corinthians",
+    "Kairat",
+    "Midtjylland",
+    "Sport",
+    "Atlético-GO",
+    "Avaí",
+    "Retrô"
+   ],
+   "transfermarkt": [
+    "Palmeiras",
+    "PFC CSKA Moscovo",
+    "Palmeiras",
+    "Clube de Regatas do Flamengo",
+    "PFC CSKA Moscovo",
+    "Shandong Taishan Football Club",
+    "Corinthians",
+    "Monaco",
+    "Aytemiz Alanyaspor",
+    "Besiktas",
+    "Corinthians",
+    "Kairat Almaty",
+    "Midtjylland",
+    "Sport Club do Recife",
+    "Atletico Go",
+    "Avaí",
+    "Retrô Futebol Clube Brasil"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Palmeiras",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "CSKA Moscou",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Flamengo",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Shandong Taishan",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Corinthians",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Beşiktaş",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Monaco",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Sport Recife",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Aytemiz Alanyaspor",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "FC Kairat",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Football Club Midtjylland",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Avaí Futebol Clube",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Retrô Futebol Clube Brasil",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Atlético-GO",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Atlético Clube Goianiense",
+    "por": [
+     "wikidata"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "jo",
+  "nome": "Jô",
+  "qid": "Q314099",
+  "tm": "34156",
+  "artigo": "Jô (futebolista)",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Corinthians",
+   "CSKA Moscou",
+   "Manchester City",
+   "Everton",
+   "Galatasaray",
+   "Internacional",
+   "Atlético Mineiro",
+   "Nagoya Grampus"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Sport Club Corinthians Paulista (2003–2005)",
+    "PFC CSKA Moscovo (2005–2008)",
+    "Manchester City Football Club (2008–2011)",
+    "Everton Football Club (2009–2010)",
+    "Galatasaray Spor Kulübü (2010–2010)",
+    "Sport Club Internacional (2011–2012)",
+    "Clube Atlético Mineiro (2012–2015)",
+    "Al-Shabab Al Arabi Club (2015–2016)",
+    "Jiangsu Football Club (2016–2016)",
+    "Sport Club Corinthians Paulista (2017–2017)",
+    "Nagoya Grampus (2018–2020)",
+    "Sport Club Corinthians Paulista (2020–2022)",
+    "Ceará Sporting Club (2022–2022)",
+    "Al Jabalain (2023–2023)",
+    "Amazonas Futebol Clube (2024–2024)",
+    "Itabirito Futebol Clube (2024–2025)"
+   ],
+   "wikipedia": [
+    "Corinthians",
+    "CSKA Moscou",
+    "Manchester City",
+    "Everton",
+    "Galatasaray",
+    "Inter",
+    "Atlético-MG",
+    "Al-Shabab",
+    "Jiangsu Suning",
+    "Corinthians",
+    "Nagoya Grampus",
+    "Corinthians",
+    "Ceará",
+    "Al-Jabalain",
+    "Amazonas",
+    "Itabirito"
+   ],
+   "transfermarkt": [
+    "Corinthians",
+    "PFC CSKA Moscovo",
+    "Man City",
+    "Everton",
+    "Galatasaray",
+    "Internacional",
+    "Atletico Mg",
+    "Al-Shabab Al Arabi Club",
+    "Js Suning",
+    "Corinthians",
+    "Nagoya Grampus",
+    "Corinthians",
+    "Ceará",
+    "Al Jabalain",
+    "Amazonas Futebol Clube",
+    "Itabirito"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Corinthians",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "CSKA Moscou",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Manchester City",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Everton",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Galatasaray",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Internacional",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Atlético Mineiro",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Nagoya Grampus",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Atlético Mineiro"
+  ],
+  "fortes": [
+   {
+    "nome": "Al-Shabab Al Arabi Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Ceará Sporting Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al Jabalain",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Amazonas Futebol Clube",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Itabirito Futebol Clube",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Jiangsu Football Club",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Atlético-MG",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Man City",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Js Suning",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nilmar",
+  "nome": "Nilmar",
+  "qid": "Q208687",
+  "tm": "22750",
+  "artigo": "Nilmar",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Internacional",
+   "Corinthians",
+   "Olympique Lyonnais",
+   "Villarreal",
+   "Santos"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Sport Club Internacional (2002–2004)",
+    "Olympique Lyonnais (2004–2005)",
+    "Sport Club Corinthians Paulista (2005–2007)",
+    "Sport Club Internacional (2007–2009)",
+    "Villarreal Club de Fútbol (2009–2012)",
+    "Al-Rayyan Sports Club (2012–2014)",
+    "Lekhwiya Sports Club (2013–2013)",
+    "Al-Jaish (Qatar) (2014–2014)",
+    "Sport Club Internacional (2014–2015)",
+    "Al-Nasr Sports Club (2015–2017)",
+    "Santos Futebol Clube (2017–2017)"
+   ],
+   "wikipedia": [
+    "Internacional-RS",
+    "Lyon",
+    "Corinthians",
+    "Internacional-RS",
+    "Villarreal",
+    "Al-Rayyan",
+    "El-Jaish",
+    "Internacional-RS",
+    "Al-Nasr",
+    "Santos"
+   ],
+   "transfermarkt": [
+    "Internacional",
+    "Lyon",
+    "Corinthians",
+    "Internacional",
+    "Villarreal",
+    "Al-Rayyan Sports Club",
+    "Al Jaish",
+    "Internacional",
+    "Al Nasr",
+    "Santos"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Internacional",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Corinthians",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Olympique Lyonnais",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Villarreal",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Santos",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Olympique Lyonnais"
+  ],
+  "fortes": [
+   {
+    "nome": "Al-Rayyan Sports Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Nasr Sports Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Jaish (Qatar)",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Lyon",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Lekhwiya Sports Club",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Internacional-RS",
+    "por": [
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "El-Jaish",
+    "por": [
+     "wikipedia"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "pato",
+  "nome": "Alexandre Pato",
+  "qid": "Q138075",
+  "tm": "37579",
+  "artigo": "Alexandre Pato",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Internacional",
+   "Milan",
+   "Corinthians",
+   "São Paulo",
+   "Villarreal",
+   "Orlando City"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Sport Club Internacional (2006–2007)",
+    "A.C. Milan (2007–2013)",
+    "Sport Club Corinthians Paulista (2013–2016)",
+    "São Paulo Futebol Clube (2014–2015)",
+    "Chelsea Football Club (2016–2016)",
+    "Villarreal Club de Fútbol (2016–2017)",
+    "Tianjin Tianhai Football Club (2017–2018)",
+    "São Paulo Futebol Clube (2019–2020)",
+    "Orlando City Soccer Club (2021–2022)",
+    "São Paulo Futebol Clube (2023–2023)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Internacional",
+    "Milan",
+    "Corinthians",
+    "Sao Paulo",
+    "Chelsea",
+    "Villarreal",
+    "Tianjin Tianhai Football Club",
+    "Sao Paulo",
+    "Orlando",
+    "Sao Paulo"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Internacional",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Milan",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Corinthians",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "São Paulo",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Villarreal",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Orlando City",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Chelsea Football Club",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Tianjin Tianhai Football Club",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": []
+ },
+ {
+  "id": "bendtner",
+  "nome": "Nicklas Bendtner",
+  "qid": "Q167240",
+  "tm": "34557",
+  "artigo": "Nicklas Bendtner",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Arsenal",
+   "Birmingham City",
+   "Sunderland",
+   "Juventus",
+   "Wolfsburg",
+   "Nottingham Forest",
+   "Rosenborg",
+   "Copenhague"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Kjøbenhavns Boldklub",
+    "Tårnby Boldklub",
+    "Arsenal Football Club (2005–2014)",
+    "Birmingham City Football Club (2006–2007)",
+    "Sunderland Association Football Club (2011–2012)",
+    "Juventus Football Club (2012–2013)",
+    "VfL Wolfsburg (2014–2016)",
+    "Nottingham Forest Football Club (2016–2017)",
+    "Rosenborg Ballklub (2017–2019)",
+    "F.C. København (2019–2019)"
+   ],
+   "wikipedia": [
+    "Arsenal",
+    "Birmingham City",
+    "Sunderland",
+    "Juventus",
+    "Wolfsburg",
+    "Nottingham Forest",
+    "Rosenborg",
+    "Copenhague"
+   ],
+   "transfermarkt": [
+    "Fck Juvenis",
+    "Arsenal Sub 18",
+    "Birmingham",
+    "Arsenal",
+    "Afc Sunderland",
+    "Juventus",
+    "Wolfsburg",
+    "Nottm Forest",
+    "Rosenborg Bk",
+    "Copenhague"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Arsenal",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Birmingham City",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Sunderland",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Juventus",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Wolfsburg",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Nottingham Forest",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Rosenborg",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Copenhague",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [],
+  "fracos": [
+   {
+    "nome": "Kjøbenhavns Boldklub",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Tårnby Boldklub",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "F.C. København",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Fck Juvenis",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Nottm Forest",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "quaresma",
+  "nome": "Ricardo Quaresma",
+  "qid": "Q188241",
+  "tm": "4188",
+  "artigo": "Ricardo Quaresma",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Sporting",
+   "Barcelona",
+   "Porto",
+   "Inter de Milão",
+   "Chelsea",
+   "Beşiktaş",
+   "Vitória de Guimarães"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Sporting Clube de Portugal (2001–2003)",
+    "Futbol Club Barcelona (2003–2004)",
+    "Futebol Clube do Porto (2004–2008)",
+    "Football Club Internazionale Milano (2008–2010)",
+    "Chelsea Football Club (2009–2009)",
+    "Beşiktaş Jimnastik Kulübü (2010–2012)",
+    "Al-Ahli (Emirados Árabes Unidos) (2013–2013)",
+    "Futebol Clube do Porto (2014–2015)",
+    "Beşiktaş Jimnastik Kulübü (2015–2019)",
+    "Kasımpaşa Spor Kulübü (2019–2020)",
+    "Vitória Sport Clube (2020–2022)"
+   ],
+   "wikipedia": [
+    "Sporting-POR",
+    "Barcelona",
+    "Porto",
+    "Internazionale",
+    "Chelsea",
+    "Besiktas",
+    "Al-Ahli",
+    "Porto",
+    "Besiktas",
+    "Kasımpaşa",
+    "Vitória SC"
+   ],
+   "transfermarkt": [
+    "Scp Formacao",
+    "Sporting Sub 15",
+    "Sporting Sub 17",
+    "Sporting Sub 19",
+    "Sporting",
+    "Barcelona",
+    "Fc Porto",
+    "Inter",
+    "Chelsea",
+    "Besiktas",
+    "Al Ahli Uae ",
+    "Fc Porto",
+    "Besiktas",
+    "Kasimpasa",
+    "Vit Guimaraes"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Sporting",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Barcelona",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Porto",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Inter de Milão",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Chelsea",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Beşiktaş",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Vitória de Guimarães",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Al-Ahli (Emirados Árabes Unidos)",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Kasımpaşa Spor Kulübü",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Internazionale",
+    "por": [
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Scp Formacao",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al Ahli Uae ",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Kasimpasa",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Vit Guimaraes",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "balotelli",
+  "nome": "Mario Balotelli",
+  "qid": "Q129700",
+  "tm": "45146",
+  "artigo": "Mario Balotelli",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "Inter de Milão",
+   "Manchester City",
+   "Milan",
+   "Liverpool",
+   "Nice",
+   "Olympique de Marseille",
+   "Brescia",
+   "Monza"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Associazione Calcio Lumezzane (2006–2007)",
+    "Football Club Internazionale Milano (2007–2010)",
+    "Manchester City Football Club (2010–2013)",
+    "A.C. Milan (2013–2014)",
+    "Liverpool Football Club (2014–2016)",
+    "A.C. Milan (2015–2016)",
+    "Olympique Gymnaste Club de Nice Côte d'Azur (2016–2019)",
+    "Olympique de Marseille (2019–2019)",
+    "Brescia Calcio (2019–2020)",
+    "A.C. Monza (2020–2021)",
+    "Adana Demirspor Kulübü (2021–2022)",
+    "Football Club Sion (2022–2023)",
+    "Adana Demirspor Kulübü (2023–2024)",
+    "Genoa Cricket and Football Club (2024–2025)",
+    "Al-Ittifaq F. C. (2026–?)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Lumezzane",
+    "Inter Sub 19",
+    "Inter",
+    "Man City",
+    "Milan",
+    "Liverpool",
+    "Milan",
+    "Nice",
+    "Marselha",
+    "Brescia",
+    "Monza",
+    "Adana Demirspor Kulübü",
+    "Fc Sion",
+    "Adana Demirspor Kulübü",
+    "Genoa",
+    "Al Ittifaq"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Inter de Milão",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Manchester City",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Milan",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Liverpool",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Nice",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Olympique de Marseille",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Brescia",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Monza",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [
+   "Manchester City",
+   "Olympique de Marseille"
+  ],
+  "fortes": [
+   {
+    "nome": "Associazione Calcio Lumezzane",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Adana Demirspor Kulübü",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Football Club Sion",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Genoa Cricket and Football Club",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Ittifaq F. C.",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Inter Sub 19",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Man City",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Marselha",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "keirrison",
+  "nome": "Keirrison",
+  "qid": "Q314225",
+  "tm": "68821",
+  "artigo": "Keirrison",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Coritiba",
+   "Palmeiras",
+   "Barcelona",
+   "Benfica",
+   "Fiorentina",
+   "Santos",
+   "Cruzeiro",
+   "Coritiba",
+   "Londrina",
+   "Arouca"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Coritiba Foot Ball Club (2006–2009)",
+    "Sociedade Esportiva Palmeiras (2009–2009)",
+    "Sport Lisboa e Benfica (2009–2010)",
+    "Futbol Club Barcelona (2009–2014)",
+    "ACF Fiorentina (2010–2010)",
+    "Santos Futebol Clube (2010–2011)",
+    "Cruzeiro Esporte Clube (2011–2012)",
+    "Coritiba Foot Ball Club (2012–2015)",
+    "Londrina Esporte Clube (2016–?)"
+   ],
+   "wikipedia": [
+    "Coritiba",
+    "Palmeiras",
+    "Barcelona",
+    "Benfica",
+    "Fiorentina",
+    "Santos",
+    "Cruzeiro",
+    "Coritiba",
+    "Londrina",
+    "Arouca",
+    "Coritiba",
+    "Londrina"
+   ],
+   "transfermarkt": [
+    "Coritiba",
+    "Palmeiras",
+    "Desp Brasil",
+    "Palmeiras",
+    "Barcelona",
+    "Benfica",
+    "Fiorentina",
+    "Santos",
+    "Cruzeiro",
+    "Coritiba",
+    "Londrina Esporte Clube",
+    "Arouca",
+    "Coritiba",
+    "Londrina Esporte Clube",
+    "Palm Beach"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Coritiba",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Palmeiras",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Barcelona",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Benfica",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Fiorentina",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Santos",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Cruzeiro",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Coritiba",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Londrina",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Arouca",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [],
+  "fracos": [
+   {
+    "nome": "Desp Brasil",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Palm Beach",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "diego-tardelli",
+  "nome": "Diego Tardelli",
+  "qid": "Q905206",
+  "tm": "37536",
+  "artigo": "Diego Tardelli",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "São Paulo",
+   "Flamengo",
+   "Real Betis",
+   "PSV",
+   "Atlético Mineiro",
+   "Grêmio",
+   "Shandong Taishan",
+   "Bahia"
+  ],
+  "fontes": {
+   "wikidata": [
+    "São Paulo Futebol Clube (2004–2007)",
+    "Real Betis Balompié (2005–2006)",
+    "Associação Desportiva São Caetano (2006–2006)",
+    "Real Betis Balompié (2006–2006)",
+    "PSV Eindhoven (2006–2007)",
+    "Clube de Regatas do Flamengo (2008–2008)",
+    "Clube Atlético Mineiro (2009–2011)",
+    "FC Anji Makhachkala (2011–2011)",
+    "Al-Gharafa Sports Club (2012–2013)",
+    "Clube Atlético Mineiro (2013–2014)",
+    "Shandong Taishan Football Club (2015–?)",
+    "Clube de Regatas do Flamengo (2017–?)"
+   ],
+   "wikipedia": [
+    "São Paulo",
+    "Real Betis",
+    "São Caetano",
+    "PSV Eindhoven",
+    "Flamengo",
+    "Atlético Mineiro",
+    "Anzhi Makhachkala",
+    "Al-Gharafa",
+    "Atlético Mineiro",
+    "Shandong Luneng",
+    "Grêmio",
+    "Atlético Mineiro",
+    "Santos"
+   ],
+   "transfermarkt": [
+    "Sao Paulo",
+    "Betis",
+    "Associação Desportiva São Caetano",
+    "PSV",
+    "Clube de Regatas do Flamengo",
+    "Atletico Mg",
+    "FC Anji Makhachkala",
+    "Al-Gharafa Sports Club",
+    "Atletico Mg",
+    "Shandong Taishan Football Club",
+    "Grêmio",
+    "Atletico Mg",
+    "Santos"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "São Paulo",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Flamengo",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Real Betis",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "PSV",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Atlético Mineiro",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Grêmio",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Shandong Taishan",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Bahia",
+    "por": []
+   }
+  ],
+  "semNenhuma": [
+   "Bahia"
+  ],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Associação Desportiva São Caetano",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Gharafa Sports Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "FC Anji Makhachkala",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Santos",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Anzhi Makhachkala",
+    "por": [
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Shandong Luneng",
+    "por": [
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Atletico Mg",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "elkeson",
+  "nome": "Elkeson",
+  "qid": "Q219298",
+  "tm": "103588",
+  "artigo": "Elkeson",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Vitória",
+   "Botafogo",
+   "Guangzhou Evergrande",
+   "Shanghai Port",
+   "Grêmio"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Esporte Clube Vitória (2001–2011)",
+    "Botafogo de Futebol e Regatas (2011–2012)",
+    "Guangzhou Football Club (2012–2015)",
+    "Shanghai Port Football Club (2016–?)"
+   ],
+   "wikipedia": [
+    "Vitória",
+    "Botafogo",
+    "Guangzhou Evergrande",
+    "Shanghai SIPG",
+    "Guangzhou Evergrande",
+    "Grêmio",
+    "Chengdu Rongcheng Football Club"
+   ],
+   "transfermarkt": [
+    "Esporte Clube Vitória",
+    "Botafogo",
+    "Guangzhou Football Club",
+    "Shanghai Port Football Club",
+    "Guangzhou Football Club",
+    "Grêmio",
+    "Chengdu Rongcheng Football Club"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Vitória",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Botafogo",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Guangzhou Evergrande",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Shanghai Port",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Grêmio",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Chengdu Rongcheng Football Club",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Shanghai SIPG",
+    "por": [
+     "wikipedia"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rafael-sobis",
+  "nome": "Rafael Sóbis",
+  "qid": "Q350493",
+  "tm": "27376",
+  "artigo": "Rafael Sóbis",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Internacional",
+   "Real Betis",
+   "Fluminense",
+   "Cruzeiro"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Sport Club Internacional (2004–2006)",
+    "Real Betis Balompié (2006–2008)",
+    "Al-Jazira Club (2008–2012)",
+    "Sport Club Internacional (2010–2011)",
+    "Fluminense Football Club (2011–2014)",
+    "Tigres de la Universidad Autónoma de Nuevo León (2015–?)",
+    "Cruzeiro Esporte Clube (2016–?)"
+   ],
+   "wikipedia": [
+    "Internacional-RS",
+    "Betis",
+    "Al-Jazira",
+    "Internacional-RS",
+    "Fluminense",
+    "Tigres",
+    "Cruzeiro",
+    "Internacional-RS",
+    "Ceará",
+    "Cruzeiro"
+   ],
+   "transfermarkt": [
+    "Internacional",
+    "Betis",
+    "Al-Jazira Club",
+    "Internacional",
+    "Fluminense",
+    "Tigres Uanl",
+    "Cruzeiro",
+    "Internacional",
+    "Ceará",
+    "Cruzeiro"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Internacional",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Real Betis",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Fluminense",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Cruzeiro",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Al-Jazira Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Tigres de la Universidad Autónoma de Nuevo León",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Ceará",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Internacional-RS",
+    "por": [
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Tigres Uanl",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "farfan",
+  "nome": "Jefferson Farfán",
+  "qid": "Q295311",
+  "tm": "16649",
+  "artigo": "Jefferson Farfán",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "PSV",
+   "Schalke 04",
+   "Al-Jazira",
+   "Lokomotiv Moscou"
+  ],
+  "fontes": {
+   "wikidata": [
+    "Club Alianza Lima (2001–2004)",
+    "PSV Eindhoven (2004–2008)",
+    "Fußball-Club Gelsenkirchen-Schalke 04 (2008–2015)",
+    "Al-Jazira Club (2015–2016)",
+    "FC Lokomotiv Moscou (2017–2020)",
+    "Club Alianza Lima (2021–2022)"
+   ],
+   "wikipedia": [
+    "Alianza Lima",
+    "PSV Eindhoven",
+    "Schalke 04",
+    "Al-Jazira",
+    "Lokomotiv Moscou",
+    "Alianza Lima"
+   ],
+   "transfermarkt": [
+    "Alianza Lima",
+    "PSV",
+    "Schalke",
+    "Al-Jazira Club",
+    "FC Lokomotiv Moscou",
+    "Alianza Lima"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "PSV",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Schalke 04",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Jazira",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Lokomotiv Moscou",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Club Alianza Lima",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": []
+ },
+ {
+  "id": "denilson",
+  "nome": "Denílson",
+  "qid": "Q311641",
+  "tm": "7660",
+  "artigo": "Denílson",
+  "disponiveis": [
+   "wikidata",
+   "transfermarkt"
+  ],
+  "local": [
+   "São Paulo",
+   "Real Betis",
+   "Flamengo",
+   "Bordeaux",
+   "Al-Nassr",
+   "Palmeiras"
+  ],
+  "fontes": {
+   "wikidata": [
+    "São Paulo Futebol Clube (1995–1998)",
+    "Real Betis Balompié (1998–2005)",
+    "Clube de Regatas do Flamengo (2000–2000)",
+    "Football Club des Girondins de Bordeaux (2005–2006)",
+    "Al-Nassr (2006–2007)",
+    "Football Club Dallas (2007–2008)",
+    "Sociedade Esportiva Palmeiras (2008–2008)",
+    "Xi Măng Hải Phòng FC (2009–2009)",
+    "Itumbiara Esporte Clube (2009–2009)",
+    "AO Kavala (2010–2010)"
+   ],
+   "wikipedia": [],
+   "transfermarkt": [
+    "Sao Paulo",
+    "Betis",
+    "Clube de Regatas do Flamengo",
+    "Bordeaux",
+    "Al Nassr",
+    "Dallas",
+    "Palmeiras",
+    "Itumbiara",
+    "Xi Măng Hải Phòng FC",
+    "AO Kavala",
+    "Íbis Sport Club"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "São Paulo",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Real Betis",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Flamengo",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Bordeaux",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Al-Nassr",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Palmeiras",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "semNenhuma": [],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "Football Club Dallas",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Xi Măng Hải Phòng FC",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Itumbiara Esporte Clube",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "AO Kavala",
+    "por": [
+     "wikidata",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "Íbis Sport Club",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "drenthe",
+  "nome": "Royston Drenthe",
+  "qid": "Q287815",
+  "tm": "35631",
+  "artigo": "Royston Drenthe",
+  "disponiveis": [
+   "wikidata",
+   "wikipedia",
+   "transfermarkt"
+  ],
+  "local": [
+   "Feyenoord",
+   "Real Madrid",
+   "Hércules",
+   "Everton",
+   "Reading",
+   "Sheffield Wednesday",
+   "Kayserispor"
+  ],
+  "fontes": {
+   "wikidata": [
+    "SBV Excelsior (2003–2005)",
+    "Feyenoord (2005–2007)",
+    "Real Madrid Club de Fútbol (2007–2012)",
+    "Hércules Club de Fútbol (2010–2011)",
+    "Everton Football Club (2011–2012)",
+    "FC Alania Vladikavkaz (2012–2013)",
+    "Reading Football Club (2013–2015)",
+    "Sheffield Wednesday Football Club (2014–2015)",
+    "Baniyas Sports & Culture Club (2015–?)",
+    "Kayseri Erciyesspor (2015–2015)"
+   ],
+   "wikipedia": [
+    "Feyenoord",
+    "Real Madrid",
+    "Hércules",
+    "Everton",
+    "Alania Vladikavkaz",
+    "Reading",
+    "Sheffield Wednesday",
+    "Kayseri Erciyesspor",
+    "Baniyas",
+    "Sparta Rotterdam",
+    "Kozakken Boys",
+    "Racing Murcia",
+    "Real Murcia",
+    "Racing Mérida City",
+    "Kozakken Boys"
+   ],
+   "transfermarkt": [
+    "Feyenoord Form ",
+    "Feyenoord",
+    "Real Madrid",
+    "Hercules Cf",
+    "Everton",
+    "Alania",
+    "Reading",
+    "Sheff Wed",
+    "K Erciyesspor",
+    "Baniyas Sports & Culture Club",
+    "Xerxes Zon ",
+    "Sparta R ",
+    "Kozakken Boys",
+    "Racing Murcia",
+    "Real Murcia",
+    "Racing Merida",
+    "Kozakken Boys"
+   ]
+  },
+  "nossos": [
+   {
+    "nome": "Feyenoord",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Real Madrid",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Hércules",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Everton",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Reading",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Sheffield Wednesday",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Kayserispor",
+    "por": []
+   }
+  ],
+  "semNenhuma": [
+   "Kayserispor"
+  ],
+  "soUma": [],
+  "fortes": [
+   {
+    "nome": "FC Alania Vladikavkaz",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Baniyas Sports & Culture Club",
+    "por": [
+     "wikidata",
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Kayseri Erciyesspor",
+    "por": [
+     "wikidata",
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Kozakken Boys",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Racing Murcia",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Racing Mérida City",
+    "por": [
+     "wikipedia",
+     "transfermarkt"
+    ]
+   }
+  ],
+  "fracos": [
+   {
+    "nome": "SBV Excelsior",
+    "por": [
+     "wikidata"
+    ]
+   },
+   {
+    "nome": "Sparta Rotterdam",
+    "por": [
+     "wikipedia"
+    ]
+   },
+   {
+    "nome": "Sheff Wed",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "K Erciyesspor",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Xerxes Zon ",
+    "por": [
+     "transfermarkt"
+    ]
+   },
+   {
+    "nome": "Sparta R ",
+    "por": [
+     "transfermarkt"
+    ]
+   }
+  ]
+ }
+]
