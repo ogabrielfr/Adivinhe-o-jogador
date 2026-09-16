@@ -63,7 +63,7 @@ export const JOGADORES: Jogador[] = [
   {
     id: 'ronaldo-fenomeno',
     nome: 'Ronaldo Fenômeno',
-    apelidos: ['ronaldo fenomeno', 'ronaldo nazario', 'r9', 'ronaldo luis nazario de lima'],
+    apelidos: ['ronaldo', 'ronaldo fenomeno', 'ronaldo nazario', 'r9', 'ronaldo luis nazario de lima'],
     nivel: 'facil',
     clubes: ['cruzeiro', 'psv', 'barcelona', 'inter', 'real-madrid', 'milan', 'corinthians'],
     dica: 'Voltou de duas cirurgias no mesmo joelho para ser artilheiro de uma Copa do Mundo e calar quem o dava como acabado.',

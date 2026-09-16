@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { NIVEIS } from './dados/tipos'
 import type { Jogador, Nivel } from './dados/tipos'
 import { chaveDoDia, jogadorDoDia, numeroDoDia, PALPITES_AMBIGUOS } from './logica/diario'
-import { normalizar, pareceIgual } from './logica/texto'
+import { formasAceitas, normalizar, pareceIgual } from './logica/texto'
 import { carregar, partidaNova, registrarResultado, salvar, TENTATIVAS } from './logica/armazenamento'
 import { textoDeCompartilhamento } from './logica/compartilhar'
 import { TelaInicial } from './componentes/TelaInicial'
@@ -51,8 +51,7 @@ export function App() {
       if (PALPITES_AMBIGUOS.has(palpite)) return 'ambiguo'
 
       const jogador = jogadores[nivel]
-      const acertou = [jogador.nome, ...jogador.apelidos]
-        .map(normalizar)
+      const acertou = formasAceitas(jogador.nome, jogador.apelidos)
         .some((alvo) => pareceIgual(palpite, alvo))
 
       let resultado: ResultadoChute = 'errou'
