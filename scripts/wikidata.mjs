@@ -18,12 +18,12 @@ const AGENTE = 'acerte-o-jogador/1.0 (https://github.com/ogabrielfr/Adivinhe-o-j
 
 const espera = (ms) => new Promise((r) => setTimeout(r, ms))
 
-/** Repete em 429/503, que o endpoint usa para pedir ritmo menor. */
+/** Repete no que é transitório: 429 pede ritmo menor, 5xx é o endpoint sobrecarregado. */
 export async function pedir(url, opcoes = {}, tentativas = 4) {
   for (let i = 0; i < tentativas; i++) {
     const r = await fetch(url, { ...opcoes, headers: { 'User-Agent': AGENTE, ...opcoes.headers } })
     if (r.ok) return r
-    if (r.status === 429 || r.status === 503) {
+    if (r.status === 429 || r.status === 502 || r.status === 503 || r.status === 504) {
       const pausa = Number(r.headers.get('retry-after')) * 1000 || 2000 * 2 ** i
       await espera(Math.min(pausa, 30000))
       continue

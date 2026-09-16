@@ -26,7 +26,7 @@
  * clube de todo jeito, e o projeto já os usa para identificação, mas a
  * distinção fica explícita no manifesto em vez de escondida.
  */
-import { writeFileSync, mkdirSync } from 'node:fs'
+import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { consultar, qidDe, imagensDeArtigos } from './wikidata.mjs'
@@ -122,6 +122,17 @@ for (const [sigla, { qid, nome }] of paises) {
     })
   }
   console.log(`${sigla} ${nome.padEnd(24)} ${String(comEscudo).padStart(4)} com escudo  (${porClube.size} no total)`)
+}
+
+/**
+ * Rodar com um subconjunto de países não pode apagar o resto do manifesto —
+ * é assim que se acrescenta um país sem refazer as quatro mil e quinhentas
+ * consultas das outras quarenta e seis.
+ */
+if (alvos.length && existsSync(SAIDA)) {
+  const antes = JSON.parse(readFileSync(SAIDA, 'utf8'))
+  const refeitos = new Set(paises.map(([sigla]) => sigla))
+  clubes.push(...antes.filter((c) => !refeitos.has(c.pais)))
 }
 
 clubes.sort((a, b) => a.pais.localeCompare(b.pais) || a.nome.localeCompare(b.nome))

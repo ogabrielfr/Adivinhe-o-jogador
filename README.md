@@ -22,6 +22,7 @@ npm run dev
 | `npm run verificar` | confere as carreiras contra o Wikidata e relata as divergências |
 | `npm run teste-nomes` | testa o comparador de nomes de clube |
 | `npm run coletar` | remonta `scripts/clubes-externos.json` a partir do Wikidata |
+| `npm run biblioteca` | regera `src/dados/jogadores.ts` a partir do Transfermarkt |
 | `npm run teste-visual` | roda a partida ponta a ponta no Chromium e salva capturas |
 
 O teste visual precisa do Chromium do Playwright (`npx playwright install chromium`)
@@ -45,55 +46,52 @@ virar um problema, a saída é mover o sorteio para um endpoint.
 
 ## A biblioteca
 
-`src/dados/jogadores.ts` tem os jogadores e `src/dados/clubes.ts` o catálogo de
-clubes. Cada jogador declara nome, apelidos aceitos, nível, os clubes em ordem
-cronológica e uma dica.
+`src/dados/jogadores.ts` tem **300 jogadores, 100 por nível**, e é **gerado**
+por `npm run biblioteca`. Não edite à mão sem motivo.
 
-A dica revela um fato marcante sem citar nome, clube, posição ou ano — o
-`validar-dados` recusa uma dica que mencione o nome do jogador ou de um clube
-que está à mostra.
+A carreira de cada um vem do histórico de transferências do **Transfermarkt**,
+na ordem em que aconteceu, e `fonte` aponta a página de onde saiu. Isso existe
+porque a onda anterior foi escrita de memória do modelo e a conferência achou
+erro em 33 de 45 carreiras: multiplicar isso por trezentos multiplicaria o
+problema.
 
-### Conferência das carreiras
+### Como um clube do Transfermarkt vira um id do catálogo
 
-> **As carreiras desta onda foram escritas de memória e a conferência mostrou
-> que isso produz erro.** Das 45, 12 passam sem divergência forte e 33 divergem.
-> Nenhuma correção foi aplicada ainda.
+**Por id, não por nome.** Cada transferência traz `/verein/<id>` no link, e
+`scripts/clubes-transfermarkt.json` liga esse id ao nosso, via a propriedade
+P7223 do Wikidata. Casar por nome seria pedir para errar: o catálogo tem dez
+Guaranis, cinco Botafogos e um Esporte Clube Milan. Só quando o id é
+desconhecido é que cai para nome, e aí exige resposta única no mesmo país —
+com desempate pelo clube curado em `CANONICOS`, que é o famoso por construção.
 
-`npm run verificar` compara cada carreira com **três fontes** e imprime as
-divergências, sem alterar nada. Grava também `scripts/relatorio-carreiras.json`.
+**Jogador com qualquer clube não resolvido fica de fora.** O escudo é a
+informação principal do jogo; carreira com buraco não serve. Na última
+execução isso recusou 983 candidatos, e o script imprime quais clubes mais
+derrubaram jogador — é por onde vale ampliar o catálogo.
 
-| | Fonte | Força | Fraqueza |
-| --- | --- | --- | --- |
-| `wd` | Wikidata, propriedade P54 | estruturado, auditável por QID | preenchido à mão e atrasado |
-| `wp` | Infobox do artigo na Wikipédia | melhor no futebol brasileiro | alguns artigos não têm o campo |
-| `tm` | Transfermarkt | a mais completa das três | depende de o WAF deixar passar |
+### A dica
 
-**São três porque uma só não distingue erro nosso de lacuna da fonte.** Com
-apenas o Wikidata, o Grêmio do Elkeson parecia clube inventado — ele jogou lá em
-2021, e eram o infobox e o Transfermarkt que tinham a passagem. O mesmo com o
-Grêmio do Diego Tardelli e o Arouca do Keirrison.
+Sai de atributo estruturado: posição, país de nascimento, quantos países a
+carreira atravessou, década de nascimento. **Nunca de texto gerado** — dica
+inventada é a mesma classe de erro que carreira inventada, só que mais difícil
+de conferir depois.
 
-O relatório conta quantas fontes confirmam cada clube:
+### O nível
 
-| Saída | O que significa |
-| --- | --- |
-| `FALTA (2+ fontes)` | duas ou três têm um clube que não temos — acrescentar |
-| `NENHUMA FONTE TEM` | um clube nosso que nenhuma tem — candidato a erro nosso |
-| `falta (1 fonte)` | só uma tem — quase sempre lacuna das outras duas |
-| `só uma fonte tem` | nosso clube confirmado por só uma — está certo |
+Sai do número de links de Wikipédia do jogador, o melhor proxy calculável de
+reconhecimento. É aproximação, não julgamento editorial: ajuste à mão onde
+discordar.
 
-O Ogol seria a melhor referência para futebol brasileiro, mas ele e o zerozero
-estão atrás do bot management do Cloudflare e devolvem `403 cf-mitigated:
-challenge` a qualquer cliente automatizado, inclusive Chromium real. É controle
-de acesso do próprio site, não do ambiente.
+`OBRIGATORIOS`, em `scripts/montar-biblioteca.mjs`, força a entrada de um
+jogador independentemente de fama, e `escalarParaHoje()` o coloca no sorteio de
+hoje — dá para testar um nome específico sem esperar a data chegar.
 
-`npm run teste-nomes` testa o comparador de nomes de clube, que é a peça de que
-tudo depende: ele precisa casar "Coritiba" com "Coritiba Foot Ball Club" sem
-casar "Botafogo" com "Botafogo-SP".
+### Conferência
 
-Quando a conferência passar, marque cada jogador com `verificado: true` e ligue
-`EXIGIR_VERIFICACAO` em `src/logica/diario.ts` — o sorteio passa a ignorar
-quem não foi conferido.
+`EXIGIR_VERIFICACAO` em `src/logica/diario.ts` está **ligado**: só entra no
+sorteio quem tem `verificado: true`. Isso quer dizer "a lista de clubes e a
+ordem saíram de uma fonte externa, e `fonte` aponta qual" — não "alguém
+conferiu à mão".
 
 Os níveis são julgamento editorial sobre o que o torcedor brasileiro reconhece:
 

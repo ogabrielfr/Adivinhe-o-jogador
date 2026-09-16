@@ -212,7 +212,7 @@ if (existsSync(ARQ_EXTERNOS)) {
   const porPais = new Map()
   for (const a of candidatos.values()) {
     if (!porPais.has(a.pais)) porPais.set(a.pais, [])
-    porPais.get(a.pais).push(a.nome)
+    porPais.get(a.pais).push(a)
   }
 
   // 1. decide id e destino de cada um, em ordem, para o resultado não depender
@@ -229,7 +229,15 @@ if (existsSync(ARQ_EXTERNOS)) {
     // e os jogadores já apontam para ele. Nome com parêntese é desambiguado
     // ("... (Ribeirão Preto)"), logo não é o clube famoso de mesmo nome.
     const desambiguado = nome.includes('(')
-    if (!desambiguado && (porPais.get(c.pais) ?? []).some((n) => mesmoClube(n, nome))) {
+    const jaTem = !desambiguado && (porPais.get(c.pais) ?? []).find((a) => mesmoClube(a.nome, nome))
+    if (jaTem) {
+      /**
+       * O clube já veio de repositório e fica com a versão de lá, mas o QID é
+       * aproveitado: é ele que liga o clube ao id do Transfermarkt, e sem isso
+       * os clubes grandes — justamente os que aparecem em toda carreira —
+       * ficariam sem forma de resolver a não ser casando nome.
+       */
+      jaTem.qid ??= c.qid
       repetidos++
       continue
     }
@@ -286,7 +294,8 @@ if (existsSync(ARQ_EXTERNOS)) {
   for (const c of fila) {
     if (!c.ok) continue
     candidatos.set(`wd:${c.qid}`, {
-      id: c.id, nome: c.nome, pais: c.pais, fonte: 'wd', qualidade: QUALIDADE.wd, origem: c.arquivo,
+      id: c.id, nome: c.nome, pais: c.pais, qid: c.qid,
+      fonte: 'wd', qualidade: QUALIDADE.wd, origem: c.arquivo,
     })
   }
   console.log(`  +${baixados} novos | ${repetidos} já no catálogo | ${naoEhEscudo} imagem que não é escudo | ${falhas} falharam`)
@@ -315,11 +324,25 @@ for (const id of DESCARTAR) {
   if (entrada) candidatos.delete(entrada[0])
 }
 
-// clubes que nenhuma fonte cobre entram sem arquivo: o jogo desenha o brasão de
-// reserva. Só entram se continuarem descobertos — com o Wikidata vários deles
-// passaram a ter escudo de verdade, e o de reserva viraria um id duplicado.
+/**
+ * Clubes que os repositórios não cobrem. Quando `wd` aponta um QID que o
+ * Wikidata cobriu, esse clube assume o id canônico e o jogo passa a mostrar o
+ * escudo real; sem isso, entra só com as cores e o jogo desenha o brasão.
+ *
+ * A troca é por QID porque por nome dá errado: "Guangzhou Evergrande" casa
+ * tanto com o Guangzhou FC, que é ele renomeado, quanto com o Guangzhou City,
+ * que é outro clube.
+ */
 for (const [id, dados] of Object.entries(SEM_ESCUDO)) {
   if ([...candidatos.values()].some((c) => c.id === id)) continue
+
+  const externo = dados.wd && candidatos.get(`wd:${dados.wd}`)
+  if (externo) {
+    candidatos.delete(`wd:${dados.wd}`)
+    candidatos.set(`wd:${dados.wd}`, { ...externo, id, nome: dados.nome, pais: dados.pais })
+    continue
+  }
+
   const c = { id, nome: dados.nome, pais: dados.pais, cores: dados.cores, fonte: 'reserva', qualidade: 9 }
   candidatos.set(chaveDedup(c), c)
 }
@@ -470,7 +493,13 @@ writeFileSync(
 writeFileSync(
   join(raiz, 'scripts/catalogo-completo.json'),
   JSON.stringify(
-    comEscudo.map((c) => ({ id: c.id, nome: c.nome, pais: c.pais, escudo: arquivoDe[c.id] ?? null })),
+    comEscudo.map((c) => ({
+      id: c.id, nome: c.nome, pais: c.pais,
+      escudo: arquivoDe[c.id] ?? null,
+      // presente nos clubes vindos do Wikidata; é o que liga o clube a um id
+      // do Transfermarkt sem depender de casar nome
+      qid: c.qid ?? null,
+    })),
     null, 1,
   ) + '\n',
 )

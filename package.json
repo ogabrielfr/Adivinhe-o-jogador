@@ -11,7 +11,8 @@
     "catalogo": "node scripts/construir-catalogo.mjs",
     "verificar": "node scripts/verificar-carreiras.mjs",
     "teste-nomes": "node scripts/teste-nomes.mjs",
-    "coletar": "node scripts/coletar-clubes.mjs"
+    "coletar": "node scripts/coletar-clubes.mjs",
+    "biblioteca": "node scripts/montar-biblioteca.mjs"
   },
   "repository": {
     "type": "git",

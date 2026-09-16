@@ -47,6 +47,13 @@ export const PAISES = {
   US: { qid: 'Q30', nome: 'Estados Unidos' },
   CA: { qid: 'Q16', nome: 'Canadá' },
 
+  // --- ligas grandes: o repositório europeu só traz a temporada atual e o
+  //     histórico recente, então falta a divisão de acesso e quem sumiu dela
+  ES: { qid: 'Q29', nome: 'Espanha' },
+  // clube inglês tem P17 = Reino Unido, não Inglaterra; Q21 devolve zero
+  EN: { qid: 'Q145', nome: 'Reino Unido' },
+  IT: { qid: 'Q38', nome: 'Itália' },
+
   // --- Europa e arredores pouco cobertos pelos repositórios
   TR: { qid: 'Q43', nome: 'Turquia' },
   RU: { qid: 'Q159', nome: 'Rússia' },

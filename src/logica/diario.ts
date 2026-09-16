@@ -18,11 +18,14 @@ export function msAteAmanha(d = new Date()): number {
 }
 
 /**
- * Quando ligado, só jogadores com a carreira conferida contra fonte externa
- * entram no sorteio. Está desligado porque a conferência ainda não rodou —
- * ligar agora deixaria os três níveis vazios.
+ * Só entra no sorteio quem tem a carreira vinda de fonte externa, não da
+ * memória do modelo. Ligado desde que a biblioteca passou a ser gerada do
+ * histórico do Transfermarkt — antes disso deixaria os três níveis vazios.
+ *
+ * `verificado` quer dizer "a lista de clubes e a ordem saíram de uma fonte
+ * externa e `fonte` aponta qual", não "alguém conferiu à mão".
  */
-export const EXIGIR_VERIFICACAO = false
+export const EXIGIR_VERIFICACAO = true
 
 const elegivel = (j: Jogador) => !EXIGIR_VERIFICACAO || j.verificado === true
 

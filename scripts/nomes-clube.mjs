@@ -19,12 +19,15 @@ const semAcento = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '')
 /** Tokens que aparecem no nome oficial e não distinguem clube nenhum. */
 const GENERICOS = new Set([
   'fc','cf','ac','acf','sc','afc','ca','cd','ud','rcd','as','ss','ssc','bk','sk','if','fk','nk','hk',
-  'jk','sv','vfl','vfb','tsg','sl','bv','rc','us','ogc','psv','cr','ec','se','aa','ad','fk','ko',
+  'jk','sv','vfl','vfb','tsg','sl','bv','rc','us','ogc','cr','ec','se','aa','ad','fk','ko',
   'club','clube','futbol','football','foot','ball','futebol','soccer','esporte','esportes','esportivo',
   'sportivo','sportiva','sporting','sport','sports','associazione','associacao','association','associacao',
   'sociedade','societa','calcio','spor','kulubu','kulube','regatas','recreativo','deportivo','deportes','desportivo','desportiva','desportos',
   'de','do','da','das','dos','e','and','the','of','y','la','el','los','las',
-  'real','united','city','team','klub','futbolniy','boldklub','spartak',
+  // "united" e "city" separam Manchester United de Manchester City; "real"
+  // separa Real Madrid de Madrid. Genérico de verdade é só o que não
+  // distingue clube nenhum.
+  'team','klub','futbolniy','boldklub',
 ])
 
 const partir = (nome) =>

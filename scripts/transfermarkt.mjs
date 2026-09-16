@@ -68,7 +68,7 @@ const NAO_E_CLUBE = /^(sem clube|aposentad|fim de carreira|carreira encerrada|un
  * "Coritiba U20", "Dunkerque Jgd" (Jugend), "Le Mans UC 72 B", "SD Taishan Res.".
  */
 const CATEGORIA_DE_BASE =
-  /\b(U\d{1,2}|Sub-?\d{2}|Youth|Jugend|Jgd|Juvenil|Juniores|Academy|Res|Reserves?)\b\.?|\s(B|II|2)$/i
+  /\b(U\d{1,2}|Sub[-\s]?\d{1,2}|Youth|Yth|Jugend|Jgd|Juv|Juvenil|Juniores|Jun|Academy|Acad|Form|Formation|Abi|Amateure?|Res|Reserves?)\b\.?|\s(B|II|2)$/i
 
 /**
  * O retorno de empréstimo não é uma passagem nova: leva o jogador de volta ao
@@ -127,7 +127,7 @@ function nomeDoClube(clube) {
  * retorno viram transferências próprias, então a volta a um clube aparece na
  * posição certa — que é exatamente o que o jogo mostra.
  */
-export async function carreiraDoTransfermarkt(tmId) {
+export async function passagensDoTransfermarkt(tmId) {
   const bruto = await pedirComInsistencia(`${BASE}/ceapi/transferHistory/list/${tmId}`)
   if (!bruto) return null
 
@@ -143,15 +143,23 @@ export async function carreiraDoTransfermarkt(tmId) {
   if (!transferencias.length) return []
 
   const sequencia = []
-  const acrescentar = (nome) => {
+  const acrescentar = (clube) => {
+    const nome = nomeDoClube(clube)
     if (!nome || NAO_E_CLUBE.test(nome) || CATEGORIA_DE_BASE.test(nome)) return
-    if (sequencia[sequencia.length - 1] !== nome) sequencia.push(nome)
+    const idTm = clube?.href?.match(/\/verein\/(\d+)/)?.[1] ?? null
+    if (sequencia[sequencia.length - 1]?.nome !== nome) sequencia.push({ nome, idTm })
   }
 
-  acrescentar(nomeDoClube(transferencias[0]?.from))
+  acrescentar(transferencias[0]?.from)
   for (const t of transferencias) {
     if (FIM_DE_EMPRESTIMO.test(t.fee ?? '')) continue
-    acrescentar(nomeDoClube(t.to))
+    acrescentar(t.to)
   }
   return sequencia
+}
+
+/** Só os nomes, para quem não precisa do id — é o que a conferência usa. */
+export async function carreiraDoTransfermarkt(tmId) {
+  const passagens = await passagensDoTransfermarkt(tmId)
+  return passagens && passagens.map((p) => p.nome)
 }
