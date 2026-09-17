@@ -70,6 +70,8 @@ for (const c of externos) {
  * de nomes não é barata. Dois nomes que descrevem o mesmo clube compartilham
  * pelo menos uma palavra, então basta olhar quem divide alguma.
  */
+const paisDoClube = new Map(catalogo.map((c) => [c.id, c.pais]))
+
 const porToken = new Map()
 for (const c of catalogo) {
   for (const t of tokensDoNome(c.nome)) {
@@ -151,17 +153,37 @@ if (existsSync(ARQUIVO_CANDIDATOS)) {
  */
 const OBRIGATORIOS = {
   Q15207061: 'Lucas Lima',
+  // ídolos que o corte por fama global deixava de fora, e que o WAF do
+  // Transfermarkt às vezes derruba por azar de requisição — indo na frente da
+  // fila, são tentados antes de o limite apertar
+  Q12897: 'Pelé',
+  Q178649: 'Romário',
+  Q483577: 'Rivaldo',
+  Q47526: 'Zico',
+  Q204825: 'Bebeto',
+  Q312895: 'Raí',
 }
 const LUCAS_LIMA = 'Q15207061'
 
-const porFama = [...fama.entries()]
-  .filter(([q]) => !(q in OBRIGATORIOS))
-  .sort((a, b) => b[1] - a[1])
-  .map(([qid]) => qid)
-const candidatos = [...Object.keys(OBRIGATORIOS), ...porFama]
-console.log(`  ${candidatos.length} candidatos`)
+/**
+ * Número de links de Wikipédia mede fama global, e o jogo é para o torcedor
+ * brasileiro — sem correção, o nível fácil enche de nome que o mundo conhece e
+ * o Brasil não. O peso empurra brasileiro e quem passou pelo futebol
+ * brasileiro para cima; continua sendo aproximação, não julgamento editorial.
+ */
+const PESO_BRASILEIRO = 2.5
+const PESO_JOGOU_NO_BRASIL = 1.8
+
+const famaCorrigida = (qid, jogouNoBrasil = false) => {
+  const base = fama.get(qid) ?? 0
+  if (meta.get(qid)?.pais === 'Brasil') return base * PESO_BRASILEIRO
+  return jogouNoBrasil ? base * PESO_JOGOU_NO_BRASIL : base
+}
 
 // ------------------------------------------------- metadados para nome e dica
+/** Lista crua, só para saber de quem buscar dado; a ordem vem depois. */
+const todosQids = [...new Set([...Object.keys(OBRIGATORIOS), ...fama.keys()])]
+
 const ARQUIVO_META = join(raiz, 'scripts/meta-jogadores.json')
 const meta = new Map()
 if (existsSync(ARQUIVO_META)) {
@@ -169,7 +191,7 @@ if (existsSync(ARQUIVO_META)) {
   console.log(`metadados do cache: ${meta.size}`)
 }
 
-const faltaMeta = candidatos.filter((q) => !meta.has(q))
+const faltaMeta = todosQids.filter((q) => !meta.has(q))
 if (faltaMeta.length) console.log(`buscando nome, posição e nacionalidade de ${faltaMeta.length}...`)
 for (let i = 0; i < faltaMeta.length; i += 150) {
   const lote = faltaMeta.slice(i, i + 150).map((q) => `wd:${q}`).join(' ')
@@ -261,7 +283,7 @@ const tmPorQid = new Map()
 if (existsSync(ARQUIVO_TM)) {
   for (const [q, tm] of Object.entries(JSON.parse(readFileSync(ARQUIVO_TM, 'utf8')))) tmPorQid.set(q, tm)
 }
-const faltaTm = candidatos.filter((q) => !tmPorQid.has(q))
+const faltaTm = todosQids.filter((q) => !tmPorQid.has(q))
 if (faltaTm.length) {
   console.log(`buscando o id do Transfermarkt de ${faltaTm.length}...`)
   for (let i = 0; i < faltaTm.length; i += 200) {
@@ -271,6 +293,18 @@ if (faltaTm.length) {
   writeFileSync(ARQUIVO_TM, JSON.stringify(Object.fromEntries(tmPorQid)) + '\n')
 }
 console.log(`  ${tmPorQid.size} com id do Transfermarkt`)
+
+/**
+ * Só agora dá para ordenar: o peso depende da nacionalidade, que vem dos
+ * metadados. Obrigatórios vão na frente da fila, fora do ranking.
+ */
+const candidatos = [
+  ...Object.keys(OBRIGATORIOS),
+  ...todosQids
+    .filter((q) => !(q in OBRIGATORIOS))
+    .sort((a, b) => famaCorrigida(b) - famaCorrigida(a)),
+]
+console.log(`  ${candidatos.length} candidatos, ordenados por reconhecimento no Brasil`)
 
 const NIVEIS = ['facil', 'intermediario', 'dificil']
 const ALVO = POR_NIVEL * 3
@@ -317,18 +351,24 @@ async function trabalhador() {
     }
     if (falhou) { recusas.clubeNaoResolvido++; continue }
 
-    // menos de três escudos não dá partida; mais de nove vira parede ilegível
-    if (clubes.length < 3 || clubes.length > 9) { recusas.tamanho++; continue }
+    /**
+     * Um escudo só não é charada. O teto existe porque a parede de escudos
+     * fica ilegível: doze cabem em quatro linhas no celular, mais que isso
+     * não. O teto de nove recusava cem candidatos, e carreira longa é
+     * justamente a graça do nível difícil.
+     */
+    if (clubes.length < 2 || clubes.length > 12) { recusas.tamanho++; continue }
 
     const id = slug(dados.nome)
     if (idsUsados.has(id)) { recusas.repetido++; continue }
     idsUsados.add(id)
 
-    const paises = new Set(clubes.map((c) => catalogo.find((x) => x.id === c)?.pais)).size
+    const paises = new Set(clubes.map((c) => paisDoClube.get(c))).size
     aceitos.push({
       id, nome: dados.nome, apelidos: apelidosDe(dados.nome),
       clubes, dica: montarDica(dados, paises),
-      fama: fama.get(qid) ?? 0, qid, tm, obrigatorio: qid in OBRIGATORIOS,
+      fama: famaCorrigida(qid, clubes.some((c) => paisDoClube.get(c) === 'BR')),
+      qid, tm, obrigatorio: qid in OBRIGATORIOS,
     })
     if (aceitos.length % 25 === 0) console.log(`  ${aceitos.length}/${ALVO}`)
   }

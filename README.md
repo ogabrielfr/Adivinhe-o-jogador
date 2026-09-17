@@ -78,13 +78,34 @@ de conferir depois.
 
 ### O nível
 
-Sai do número de links de Wikipédia do jogador, o melhor proxy calculável de
-reconhecimento. É aproximação, não julgamento editorial: ajuste à mão onde
-discordar.
+Sai do número de links de Wikipédia do jogador, **corrigido para o torcedor
+brasileiro**: quem é brasileiro pesa 2,5x e quem passou pelo futebol brasileiro
+1,8x. Sem essa correção o nível fácil enchia de nome que o mundo conhece e o
+Brasil não — a primeira versão abria com Darijo Srna e Granit Xhaka; agora abre
+com Pelé, Neymar, Cristiano Ronaldo, Roberto Carlos e Ronaldinho.
+
+Continua sendo aproximação, não julgamento editorial. Guardiola, por exemplo,
+cai no fácil por ser famoso como **técnico**, embora a carreira de jogador dele
+seja um enigma difícil. Ajuste à mão onde discordar.
 
 `OBRIGATORIOS`, em `scripts/montar-biblioteca.mjs`, força a entrada de um
-jogador independentemente de fama, e `escalarParaHoje()` o coloca no sorteio de
-hoje — dá para testar um nome específico sem esperar a data chegar.
+jogador independentemente de fama e o põe na frente da fila, e
+`escalarParaHoje()` o coloca no sorteio de hoje — dá para testar um nome
+específico sem esperar a data chegar. **A escalação é presa à data em que o
+script rodou**: no dia seguinte o sorteio segue seu curso normal.
+
+**Quando um ídolo não entra, quase sempre é um clube só que bloqueia.** Cada
+jogador é descartado inteiro se qualquer passagem não resolver, e o script
+imprime quais clubes mais derrubaram jogador. Romário, Rivaldo e Bebeto ainda
+estão de fora por isso. O conserto é acrescentar o par `id do Transfermarkt ->
+id do nosso catálogo` em `scripts/clubes-transfermarkt.json`, como já foi feito
+para o Cosmos do Pelé, o América-RJ, o Santa Cruz e o Sevilla.
+
+**A composição depende um pouco de sorte de rede.** O WAF do Transfermarkt
+recusa uma fração das requisições, e sob carga essa fração cresce — numa das
+execuções, 171 candidatos ficaram sem carreira por isso. Rodar de novo produz
+uma lista parecida, não idêntica. Por isso os nomes que não podem faltar vão em
+`OBRIGATORIOS`, que são tentados primeiro.
 
 ### Conferência
 
