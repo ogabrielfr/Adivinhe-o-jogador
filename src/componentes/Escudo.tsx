@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { CLUBE_POR_ID } from '../dados/clubes'
 
 const BASE = import.meta.env.BASE_URL
@@ -59,17 +59,43 @@ export function Escudo({
   adiar?: boolean
 }) {
   const arquivo = CLUBE_POR_ID.get(id)?.escudo
+
+  /**
+   * Uma partida pede todos os escudos de uma vez, e basta uma requisição
+   * falhar para o navegador cravar o ícone de imagem quebrada ali — não há
+   * nova tentativa, e o escudo é a informação principal do jogo.
+   *
+   * `tentativa` força uma URL diferente para o navegador não devolver a falha
+   * do cache, e o intervalo cresce a cada uma — falha transitória some sozinha
+   * em pouco tempo, e o que se quer é o escudo real de volta, não a queda.
+   * Esgotadas as tentativas, desenha o brasão, que é a mesma queda já usada
+   * para clube sem escudo: pior que o escudo real, muito melhor que um
+   * quadrado vazio.
+   *
+   * Na prática quem falha são os arquivos maiores do lote, o que bate com
+   * transferência interrompida e não com arquivo ruim: os mesmos escudos
+   * decodificam sem erro quando pedidos de novo.
+   */
+  const [tentativa, setTentativa] = useState(0)
+  const desistiu = tentativa > 2
+
   return (
     <span
       className={`grid place-items-center rounded-xl bg-[#EDEBE4] shadow-[inset_0_0_0_1px_rgba(12,23,17,0.12)] ${className}`}
     >
-      {arquivo ? (
+      {arquivo && !desistiu ? (
         <img
-          src={`${BASE}escudos/${arquivo}`}
+          key={tentativa}
+          src={tentativa ? `${BASE}escudos/${arquivo}?r=${tentativa}` : `${BASE}escudos/${arquivo}`}
           alt=""
           loading={adiar ? 'lazy' : 'eager'}
           className="h-[76%] w-[76%] object-contain"
           draggable={false}
+          onError={() => {
+            const n = tentativa + 1
+            if (n > 2) setTentativa(n)
+            else setTimeout(() => setTentativa(n), n * 400)
+          }}
         />
       ) : (
         <BrasaoReserva id={id} />

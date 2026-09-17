@@ -1,9 +1,10 @@
 import { JOGADORES } from '../dados/jogadores'
 import type { Jogador, Nivel } from '../dados/tipos'
+import { formasAceitas } from './texto'
+import { embaralhar, numeroDoDia, posicaoDoDia, semente } from './sorteio'
 
-/** Dia 1 do jogo. O desafio vira à meia-noite no fuso de quem está jogando. */
-const EPOCA = Date.UTC(2026, 0, 1)
-const UM_DIA = 86_400_000
+export { numeroDoDia } from './sorteio'
+
 
 export function chaveDoDia(d = new Date()): string {
   const mes = String(d.getMonth() + 1).padStart(2, '0')
@@ -11,50 +12,20 @@ export function chaveDoDia(d = new Date()): string {
   return `${d.getFullYear()}-${mes}-${dia}`
 }
 
-export function numeroDoDia(d = new Date()): number {
-  return Math.round((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - EPOCA) / UM_DIA)
-}
-
 export function msAteAmanha(d = new Date()): number {
   const amanha = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)
   return amanha.getTime() - d.getTime()
 }
 
-// ------------------------------------------------------------ sorteio estável
-function semente(texto: string): number {
-  let h = 2166136261
-  for (let i = 0; i < texto.length; i++) {
-    h ^= texto.charCodeAt(i)
-    h = Math.imul(h, 16777619)
-  }
-  return h >>> 0
-}
-
-function gerador(s: number) {
-  return () => {
-    s = (s + 0x6d2b79f5) >>> 0
-    let t = Math.imul(s ^ (s >>> 15), 1 | s)
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
-  }
-}
-
-function embaralhar<T>(lista: T[], s: number): T[] {
-  const r = gerador(s)
-  const saida = [...lista]
-  for (let i = saida.length - 1; i > 0; i--) {
-    const j = Math.floor(r() * (i + 1))
-    ;[saida[i], saida[j]] = [saida[j], saida[i]]
-  }
-  return saida
-}
-
 /**
- * Quando ligado, só jogadores com a carreira conferida contra fonte externa
- * entram no sorteio. Está desligado porque a conferência ainda não rodou —
- * ligar agora deixaria os três níveis vazios.
+ * Só entra no sorteio quem tem a carreira vinda de fonte externa, não da
+ * memória do modelo. Ligado desde que a biblioteca passou a ser gerada do
+ * histórico do Transfermarkt — antes disso deixaria os três níveis vazios.
+ *
+ * `verificado` quer dizer "a lista de clubes e a ordem saíram de uma fonte
+ * externa e `fonte` aponta qual", não "alguém conferiu à mão".
  */
-export const EXIGIR_VERIFICACAO = false
+export const EXIGIR_VERIFICACAO = true
 
 const elegivel = (j: Jogador) => !EXIGIR_VERIFICACAO || j.verificado === true
 
@@ -70,9 +41,8 @@ const POR_NIVEL: Record<Nivel, Jogador[]> = {
  */
 export function jogadorDoDia(nivel: Nivel, dia = numeroDoDia()): Jogador {
   const lista = POR_NIVEL[nivel]
-  const posicaoAbsoluta = ((dia % lista.length) + lista.length) % lista.length
-  const ciclo = Math.floor(dia / lista.length)
-  return embaralhar(lista, semente(`${nivel}:${ciclo}`))[posicaoAbsoluta]
+  const { posicao, ciclo } = posicaoDoDia(dia, lista.length)
+  return embaralhar(lista, semente(`${nivel}:${ciclo}`))[posicao]
 }
 
 export function totalNoNivel(nivel: Nivel): number {
@@ -83,8 +53,9 @@ export function totalNoNivel(nivel: Nivel): number {
 export const PALPITES_AMBIGUOS: ReadonlySet<string> = (() => {
   const contagem = new Map<string, Set<string>>()
   for (const j of JOGADORES) {
-    for (const p of [j.nome, ...j.apelidos]) {
-      const k = p.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim()
+    // o mesmo conjunto que o jogo aceita como acerto, para que uma palavra
+    // servindo a dois jogadores seja recusada em vez de premiar o primeiro
+    for (const k of formasAceitas(j.nome, j.apelidos)) {
       if (!contagem.has(k)) contagem.set(k, new Set())
       contagem.get(k)!.add(j.id)
     }

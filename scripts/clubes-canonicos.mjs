@@ -98,19 +98,29 @@ export const CANONICOS = {
 }
 
 /** Clubes que nenhuma fonte pública cobre: entram no catálogo com cores para o brasão de reserva. */
+/**
+ * Clubes em uso que os repositórios de escudo não cobrem. As `cores` desenham
+ * o brasão de reserva quando não há arquivo.
+ *
+ * `wd` aponta o QID do clube no catálogo do Wikidata, e quando existe o escudo
+ * real entra no lugar do brasão. É por QID e não por nome de propósito:
+ * "Guangzhou Evergrande" casa por nome tanto com o Guangzhou FC (que é ele,
+ * renomeado) quanto com o Guangzhou City (que é outro clube, o ex-R&F), e
+ * escudo trocado é o pior erro possível neste jogo.
+ */
 export const SEM_ESCUDO = {
-  'colo-colo': { nome: "Colo-Colo", pais: 'CL', cores: ['#FFFFFF', '#1A1A1A'] },
-  'hercules': { nome: "Hércules", pais: 'ES', cores: ['#FFFFFF', '#0A3D91'] },
-  'brescia': { nome: "Brescia", pais: 'IT', cores: ['#0A3D91', '#FFFFFF'] },
-  'birmingham-city': { nome: "Birmingham City", pais: 'EN', cores: ['#0000FF', '#FFFFFF'] },
-  'reading': { nome: "Reading", pais: 'EN', cores: ['#004494', '#FFFFFF'] },
-  'sheffield-wednesday': { nome: "Sheffield Wednesday", pais: 'EN', cores: ['#0066B3', '#FFFFFF'] },
-  'al-gharafa': { nome: "Al-Gharafa", pais: 'QA', cores: ['#1A1A1A', '#FFD700'] },
-  'al-jazira': { nome: "Al-Jazira", pais: 'AE', cores: ['#F58220', '#FFFFFF'] },
-  'shanghai-shenhua': { nome: "Shanghai Shenhua", pais: 'CN', cores: ['#0A3D91', '#FFFFFF'] },
-  'shanghai-sipg': { nome: "Shanghai Port", pais: 'CN', cores: ['#E30613', '#1A1A1A'] },
-  'shandong-luneng': { nome: "Shandong Taishan", pais: 'CN', cores: ['#F58220', '#1A1A1A'] },
-  'guangzhou-evergrande': { nome: "Guangzhou Evergrande", pais: 'CN', cores: ['#E30613', '#FFD700'] },
+  'colo-colo': { nome: "Colo-Colo", pais: 'CL', cores: ['#FFFFFF', '#1A1A1A'], wd: 'Q207373' },
+  'hercules': { nome: "Hércules", pais: 'ES', cores: ['#FFFFFF', '#0A3D91'], wd: 'Q11963' },
+  'brescia': { nome: "Brescia", pais: 'IT', cores: ['#0A3D91', '#FFFFFF'], wd: 'Q6651' },
+  'birmingham-city': { nome: "Birmingham City", pais: 'EN', cores: ['#0000FF', '#FFFFFF'], wd: 'Q19444' },
+  'reading': { nome: "Reading", pais: 'EN', cores: ['#004494', '#FFFFFF'], wd: 'Q18729' },
+  'sheffield-wednesday': { nome: "Sheffield Wednesday", pais: 'EN', cores: ['#0066B3', '#FFFFFF'], wd: 'Q19498' },
+  'al-gharafa': { nome: "Al-Gharafa", pais: 'QA', cores: ['#1A1A1A', '#FFD700'], wd: 'Q428211' },
+  'al-jazira': { nome: "Al-Jazira", pais: 'AE', cores: ['#F58220', '#FFFFFF'], wd: 'Q429630' },
+  'shanghai-shenhua': { nome: "Shanghai Shenhua", pais: 'CN', cores: ['#0A3D91', '#FFFFFF'], wd: 'Q725367' },
+  'shanghai-sipg': { nome: "Shanghai Port", pais: 'CN', cores: ['#E30613', '#1A1A1A'], wd: 'Q564216' },
+  'shandong-luneng': { nome: "Shandong Taishan", pais: 'CN', cores: ['#F58220', '#1A1A1A'], wd: 'Q1046367' },
+  'guangzhou-evergrande': { nome: "Guangzhou Evergrande", pais: 'CN', cores: ['#E30613', '#FFD700'], wd: 'Q130521' },
 }
 
 /**
