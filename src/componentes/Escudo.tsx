@@ -66,12 +66,18 @@ export function Escudo({
    * nova tentativa, e o escudo é a informação principal do jogo.
    *
    * `tentativa` força uma URL diferente para o navegador não devolver a falha
-   * do cache. Na segunda falha, desiste do arquivo e desenha o brasão, que é a
-   * mesma queda já usada para clube sem escudo: pior que o escudo real, muito
-   * melhor que um quadrado vazio.
+   * do cache, e o intervalo cresce a cada uma — falha transitória some sozinha
+   * em pouco tempo, e o que se quer é o escudo real de volta, não a queda.
+   * Esgotadas as tentativas, desenha o brasão, que é a mesma queda já usada
+   * para clube sem escudo: pior que o escudo real, muito melhor que um
+   * quadrado vazio.
+   *
+   * Na prática quem falha são os arquivos maiores do lote, o que bate com
+   * transferência interrompida e não com arquivo ruim: os mesmos escudos
+   * decodificam sem erro quando pedidos de novo.
    */
   const [tentativa, setTentativa] = useState(0)
-  const desistiu = tentativa > 1
+  const desistiu = tentativa > 2
 
   return (
     <span
@@ -85,7 +91,11 @@ export function Escudo({
           loading={adiar ? 'lazy' : 'eager'}
           className="h-[76%] w-[76%] object-contain"
           draggable={false}
-          onError={() => setTentativa((n) => n + 1)}
+          onError={() => {
+            const n = tentativa + 1
+            if (n > 2) setTentativa(n)
+            else setTimeout(() => setTentativa(n), n * 400)
+          }}
         />
       ) : (
         <BrasaoReserva id={id} />
