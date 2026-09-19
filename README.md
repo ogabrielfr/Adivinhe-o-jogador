@@ -23,6 +23,7 @@ npm run dev
 | `npm run teste-nomes` | testa o comparador de nomes de clube |
 | `npm run coletar` | remonta `scripts/clubes-externos.json` a partir do Wikidata |
 | `npm run dicas` | refaz as dicas sem mexer no elenco |
+| `npm run reparar` | corrige clubes mal resolvidos e recalcula os níveis |
 | `npm run teste-palpites` | testa o que o jogo aceita como acerto |
 | `npm run biblioteca` | regera `src/dados/jogadores.ts` a partir do Transfermarkt |
 | `npm run teste-visual` | roda a partida ponta a ponta no Chromium e salva capturas |
@@ -114,34 +115,37 @@ nome que serve a mais de um. `npm run teste-palpites` guarda os casos.
 
 ### O nível
 
-Sai do número de links de Wikipédia do jogador, **corrigido para o torcedor
-brasileiro**: quem é brasileiro pesa 2,5x e quem passou pelo futebol brasileiro
-1,8x. Sem essa correção o nível fácil enchia de nome que o mundo conhece e o
-Brasil não — a primeira versão abria com Darijo Srna e Granit Xhaka; agora abre
-com Pelé, Neymar, Cristiano Ronaldo, Roberto Carlos e Ronaldinho.
+Sai da **mediana de visualizações do artigo na Wikipédia em português**, mais
+jogos de seleção e anos de carreira. A mediana e não a soma porque
+transferência e polêmica produzem pico de um ou dois meses: a pergunta é quem o
+torcedor conhece sempre, não quem esteve no noticiário em março.
 
-Continua sendo aproximação, não julgamento editorial. Guardiola, por exemplo,
-cai no fácil por ser famoso como **técnico**, embora a carreira de jogador dele
-seja um enigma difícil. Ajuste à mão onde discordar.
+Duas versões anteriores erraram e vale saber por quê. A primeira usava número
+de links de Wikipédia, que mede alcance global — o nível fácil abria com Darijo
+Srna e Granit Xhaka. A segunda somou valor de mercado, e jogador jovem em
+evidência subiu junto: Vitor Roque foi parar no fácil e Rodrygo no difícil.
 
-`OBRIGATORIOS`, em `scripts/montar-biblioteca.mjs`, força a entrada de um
-jogador independentemente de fama e o põe na frente da fila, e
-`escalarParaHoje()` o coloca no sorteio de hoje — dá para testar um nome
-específico sem esperar a data chegar. **A escalação é presa à data em que o
-script rodou**: no dia seguinte o sorteio segue seu curso normal.
+**Onde o número erra, `scripts/niveis-fixos.mjs` decide.** É o único lugar em
+que julgamento editorial entra, e ele ganha do cálculo de propósito.
 
-**Quando um ídolo não entra, quase sempre é um clube só que bloqueia.** Cada
-jogador é descartado inteiro se qualquer passagem não resolver, e o script
-imprime quais clubes mais derrubaram jogador. Romário, Rivaldo e Bebeto ainda
-estão de fora por isso. O conserto é acrescentar o par `id do Transfermarkt ->
-id do nosso catálogo` em `scripts/clubes-transfermarkt.json`, como já foi feito
-para o Cosmos do Pelé, o América-RJ, o Santa Cruz e o Sevilla.
+### Consertar sem gerar elenco novo
 
-**A composição depende um pouco de sorte de rede.** O WAF do Transfermarkt
-recusa uma fração das requisições, e sob carga essa fração cresce — numa das
-execuções, 171 candidatos ficaram sem carreira por isso. Rodar de novo produz
-uma lista parecida, não idêntica. Por isso os nomes que não podem faltar vão em
-`OBRIGATORIOS`, que são tentados primeiro.
+Cada geração depende do WAF do Transfermarkt liberar e devolve um conjunto de
+jogadores um pouco diferente, então trocar texto ou nível não deveria custar um
+elenco novo:
+
+| Comando | O que faz |
+| --- | --- |
+| `npm run dicas` | refaz as dicas |
+| `npm run reparar` | re-resolve os clubes de cada carreira e recalcula os níveis |
+
+`npm run reparar` existe porque um erro de comparação de nomes chegou ao jogo:
+"West Ham United" casou com "Western United", um clube australiano, e o
+Mascherano apareceu com o escudo errado. Pior, o clube australiano herdou o QID
+do West Ham no catálogo, e o erro se espalhou para o mapa de ids do
+Transfermarkt. Corrigida a comparação, este comando reescreve todas as
+carreiras a partir do histórico em cache — foram 17 delas, e `lyon` →
+`olympique-lyon` em onze jogadores era outro erro silencioso.
 
 ### Conferência
 

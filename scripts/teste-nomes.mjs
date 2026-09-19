@@ -24,6 +24,11 @@ const naoDeveCasar = [
   ['Inter de Milão', 'Internacional'],
   ['LA Galaxy', 'Los Angeles FC'],
   ['Botafogo', 'Botafogo-SP'],
+  // o Western United da Austrália virou o West Ham do Mascherano no jogo
+  ['Western United', 'West Ham United Football Club'],
+  ['West Ham United', 'Western United FC'],
+  ['Newcastle United', 'New England Revolution'],
+  ['Real Madrid', 'Real Sociedad'],
 ]
 let falhas = 0
 for (const [a, b] of deveCasar) if (!mesmoClube(a, b)) { console.log(`FALHOU (devia casar)     ${a}  |  ${b}`); falhas++ }

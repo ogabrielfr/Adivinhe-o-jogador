@@ -13,6 +13,7 @@
     "teste-nomes": "node scripts/teste-nomes.mjs",
     "teste-palpites": "node scripts/teste-palpites.mjs",
     "dicas": "node scripts/atualizar-dicas.mjs",
+    "reparar": "node scripts/reparar-biblioteca.mjs",
     "coletar": "node scripts/coletar-clubes.mjs",
     "biblioteca": "node scripts/montar-biblioteca.mjs"
   },

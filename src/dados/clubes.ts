@@ -267,6 +267,7 @@ export const CLUBES: Clube[] = [
   { id: 'oita-trinita', nome: "Oita Trinita", pais: 'JP', escudo: 'oita-trinita.svg' },
   { id: 'olaria-atletico-clube', nome: "Olaria Atlético Clube", pais: 'BR', escudo: 'olaria-atletico-clube.png' },
   { id: 'olympiacos-piraeus', nome: "Olympiacos Piraeus", pais: 'GR', escudo: 'olympiacos-piraeus.png' },
+  { id: 'olympique-lyon', nome: "Olympique Lyon", pais: 'FR', escudo: 'olympique-lyon.png' },
   { id: 'omiya-ardija', nome: "Omiya Ardija", pais: 'JP', escudo: 'omiya-ardija.svg' },
   { id: 'operario-ferroviario-esporte-clube', nome: "Operário Ferroviário Esporte Clube", pais: 'BR', escudo: 'operario-ferroviario-esporte-clube.png' },
   { id: 'orlando-city', nome: "Orlando City", pais: 'US', escudo: 'orlando-city.svg' },

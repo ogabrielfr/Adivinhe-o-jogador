@@ -60,9 +60,14 @@ function mesmoToken(a, b, estrito) {
   if (a === b) return true
   if (estrito) return false
   const [curto, longo] = a.length <= b.length ? [a, b] : [b, a]
-  // prefixo só vale quando o resto é substancial: "inter" -> "internazionale"
-  // passa, "bayer" -> "bayern" não.
-  if (curto.length >= 4 && longo.startsWith(curto) && longo.length - curto.length >= 3) return true
+  /**
+   * Prefixo só vale quando o resto é substancial. O caso que a regra existe
+   * para pegar é "inter" -> "internazionale", oito letras de diferença. Os
+   * casos que ela precisa recusar são vizinhos próximos de clubes diferentes:
+   * "bayer" -> "bayern" (uma letra) e "west" -> "western", que fez o West Ham
+   * do Mascherano virar o Western United da Austrália.
+   */
+  if (curto.length >= 5 && longo.startsWith(curto) && longo.length - curto.length >= 4) return true
   return curto.length >= 5 && distancia(a, b) <= 2
 }
 
