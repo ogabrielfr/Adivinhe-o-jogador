@@ -119,12 +119,22 @@ function dinheiro(v) {
   return `€ ${Math.round(v / 1e3)} mil`
 }
 
-/** "14/15" -> 2014. O Transfermarkt usa temporada, não ano. */
+/**
+ * "14/15" -> 2014. O Transfermarkt usa temporada, não ano.
+ *
+ * O corte entre 1900 e 2000 não pode ser um número fixo: com 50, a temporada
+ * 50/51 do Pelé virava 2050; com o ano corrente mais folga, a 31/32 de
+ * Domingos da Guia virava 2031. Qualquer corte fixo tem uma borda.
+ *
+ * A regra sem borda: um ano que ainda não chegou é do século passado. A folga
+ * de três anos cobre contrato já assinado para temporada futura, que o site
+ * lista.
+ */
 export function anoDaTemporada(t) {
   const m = String(t ?? '').match(/^(\d{2})\/(\d{2})$/)
   if (!m) return null
-  const n = Number(m[1])
-  return n > 50 ? 1900 + n : 2000 + n
+  const ano = 2000 + Number(m[1])
+  return ano > new Date().getFullYear() + 3 ? ano - 100 : ano
 }
 
 // ------------------------------------------------------------------ fatos
