@@ -182,6 +182,26 @@ Transfermarkt. Corrigida a comparação, este comando reescreve todas as
 carreiras a partir do histórico em cache — foram 17 delas, e `lyon` →
 `olympique-lyon` em onze jogadores era outro erro silencioso.
 
+**E o Chicharito continuou com o escudo do Western United mesmo depois disso.**
+O reparo tem uma regra de segurança: se um clube da carreira não resolve, a
+carreira inteira fica como está, para não gravar uma lista com buraco. A regra
+está certa; o problema era ela falhar calada. O nome "PSG" não resolvia contra
+o catálogo, onde o clube é "Paris Saint-Germain", e isso bastava para congelar
+dezesseis carreiras — a do Chicharito entre elas, com o West Ham dele ainda
+escrito como um clube australiano.
+
+Eram **oito nomes travando 49 das 300 carreiras**: PSG, Sevilla Fútbol Club,
+Marselha, Reial Club Deportiu Espanyol de Barcelona, Verdy Kawasaki, Ny Cosmos,
+America Rj e Santa Cruz. O conserto de cada um é uma linha em
+`scripts/clubes-transfermarkt.json`, que casa id do Transfermarkt com id do
+catálogo e não depende de o nome bater. Com os oito, as 300 voltaram a ser
+reresolvíveis e as duas que ainda estavam erradas se corrigiram sozinhas.
+
+Hoje o comando **lista as carreiras que congelou** e o nome que travou cada
+uma. Uma resolução que falha calada é pior que uma que falha alto: a correção
+do mapa já existia havia semanas, e ninguém tinha como saber que ela não
+chegava ao Chicharito.
+
 ### Conferência
 
 `EXIGIR_VERIFICACAO` em `src/logica/diario.ts` está **ligado**: só entra no

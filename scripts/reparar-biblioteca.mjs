@@ -149,6 +149,16 @@ if (faltamViews.length) {
 const jogadores = []
 let carreirasMudadas = 0
 const trocas = []
+/**
+ * Carreira que não pôde ser reresolvida porque um clube não tem id.
+ *
+ * Precisa aparecer no relatório. Enquanto ficava em silêncio, o Chicharito
+ * passou semanas com o escudo do Western United, da Austrália, no lugar do
+ * West Ham: a correção do mapa existia, mas a carreira dele estava congelada
+ * por outro clube irresolúvel e nunca era reescrita. Uma resolução que falha
+ * calada é pior que uma que falha alto.
+ */
+const congeladas = new Map()
 
 for (const b of blocos) {
   const texto = b[0]
@@ -163,7 +173,11 @@ for (const b of blocos) {
     let falhou = false
     for (const p of passagens) {
       const id = resolverClube(p)
-      if (!id) { falhou = true; break }
+      if (!id) {
+        falhou = true
+        congeladas.set(p.nome, (congeladas.get(p.nome) ?? 0) + 1)
+        break
+      }
       if (novos[novos.length - 1] !== id) novos.push(id)
     }
     // só troca quando a resolução nova está completa; carreira com buraco fica como está
@@ -211,6 +225,20 @@ for (const t of trocas) contagem.set(t, (contagem.get(t) ?? 0) + 1)
 for (const [t, n] of [...contagem].sort((a, b) => b[1] - a[1]).slice(0, 12)) {
   console.log(`  ${String(n).padStart(3)}x  ${t}`)
 }
+/**
+ * Carreira congelada não é ruído: é dado velho que o reparo não alcança.
+ * O conserto é acrescentar o par `id do Transfermarkt -> id do catálogo` em
+ * scripts/clubes-transfermarkt.json e rodar de novo.
+ */
+if (congeladas.size) {
+  const total = [...congeladas.values()].reduce((a, b) => a + b, 0)
+  console.log(`\n${total} carreiras NÃO foram reresolvidas: um clube sem id trava a carreira inteira`)
+  for (const [nome, n] of [...congeladas].sort((a, b) => b[1] - a[1])) {
+    console.log(`  ${String(n).padStart(3)}x  ${nome}`)
+  }
+  console.log('  conserto: acrescente o par em scripts/clubes-transfermarkt.json')
+}
+
 console.log(`\n${nivelMudado} jogadores mudaram de nível`)
 const fixados = jogadores.filter((j) => j.id in NIVEL_FIXO).length
 if (fixados) console.log(`  ${fixados} com nível decidido à mão em niveis-fixos.mjs`)
