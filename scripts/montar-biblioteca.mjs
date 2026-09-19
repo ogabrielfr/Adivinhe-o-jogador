@@ -33,7 +33,11 @@ import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
 import { CANONICOS } from './clubes-canonicos.mjs'
 import { mesmoClube, tokensDoNome } from './nomes-clube.mjs'
-import { passagensDoTransfermarkt, idsDoTransfermarkt } from './transfermarkt.mjs'
+import { montarDica, fatosDoHistorico } from './dicas.mjs'
+import {
+  passagensDoTransfermarkt, idsDoTransfermarkt,
+  historicoDoTransfermarkt, perfilDoTransfermarkt,
+} from './transfermarkt.mjs'
 import { numeroDoDia, origemDaPosicao, posicaoDoDia, semente } from '../src/logica/sorteio.ts'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -216,54 +220,6 @@ for (let i = 0; i < faltaMeta.length; i += 150) {
 if (faltaMeta.length) writeFileSync(ARQUIVO_META, JSON.stringify(Object.fromEntries(meta)) + '\n')
 
 // ---------------------------------------------------------------- dica
-const POSICAO = {
-  goleiro: 'Goleiro', zagueiro: 'Zagueiro', 'defensor central': 'Zagueiro',
-  'lateral-direito': 'Lateral', 'lateral-esquerdo': 'Lateral',
-  volante: 'Volante', 'meio-campista': 'Meio-campista', 'meia-atacante': 'Meia',
-  meia: 'Meia', 'ponta-direita': 'Ponta', 'ponta-esquerda': 'Ponta',
-  atacante: 'Atacante', centroavante: 'Centroavante',
-}
-
-/**
- * Dica montada de atributo estruturado: posição, país de nascimento, quantos
- * países a carreira atravessou e a década de nascimento. Nada de texto gerado
- * — dica inventada é a mesma classe de erro que carreira inventada, só que
- * mais difícil de conferir depois.
- *
- * Não cita o número de clubes de propósito: os escudos estão à vista e contar
- * de novo não ajuda ninguém.
- */
-/**
- * País pede preposição diferente e não há regra limpa: "na Argentina", "no
- * Japão", "em Portugal". A heurística cobre a maioria (termina em -a leva
- * "na", o resto "no") e a lista trata quem não leva artigo nenhum.
- */
-const SEM_ARTIGO = new Set([
-  'Portugal', 'Israel', 'Angola', 'Moçambique', 'Cuba', 'Cabo Verde', 'Andorra',
-  'Malta', 'Chipre', 'Omã', 'Gana', 'Marrocos', 'Trinidad e Tobago',
-])
-
-function ondeNasceu(pais) {
-  if (SEM_ARTIGO.has(pais)) return `em ${pais}`
-  return /a$/i.test(pais) ? `na ${pais}` : `no ${pais}`
-}
-
-function montarDica({ posicao, pais, nasc }, paises) {
-  const papel = POSICAO[(posicao ?? '').toLowerCase()]
-  const origem = pais ? (pais === 'Brasil' ? 'brasileiro' : `nascido ${ondeNasceu(pais)}`) : null
-
-  const sujeito = papel
-    ? `${papel}${origem ? ` ${origem}` : ''}`
-    : origem ? `Jogador ${origem}` : 'Jogador'
-
-  const rodagem = paises > 1
-    ? `passou por clubes de ${paises} países`
-    : 'fez a carreira inteira num país só'
-
-  const decada = nasc ? ` Nasceu nos anos ${String(Math.floor(Number(nasc) / 10) * 10).slice(2)}.` : ''
-  return `${sujeito}, ${rodagem}.${decada}`
-}
-
 /** Apelidos previsíveis; o jogo já aceita a primeira e a última palavra do nome. */
 function apelidosDe(nome) {
   const limpo = nome.replace(/\s+/g, ' ').trim()
@@ -359,14 +315,35 @@ async function trabalhador() {
      */
     if (clubes.length < 2 || clubes.length > 12) { recusas.tamanho++; continue }
 
-    const id = slug(dados.nome)
+    /**
+     * O nome da camisa vem do Transfermarkt e vale mais que o rótulo do
+     * Wikidata, que costuma ser o nome de registro: ninguém digita "Paulo
+     * Henrique Sampaio Filho". O de registro continua valendo como palpite.
+     */
+    const perfil = await perfilDoTransfermarkt(tm)
+    const nome = perfil?.nome && perfil.nome.split(' ').length < dados.nome.split(' ').length
+      ? perfil.nome
+      : dados.nome
+
+    const id = slug(nome)
     if (idsUsados.has(id)) { recusas.repetido++; continue }
     idsUsados.add(id)
 
+    const historico = await historicoDoTransfermarkt(tm)
     const paises = new Set(clubes.map((c) => paisDoClube.get(c))).size
+
     aceitos.push({
-      id, nome: dados.nome, apelidos: apelidosDe(dados.nome),
-      clubes, dica: montarDica(dados, paises),
+      id,
+      nome,
+      apelidos: [...new Set([nome, dados.nome, ...apelidosDe(dados.nome)].map((n) => n.toLowerCase()))],
+      clubes,
+      dica: montarDica({
+        ...dados,
+        posicao: perfil?.posicao ?? dados.posicao,
+        pais: perfil?.nacionalidade ?? dados.pais,
+        fatos: fatosDoHistorico(historico?.transfers ?? []),
+        paises,
+      }),
       fama: famaCorrigida(qid, clubes.some((c) => paisDoClube.get(c) === 'BR')),
       qid, tm, obrigatorio: qid in OBRIGATORIOS,
     })

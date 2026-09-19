@@ -42,30 +42,67 @@ export function pareceIgual(palpite: string, alvo: string): boolean {
   return distancia(palpite, alvo, folga) <= folga
 }
 
-/** Palavras que não identificam ninguém sozinhas e não valem como palpite. */
-const SEM_VALOR = new Set(['de', 'da', 'do', 'dos', 'das', 'del', 'van', 'von', 'dos', 'jr'])
+/**
+ * Partículas de sobrenome. Não identificam ninguém sozinhas, mas fazem parte
+ * do sobrenome quando vêm antes dele: o mundo chama Marc-André ter Stegen de
+ * "ter Stegen", não de "Stegen".
+ */
+const PARTICULAS = new Set([
+  'de', 'da', 'do', 'das', 'dos', 'del', 'dela', 'della', 'di', 'du',
+  'van', 'von', 'ter', 'ten', 'der', 'den', 'dos', 'la', 'le', 'el',
+  'al', 'bin', 'ibn', 'y', 'e', 'jr', 'junior', 'filho', 'neto',
+])
 
 /**
  * Todas as formas que contam como acerto para um jogador.
  *
- * Além do nome e dos apelidos declarados, aceita a primeira e a última palavra
- * do nome canônico. É o que faltava quando "Ronaldo Fenômeno" recusava
- * "ronaldo": o palpite mais provável do país inteiro caía fora, e a tolerância
- * a digitação não cobre porque ela mede distância de edição — "ronaldo" está a
- * oito caracteres de "ronaldo fenomeno", não a um erro de digitação.
+ * Ninguém digita o nome completo. Digita o pedaço pelo qual conhece o jogador,
+ * e esse pedaço é quase sempre uma sequência de palavras do nome: "ter Stegen"
+ * de "Marc-André ter Stegen", "Lucas Lima" de "Lucas Lima", "ronaldo" de
+ * "Ronaldo Fenômeno". Então vale qualquer sequência contígua de duas ou mais
+ * palavras, mais as palavras isoladas que identificam sozinhas.
  *
- * Manter isto aqui, e não na lista de apelidos de cada jogador, é o que faz a
- * regra valer para os trezentos sem ninguém ter que lembrar caso a caso. Quando
- * a palavra serve a mais de um jogador, `PALPITES_AMBIGUOS` a recusa e pede
- * desempate — o tratamento que já existia.
+ * Uma palavra só vale sozinha se tiver ao menos quatro letras e não for
+ * partícula — "ter" e "de" não dizem nada. E quando a mesma forma serve a mais
+ * de um jogador, `PALPITES_AMBIGUOS` a recusa e pede desempate, o tratamento
+ * que já existia.
+ *
+ * Manter a regra aqui, e não na lista de apelidos de cada jogador, é o que faz
+ * ela valer para os trezentos sem ninguém ter que lembrar caso a caso.
  */
-export function formasAceitas(nome: string, apelidos: readonly string[]): string[] {
-  const formas = new Set([nome, ...apelidos].map(normalizar))
-  const palavras = normalizar(nome).split(' ').filter(Boolean)
-  if (palavras.length > 1) {
-    for (const p of [palavras[0], palavras[palavras.length - 1]]) {
-      if (p.length >= 4 && !SEM_VALOR.has(p)) formas.add(p)
+/** O nome canônico e os apelidos declarados, exatamente como estão. */
+export function formasExatas(nome: string, apelidos: readonly string[]): string[] {
+  return [nome, ...apelidos].map(normalizar)
+}
+
+/**
+ * Os pedaços do nome que também contam: sequências contíguas de palavras e as
+ * palavras que identificam sozinhas. Ficam separadas das exatas porque só
+ * estas passam pelo teste de ambiguidade — ver `formasAceitas`.
+ */
+export function formasDerivadas(nome: string, apelidos: readonly string[]): string[] {
+  const formas = new Set<string>()
+
+  for (const base of [nome, ...apelidos]) {
+    const palavras = normalizar(base).split(' ').filter(Boolean)
+
+    // sequências contíguas de duas ou mais palavras
+    for (let i = 0; i < palavras.length; i++) {
+      for (let j = i + 2; j <= palavras.length; j++) {
+        formas.add(palavras.slice(i, j).join(' '))
+      }
+    }
+
+    for (const p of palavras) {
+      if (p.length >= 4 && !PARTICULAS.has(p)) formas.add(p)
     }
   }
+
+  for (const exata of formasExatas(nome, apelidos)) formas.delete(exata)
   return [...formas]
+}
+
+/** Tudo que conta como acerto, exatas e derivadas. */
+export function formasAceitas(nome: string, apelidos: readonly string[]): string[] {
+  return [...formasExatas(nome, apelidos), ...formasDerivadas(nome, apelidos)]
 }

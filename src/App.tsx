@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { NIVEIS } from './dados/tipos'
 import type { Jogador, Nivel } from './dados/tipos'
 import { chaveDoDia, jogadorDoDia, numeroDoDia, PALPITES_AMBIGUOS } from './logica/diario'
-import { formasAceitas, normalizar, pareceIgual } from './logica/texto'
+import { formasDerivadas, formasExatas, normalizar, pareceIgual } from './logica/texto'
 import { carregar, partidaNova, registrarResultado, salvar, TENTATIVAS } from './logica/armazenamento'
 import { textoDeCompartilhamento } from './logica/compartilhar'
 import { TelaInicial } from './componentes/TelaInicial'
@@ -48,11 +48,19 @@ export function App() {
 
       const palpite = normalizar(limpo)
       if (!palpite) return 'vazio'
-      if (PALPITES_AMBIGUOS.has(palpite)) return 'ambiguo'
-
       const jogador = jogadores[nivel]
-      const acertou = formasAceitas(jogador.nome, jogador.apelidos)
+
+      /**
+       * O nome canônico e os apelidos declarados ganham direto: se o palpite é
+       * o nome do jogador, acertou, mesmo que outro jogador da biblioteca se
+       * chame igual. O desempate só faz sentido para pedaço de nome.
+       */
+      const exato = formasExatas(jogador.nome, jogador.apelidos)
         .some((alvo) => pareceIgual(palpite, alvo))
+      if (!exato && PALPITES_AMBIGUOS.has(palpite)) return 'ambiguo'
+
+      const acertou = exato ||
+        formasDerivadas(jogador.nome, jogador.apelidos).some((alvo) => pareceIgual(palpite, alvo))
 
       let resultado: ResultadoChute = 'errou'
 

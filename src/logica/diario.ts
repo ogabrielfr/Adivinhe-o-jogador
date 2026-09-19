@@ -1,6 +1,6 @@
 import { JOGADORES } from '../dados/jogadores'
 import type { Jogador, Nivel } from '../dados/tipos'
-import { formasAceitas } from './texto'
+import { formasDerivadas } from './texto'
 import { embaralhar, numeroDoDia, posicaoDoDia, semente } from './sorteio'
 
 export { numeroDoDia } from './sorteio'
@@ -49,13 +49,17 @@ export function totalNoNivel(nivel: Nivel): number {
   return POR_NIVEL[nivel].length
 }
 
-/** Palpites que casariam com mais de um jogador precisam de desempate. */
+/**
+ * Palpites que casariam com mais de um jogador precisam de desempate — mas só
+ * quando são pedaço de nome. O nome canônico sempre vale: existem dois
+ * Paulinhos na biblioteca, e quem digita "Paulinho" no dia de um deles não tem
+ * como ser mais específico. Recusar seria pedir o nome de registro, que
+ * ninguém sabe.
+ */
 export const PALPITES_AMBIGUOS: ReadonlySet<string> = (() => {
   const contagem = new Map<string, Set<string>>()
   for (const j of JOGADORES) {
-    // o mesmo conjunto que o jogo aceita como acerto, para que uma palavra
-    // servindo a dois jogadores seja recusada em vez de premiar o primeiro
-    for (const k of formasAceitas(j.nome, j.apelidos)) {
+    for (const k of formasDerivadas(j.nome, j.apelidos)) {
       if (!contagem.has(k)) contagem.set(k, new Set())
       contagem.get(k)!.add(j.id)
     }

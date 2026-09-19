@@ -2,6 +2,7 @@
 import { readdirSync, existsSync } from 'node:fs'
 import { JOGADORES } from '../src/dados/jogadores.ts'
 import { CLUBES } from '../src/dados/clubes.ts'
+import { formasDerivadas } from '../src/logica/texto.ts'
 
 const erros = []
 const avisos = []
@@ -32,17 +33,20 @@ for (const j of JOGADORES) {
   }
 }
 
-// palpites que casariam com mais de um jogador precisam ser tratados como ambíguos
-const porPalpite = new Map()
+/**
+ * Pedaço de nome servindo a dois jogadores pede desempate no jogo. O nome
+ * canônico, não: existem dois Paulinhos, e quem digita "Paulinho" no dia de um
+ * deles não tem como ser mais específico. Só os pedaços entram no aviso.
+ */
+const porPedaco = new Map()
 for (const j of JOGADORES) {
-  for (const p of [j.nome, ...j.apelidos]) {
-    const k = normalizar(p)
-    if (!porPalpite.has(k)) porPalpite.set(k, new Set())
-    porPalpite.get(k).add(j.id)
+  for (const p of formasDerivadas(j.nome, j.apelidos)) {
+    if (!porPedaco.has(p)) porPedaco.set(p, new Set())
+    porPedaco.get(p).add(j.id)
   }
 }
-for (const [k, lista] of porPalpite) {
-  if (lista.size > 1) avisos.push(`palpite ambíguo "${k}" → ${[...lista].join(', ')}`)
+for (const [k, lista] of porPedaco) {
+  if (lista.size > 1) avisos.push(`pedaço de nome ambíguo "${k}" → ${[...lista].join(', ')}`)
 }
 
 // o catálogo é propositalmente maior que o uso: serve de biblioteca para novos jogadores

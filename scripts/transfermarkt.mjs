@@ -23,7 +23,7 @@
  */
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
-import { readFileSync, existsSync } from 'node:fs'
+import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
@@ -88,6 +88,37 @@ export async function idsDoTransfermarkt(qids) {
   return new Map(linhas.map((l) => [qidDe(l.j), l.tm]))
 }
 
+/**
+ * O histórico de um jogador não muda de uma hora para outra, e cada ida ao
+ * site custa caro: o WAF recusa uma parte das requisições e o conjunto todo
+ * leva mais de vinte minutos. Guardar em disco deixa o trabalho de iterar
+ * sobre os dados — refazer dicas, mudar filtro de clube — em segundos.
+ */
+const CACHE = join(dirname(fileURLToPath(import.meta.url)), '..', '.cache', 'transfermarkt')
+mkdirSync(CACHE, { recursive: true })
+
+/** Histórico cru de transferências, do cache quando já foi buscado. */
+export async function historicoDoTransfermarkt(tmId, { forcar = false } = {}) {
+  const arquivo = join(CACHE, `${tmId}.json`)
+  if (!forcar && existsSync(arquivo)) {
+    try {
+      return JSON.parse(readFileSync(arquivo, 'utf8'))
+    } catch {
+      // cache corrompido: busca de novo
+    }
+  }
+  const bruto = await pedirComInsistencia(`${BASE}/ceapi/transferHistory/list/${tmId}`)
+  if (!bruto) return null
+  let dados
+  try {
+    dados = JSON.parse(bruto)
+  } catch {
+    return null
+  }
+  writeFileSync(arquivo, JSON.stringify(dados))
+  return dados
+}
+
 /** Repete enquanto o WAF responder com a página de verificação. */
 async function pedirComInsistencia(url, tentativas = 6) {
   const cabecalhos = Object.entries(NAVEGADOR).flatMap(([k, v]) => ['-H', `${k}: ${v}`])
@@ -128,15 +159,8 @@ function nomeDoClube(clube) {
  * posição certa — que é exatamente o que o jogo mostra.
  */
 export async function passagensDoTransfermarkt(tmId) {
-  const bruto = await pedirComInsistencia(`${BASE}/ceapi/transferHistory/list/${tmId}`)
-  if (!bruto) return null
-
-  let dados
-  try {
-    dados = JSON.parse(bruto)
-  } catch {
-    return null
-  }
+  const dados = await historicoDoTransfermarkt(tmId)
+  if (!dados) return null
 
   // a API devolve do mais recente para o mais antigo
   const transferencias = (dados.transfers ?? []).slice().reverse()
@@ -162,4 +186,50 @@ export async function passagensDoTransfermarkt(tmId) {
 export async function carreiraDoTransfermarkt(tmId) {
   const passagens = await passagensDoTransfermarkt(tmId)
   return passagens && passagens.map((p) => p.nome)
+}
+
+/**
+ * Posição e nacionalidade do perfil.
+ *
+ * Vêm daqui e não do Wikidata porque lá as duas propriedades aceitam vários
+ * valores e a escolha do primeiro saía errada: o Zico aparecia como "nascido
+ * em Portugal" na mesma frase que citava a seleção brasileira. O Transfermarkt
+ * guarda um valor só, que é o que o jogo precisa.
+ */
+export async function perfilDoTransfermarkt(tmId) {
+  const arquivo = join(CACHE, `perfil-${tmId}.json`)
+  if (existsSync(arquivo)) {
+    try {
+      return JSON.parse(readFileSync(arquivo, 'utf8'))
+    } catch {
+      // cache corrompido: busca de novo
+    }
+  }
+
+  const html = await pedirComInsistencia(`${BASE}/-/profil/spieler/${tmId}`)
+  if (!html || html.length < 20_000) return null
+
+  const posicao =
+    html.match(/Posi[çc][ãa]o:?\s*<\/span>\s*<span[^>]*>([^<]+)/i)?.[1]?.trim() ??
+    html.match(/data-header__label"[^>]*>\s*Posição[\s\S]{0,120}?content"[^>]*>([^<]+)/i)?.[1]?.trim() ??
+    null
+
+  const nacionalidade =
+    html.match(/Naci?onalidade:?[\s\S]{0,300}?title="([^"]+)"/i)?.[1]?.trim() ?? null
+
+  /**
+   * O nome do cabeçalho é o nome pelo qual o jogador é conhecido — o da
+   * camisa. O rótulo do Wikidata costuma trazer o nome de registro, e
+   * "Paulo Henrique Sampaio Filho" não é palpite que alguém digite.
+   */
+  const nome = html
+    .match(/<h1[^>]*data-header__headline-wrapper[^>]*>([\s\S]*?)<\/h1>/i)?.[1]
+    ?.replace(/<[^>]+>/g, ' ')
+    .replace(/#\d+\s*/g, '')
+    .replace(/\s+/g, ' ')
+    .trim() ?? null
+
+  const perfil = { nome, posicao, nacionalidade }
+  writeFileSync(arquivo, JSON.stringify(perfil))
+  return perfil
 }

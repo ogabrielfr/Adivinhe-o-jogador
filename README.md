@@ -22,6 +22,8 @@ npm run dev
 | `npm run verificar` | confere as carreiras contra o Wikidata e relata as divergências |
 | `npm run teste-nomes` | testa o comparador de nomes de clube |
 | `npm run coletar` | remonta `scripts/clubes-externos.json` a partir do Wikidata |
+| `npm run dicas` | refaz as dicas sem mexer no elenco |
+| `npm run teste-palpites` | testa o que o jogo aceita como acerto |
 | `npm run biblioteca` | regera `src/dados/jogadores.ts` a partir do Transfermarkt |
 | `npm run teste-visual` | roda a partida ponta a ponta no Chromium e salva capturas |
 
@@ -71,10 +73,44 @@ derrubaram jogador — é por onde vale ampliar o catálogo.
 
 ### A dica
 
-Sai de atributo estruturado: posição, país de nascimento, quantos países a
-carreira atravessou, década de nascimento. **Nunca de texto gerado** — dica
-inventada é a mesma classe de erro que carreira inventada, só que mais difícil
-de conferir depois.
+`npm run dicas` refaz a dica de todos sem tocar no elenco — trocar texto não
+deveria custar um elenco novo, já que cada geração depende do WAF do
+Transfermarkt liberar e devolve um conjunto um pouco diferente.
+
+A dica é feita de **números que mudam de jogador para jogador**: quantas vezes
+vestiu a camisa da seleção, quanto custou a transferência mais cara, quanto
+chegou a valer, de quando a quando jogou. Tudo verificável, do histórico do
+Transfermarkt e do Wikidata — **nunca texto gerado**, que é a mesma classe de
+erro que carreira inventada, só que mais difícil de conferir.
+
+A primeira versão descrevia posição, país e número de países, atributos que
+centenas de jogadores compartilham: **177 dos 300 repetiam a dica de outro**, e
+duas partidas seguidas mostravam a frase idêntica. Uma dica que serve para
+qualquer um não é dica. Hoje são 300 distintas para 300 jogadores, e o script
+avisa se alguma voltar a repetir.
+
+Posição e nacionalidade vêm do **perfil do Transfermarkt**, não do Wikidata:
+lá as duas propriedades aceitam vários valores e pegar o primeiro saía errado —
+o Zico aparecia como "nascido em Portugal" na mesma frase que citava a seleção
+brasileira.
+
+### O nome do jogador
+
+O nome canônico é o **nome da camisa**, do cabeçalho do Transfermarkt, e não o
+rótulo do Wikidata, que costuma trazer o nome de registro: ninguém digita
+"Paulo Henrique Sampaio Filho". O nome de registro continua valendo como
+palpite.
+
+`src/logica/texto.ts` decide o que conta como acerto. Vale qualquer sequência
+contígua de palavras do nome e qualquer palavra que identifique sozinha — é o
+que faz "ter Stegen" acertar "Marc-André ter Stegen", "van Dijk" acertar
+"Virgil van Dijk" e "de Bruyne" acertar "Kevin De Bruyne". Partícula sozinha
+("ter", "van", "de") não vale.
+
+**Nome canônico sempre ganha, mesmo repetido.** Há dois Paulinhos e dois
+Henriques na biblioteca; quem digita "Paulinho" no dia de um deles não tem como
+ser mais específico, então acerta. O pedido de desempate fica só para pedaço de
+nome que serve a mais de um. `npm run teste-palpites` guarda os casos.
 
 ### O nível
 
