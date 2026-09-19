@@ -12,6 +12,6 @@
  *   'id-do-jogador': 'facil' | 'intermediario' | 'dificil'
  */
 export const NIVEL_FIXO = {
-  // apontado pelo cliente: a carreira dele não é de nível fácil
-  'vitor-roque': 'dificil',
+  // vazio: o cálculo por visualizações em português está acertando os casos
+  // que o cliente apontou. Preencha quando ele errar de novo.
 }

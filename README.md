@@ -115,18 +115,32 @@ nome que serve a mais de um. `npm run teste-palpites` guarda os casos.
 
 ### O nível
 
-Sai da **mediana de visualizações do artigo na Wikipédia em português**, mais
-jogos de seleção e anos de carreira. A mediana e não a soma porque
-transferência e polêmica produzem pico de um ou dois meses: a pergunta é quem o
-torcedor conhece sempre, não quem esteve no noticiário em março.
+Sai quase todo da **mediana de visualizações do artigo na Wikipédia em
+português**: é a única medida direta da pergunta do jogo — quanta gente procura
+esse jogador em português. Mediana e não soma porque transferência e polêmica
+produzem pico de um ou dois meses.
 
-Duas versões anteriores erraram e vale saber por quê. A primeira usava número
-de links de Wikipédia, que mede alcance global — o nível fácil abria com Darijo
-Srna e Granit Xhaka. A segunda somou valor de mercado, e jogador jovem em
-evidência subiu junto: Vitor Roque foi parar no fácil e Rodrygo no difícil.
+Jogos de seleção e número de links de Wikipédia entram como desempate de peso
+pequeno. Só decidem entre jogadores de procura parecida; **nunca invertem a
+ordem**, e essa contenção é o ponto.
 
-**Onde o número erra, `scripts/niveis-fixos.mjs` decide.** É o único lugar em
-que julgamento editorial entra, e ele ganha do cálculo de propósito.
+Três versões anteriores erraram do mesmo jeito: somando algo que parecia mérito
+e que acabava punindo quem o torcedor conhece hoje.
+
+| Critério | O que deu errado |
+| --- | --- |
+| Links de Wikipédia | mede alcance global; o fácil abria com Darijo Srna e Granit Xhaka |
+| Valor de mercado | subiu jovem em evidência junto com jovem consolidado |
+| Jogos de seleção e anos de carreira, com peso alto | empurrou veterano para cima e derrubou Vitor Roque e Rodrygo, que são o 23º e o 33º em procura entre os trezentos |
+
+O padrão é sempre o mesmo: **"carreira longa" e "muita seleção" medem mérito, e
+o jogo não pergunta mérito, pergunta reconhecimento.** Um garoto de vinte anos
+que aparece toda semana na televisão é fácil; um lateral de quinze anos de
+estrada que ninguém lembra é difícil.
+
+`scripts/niveis-fixos.mjs` fixa o nível à mão e vence o cálculo. Está vazio
+hoje — o cálculo está acertando os casos apontados —, e é onde escrever quando
+ele errar de novo.
 
 ### Consertar sem gerar elenco novo
 

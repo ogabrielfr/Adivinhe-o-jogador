@@ -23,8 +23,7 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { mesmoClube, tokensDoNome } from './nomes-clube.mjs'
 import { CANONICOS } from './clubes-canonicos.mjs'
-import { historicoDoTransfermarkt, passagensDoTransfermarkt } from './transfermarkt.mjs'
-import { anoDaTemporada, fatosDoHistorico } from './dicas.mjs'
+import { passagensDoTransfermarkt } from './transfermarkt.mjs'
 import { consultar, qidDe } from './wikidata.mjs'
 import { visualizacoesDe } from './visualizacoes.mjs'
 import { NIVEL_FIXO } from './niveis-fixos.mjs'
@@ -95,26 +94,29 @@ function resolverClube(passagem) {
 /**
  * Quanto o torcedor brasileiro reconhece o jogador.
  *
- * O peso maior é a **mediana de visualizações do artigo em português**: mede
- * quanta gente procura o jogador em português, que é a pergunta do jogo. O
- * critério anterior era o número de links de Wikipédia, que conta alcance no
- * mundo — por isso o nível fácil abria com Darijo Srna e Granit Xhaka.
+ * O peso é quase todo da **mediana de visualizações do artigo em português**,
+ * porque é a única medida direta da pergunta do jogo: quanta gente procura
+ * esse jogador em português.
  *
- * Jogos de seleção e anos de carreira entram como estatura acumulada, que
- * distingue quem construiu uma carreira de quem está em evidência agora. Não
- * resolvem tudo: onde o número erra, `NIVEL_FIXO` decide.
+ * As versões anteriores erraram sempre do mesmo jeito — somando algo que
+ * parecia "mérito" e que acabava punindo quem o torcedor conhece hoje:
+ *
+ * - número de links de Wikipédia mede alcance global, e o fácil abria com
+ *   Darijo Srna e Granit Xhaka;
+ * - valor de mercado subiu jovem em evidência junto com jovem consolidado;
+ * - jogos de seleção e anos de carreira, com peso alto, empurraram veterano
+ *   para cima e derrubaram Vitor Roque e Rodrygo para fora do fácil, embora
+ *   sejam o 23º e o 33º em procura entre os trezentos.
+ *
+ * Jogo de seleção e alcance ficam como desempate de peso pequeno: só decidem
+ * entre jogadores de procura parecida, nunca invertem a ordem.
  */
-function estatura(qid, artigo, anosDeCarreira) {
+function estatura(qid, artigo) {
   const procura = Number(views[artigo] ?? 0)
   const jogos = Number(selecoes[qid]?.jogos ?? 0)
   const alcance = Number(fama[qid] ?? 0)
 
-  return (
-    procura +
-    jogos * 220 +                          // 100 jogos valem 22 mil visualizações
-    Math.min(anosDeCarreira, 22) * 300 +
-    alcance * 40                            // desempate para quem tem pouca procura
-  )
+  return procura + jogos * 30 + alcance * 5
 }
 
 // --------------------------------------------------------------- arquivo
@@ -176,15 +178,8 @@ for (const b of blocos) {
     }
   }
 
-  const historico = tm ? await historicoDoTransfermarkt(tm) : null
-  const anos = (historico?.transfers ?? []).map((t) => anoDaTemporada(t.season)).filter(Boolean)
-  const duracao = anos.length ? Math.max(...anos) - Math.min(...anos) : 0
-
   const id = b[1]
-  jogadores.push({
-    texto, clubes, id,
-    pontos: estatura(qid, artigoPorQid.get(qid) ?? '', duracao),
-  })
+  jogadores.push({ texto, clubes, id, pontos: estatura(qid, artigoPorQid.get(qid) ?? '') })
 }
 
 // ----------------------------------------------------------------- níveis
