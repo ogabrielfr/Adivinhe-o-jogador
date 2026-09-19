@@ -90,6 +90,27 @@ duas partidas seguidas mostravam a frase idêntica. Uma dica que serve para
 qualquer um não é dica. Hoje são 300 distintas para 300 jogadores, e o script
 avisa se alguma voltar a repetir.
 
+Distintas, porém, não é o bastante — e a segunda versão errou por aí. Trocar o
+texto por números resolveu a frase repetida e deixou a **forma** repetida:
+237 dos 300 abriam com "custou € X na transferência mais cara" e 38 eram só
+dois valores em euro seguidos, do tipo *"custou € 3 milhões e chegou a valer
+€ 2 milhões"* — três linhas que não levam a jogador nenhum. O problema não era
+o número, era a ordem fixa: o fato mais comum da lista ia para todo mundo.
+
+Duas correções, as duas em `scripts/dicas.mjs`:
+
+**O que entra na dica é o que o mural de escudos não mostra.** Quantos clubes o
+jogador teve, quais e em que ordem já estão na tela. Tempo de casa, empréstimo
+e idade da ida para o exterior, não — são forma de carreira invisível no
+escudo, e saem do mesmo histórico do Transfermarkt que desenha o mural.
+
+**Cada jogador é descrito pelo que tem de raro.** `escalaDosFatos` junta os
+valores dos 300 por tipo de fato e a dica escolhe aqueles em que o número do
+jogador está longe da mediana da biblioteca. Uma taxa de € 3 milhões é a taxa
+de todo mundo; 18 anos no mesmo clube não é. O Pelé passou a ser lembrado pelos
+18 anos de Santos, o Fagner pelos quatro empréstimos, e o uso da taxa caiu de
+237 para 58 sem que ninguém precisasse editar dica à mão.
+
 Posição e nacionalidade vêm do **perfil do Transfermarkt**, não do Wikidata:
 lá as duas propriedades aceitam vários valores e pegar o primeiro saía errado —
 o Zico aparecia como "nascido em Portugal" na mesma frase que citava a seleção

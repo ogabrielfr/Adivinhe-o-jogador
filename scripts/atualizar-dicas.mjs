@@ -13,7 +13,7 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
 import { historicoDoTransfermarkt, perfilDoTransfermarkt } from './transfermarkt.mjs'
-import { montarDica, fatosDoHistorico, papelConhecido } from './dicas.mjs'
+import { montarDica, fatosDoHistorico, papelConhecido, escalaDosFatos } from './dicas.mjs'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
 const ARQUIVO = join(raiz, 'src/dados/jogadores.ts')
@@ -80,8 +80,13 @@ let renomeados = 0
 const posicoesSoltas = new Map()
 const dicas = new Map()
 
+/**
+ * Primeira passada: os dados de todo mundo. A dica de um jogador depende do
+ * que os outros 299 têm — um fato só vale a pena quando o número dele é raro
+ * na biblioteca —, então nada pode ser escrito antes de ler todos.
+ */
+const coletado = []
 for (const b of blocos) {
-  const id = b[1]
   const tm = tmDoBloco(b)
   const qid = qidPorTm.get(tm)
   const m = meta[qid] ?? {}
@@ -100,16 +105,27 @@ for (const b of blocos) {
     [...paisesDoBloco(b).matchAll(/'([^']+)'/g)].map((x) => paisDoClube.get(x[1])),
   ).size
 
-  const dados = {
-    ...m,
-    posicao: perfil?.posicao ?? m.posicao,
-    pais: perfil?.nacionalidade ?? m.pais,
-    jogosSelecao: sel.jogos, selecao: sel.selecao, fatos, paises,
-  }
+  coletado.push({
+    bloco: b,
+    perfil,
+    dados: {
+      ...m,
+      posicao: perfil?.posicao ?? m.posicao,
+      pais: perfil?.nacionalidade ?? m.pais,
+      jogosSelecao: sel.jogos, selecao: sel.selecao, fatos, paises,
+    },
+  })
+}
+
+const escala = escalaDosFatos(coletado.map((c) => c.dados))
+
+// ------------------------------------- segunda passada: escrever cada dica
+for (const { bloco: b, perfil, dados } of coletado) {
+  const id = b[1]
 
   // dica repetida não é dica: sobe o número de fatos até separar uma da outra
-  let dica = montarDica(dados)
-  for (let n = 3; dicas.has(dica) && n <= 5; n++) dica = montarDica(dados, n)
+  let dica = montarDica(dados, 2, escala)
+  for (let n = 3; dicas.has(dica) && n <= 5; n++) dica = montarDica(dados, n, escala)
   if (dicas.has(dica)) semFato++
   dicas.set(dica, id)
 

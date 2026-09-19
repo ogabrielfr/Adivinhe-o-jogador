@@ -138,11 +138,33 @@ export function anoDaTemporada(t) {
 }
 
 // ------------------------------------------------------------------ fatos
-/** Extrai do histórico cru os números que valem uma dica. */
+const EMPRESTIMO = /empr[eé]stimo/i
+const FIM_DE_EMPRESTIMO = /fim do empr[eé]stimo/i
+const ANO = 365.25 * 24 * 60 * 60 * 1000
+
+/**
+ * O id do clube sai do link: /vasco-da-gama/transfers/verein/978/saison_id/2025
+ * -> "978". O link inteiro não serve de chave: ele carrega a temporada, que
+ * muda entre a transferência que levou o jogador ao clube e a que o tirou.
+ */
+const clubeDo = (href) => String(href ?? '').match(/\/verein\/(\d+)/)?.[1] ?? null
+
+/** O id do país sai da bandeira: .../flagge/verysmall/26.png -> "26" */
+const paisDaBandeira = (url) => String(url ?? '').match(/\/(\d+)\.png/)?.[1] ?? null
+
+/**
+ * Extrai do histórico cru os números que valem uma dica.
+ *
+ * O que entra aqui é o que o mural de escudos NÃO mostra. Quantos clubes o
+ * jogador teve, quais e em que ordem já estão na tela; dizer isso de novo não
+ * é dica. Tempo de casa, empréstimo e idade da mudança de país, não: são
+ * forma de carreira invisível no escudo.
+ */
 export function fatosDoHistorico(transferencias = []) {
   let maiorTaxa = null
   let maiorTaxaAno = null
   let valorPico = null
+  let emprestimos = 0
   const anos = []
 
   for (const t of transferencias) {
@@ -156,13 +178,57 @@ export function fatosDoHistorico(transferencias = []) {
     }
     const vm = emEuros(t.marketValue)
     if (vm && (!valorPico || vm > valorPico)) valorPico = vm
+
+    // a volta do empréstimo é a mesma cessão contada de novo
+    const taxaCrua = String(t.fee ?? '')
+    if (EMPRESTIMO.test(taxaCrua) && !FIM_DE_EMPRESTIMO.test(taxaCrua)) emprestimos++
+  }
+
+  const encerrou = transferencias.some((t) => /fim de carreira/i.test(t.to?.clubName ?? ''))
+
+  const linha = transferencias
+    .map((t) => ({ t, quando: Date.parse(t.dateUnformatted ?? '') }))
+    .filter((x) => Number.isFinite(x.quando))
+    .sort((a, b) => a.quando - b.quando)
+
+  /**
+   * Tempo de casa: da transferência que levou o jogador ao clube até a que o
+   * tirou de lá. O par só vale quando o destino de uma é a origem da outra —
+   * sem isso, uma lacuna no histórico viraria uma década de fidelidade.
+   */
+  let maiorPermanencia = 0
+  for (let i = 0; i < linha.length - 1; i++) {
+    const chegou = clubeDo(linha[i].t.to?.href)
+    if (!chegou || chegou !== clubeDo(linha[i + 1].t.from?.href)) continue
+    const dentro = (linha[i + 1].quando - linha[i].quando) / ANO
+    if (dentro > maiorPermanencia) maiorPermanencia = dentro
+  }
+  // quem ainda está em campo segue somando no clube atual
+  const ultima = linha.at(-1)
+  if (ultima && !encerrou && !/fim de carreira/i.test(ultima.t.to?.clubName ?? '')) {
+    const ateHoje = (Date.now() - ultima.quando) / ANO
+    if (ateHoje > maiorPermanencia) maiorPermanencia = ateHoje
+  }
+
+  /** O ano em que saiu pela primeira vez do país onde começou. */
+  let anoDoExterior = null
+  const berco = paisDaBandeira(linha[0]?.t.from?.countryFlag)
+  if (berco) {
+    for (const { t, quando } of linha) {
+      const destino = paisDaBandeira(t.to?.countryFlag)
+      if (destino && destino !== berco && !/fim de carreira/i.test(t.to?.clubName ?? '')) {
+        anoDoExterior = new Date(quando).getUTCFullYear()
+        break
+      }
+    }
   }
 
   return {
-    maiorTaxa, maiorTaxaAno, valorPico,
+    maiorTaxa, maiorTaxaAno, valorPico, emprestimos, anoDoExterior,
+    permanencia: Math.floor(maiorPermanencia),
     estreia: anos.length ? Math.min(...anos) : null,
     ultimo: anos.length ? Math.max(...anos) : null,
-    encerrou: transferencias.some((t) => /fim de carreira/i.test(t.to?.clubName ?? '')),
+    encerrou,
   }
 }
 
@@ -173,44 +239,91 @@ function adjetivoDaSelecao(rotulo) {
 }
 
 /**
- * Os pedaços de dica que este jogador tem, do mais distintivo para o menos.
- * Cada um é uma oração que encaixa depois do sujeito.
+ * Os pedaços de dica que este jogador tem. Cada um é uma oração que encaixa
+ * depois do sujeito, com o número cru ao lado para o desempate de `escolher`.
  */
-function orações({ jogosSelecao, selecao, fatos, paises }) {
+function orações({ jogosSelecao, selecao, fatos, paises, nasc }) {
   const saida = []
+  const por = (tipo, valor, texto) => saida.push({ tipo, valor, texto })
 
   if (jogosSelecao >= 1) {
     const adj = adjetivoDaSelecao(selecao)
-    saida.push(
-      `vestiu a camisa da seleção${adj ? ` ${adj}` : ''} ${jogosSelecao} ${jogosSelecao === 1 ? 'vez' : 'vezes'}`,
-    )
+    por('selecao', jogosSelecao,
+      `vestiu a camisa da seleção${adj ? ` ${adj}` : ''} ${jogosSelecao} ${jogosSelecao === 1 ? 'vez' : 'vezes'}`)
   }
   if (fatos.maiorTaxa >= 500_000) {
-    saida.push(
+    por('taxa', fatos.maiorTaxa,
       `custou ${dinheiro(fatos.maiorTaxa)} na transferência mais cara` +
-        (fatos.maiorTaxaAno ? ` (${fatos.maiorTaxaAno})` : ''),
-    )
+        (fatos.maiorTaxaAno ? ` (${fatos.maiorTaxaAno})` : ''))
   }
-  if (fatos.valorPico >= 1_000_000) {
-    saida.push(`chegou a valer ${dinheiro(fatos.valorPico)}`)
+  if (fatos.emprestimos >= 3) {
+    por('emprestimo', fatos.emprestimos, `saiu por empréstimo ${fatos.emprestimos} vezes`)
+  }
+  if (fatos.permanencia >= 6) {
+    por('permanencia', fatos.permanencia, `ficou ${fatos.permanencia} anos seguidos num mesmo clube`)
   }
   if (fatos.estreia && fatos.ultimo && fatos.ultimo - fatos.estreia >= 8) {
-    saida.push(
+    por('estrada', fatos.ultimo - fatos.estreia,
       fatos.encerrou
         ? `rodou o profissionalismo de ${fatos.estreia} a ${fatos.ultimo}`
-        : `começou a rodar em ${fatos.estreia} e seguia em campo ${fatos.ultimo - fatos.estreia} anos depois`,
-    )
+        // sem "e" no meio: a frase já é ligada por "e" à outra oração
+        : `já soma ${fatos.ultimo - fatos.estreia} anos de estrada desde ${fatos.estreia}`)
   }
-  if (paises > 2) saida.push(`defendeu clubes de ${paises} países`)
+  if (fatos.anoDoExterior && nasc) {
+    const idade = fatos.anoDoExterior - Number(nasc)
+    // idade fora de 15 a 40 é data errada em algum dos dois lados
+    if (idade >= 15 && idade <= 40) por('exterior', -idade, `foi jogar fora do país aos ${idade} anos`)
+  }
+  if (paises > 2) por('paises', paises, `defendeu clubes de ${paises} países`)
+
+  /**
+   * Valor de mercado é o fato mais fraco que existe aqui: não diz nada da
+   * carreira e quase todo mundo tem um. Fica como último recurso.
+   */
+  if (fatos.valorPico >= 1_000_000) {
+    por('valor', fatos.valorPico, `chegou a valer ${dinheiro(fatos.valorPico)}`)
+  }
 
   return saida
+}
+
+/**
+ * A ordem em que os fatos entram na dica quando não há com que comparar.
+ * Vale para o gerador, que monta um jogador por vez.
+ */
+const PESO = {
+  selecao: 8, emprestimo: 7, permanencia: 6, exterior: 5,
+  estrada: 4, taxa: 3, paises: 2, valor: 1,
+}
+
+/**
+ * Escolhe os fatos que fazem ESTE jogador diferente dos outros.
+ *
+ * A ordem fixa não servia. Com ela, 237 dos 300 abriam com "custou € X na
+ * transferência mais cara" e 240 citavam jogos de seleção: os fatos mudavam de
+ * número mas a dica tinha sempre a mesma cara, que é a repetição de que o
+ * cliente reclamou. Uma taxa de € 3 milhões é a taxa de todo mundo; 18 anos no
+ * mesmo clube não é.
+ *
+ * `escala` traz, por tipo de fato, os valores de todos os jogadores em ordem.
+ * O destaque de um número é a distância dele até a mediana do próprio tipo, de
+ * 0 (é a mediana) a 1 (é o extremo). Assim o Pelé é lembrado pelos 18 anos de
+ * Santos e o Fagner pelos quatro empréstimos, cada um pelo que tem de raro.
+ */
+function destaque(tipo, valor, escala) {
+  const valores = escala?.[tipo]
+  if (!valores?.length) return 0
+  const abaixo = valores.filter((v) => v < valor).length
+  const iguais = valores.filter((v) => v === valor).length
+  const posicao = (abaixo + iguais / 2) / valores.length
+  return Math.abs(posicao - 0.5) * 2
 }
 
 /**
  * A dica final: sujeito + até dois fatos. `quantosFatos` sobe quando duas
  * dicas saem iguais e é preciso separar uma da outra.
  */
-export function montarDica(dados, quantosFatos = 2) {
+export function montarDica(dados, quantosFatos = 2, escala = null) {
   const { posicao, pais, nasc } = dados
   const papel = papelDe(posicao)
   const origem = pais ? (pais === 'Brasil' ? 'brasileiro' : `nascido ${ondeNasceu(pais)}`) : null
@@ -219,7 +332,16 @@ export function montarDica(dados, quantosFatos = 2) {
     ? `${papel}${origem ? ` ${origem}` : ''}`
     : origem ? `Jogador ${origem}` : 'Jogador'
 
-  const partes = orações(dados).slice(0, Math.max(1, quantosFatos))
+  const candidatos = orações(dados)
+  const nota = (c) => (escala ? destaque(c.tipo, c.valor, escala) * 10 : 0) + PESO[c.tipo]
+  const escolhidos = [...candidatos]
+    .sort((a, b) => nota(b) - nota(a))
+    .slice(0, Math.max(1, quantosFatos))
+
+  // dentro da dica os fatos voltam à ordem natural: quem é, depois o resto
+  escolhidos.sort((a, b) => PESO[b.tipo] - PESO[a.tipo])
+
+  const partes = escolhidos.map((c) => c.texto)
   if (!partes.length) {
     const decada = nasc ? ` dos anos ${String(Math.floor(Number(nasc) / 10) * 10).slice(2)}` : ''
     return `${sujeito}${decada}.`
@@ -227,6 +349,15 @@ export function montarDica(dados, quantosFatos = 2) {
 
   const corpo = partes.length === 1 ? partes[0] : `${partes.slice(0, -1).join(', ')} e ${partes.at(-1)}`
   return `${sujeito}, ${corpo}.`
+}
+
+/** Os valores de cada tipo de fato em toda a biblioteca, para `montarDica`. */
+export function escalaDosFatos(todos) {
+  const escala = {}
+  for (const dados of todos) {
+    for (const { tipo, valor } of orações(dados)) (escala[tipo] ??= []).push(valor)
+  }
+  return escala
 }
 
 /** O mapa conhece esta posição? Serve para o gerador avisar o que falta. */
