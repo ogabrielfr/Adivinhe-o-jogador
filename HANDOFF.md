@@ -74,110 +74,67 @@ Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
 
 ## Pronto e testado
 
-- Jogo completo: tela inicial, partida, derrota, vitória, compartilhamento estilo Wordle, streak e estatísticas em `localStorage`.
+- Jogo completo: tela inicial, partida, derrota (com o nome revelado), vitória, compartilhamento estilo Wordle, streak e estatísticas em `localStorage`.
 - Sorteio diário determinístico por data, sem servidor, com reembaralhamento por ciclo para ninguém repetir antes da volta completa.
-- **Conferência das 45 carreiras contra o Wikidata**, rodada e relatada (ver abaixo).
-- **Catálogo de 4521 clubes de 66 países**, sendo 1141 brasileiros, contra 44 antes.
+- **300 jogadores, 100 por nível**, com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e os 300 têm `verificado: true`.
+- **Catálogo de 5352 clubes de 66 países**, sendo 1142 brasileiros. Os 385 que o jogo usa têm escudo real — nenhum brasão de reserva em uso.
+- Dica montada de números verificáveis e escolhida pelo que cada jogador tem de raro na biblioteca; 300 distintas para 300 jogadores.
 - `npm run validar-dados` confere integridade e recusa dica que entregue nome de jogador ou clube visível.
-- `npm run teste-nomes` testa o comparador de nomes de clube.
+- `npm run teste-nomes` (26 casos) testa o comparador de nomes de clube; `npm run teste-palpites` (25 casos) testa a aceitação de palpite.
 - `npm run teste-visual` roda a partida ponta a ponta no Chromium e salva capturas.
 
 ---
 
 ## Pontos em aberto, por prioridade
 
-### 1. Corrigir as carreiras (a conferência já apontou o quê)
+### 1. Três nomes grandes continuam fora
 
-`npm run verificar` compara cada carreira com **três fontes**, porque nenhuma
-sozinha basta:
+**Romário, Rivaldo e Bebeto** não entraram na biblioteca. Cada um esbarra em
+mais de um clube que a resolução não fecha, e a regra é não gravar carreira com
+buraco.
 
-| | Fonte | Força | Fraqueza |
-| --- | --- | --- | --- |
-| `wd` | Wikidata, propriedade P54 | estruturado, auditável por QID | preenchido à mão e atrasado |
-| `wp` | Infobox do artigo na Wikipédia | melhor no futebol brasileiro | alguns artigos não têm o campo |
-| `tm` | Transfermarkt | a mais completa das três | depende de o WAF deixar passar |
+O conserto é o mesmo dos outros oito nomes já resolvidos: achar o id do clube
+no Transfermarkt e acrescentar o par `id do TM -> id do catálogo` em
+`scripts/clubes-transfermarkt.json`, depois `npm run reparar`. Desde a última
+sessão o comando **lista quais carreiras congelou e que nome travou cada uma**,
+então o trabalho começa rodando ele e lendo a lista.
 
-**Por que três e não uma.** A primeira rodada usou só o Wikidata e eu apontei o
-Grêmio do Elkeson como "clube inventado". Estava errado: o Elkeson jogou no
-Grêmio em 2021, o infobox da Wikipédia e o Transfermarkt têm a passagem, e era
-o P54 do Wikidata que estava incompleto. O mesmo valia para o Grêmio do Diego
-Tardelli. Uma fonte só não distingue erro nosso de lacuna dela.
+### 2. Nível de quem é famoso por outra coisa
 
-Resultado com as três: **12 de 45 sem divergência forte, 33 divergem, 0 erros
-de busca.** Nenhuma correção foi aplicada.
+O nível sai de visualizações medianas da Wikipédia em português, que é a melhor
+medida de reconhecimento brasileiro que achamos — e erra quando a fama não vem
+de jogar. **Guardiola está no fácil** porque é procuradíssimo como treinador;
+como jogador, a carreira dele é um enigma difícil.
 
-O relatório separa por quantas fontes confirmam cada clube, que é o que permite
-agir sem chutar:
+`scripts/niveis-fixos.mjs` existe para isso: um id e um nível, e o cálculo é
+ignorado para aquele jogador. Está **vazio de propósito** — toda vez que
+tentei corrigir o nível por regra eu piorei o conjunto (ver README, seção
+"O nível"). Use para o caso isolado, não para uma nova teoria de ranking.
 
-| Saída | O que significa | Ação |
-| --- | --- | --- |
-| `FALTA (2+ fontes)` | duas ou três têm um clube que não temos | acrescentar |
-| `NENHUMA FONTE TEM` | um clube nosso que nenhuma das três tem | candidato a erro nosso |
-| `falta (1 fonte)` | só uma fonte tem | quase sempre lacuna das outras duas |
-| `só uma fonte tem` | nosso clube confirmado por só uma | está certo; as outras é que falham |
+### 3. Texto que vem das fontes e lê mal
 
-**Os três clubes que nenhuma fonte confirma**, cada um com as três fontes de acordo:
+- **Posição vem do Transfermarkt** e às vezes soa estranha em português de jogo: o Neymar aparece como "Meia".
+- **Nome de clube pode ser verboso** — "Associação Atlética Internacional (Limeira)" em vez de "Inter de Limeira". Os nomes curados ficam em `scripts/clubes-canonicos.mjs`.
 
-- **`adriano` → Atlético Mineiro.** As três listam Athletico Paranaense (2014) e
-  nenhuma lista o Mineiro. Nosso dado tem os dois; o Mineiro parece ser confusão
-  com o Paranaense.
-- **`diego-tardelli` → Bahia.** Nenhuma das três tem. As três têm Santos, que
-  falta no nosso.
-- **`drenthe` → Kayserispor.** As três apontam **Kayseri Erciyesspor**, outro
-  clube da mesma cidade.
+### 4. Tamanho do repositório
 
-O padrão geral continua sendo **começo e fim de carreira faltando**, que é o que
-a memória do modelo corta.
+`public/escudos/` está em **77 MB** com os 5352 clubes. Dentro dos limites do
+GitHub Pages com folga, e o pacote enviado ao navegador **não** cresce com
+isso: `clubes.ts` leva só os 385 clubes em uso.
 
-Quando a conferência passar: marque `verificado: true` e ligue
-`EXIGIR_VERIFICACAO` em `src/logica/diario.ts`.
-
-### 2. Onze clubes em uso ainda mostram brasão de reserva
-
-`al-gharafa`, `colo-colo`, `shanghai-sipg`, `shandong-luneng`,
-`birmingham-city`, `brescia`, `guangzhou-evergrande`, `al-jazira`, `hercules`,
-`reading`, `sheffield-wednesday`.
-
-Eram 12 antes, e não é bug — `Escudo.tsx` desenha um brasão com as cores e as
-iniciais. Mas escudo é a informação principal do jogo, e agora ficou barato
-resolver: são quase todos de divisão de acesso europeia, e bastou eu não ter
-posto Espanha, Inglaterra, Itália, Portugal e Holanda em
-`scripts/paises-alvo.mjs` (elas já vinham do repositório europeu, que só cobre
-a temporada atual e o histórico recente).
-
-Para resolver: acrescente esses países a `paises-alvo.mjs`, rode
-`npm run coletar` e `npm run catalogo`. Falta um detalhe — o clube novo entraria
-com id derivado do nome (`hercules-cf`), não com o id curado (`hercules`) que os
-jogadores usam, então os de `SEM_ESCUDO` precisam procurar o escudo novo pelo
-nome. Pesa também no tamanho do repositório (ver abaixo).
-
-### 3. Tamanho do repositório
-
-`public/escudos/` foi de 13 MB para **64 MB** com os 4521 clubes. Está dentro
-dos limites do GitHub Pages com folga, e o pacote enviado ao navegador **não**
-cresceu — encolheu, porque `clubes.ts` passou a levar só os 101 clubes em uso
-(81,7 kB gzipados no total, contra ~99 kB antes).
-
-O custo é de repositório, não de carregamento: clone mais lento e 64 MB
+O custo é de repositório, não de carregamento — clone mais lento e 77 MB
 publicados a cada push. Se incomodar, o corte natural é gravar em
 `public/escudos/` só os clubes em uso e deixar o resto como metadado em
 `scripts/catalogo-completo.json`, que já tem a URL de origem de cada um.
 Deixei vendorizado porque o combinado era catálogo maior que o uso e porque o
 acesso a essas fontes se mostrou frágil.
 
-### 4. Volume da biblioteca
-
-Continuam 45 jogadores (15 por nível). O combinado era chegar a ~300 e depois a
-~900 **depois** que o cliente testasse. Com o catálogo grande, o que travava do
-lado dos escudos deixou de travar: falta escrever carreira, e agora há como
-conferir cada uma antes de publicar.
-
 ### 5. Decisões de produto pendentes
 
 - **O nome do clube fica escondido**, revelado ao tocar no escudo e sempre no fim da partida. Escolha minha, ainda não validada pelo cliente.
 - **As respostas estão no pacote enviado ao navegador** (mesma escolha do Wordle original). Se virar problema, a saída é mover o sorteio para um endpoint.
-- **O jogo está no ar com os dados não conferidos.** Perguntei ao cliente se ele prefere ligar `EXIGIR_VERIFICACAO` e pôr uma tela de "biblioteca em conferência" até validarmos, e ele não respondeu — vale retomar.
-- **Licença dos escudos.** O catálogo mistura três origens: 1473 com licença livre declarada no Commons, 1239 de upload local da Wikipédia marcado "Conteúdo restrito" (uso justo) e 1801 do Transfermarkt, sem licença. Escudo é marca do clube em qualquer caso, e o projeto já os usava para identificação, mas agora a distinção está explícita no campo `licenca` de `scripts/clubes-externos.json`, caso o cliente queira restringir.
+- **Volume da biblioteca.** O combinado era 300 e depois ~900 se o cliente gostasse. Os 300 estão no ar; os 900 dependem de ele pedir.
+- **Licença dos escudos.** O catálogo mistura três origens: licença livre declarada no Commons, upload local da Wikipédia marcado "Conteúdo restrito" (uso justo) e Transfermarkt, sem licença. Escudo é marca do clube em qualquer caso, e o projeto já os usava para identificação, mas a distinção está explícita no campo `licenca` de `scripts/clubes-externos.json`, caso o cliente queira restringir.
 
 ---
 
@@ -186,6 +143,7 @@ conferir cada uma antes de publicar.
 - **`npm run catalogo` demora bastante** (baixa milhares de imagens e processa com sharp). Rode em background. O `.cache/` guarda os originais, então a segunda vez é rápida.
 - **`npm run coletar` demora ~25 min** e refaz `scripts/clubes-externos.json` do zero. Só precisa rodar quando quiser ampliar países ou atualizar a fonte.
 - **`src/dados/clubes.ts` é gerado e só tem os clubes em uso.** O catálogo completo, para consultar ao escrever carreira nova, está em `scripts/catalogo-completo.json`. Ao acrescentar jogador, rode `npm run catalogo` de novo para os clubes novos entrarem no pacote.
+- **Carreira que não resolve fica congelada, e isso já escondeu erro por semanas.** `npm run reparar` não reescreve uma carreira quando algum clube dela não tem id — a regra existe para não gravar lista com buraco, mas congela junto os clubes que o mapa já sabia corrigir. Foi assim que o Chicharito seguiu com o escudo do Western United depois de o West Ham já estar certo no mapa. O comando agora **lista o que congelou e o nome que travou**; leia essa lista toda vez.
 - **Clube homônimo é a armadilha do Brasil.** Há dez Guaranis e cinco Botafogos no catálogo, de cidades diferentes. O id sai desambiguado pela cidade quando o nome colide. Confira o id antes de usar.
 - **Imagem de topo de artigo da Wikipédia nem sempre é o escudo** — em clube pequeno costuma ser foto da sede. `pareceEscudo()` em `scripts/wikidata.mjs` barra isso pelo formato e pelo nome do arquivo.
 - **`pilicense=free` da API do MediaWiki não filtra o que promete**: continua devolvendo arquivo local marcado "Conteúdo restrito". A classificação confiável é pelo host da URL.
