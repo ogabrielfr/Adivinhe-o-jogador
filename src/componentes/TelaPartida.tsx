@@ -17,6 +17,7 @@ interface Props {
   proximoNivel: Nivel | null
   aoChutar: (texto: string) => ResultadoChute
   aoPedirDica: () => void
+  aoDesistir: () => void
   aoVoltar: () => void
   aoIrPara: (nivel: Nivel) => void
 }
@@ -29,12 +30,15 @@ export function TelaPartida({
   proximoNivel,
   aoChutar,
   aoPedirDica,
+  aoDesistir,
   aoVoltar,
   aoIrPara,
 }: Props) {
   const [texto, setTexto] = useState('')
   const [aviso, setAviso] = useState<string | null>(null)
   const [tremendo, setTremendo] = useState(false)
+  /** desistir é irreversível, então o primeiro toque só arma a confirmação */
+  const [confirmandoDesistencia, setConfirmandoDesistencia] = useState(false)
   const campo = useRef<HTMLInputElement>(null)
 
   const acabou = partida.status !== 'jogando'
@@ -43,6 +47,7 @@ export function TelaPartida({
   useEffect(() => {
     setTexto('')
     setAviso(null)
+    setConfirmandoDesistencia(false)
     if (!acabou) campo.current?.focus()
   }, [nivel, acabou])
 
@@ -109,7 +114,9 @@ export function TelaPartida({
                 ? partida.palpites.length === 1
                   ? 'De primeira.'
                   : `Você acertou no ${partida.palpites.length}º chute.`
-                : 'Acabaram os chutes. Era ele:'}
+                : partida.desistiu
+                  ? 'Você desistiu. Era ele:'
+                  : 'Acabaram os chutes. Era ele:'}
               {partida.usouDica && <span className="text-dica"> Com dica.</span>}
             </p>
             <h2 className="t-camisa mt-3 text-[clamp(1.9rem,8.5vw,2.9rem)]">{jogador.nome}</h2>
@@ -177,6 +184,41 @@ export function TelaPartida({
             {!partida.usouDica && (
               <p className="mt-2.5 text-center text-xs text-cal-700">A dica não gasta chute.</p>
             )}
+
+            {/*
+              Desistir revela o nome e encerra o nível, e não dá para voltar
+              atrás — por isso o primeiro toque só arma a confirmação, em vez
+              de queimar a partida do dia num clique sem querer.
+            */}
+            <div className="mt-5 text-center">
+              {confirmandoDesistencia ? (
+                <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-cal-700">
+                  <span>Revelar o nome e encerrar?</span>
+                  <button
+                    type="button"
+                    onClick={aoDesistir}
+                    className="t-rotulo cursor-pointer rounded-lg border border-erro px-2.5 py-1 text-xs text-erro transition-colors hover:bg-erro hover:text-relva-900"
+                  >
+                    Desistir
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmandoDesistencia(false)}
+                    className="t-rotulo cursor-pointer px-1 py-1 text-xs text-cal-500 underline underline-offset-2 transition-colors hover:text-cal"
+                  >
+                    Continuar jogando
+                  </button>
+                </p>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setConfirmandoDesistencia(true)}
+                  className="t-rotulo cursor-pointer px-2 py-1 text-xs text-cal-700 underline underline-offset-2 transition-colors hover:text-erro"
+                >
+                  Desistir e ver o nome
+                </button>
+              )}
+            </div>
           </form>
         )}
 

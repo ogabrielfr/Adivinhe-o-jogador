@@ -10,6 +10,12 @@ export interface Partida {
   /** o que a pessoa digitou, na ordem */
   palpites: string[]
   usouDica: boolean
+  /**
+   * Desistiu em vez de gastar os três chutes. Conta como derrota igual, e
+   * serve só para a tela não dizer "acabaram os chutes" a quem ainda tinha.
+   * Opcional porque partida salva antes desta versão não tem o campo.
+   */
+  desistiu?: boolean
 }
 
 export interface Estatistica {

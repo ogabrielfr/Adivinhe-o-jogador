@@ -96,6 +96,34 @@ export function App() {
     [jogadores, dia],
   )
 
+  /**
+   * Desistir encerra a partida do nível e revela o nome sem gastar os três
+   * chutes. Conta como derrota — quem desistiu não acertou —, e por isso passa
+   * pelo mesmo `registrarResultado` de quem errou até o fim.
+   */
+  const aoDesistir = useCallback(
+    (nivel: Nivel) => {
+      setEstado((anterior) => {
+        const atual = anterior.partidas[nivel] ?? partidaNova()
+        if (atual.status !== 'jogando') return anterior
+
+        const partidas = {
+          ...anterior.partidas,
+          [nivel]: { ...atual, status: 'perdeu' as const, desistiu: true },
+        }
+        return {
+          ...anterior,
+          partidas,
+          estatisticas: {
+            ...anterior.estatisticas,
+            [nivel]: registrarResultado(anterior.estatisticas[nivel], false, atual.palpites.length, dia),
+          },
+        }
+      })
+    },
+    [dia],
+  )
+
   const aoPedirDica = useCallback((nivel: Nivel) => {
     setEstado((anterior) => {
       const atual = anterior.partidas[nivel] ?? partidaNova()
@@ -115,6 +143,7 @@ export function App() {
         proximoNivel={restantes[0] ?? null}
         aoChutar={(texto) => aoChutar(nivelAtivo, texto)}
         aoPedirDica={() => aoPedirDica(nivelAtivo)}
+        aoDesistir={() => aoDesistir(nivelAtivo)}
         aoVoltar={() => setNivelAtivo(null)}
         aoIrPara={setNivelAtivo}
       />
