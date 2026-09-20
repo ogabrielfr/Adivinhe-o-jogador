@@ -226,6 +226,13 @@ export function fatosDoHistorico(transferencias = []) {
   return {
     maiorTaxa, maiorTaxaAno, valorPico, emprestimos, anoDoExterior,
     permanencia: Math.floor(maiorPermanencia),
+    /**
+     * Todos os anos com transferência, do mais antigo ao mais novo. Quem
+     * souber a data de nascimento usa isto para achar o começo de verdade:
+     * o Transfermarkt registra mudança de categoria de base, e a primeira
+     * transferência do Çalhanoğlu é de 2001, quando ele tinha sete anos.
+     */
+    anos: [...new Set(anos)].sort((a, b) => a - b),
     estreia: anos.length ? Math.min(...anos) : null,
     ultimo: anos.length ? Math.max(...anos) : null,
     encerrou,
@@ -262,12 +269,21 @@ function orações({ jogosSelecao, selecao, fatos, paises, nasc }) {
   if (fatos.permanencia >= 6) {
     por('permanencia', fatos.permanencia, `ficou ${fatos.permanencia} anos seguidos num mesmo clube`)
   }
-  if (fatos.estreia && fatos.ultimo && fatos.ultimo - fatos.estreia >= 8) {
-    por('estrada', fatos.ultimo - fatos.estreia,
+  /**
+   * O começo da carreira conta dos 15 anos para cima. Sem esse corte a dica
+   * do Çalhanoğlu dizia "20 anos de estrada desde 2001", ano em que ele tinha
+   * sete: a primeira transferência dele no Transfermarkt é de categoria de
+   * base. Sem data de nascimento não dá para corrigir, e aí vale o que tem.
+   */
+  const comecou = nasc
+    ? (fatos.anos ?? []).find((a) => a - Number(nasc) >= 15) ?? null
+    : fatos.estreia
+  if (comecou && fatos.ultimo && fatos.ultimo - comecou >= 8) {
+    por('estrada', fatos.ultimo - comecou,
       fatos.encerrou
-        ? `rodou o profissionalismo de ${fatos.estreia} a ${fatos.ultimo}`
+        ? `rodou o profissionalismo de ${comecou} a ${fatos.ultimo}`
         // sem "e" no meio: a frase já é ligada por "e" à outra oração
-        : `já soma ${fatos.ultimo - fatos.estreia} anos de estrada desde ${fatos.estreia}`)
+        : `já soma ${fatos.ultimo - comecou} anos de estrada desde ${comecou}`)
   }
   if (fatos.anoDoExterior && nasc) {
     const idade = fatos.anoDoExterior - Number(nasc)

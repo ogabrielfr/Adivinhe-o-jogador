@@ -39,6 +39,7 @@ import {
   historicoDoTransfermarkt, perfilDoTransfermarkt,
 } from './transfermarkt.mjs'
 import { numeroDoDia, origemDaPosicao, posicaoDoDia, semente } from '../src/logica/sorteio.ts'
+import { latinizar } from '../src/logica/texto.ts'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
 const POR_NIVEL = Number(process.argv[2]) || 100
@@ -321,9 +322,12 @@ async function trabalhador() {
      * Henrique Sampaio Filho". O de registro continua valendo como palpite.
      */
     const perfil = await perfilDoTransfermarkt(tm)
-    const nome = perfil?.nome && perfil.nome.split(' ').length < dados.nome.split(' ').length
-      ? perfil.nome
-      : dados.nome
+    // o Transfermarkt já mandou "Arda Güler" com alfa grego no lugar do A
+    const nome = latinizar(
+      perfil?.nome && perfil.nome.split(' ').length < dados.nome.split(' ').length
+        ? perfil.nome
+        : dados.nome,
+    )
 
     const id = slug(nome)
     if (idsUsados.has(id)) { recusas.repetido++; continue }

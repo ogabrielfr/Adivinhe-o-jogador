@@ -14,6 +14,7 @@ import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
 import { historicoDoTransfermarkt, perfilDoTransfermarkt } from './transfermarkt.mjs'
 import { montarDica, fatosDoHistorico, papelConhecido, escalaDosFatos } from './dicas.mjs'
+import { latinizar } from '../src/logica/texto.ts'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
 const ARQUIVO = join(raiz, 'src/dados/jogadores.ts')
@@ -143,7 +144,8 @@ for (const { bloco: b, perfil, dados } of coletado) {
    * tem que acertar.
    */
   const nomeAtual = antigo.match(/nome: "((?:[^"\\]|\\.)*)"/)?.[1]
-  const nomeTm = perfil?.nome
+  // sósia grego ou cirílico vira letra latina antes de virar nome na tela
+  const nomeTm = perfil?.nome ? latinizar(perfil.nome) : null
   if (nomeTm && nomeAtual && nomeTm !== nomeAtual &&
       nomeTm.split(' ').length < nomeAtual.split(' ').length) {
     const apelidos = new Set([nomeAtual.toLowerCase(), nomeTm.toLowerCase()])

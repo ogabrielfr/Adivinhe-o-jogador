@@ -1,6 +1,43 @@
-/** Remove acento, caixa e pontuação para comparar palpites. */
+/**
+ * Letras gregas e cirílicas que são desenhadas igual a uma latina.
+ *
+ * Existe porque o nome do Arda Güler chegou do Transfermarkt com um alfa
+ * grego (U+0391) no lugar do A: idêntico na tela, outro caractere para o
+ * computador. Sem isto, `normalizar` jogava o alfa fora junto com a
+ * pontuação e quem digitasse "arda" comparava contra " rda".
+ *
+ * O critério é semelhança visual, não transliteração: aqui o ni grego vale
+ * "v" porque é assim que ele aparece num nome escrito em alfabeto latino,
+ * ainda que transliterar grego de verdade daria "n".
+ */
+const SOSIAS: Record<string, string> = {
+  // grego maiúsculo
+  '\u0391': 'A', '\u0392': 'B', '\u0395': 'E', '\u0396': 'Z', '\u0397': 'H',
+  '\u0399': 'I', '\u039A': 'K', '\u039C': 'M', '\u039D': 'N', '\u039F': 'O',
+  '\u03A1': 'P', '\u03A4': 'T', '\u03A5': 'Y', '\u03A7': 'X',
+  // grego minúsculo
+  '\u03B1': 'a', '\u03B5': 'e', '\u03B9': 'i', '\u03BA': 'k',
+  '\u03BD': 'v', '\u03BF': 'o', '\u03C1': 'p', '\u03C5': 'u',
+  // cirílico maiúsculo
+  '\u0410': 'A', '\u0412': 'B', '\u0415': 'E', '\u041A': 'K', '\u041C': 'M',
+  '\u041D': 'H', '\u041E': 'O', '\u0420': 'P', '\u0421': 'C', '\u0422': 'T',
+  '\u0423': 'Y', '\u0425': 'X', '\u0408': 'J', '\u0405': 'S', '\u0406': 'I',
+  // cirílico minúsculo
+  '\u0430': 'a', '\u0432': 'b', '\u0435': 'e', '\u043A': 'k', '\u043C': 'm',
+  '\u043D': 'h', '\u043E': 'o', '\u0440': 'p', '\u0441': 'c', '\u0442': 't',
+  '\u0443': 'y', '\u0445': 'x', '\u0458': 'j', '\u0455': 's', '\u0456': 'i',
+}
+
+const SOSIA = new RegExp(`[${Object.keys(SOSIAS).join('')}]`, 'g')
+
+/** Troca sósia por letra latina. O resto do texto passa intacto. */
+export function latinizar(texto: string): string {
+  return texto.replace(SOSIA, (c) => SOSIAS[c] ?? c)
+}
+
+/** Remove sósia, acento, caixa e pontuação para comparar palpites. */
 export function normalizar(texto: string): string {
-  return texto
+  return latinizar(texto)
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
     .toLowerCase()
