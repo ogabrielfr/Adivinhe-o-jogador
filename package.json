@@ -15,7 +15,9 @@
     "dicas": "node scripts/atualizar-dicas.mjs",
     "reparar": "node scripts/reparar-biblioteca.mjs",
     "coletar": "node scripts/coletar-clubes.mjs",
-    "biblioteca": "node scripts/montar-biblioteca.mjs"
+    "biblioteca": "node scripts/montar-biblioteca.mjs",
+    "tecnicos": "node scripts/fama-de-tecnico.mjs",
+    "repor": "node scripts/repor-obscuros.mjs"
   },
   "repository": {
     "type": "git",

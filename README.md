@@ -1,7 +1,9 @@
 # Acerte o jogador pela carreira
 
 Jogo diário: os escudos dos clubes por onde um jogador passou aparecem em ordem
-de carreira, e você tem 3 chutes e uma dica para descobrir quem é.
+de carreira, e você tem 3 chutes e uma dica para descobrir quem é. Quem não
+quiser gastar os três pode desistir e ver o nome — conta como derrota, e o
+primeiro toque só arma a confirmação, porque não dá para voltar atrás.
 
 Três níveis independentes, um jogador novo em cada um por dia, à meia-noite no
 fuso de quem está jogando. Site estático, sem back-end e sem chave de API.
@@ -24,6 +26,8 @@ npm run dev
 | `npm run coletar` | remonta `scripts/clubes-externos.json` a partir do Wikidata |
 | `npm run dicas` | refaz as dicas sem mexer no elenco |
 | `npm run reparar` | corrige clubes mal resolvidos e recalcula os níveis |
+| `npm run tecnicos` | lista quem é mais conhecido pelo banco do que pelo campo |
+| `npm run repor` | troca quem tem procura baixa demais para estar na biblioteca |
 | `npm run teste-palpites` | testa o que o jogo aceita como acerto |
 | `npm run biblioteca` | regera `src/dados/jogadores.ts` a partir do Transfermarkt |
 | `npm run teste-visual` | roda a partida ponta a ponta no Chromium e salva capturas |
@@ -159,9 +163,37 @@ o jogo não pergunta mérito, pergunta reconhecimento.** Um garoto de vinte anos
 que aparece toda semana na televisão é fácil; um lateral de quinze anos de
 estrada que ninguém lembra é difícil.
 
-`scripts/niveis-fixos.mjs` fixa o nível à mão e vence o cálculo. Está vazio
-hoje — o cálculo está acertando os casos apontados —, e é onde escrever quando
-ele errar de novo.
+#### O ponto cego: a régua mede fama, não fama de jogador
+
+Visualizações medem quanta gente procura o nome. Elas não sabem **por que**.
+Quem ficou famoso no banco sobe de nível pelo que fez como treinador, enquanto
+o jogo mostra os escudos da carreira de jogador — e aí não há como chegar à
+resposta. O Roger Machado tinha 8761 visualizações por mês, acima da mediana do
+fácil, com 1 jogo de seleção e uma transferência de € 1 milhão; os escudos dele
+são Grêmio, Vissel Kobe, Fluminense e D.C. United.
+
+`npm run tecnicos` ordena os suspeitos pela razão entre procura e tamanho da
+carreira de jogador. **Ele não corrige nada de propósito**, porque a razão erra
+onde mais importaria acertar: goleiro não tem taxa de transferência, então o
+Rogério Ceni aparece em segundo lugar na lista sendo ídolo conhecidíssimo como
+jogador. Nenhuma fórmula distingue os dois casos; uma pessoa distingue em dois
+segundos.
+
+Por isso `scripts/niveis-fixos.mjs` fixa o nível à mão e vence o cálculo. Hoje
+tem três entradas, cada uma com o motivo escrito: Roger Machado e Joel Santana
+no difícil, Guardiola no intermediário.
+
+#### O outro piso: difícil não é desconhecido
+
+Procura baixa demais também estraga, do outro lado. Takashi Usami tem 86
+visualizações por mês — nove vezes abaixo da mediana do próprio nível. Quem cai
+nele não perde uma charada difícil; perde uma que não tinha resposta possível, e
+termina a partida sem saber quem é o nome revelado.
+
+`npm run repor` mede a procura dos trezentos, lista quem está abaixo do piso
+(250 por padrão, `PISO=` muda) e troca cada um por um candidato que passe no
+mesmo caminho de aceitação do gerador com procura bem acima do piso
+(`PISO_NOVO=`, 800 por padrão). Quem sai não é apagado: só sai da vez.
 
 ### Consertar sem gerar elenco novo
 

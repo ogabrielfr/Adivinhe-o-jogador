@@ -28,6 +28,7 @@ Site estático (Vite + React + TS + Tailwind), sem back-end e sem chave de API.
 | Stack | Vite + React, GitHub Pages |
 | Níveis | Por reconhecimento do torcedor brasileiro, não por número de clubes nem por época |
 | Dica | Não gasta chute; marca no resultado compartilhado (🟢 sem dica / 🟡 com dica) |
+| Desistir | Revela o nome e encerra o nível; conta como derrota, com confirmação em dois toques |
 | Entrada de texto | Livre, sem autocomplete (entregaria a lista de respostas); tolera acento, caixa e um erro de digitação |
 | Clube repetido | Válido — o escudo reaparece na posição certa quando o jogador voltou |
 
