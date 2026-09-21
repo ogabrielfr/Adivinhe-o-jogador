@@ -6,6 +6,20 @@
  * Sem isso o Barcelona viraria "fc-barcelona" e quebraria os dados existentes.
  */
 export const CANONICOS = {
+  /**
+   * Nomes que saíram errados ou longos demais das fontes. O jogador vê este
+   * nome ao tocar no escudo e dentro da dica de tempo de casa, então
+   * "Hotspur" e "Goias" não servem.
+   */
+  'goias': { de: 'goias', nome: "Goiás", pais: 'BR' },
+  'avai': { de: 'avai', nome: "Avaí", pais: 'BR' },
+  'ceara': { de: 'ceara', nome: "Ceará", pais: 'BR' },
+  'hotspur': { de: 'hotspur', nome: "Tottenham", pais: 'EN' },
+  'unione-sportiva-catanzaro': { de: 'unione-sportiva-catanzaro', nome: "Catanzaro", pais: 'IT' },
+  'comercial-futebol-clube-ribeirao-preto': {
+    de: 'comercial-futebol-clube-ribeirao-preto', nome: "Comercial-SP", pais: 'BR',
+  },
+
   'arouca': { de: 'fc-arouca', nome: "Arouca", pais: 'PT' },
   'londrina': { de: 'londrina', nome: "Londrina", pais: 'BR' },
   'flamengo': { de: 'flamengo', nome: "Flamengo", pais: 'BR' },

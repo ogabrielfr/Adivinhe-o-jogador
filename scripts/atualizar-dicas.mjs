@@ -12,9 +12,10 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
-import { historicoDoTransfermarkt, perfilDoTransfermarkt } from './transfermarkt.mjs'
+import { historicoDoTransfermarkt, passagensDoTransfermarkt, perfilDoTransfermarkt } from './transfermarkt.mjs'
 import { montarDicas, fatosDoHistorico, papelConhecido, escalaDosFatos, naturalidadeSegura } from './dicas.mjs'
 import { torneiosDe, torneiosQueContam } from './torneios.mjs'
+import { CARREIRA_FIXA } from './carreiras-corrigidas.mjs'
 import { latinizar } from '../src/logica/texto.ts'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -38,6 +39,25 @@ const meta = JSON.parse(readFileSync(join(raiz, 'scripts/meta-jogadores.json'), 
 const catalogo = JSON.parse(readFileSync(join(raiz, 'scripts/catalogo-completo.json'), 'utf8'))
 const paisDoClube = new Map(catalogo.map((c) => [c.id, c.pais]))
 const nomeDoClube = new Map(catalogo.map((c) => [c.id, c.nome]))
+/**
+ * id do clube no Transfermarkt -> nome que o jogo mostra.
+ *
+ * O mapa curado cobre 2585 clubes, o que deixava 17 dos 28 jogadores com
+ * tempo de casa sem saber o nome da casa. `clubes-externos.json` guarda a URL
+ * do escudo no Transfermarkt, e o id do clube está dentro dela: é o mesmo
+ * preenchimento que o `reparar` usa para resolver carreira.
+ */
+const nomePorTm = new Map(
+  Object.entries(JSON.parse(readFileSync(join(raiz, 'scripts/clubes-transfermarkt.json'), 'utf8')))
+    .map(([tm, id]) => [String(tm), nomeDoClube.get(id)])
+    .filter(([, nome]) => nome),
+)
+const idPorQid = new Map(catalogo.filter((c) => c.qid).map((c) => [c.qid, c.id]))
+for (const c of JSON.parse(readFileSync(join(raiz, 'scripts/clubes-externos.json'), 'utf8'))) {
+  const tm = c.url?.match(/\/wappen\/head\/(\d+)\.png/)?.[1]
+  const nome = nomeDoClube.get(idPorQid.get(c.qid))
+  if (tm && nome && !nomePorTm.has(tm)) nomePorTm.set(tm, nome)
+}
 
 // --------------------------------------------- jogos pela seleção principal
 /**
@@ -112,9 +132,26 @@ for (const b of blocos) {
   const perfil = tm ? await perfilDoTransfermarkt(tm) : null
   if (!perfil?.posicao) semPerfil++
   const historico = tm ? await historicoDoTransfermarkt(tm) : null
+  const passagens = tm ? await passagensDoTransfermarkt(tm) : null
   const fatos = fatosDoHistorico(historico?.transfers ?? [])
   const idsDeClube = clubesDoBloco(b)
   const paises = new Set(idsDeClube.map((x) => paisDoClube.get(x))).size
+
+  /**
+   * Aprende o nome bonito de cada clube com os próprios jogadores.
+   *
+   * O mapa curado só tem clube que precisou de entrada à mão, então faltavam
+   * justamente os grandes — sem o Manchester United nele, a dica caía no nome
+   * abreviado do Transfermarkt e saía "no Man Utd". Quando a lista de
+   * passagens e a de clubes resolvidos têm o mesmo tamanho, as duas estão na
+   * mesma ordem e o par id-do-TM/clube-nosso é certo; é só anotar.
+   */
+  if (passagens && passagens.length === idsDeClube.length) {
+    passagens.forEach((p, i) => {
+      const nome = nomeDoClube.get(idsDeClube[i])
+      if (p.idTm && nome && !nomePorTm.has(String(p.idTm))) nomePorTm.set(String(p.idTm), nome)
+    })
+  }
 
   coletado.push({
     bloco: b,
@@ -130,6 +167,15 @@ for (const b of blocos) {
         b[0].match(/nome: "((?:[^"\\]|\\.)*)"/)?.[1] ?? '',
       ),
       torneios: torneiosQueContam(torneios[qid] ?? []),
+      /**
+       * O nome do clube onde ele ficou mais tempo. O mapa curado só tem os
+       * clubes que precisaram de entrada manual — o São Paulo resolve por
+       * nome e nunca entrou nele —, então o nome do próprio histórico do
+       * Transfermarkt é o que cobre todo mundo.
+       */
+      clubeDaCasa: nomePorTm.get(String(fatos.clubeDaPermanencia)) ?? fatos.nomeDaPermanencia ?? null,
+      // carreira corrigida à mão: a linha do tempo do Transfermarkt não vale
+      historicoSuspeito: b[1] in CARREIRA_FIXA,
     },
   })
 }

@@ -27,6 +27,7 @@ import { passagensDoTransfermarkt } from './transfermarkt.mjs'
 import { consultar, qidDe } from './wikidata.mjs'
 import { visualizacoesDe } from './visualizacoes.mjs'
 import { NIVEL_FIXO } from './niveis-fixos.mjs'
+import { CARREIRA_FIXA } from './carreiras-corrigidas.mjs'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
 const ARQUIVO = join(raiz, 'src/dados/jogadores.ts')
@@ -168,6 +169,23 @@ for (const b of blocos) {
 
   const passagens = tm ? await passagensDoTransfermarkt(tm) : null
   let clubes = antes
+
+  /**
+   * Correção à mão vence o Transfermarkt e encerra o assunto: o resto do
+   * laço nem roda para esse jogador. O Fabão tinha uma passagem que só o
+   * Transfermarkt registra, e reresolver a carreira dele a partir de lá
+   * traria o erro de volta toda vez.
+   */
+  const corrigida = CARREIRA_FIXA[b[1]]
+  if (corrigida) {
+    if (corrigida.clubes.join() !== antes.join()) carreirasMudadas++
+    jogadores.push({
+      texto, clubes: corrigida.clubes, id: b[1],
+      pontos: estatura(qid, artigoPorQid.get(qid) ?? ''),
+    })
+    continue
+  }
+
   if (passagens) {
     const novos = []
     let falhou = false

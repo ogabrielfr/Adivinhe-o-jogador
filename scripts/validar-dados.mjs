@@ -32,9 +32,19 @@ for (const j of JOGADORES) {
         erros.push(`${j.id}: a ${qual} contém "${parte}" do próprio nome`)
       }
     }
+    /**
+     * Citar clube é proibido, com UMA exceção: a frase de tempo de casa.
+     * "Ficou 6 anos seguidos no São Paulo" nomeia qual dos escudos à mostra
+     * foi a casa dele, que é informação nova — foi pedido do cliente, e o
+     * clube citado é sempre um que já está na tela. Fora dessa frase, citar
+     * clube continua sendo repetir o mural.
+     */
+    const semTempoDeCasa = dica.replace(/ficou \d+ anos seguidos n[ao] [^.]*/g, '')
     for (const c of j.clubes) {
       const nome = normalizar(CLUBES.find((x) => x.id === c)?.nome ?? '')
-      if (nome.length > 4 && dica.includes(nome)) erros.push(`${j.id}: a ${qual} cita o clube "${nome}"`)
+      if (nome.length > 4 && semTempoDeCasa.includes(nome)) {
+        erros.push(`${j.id}: a ${qual} cita o clube "${nome}"`)
+      }
     }
   }
 }

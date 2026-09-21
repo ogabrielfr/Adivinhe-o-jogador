@@ -138,6 +138,13 @@ export function anoDaTemporada(t) {
 }
 
 // ------------------------------------------------------------------ fatos
+/**
+ * O que o Transfermarkt lista como destino sem ser clube. Sem este filtro,
+ * "Pausa" — o intervalo de carreira — virava tempo de casa, e a dica dizia
+ * "ficou 6 anos seguidos no Pausa". Mesma lista de transfermarkt.mjs.
+ */
+const NAO_E_CLUBE = /^(sem clube|aposentad|fim de carreira|carreira encerrada|unknown|retired|pausa)/i
+
 const EMPRESTIMO = /empr[eé]stimo/i
 const FIM_DE_EMPRESTIMO = /fim do empr[eé]stimo/i
 const ANO = 365.25 * 24 * 60 * 60 * 1000
@@ -197,17 +204,29 @@ export function fatosDoHistorico(transferencias = []) {
    * sem isso, uma lacuna no histórico viraria uma década de fidelidade.
    */
   let maiorPermanencia = 0
+  /** Em qual clube foi essa permanência: id do Transfermarkt e nome dele. */
+  let clubeDaPermanencia = null
+  let nomeDaPermanencia = null
   for (let i = 0; i < linha.length - 1; i++) {
     const chegou = clubeDo(linha[i].t.to?.href)
     if (!chegou || chegou !== clubeDo(linha[i + 1].t.from?.href)) continue
+    if (NAO_E_CLUBE.test(linha[i].t.to?.clubName ?? '')) continue
     const dentro = (linha[i + 1].quando - linha[i].quando) / ANO
-    if (dentro > maiorPermanencia) maiorPermanencia = dentro
+    if (dentro > maiorPermanencia) {
+      maiorPermanencia = dentro
+      clubeDaPermanencia = chegou
+      nomeDaPermanencia = linha[i].t.to?.clubName ?? null
+    }
   }
   // quem ainda está em campo segue somando no clube atual
   const ultima = linha.at(-1)
-  if (ultima && !encerrou && !/fim de carreira/i.test(ultima.t.to?.clubName ?? '')) {
+  if (ultima && !encerrou && !NAO_E_CLUBE.test(ultima.t.to?.clubName ?? '')) {
     const ateHoje = (Date.now() - ultima.quando) / ANO
-    if (ateHoje > maiorPermanencia) maiorPermanencia = ateHoje
+    if (ateHoje > maiorPermanencia) {
+      maiorPermanencia = ateHoje
+      clubeDaPermanencia = clubeDo(ultima.t.to?.href)
+      nomeDaPermanencia = ultima.t.to?.clubName ?? null
+    }
   }
 
   /** O ano em que saiu pela primeira vez do país onde começou. */
@@ -216,7 +235,7 @@ export function fatosDoHistorico(transferencias = []) {
   if (berco) {
     for (const { t, quando } of linha) {
       const destino = paisDaBandeira(t.to?.countryFlag)
-      if (destino && destino !== berco && !/fim de carreira/i.test(t.to?.clubName ?? '')) {
+      if (destino && destino !== berco && !NAO_E_CLUBE.test(t.to?.clubName ?? '')) {
         anoDoExterior = new Date(quando).getUTCFullYear()
         break
       }
@@ -226,6 +245,8 @@ export function fatosDoHistorico(transferencias = []) {
   return {
     maiorTaxa, maiorTaxaAno, valorPico, emprestimos, anoDoExterior,
     permanencia: Math.floor(maiorPermanencia),
+    clubeDaPermanencia,
+    nomeDaPermanencia,
     /**
      * Todos os anos com transferência, do mais antigo ao mais novo. Quem
      * souber a data de nascimento usa isto para achar o começo de verdade:
@@ -237,6 +258,28 @@ export function fatosDoHistorico(transferencias = []) {
     ultimo: anos.length ? Math.max(...anos) : null,
     encerrou,
   }
+}
+
+/**
+ * Clube que leva artigo feminino: "na Portuguesa", não "no Portuguesa".
+ *
+ * A maioria é masculina ("no Santos", "no Flamengo", "no Real Madrid"), então
+ * o padrão é "no" e a lista guarda as exceções. Boa parte é clube italiano,
+ * que no Brasil se fala no feminino — a Roma, a Lazio, a Juventus — e o resto
+ * é nome de palavra feminina, como Portuguesa e Ponte Preta.
+ */
+const CLUBE_FEMININO = new Set([
+  'portuguesa', 'ponte preta', 'chapecoense', 'internacional', 'inter',
+  'roma', 'lazio', 'juventus', 'fiorentina', 'sampdoria', 'atalanta',
+  'udinese', 'inter de milao', 'real sociedad', 'real sociedade',
+  'juventude', 'macae', 'cabofriense', 'desportiva', 'ferroviaria',
+])
+
+/** "São Paulo" -> "no São Paulo"; "Portuguesa" -> "na Portuguesa" */
+function noClube(nome) {
+  const limpo = String(nome).replace(/\s*\([^)]*\)\s*$/, '').trim()
+  const chave = limpo.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  return CLUBE_FEMININO.has(chave) ? `na ${limpo}` : `no ${limpo}`
 }
 
 /**
@@ -262,7 +305,10 @@ function adjetivoDaSelecao(rotulo) {
  * Os pedaços de dica que este jogador tem. Cada um é uma oração que encaixa
  * depois do sujeito, com o número cru ao lado para o desempate de `escolher`.
  */
-function orações({ jogosSelecao, selecao, fatos, paises, nasc, naturalidade, torneios }) {
+function orações({
+  jogosSelecao, selecao, fatos, paises, nasc, naturalidade, torneios, clubeDaCasa,
+  historicoSuspeito,
+}) {
   const saida = []
   const por = (tipo, valor, texto) => saida.push({ tipo, valor, texto })
 
@@ -299,11 +345,29 @@ function orações({ jogosSelecao, selecao, fatos, paises, nasc, naturalidade, t
       `custou ${dinheiro(fatos.maiorTaxa)} na transferência mais cara` +
         (fatos.maiorTaxaAno ? ` (${fatos.maiorTaxaAno})` : ''))
   }
+  /**
+   * Quando a carreira veio corrigida à mão, a linha do tempo do Transfermarkt
+   * é a que foi rejeitada — e tudo que se calcula dela vai junto. O Fabão
+   * ganhava "ficou 6 anos seguidos no Comercial-SP", que é justamente o vão
+   * aberto pela transferência falsa que tiramos. Sobram os fatos que não
+   * dependem de data: naturalidade, seleção, torneio e valor.
+   */
+  if (!historicoSuspeito) {
   if (fatos.emprestimos >= 3) {
     por('emprestimo', fatos.emprestimos, `saiu por empréstimo ${fatos.emprestimos} vezes`)
   }
+  /**
+   * Nomear o clube foi pedido do cliente: "ficou 6 anos seguidos num mesmo
+   * clube" não diz nada que o mural já não diga, enquanto "ficou 6 anos
+   * seguidos no São Paulo" diz QUAL dos escudos foi a casa dele — e isso o
+   * mural não mostra. Como o clube é sempre um dos que estão à mostra, citar
+   * não entrega nada de graça.
+   */
   if (fatos.permanencia >= 6) {
-    por('permanencia', fatos.permanencia, `ficou ${fatos.permanencia} anos seguidos num mesmo clube`)
+    por('permanencia', fatos.permanencia,
+      clubeDaCasa
+        ? `ficou ${fatos.permanencia} anos seguidos ${noClube(clubeDaCasa)}`
+        : `ficou ${fatos.permanencia} anos seguidos num mesmo clube`)
   }
   /**
    * O começo da carreira conta dos 15 anos para cima. Sem esse corte a dica
@@ -326,6 +390,8 @@ function orações({ jogosSelecao, selecao, fatos, paises, nasc, naturalidade, t
     // idade fora de 15 a 40 é data errada em algum dos dois lados
     if (idade >= 15 && idade <= 40) por('exterior', -idade, `foi jogar fora do país aos ${idade} anos`)
   }
+  }
+
   if (paises > 2) por('paises', paises, `defendeu clubes de ${paises} países`)
 
   /**
