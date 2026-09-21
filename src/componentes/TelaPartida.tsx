@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { Jogador, Nivel } from '../dados/tipos'
 import { ROTULO_NIVEL } from '../dados/tipos'
 import type { Partida } from '../logica/armazenamento'
-import { TENTATIVAS } from '../logica/armazenamento'
+import { DICAS, TENTATIVAS } from '../logica/armazenamento'
 import { Carreira } from './Carreira'
 import { MarcadorNivel } from './MarcadorNivel'
 import { Compartilhar } from './Compartilhar'
@@ -101,10 +101,17 @@ export function TelaPartida({
       <main className="flex flex-1 flex-col justify-center gap-7 py-8">
         <Carreira clubes={jogador.clubes} revelarTudo={acabou} animar={acabou} />
 
-        {partida.usouDica && (
-          <p className="t-nota mx-auto max-w-[38ch] border-l-2 border-dica pl-4 text-[17px] leading-snug text-cal">
-            {jogador.dica}
-          </p>
+        {partida.dicasUsadas > 0 && (
+          <div className="mx-auto flex w-full max-w-[38ch] flex-col gap-3">
+            {jogador.dicas.slice(0, partida.dicasUsadas).map((dica, i) => (
+              <p
+                key={i}
+                className="t-nota border-l-2 border-dica pl-4 text-[17px] leading-snug text-cal"
+              >
+                {dica}
+              </p>
+            ))}
+          </div>
         )}
 
         {acabou ? (
@@ -117,7 +124,11 @@ export function TelaPartida({
                 : partida.desistiu
                   ? 'Você desistiu. Era ele:'
                   : 'Acabaram os chutes. Era ele:'}
-              {partida.usouDica && <span className="text-dica"> Com dica.</span>}
+              {partida.dicasUsadas > 0 && (
+                <span className="text-dica">
+                  {partida.dicasUsadas === 1 ? ' Com uma dica.' : ' Com as duas dicas.'}
+                </span>
+              )}
             </p>
             <h2 className="t-camisa mt-3 text-[clamp(1.9rem,8.5vw,2.9rem)]">{jogador.nome}</h2>
 
@@ -175,14 +186,18 @@ export function TelaPartida({
               <button
                 type="button"
                 onClick={aoPedirDica}
-                disabled={partida.usouDica}
+                disabled={partida.dicasUsadas >= DICAS}
                 className="t-rotulo cursor-pointer rounded-xl border border-relva-600 px-5 py-3.5 text-[15px] text-cal-500 transition-colors hover:border-dica hover:text-dica disabled:cursor-not-allowed disabled:opacity-35"
               >
-                {partida.usouDica ? 'Dica usada' : 'Dica'}
+                {partida.dicasUsadas === 0 ? 'Dica' : partida.dicasUsadas === 1 ? 'Outra dica' : 'Sem mais dicas'}
               </button>
             </div>
-            {!partida.usouDica && (
-              <p className="mt-2.5 text-center text-xs text-cal-700">A dica não gasta chute.</p>
+            {partida.dicasUsadas < DICAS && (
+              <p className="mt-2.5 text-center text-xs text-cal-700">
+                {partida.dicasUsadas === 0
+                  ? 'São duas dicas, e nenhuma gasta chute.'
+                  : 'A segunda dica entrega mais. Também não gasta chute.'}
+              </p>
             )}
 
             {/*

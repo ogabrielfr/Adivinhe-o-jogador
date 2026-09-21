@@ -23,7 +23,8 @@ import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
 import { visualizacoesDe } from './visualizacoes.mjs'
 import { passagensDoTransfermarkt, perfilDoTransfermarkt, historicoDoTransfermarkt } from './transfermarkt.mjs'
-import { montarDica, fatosDoHistorico } from './dicas.mjs'
+import { montarDicas, fatosDoHistorico, naturalidadeSegura } from './dicas.mjs'
+import { torneiosDe, torneiosQueContam } from './torneios.mjs'
 import { mesmoClube, tokensDoNome } from './nomes-clube.mjs'
 import { CANONICOS } from './clubes-canonicos.mjs'
 import { latinizar } from '../src/logica/texto.ts'
@@ -58,6 +59,7 @@ for (const c of externos) {
   if (tm && nosso && !idPorTm.has(tm)) idPorTm.set(tm, nosso)
 }
 const paisDoClube = new Map(catalogo.map((c) => [c.id, c.pais]))
+const nomeDoClube = new Map(catalogo.map((c) => [c.id, c.nome]))
 const porToken = new Map()
 for (const c of catalogo) {
   for (const t of tokensDoNome(c.nome)) {
@@ -182,12 +184,18 @@ for (const qid of fila) {
   escolhidos.push({
     id, nome, qid, tm, clubes, procura,
     apelidos: [...new Set([nome, dados.nome].map((n) => n.toLowerCase()))],
-    dica: montarDica({
+    dicas: montarDicas({
       ...dados,
       posicao: perfil?.posicao ?? dados.posicao,
       pais: perfil?.nacionalidade ?? dados.pais,
       fatos: fatosDoHistorico(historico?.transfers ?? []),
       paises: new Set(clubes.map((c) => paisDoClube.get(c))).size,
+      naturalidade: naturalidadeSegura(
+        perfil?.naturalidade,
+        clubes.map((c) => nomeDoClube.get(c)).filter(Boolean),
+        nome,
+      ),
+      torneios: torneiosQueContam((await torneiosDe([qid]))[qid] ?? []),
     }),
   })
   console.log(`  entra: ${String(procura).padStart(6)}  ${nome} (${clubes.length} clubes)`)
@@ -212,7 +220,7 @@ for (let i = 0; i < escolhidos.length; i++) {
     apelidos: [${entra.apelidos.map(aspas).join(', ')}],
     nivel: '${nivel}',
     clubes: [${entra.clubes.map((c) => `'${c}'`).join(', ')}],
-    dica: ${aspas(entra.dica)},
+    dicas: [${entra.dicas.map(aspas).join(', ')}],
     verificado: true,
     fonte: 'https://www.transfermarkt.com.br/-/transfers/spieler/${entra.tm}',
   },`

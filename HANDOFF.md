@@ -27,7 +27,7 @@ Site estático (Vite + React + TS + Tailwind), sem back-end e sem chave de API.
 | Mecânica | Todos os escudos de uma vez, 3 tentativas |
 | Stack | Vite + React, GitHub Pages |
 | Níveis | Por reconhecimento do torcedor brasileiro, não por número de clubes nem por época |
-| Dica | Não gasta chute; marca no resultado compartilhado (🟢 sem dica / 🟡 com dica) |
+| Dica | **Duas por jogador**: a 1ª situa, a 2ª entrega. Nenhuma gasta chute; marcam no resultado compartilhado (🟢 sem dica / 🟡 uma / 🟠 as duas) |
 | Desistir | Revela o nome e encerra o nível; conta como derrota, com confirmação em dois toques |
 | Entrada de texto | Livre, sem autocomplete (entregaria a lista de respostas); tolera acento, caixa e um erro de digitação |
 | Clube repetido | Válido — o escudo reaparece na posição certa quando o jogador voltou |
@@ -79,7 +79,7 @@ Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
 - Sorteio diário determinístico por data, sem servidor, com reembaralhamento por ciclo para ninguém repetir antes da volta completa.
 - **300 jogadores, 100 por nível**, com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e os 300 têm `verificado: true`.
 - **Catálogo de 5352 clubes de 66 países**, sendo 1142 brasileiros. Os 385 que o jogo usa têm escudo real — nenhum brasão de reserva em uso.
-- Dica montada de números verificáveis e escolhida pelo que cada jogador tem de raro na biblioteca; 300 distintas para 300 jogadores.
+- **Duas dicas por jogador**, montadas de números verificáveis e escolhidas pelo que cada um tem de raro; a naturalidade tem vaga cativa quando existe, porque é o fato que localiza.
 - `npm run validar-dados` confere integridade e recusa dica que entregue nome de jogador ou clube visível.
 - `npm run teste-nomes` (26 casos) testa o comparador de nomes de clube; `npm run teste-palpites` (25 casos) testa a aceitação de palpite.
 - `npm run teste-visual` roda a partida ponta a ponta no Chromium e salva capturas.

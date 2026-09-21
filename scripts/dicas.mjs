@@ -239,6 +239,19 @@ export function fatosDoHistorico(transferencias = []) {
   }
 }
 
+/**
+ * Lugares que pedem artigo: "é do Rio de Janeiro", não "é de Rio de Janeiro".
+ * A maioria das cidades não pede, então a lista é curta de propósito.
+ */
+const COM_ARTIGO = /^(Rio de Janeiro|Porto|Recife|Cairo|Havre|Haia|Guarujá)$/i
+
+/** "Araraquara (SP)" -> "de Araraquara"; "Rio de Janeiro" -> "do Rio de Janeiro" */
+function deOnde(lugar) {
+  // o Transfermarkt às vezes anexa a sigla do estado, que não entra na frase
+  const limpo = String(lugar).replace(/\s*\([^)]*\)\s*$/, '').trim()
+  return COM_ARTIGO.test(limpo) ? `do ${limpo}` : `de ${limpo}`
+}
+
 /** "Seleção Brasileira de Futebol" -> "brasileira" */
 function adjetivoDaSelecao(rotulo) {
   const m = String(rotulo ?? '').match(/Sele[çc][ãa]o\s+(.+?)(?:\s+de\s+Futebol)?$/i)
@@ -249,9 +262,32 @@ function adjetivoDaSelecao(rotulo) {
  * Os pedaços de dica que este jogador tem. Cada um é uma oração que encaixa
  * depois do sujeito, com o número cru ao lado para o desempate de `escolher`.
  */
-function orações({ jogosSelecao, selecao, fatos, paises, nasc }) {
+function orações({ jogosSelecao, selecao, fatos, paises, nasc, naturalidade, torneios }) {
   const saida = []
   const por = (tipo, valor, texto) => saida.push({ tipo, valor, texto })
+
+  /**
+   * Naturalidade é o fato mais específico que existe para quem tem carreira
+   * magra. O Ademilson não tem jogo de seleção nem torneio, e sobravam dois
+   * números de dinheiro; "é de Cubatão" localiza a pessoa. O valor é 1 porque
+   * não há escala — ou tem ou não tem —, e o peso alto põe na frente.
+   */
+  if (naturalidade) por('naturalidade', 1, `é ${deOnde(naturalidade)}`)
+
+  const copas = torneios?.copas ?? []
+  if (copas.length >= 2) {
+    const lista = copas.length > 3
+      // quatro Copas já é o fato; listar os anos só alonga a frase
+      ? `${copas.length} Copas do Mundo`
+      : `as Copas do Mundo de ${copas.slice(0, -1).join(', ')} e ${copas.at(-1)}`
+    por('copa', copas.length, `disputou ${lista}`)
+  } else if (copas.length === 1) {
+    por('copa', 1, `disputou a Copa do Mundo de ${copas[0]}`)
+  } else {
+    // sem Copa, o torneio menor ainda situa no tempo
+    const outro = torneios?.demais?.[0]
+    if (outro) por('torneio', 1, `disputou a ${outro.nome} de ${outro.ano}`)
+  }
 
   if (jogosSelecao >= 1) {
     const adj = adjetivoDaSelecao(selecao)
@@ -308,8 +344,8 @@ function orações({ jogosSelecao, selecao, fatos, paises, nasc }) {
  * Vale para o gerador, que monta um jogador por vez.
  */
 const PESO = {
-  selecao: 8, emprestimo: 7, permanencia: 6, exterior: 5,
-  estrada: 4, taxa: 3, paises: 2, valor: 1,
+  copa: 12, naturalidade: 11, selecao: 8, torneio: 7.5, emprestimo: 7,
+  permanencia: 6, exterior: 5, estrada: 4, taxa: 3, paises: 2, valor: 1,
 }
 
 /**
@@ -336,44 +372,101 @@ function destaque(tipo, valor, escala) {
 }
 
 /**
- * A dica final: sujeito + até dois fatos. `quantosFatos` sobe quando duas
- * dicas saem iguais e é preciso separar uma da outra.
+ * As duas dicas do jogador.
+ *
+ * O cliente escolheu o modelo de duas: **a primeira situa, a segunda
+ * entrega**, e quem joga decide até onde quer ajuda. Isso muda o que cada uma
+ * precisa fazer.
+ *
+ * A primeira é de propósito pobre — posição, país e ano de nascimento. Não
+ * identifica ninguém sozinha; serve para quem olhou o mural e não faz ideia
+ * de que década está vendo.
+ *
+ * A segunda é a que tem que resolver. Leva os dois fatos mais raros do
+ * jogador e nenhuma apresentação: quem pediu a segunda já leu a primeira.
  */
-export function montarDica(dados, quantosFatos = 2, escala = null) {
-  const { posicao, pais, nasc } = dados
+export function montarDicas(dados, escala = null) {
+  return [primeiraDica(dados), segundaDica(dados, escala)]
+}
+
+/** Posição, país e ano: o mínimo para situar sem entregar. */
+function primeiraDica({ posicao, pais, nasc }) {
   const papel = papelDe(posicao)
   const origem = pais ? (pais === 'Brasil' ? 'brasileiro' : `nascido ${ondeNasceu(pais)}`) : null
-
   const sujeito = papel
     ? `${papel}${origem ? ` ${origem}` : ''}`
     : origem ? `Jogador ${origem}` : 'Jogador'
 
-  const candidatos = orações(dados)
-  const nota = (c) => (escala ? destaque(c.tipo, c.valor, escala) * 10 : 0) + PESO[c.tipo]
-  const escolhidos = [...candidatos]
-    .sort((a, b) => nota(b) - nota(a))
-    .slice(0, Math.max(1, quantosFatos))
-
-  // dentro da dica os fatos voltam à ordem natural: quem é, depois o resto
-  escolhidos.sort((a, b) => PESO[b.tipo] - PESO[a.tipo])
-
-  const partes = escolhidos.map((c) => c.texto)
-  if (!partes.length) {
-    const decada = nasc ? ` dos anos ${String(Math.floor(Number(nasc) / 10) * 10).slice(2)}` : ''
-    return `${sujeito}${decada}.`
-  }
-
-  const corpo = partes.length === 1 ? partes[0] : `${partes.slice(0, -1).join(', ')} e ${partes.at(-1)}`
-  return `${sujeito}, ${corpo}.`
+  if (!nasc) return `${sujeito}.`
+  // "nascido na Escócia nascido em 1951" teria dois "nascido"; com o país
+  // dentro da mesma oração sai "nascido na Escócia em 1951"
+  return origem && origem.startsWith('nascido')
+    ? `${sujeito} em ${nasc}.`
+    : `${sujeito} nascido em ${nasc}.`
 }
 
-/** Os valores de cada tipo de fato em toda a biblioteca, para `montarDica`. */
+/**
+ * Dois fatos, sem apresentação.
+ *
+ * A naturalidade tem vaga cativa quando existe. O ranking por raridade
+ * sozinho a deixava de fora: "1 jogo de seleção" é numericamente mais raro
+ * que ser de algum lugar, então o Roger Machado saía descrito por um jogo de
+ * seleção e uma taxa de € 700 mil. Mas raro não é o mesmo que útil — de onde
+ * a pessoa é localiza, e localizar é o que a segunda dica existe para fazer.
+ */
+function segundaDica(dados, escala) {
+  const candidatos = orações(dados)
+  if (!candidatos.length) return 'Não temos outro fato desse jogador.'
+
+  const nota = (c) => (escala ? destaque(c.tipo, c.valor, escala) * 10 : 0) + PESO[c.tipo]
+  const ordenados = [...candidatos].sort((a, b) => nota(b) - nota(a))
+
+  const naturalidade = ordenados.find((c) => c.tipo === 'naturalidade')
+  const escolhidos = naturalidade
+    ? [naturalidade, ...ordenados.filter((c) => c.tipo !== 'naturalidade').slice(0, 1)]
+    : ordenados.slice(0, 2)
+  escolhidos.sort((a, b) => PESO[b.tipo] - PESO[a.tipo])
+
+  /**
+   * Cada fato vira uma frase sua. Ligados por "e" saía "Disputou as Copas de
+   * 1974, 1978 e 1982 e vestiu a camisa...", com dois "e" disputando o mesmo
+   * lugar; separados, cada um se lê inteiro.
+   */
+  return escolhidos
+    .map((c) => `${c.texto.charAt(0).toUpperCase()}${c.texto.slice(1)}.`)
+    .join(' ')
+}
+
+/** Os valores de cada tipo de fato em toda a biblioteca, para a segunda dica. */
 export function escalaDosFatos(todos) {
   const escala = {}
   for (const dados of todos) {
     for (const { tipo, valor } of orações(dados)) (escala[tipo] ??= []).push(valor)
   }
   return escala
+}
+
+/**
+ * A naturalidade não pode entregar nem clube visível nem o próprio nome.
+ *
+ * "É de Santos" com o escudo do Santos à mostra é repetição, não dica. E o
+ * Alexandre Pato nasceu em **Pato Branco**: a dica entregava metade do nome
+ * dele. Os dois casos o `validar-dados` recusa, e é melhor não produzir.
+ */
+export function naturalidadeSegura(naturalidade, nomesDeClube = [], nomeDoJogador = '') {
+  if (!naturalidade) return null
+  const simples = (t) => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  const limpa = simples(naturalidade)
+
+  for (const nome of nomesDeClube) {
+    const c = simples(nome)
+    if (c.includes(limpa) || limpa.includes(c)) return null
+  }
+  // pedaço de nome com mais de três letras dentro do lugar já entrega
+  for (const parte of simples(nomeDoJogador).split(/\s+/)) {
+    if (parte.length > 3 && limpa.includes(parte)) return null
+  }
+  return naturalidade
 }
 
 /** O mapa conhece esta posição? Serve para o gerador avisar o que falta. */

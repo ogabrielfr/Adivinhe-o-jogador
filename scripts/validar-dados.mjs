@@ -20,16 +20,22 @@ for (const j of JOGADORES) {
     usados.add(c)
     if (!idsClube.has(c)) erros.push(`${j.id}: clube desconhecido "${c}"`)
   }
-  if (!j.dica?.trim()) erros.push(`${j.id}: sem dica`)
+  if (!Array.isArray(j.dicas) || j.dicas.length !== 2) erros.push(`${j.id}: precisa de duas dicas`)
+  else if (j.dicas.some((d) => !d?.trim())) erros.push(`${j.id}: dica vazia`)
 
-  // a dica não pode entregar o nome do jogador nem o de um clube exibido
-  const dica = normalizar(j.dica)
-  for (const parte of normalizar(j.nome).split(' ')) {
-    if (parte.length > 3 && dica.includes(parte)) erros.push(`${j.id}: a dica contém "${parte}" do próprio nome`)
-  }
-  for (const c of j.clubes) {
-    const nome = normalizar(CLUBES.find((x) => x.id === c)?.nome ?? '')
-    if (nome.length > 4 && dica.includes(nome)) erros.push(`${j.id}: a dica cita o clube "${nome}"`)
+  // nenhuma das duas pode entregar o nome do jogador nem o de um clube exibido
+  for (const [i, bruta] of (j.dicas ?? []).entries()) {
+    const dica = normalizar(bruta ?? '')
+    const qual = i === 0 ? '1ª dica' : '2ª dica'
+    for (const parte of normalizar(j.nome).split(' ')) {
+      if (parte.length > 3 && dica.includes(parte)) {
+        erros.push(`${j.id}: a ${qual} contém "${parte}" do próprio nome`)
+      }
+    }
+    for (const c of j.clubes) {
+      const nome = normalizar(CLUBES.find((x) => x.id === c)?.nome ?? '')
+      if (nome.length > 4 && dica.includes(nome)) erros.push(`${j.id}: a ${qual} cita o clube "${nome}"`)
+    }
   }
 }
 

@@ -3,7 +3,7 @@ import { NIVEIS } from './dados/tipos'
 import type { Jogador, Nivel } from './dados/tipos'
 import { chaveDoDia, jogadorDoDia, numeroDoDia, PALPITES_AMBIGUOS } from './logica/diario'
 import { formasDerivadas, formasExatas, normalizar, pareceIgual } from './logica/texto'
-import { carregar, partidaNova, registrarResultado, salvar, TENTATIVAS } from './logica/armazenamento'
+import { carregar, DICAS, partidaNova, registrarResultado, salvar, TENTATIVAS } from './logica/armazenamento'
 import { textoDeCompartilhamento } from './logica/compartilhar'
 import { TelaInicial } from './componentes/TelaInicial'
 import { TelaPartida } from './componentes/TelaPartida'
@@ -127,8 +127,11 @@ export function App() {
   const aoPedirDica = useCallback((nivel: Nivel) => {
     setEstado((anterior) => {
       const atual = anterior.partidas[nivel] ?? partidaNova()
-      if (atual.usouDica || atual.status !== 'jogando') return anterior
-      return { ...anterior, partidas: { ...anterior.partidas, [nivel]: { ...atual, usouDica: true } } }
+      if (atual.dicasUsadas >= DICAS || atual.status !== 'jogando') return anterior
+      return {
+        ...anterior,
+        partidas: { ...anterior.partidas, [nivel]: { ...atual, dicasUsadas: atual.dicasUsadas + 1 } },
+      }
     })
   }, [])
 

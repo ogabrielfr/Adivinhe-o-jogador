@@ -200,7 +200,9 @@ export async function perfilDoTransfermarkt(tmId) {
   const arquivo = join(CACHE, `perfil-${tmId}.json`)
   if (existsSync(arquivo)) {
     try {
-      return JSON.parse(readFileSync(arquivo, 'utf8'))
+      const guardado = JSON.parse(readFileSync(arquivo, 'utf8'))
+      // perfil gravado antes de naturalidade e pé existirem: vale rebuscar
+      if ('naturalidade' in guardado) return guardado
     } catch {
       // cache corrompido: busca de novo
     }
@@ -229,7 +231,26 @@ export async function perfilDoTransfermarkt(tmId) {
     .replace(/\s+/g, ' ')
     .trim() ?? null
 
-  const perfil = { nome, posicao, nacionalidade }
+  /**
+   * Naturalidade e pé vêm da tabela lateral do perfil. Entraram porque a
+   * dica de quem tem carreira magra não entregava nada: o Ademilson não tem
+   * jogo de seleção nem torneio, e sobravam dois números de dinheiro. "Nasceu
+   * em Cubatão" é específico, verificável e o mural de escudos não mostra.
+   */
+  const campo = (rotulo) => {
+    const re = new RegExp(
+      `${rotulo}:?\\s*</span>\\s*<span[^>]*info-table__content--bold[^>]*>([\\s\\S]*?)</span>`, 'i')
+    const bruto = html.match(re)?.[1]
+    if (!bruto) return null
+    const limpo = bruto.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim()
+    return limpo || null
+  }
+
+  const perfil = {
+    nome, posicao, nacionalidade,
+    naturalidade: campo('Local de nascimento'),
+    pe: campo('P[ée]'),
+  }
   writeFileSync(arquivo, JSON.stringify(perfil))
   return perfil
 }

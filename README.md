@@ -1,7 +1,7 @@
 # Acerte o jogador pela carreira
 
 Jogo diário: os escudos dos clubes por onde um jogador passou aparecem em ordem
-de carreira, e você tem 3 chutes e uma dica para descobrir quem é. Quem não
+de carreira, e você tem 3 chutes e duas dicas para descobrir quem é. Quem não
 quiser gastar os três pode desistir e ver o nome — conta como derrota, e o
 primeiro toque só arma a confirmação, porque não dá para voltar atrás.
 
@@ -82,11 +82,17 @@ derrubaram jogador — é por onde vale ampliar o catálogo.
 deveria custar um elenco novo, já que cada geração depende do WAF do
 Transfermarkt liberar e devolve um conjunto um pouco diferente.
 
-A dica é feita de **números que mudam de jogador para jogador**: quantas vezes
-vestiu a camisa da seleção, quanto custou a transferência mais cara, quanto
-chegou a valer, de quando a quando jogou. Tudo verificável, do histórico do
-Transfermarkt e do Wikidata — **nunca texto gerado**, que é a mesma classe de
-erro que carreira inventada, só que mais difícil de conferir.
+São **duas dicas, e o cliente escolheu esse modelo**: a primeira situa, a
+segunda entrega, e quem joga decide até onde quer ajuda.
+
+A primeira é de propósito pobre — posição, país e ano de nascimento. Não
+identifica ninguém sozinha; serve para quem olhou o mural e não faz ideia de
+que década está vendo. A segunda leva os dois fatos mais raros do jogador e
+nenhuma apresentação, porque quem pediu a segunda já leu a primeira.
+
+Tudo verificável, do histórico do Transfermarkt e do Wikidata — **nunca texto
+gerado**, que é a mesma classe de erro que carreira inventada, só que mais
+difícil de conferir.
 
 A primeira versão descrevia posição, país e número de países, atributos que
 centenas de jogadores compartilham: **177 dos 300 repetiam a dica de outro**, e
@@ -111,9 +117,27 @@ escudo, e saem do mesmo histórico do Transfermarkt que desenha o mural.
 **Cada jogador é descrito pelo que tem de raro.** `escalaDosFatos` junta os
 valores dos 300 por tipo de fato e a dica escolhe aqueles em que o número do
 jogador está longe da mediana da biblioteca. Uma taxa de € 3 milhões é a taxa
-de todo mundo; 18 anos no mesmo clube não é. O Pelé passou a ser lembrado pelos
-18 anos de Santos, o Fagner pelos quatro empréstimos, e o uso da taxa caiu de
-237 para 58 sem que ninguém precisasse editar dica à mão.
+de todo mundo; 18 anos no mesmo clube não é. O uso da taxa caiu de 237 para 58
+sem que ninguém precisasse editar dica à mão.
+
+**Raro não é o mesmo que útil.** O cliente apontou que, mesmo assim, a dica do
+Ademilson entregava pouco: ele não tem jogo de seleção nem torneio, e sobravam
+dois números de dinheiro. Faltavam fatos, não ordenação. Entraram dois:
+
+| Fato | Fonte | Cobertura |
+| --- | --- | --- |
+| Naturalidade — "é de Cubatão" | perfil do Transfermarkt | 260 dos 300 |
+| Copas, Copa América, Eurocopa e Olimpíadas | P1344 do Wikidata | 229 dos 300 |
+
+A naturalidade tem **vaga cativa** na segunda dica quando existe. Por raridade
+pura ela ficava de fora — "1 jogo de seleção" é numericamente mais raro que ser
+de algum lugar, e o Roger Machado saía descrito por um jogo de seleção e uma
+taxa de € 700 mil. Mas de onde a pessoa é **localiza**, e localizar é o que a
+segunda dica existe para fazer.
+
+Ela também não pode entregar de graça: `naturalidadeSegura` recusa o lugar que
+repete clube à mostra ("é de Santos" com o escudo do Santos na tela) ou que
+carrega o nome do jogador — o Alexandre Pato nasceu em **Pato Branco**.
 
 Posição e nacionalidade vêm do **perfil do Transfermarkt**, não do Wikidata:
 lá as duas propriedades aceitam vários valores e pegar o primeiro saía errado —

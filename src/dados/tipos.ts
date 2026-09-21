@@ -38,8 +38,14 @@ export interface Jogador {
    * jogador voltou a ele, e o escudo aparece de novo na posição certa.
    */
   clubes: string[]
-  /** uma frase que revela algo marcante sem entregar nome, clube ou posição */
-  dica: string
+  /**
+   * Duas dicas, na ordem em que o jogo oferece. A primeira situa (posição,
+   * país, ano) e a segunda entrega: leva os dois fatos mais raros do jogador,
+   * sem apresentação. Nenhuma das duas cita nome de jogador nem clube que
+   * está à mostra no mural — `npm run validar-dados` recusa a biblioteca se
+   * escapar.
+   */
+  dicas: [string, string]
   /**
    * Carreira conferida contra uma fonte externa. Jogador sem esta marca não
    * entra no sorteio diário — ver scripts/verificar-carreiras.mjs.

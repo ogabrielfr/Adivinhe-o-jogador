@@ -2,6 +2,8 @@ import type { Nivel } from '../dados/tipos'
 import { NIVEIS } from '../dados/tipos'
 
 export const TENTATIVAS = 3
+/** Duas dicas por jogador: a primeira situa, a segunda entrega. */
+export const DICAS = 2
 
 export type StatusPartida = 'jogando' | 'ganhou' | 'perdeu'
 
@@ -9,7 +11,8 @@ export interface Partida {
   status: StatusPartida
   /** o que a pessoa digitou, na ordem */
   palpites: string[]
-  usouDica: boolean
+  /** quantas das duas dicas a pessoa já pediu */
+  dicasUsadas: number
   /**
    * Desistiu em vez de gastar os três chutes. Conta como derrota igual, e
    * serve só para a tela não dizer "acabaram os chutes" a quem ainda tinha.
@@ -48,7 +51,18 @@ const estatisticaZerada = (): Estatistica => ({
   porTentativa: [0, 0, 0],
 })
 
-export const partidaNova = (): Partida => ({ status: 'jogando', palpites: [], usouDica: false })
+export const partidaNova = (): Partida => ({ status: 'jogando', palpites: [], dicasUsadas: 0 })
+
+/**
+ * Partida gravada antes das duas dicas guardava `usouDica: boolean`. O estado
+ * só sobrevive ao dia corrente, então isto vale por poucas horas — mas nessas
+ * horas o jogo mostraria "nenhuma dica usada" para quem já tinha usado a sua.
+ */
+function migrar(p: Partida & { usouDica?: boolean }): Partida {
+  if (typeof p?.dicasUsadas === 'number') return p
+  const { usouDica, ...resto } = p ?? {}
+  return { ...resto, dicasUsadas: usouDica ? 1 : 0 } as Partida
+}
 
 const estadoInicial = (): Estado => ({
   versao: 1,
@@ -67,7 +81,10 @@ export function carregar(diaAtual: string): Estado {
     const estatisticas = { ...estadoInicial().estatisticas, ...salvo.estatisticas }
     // virou o dia: as partidas de ontem não valem mais
     if (salvo.dia !== diaAtual) return { versao: 1, dia: diaAtual, partidas: {}, estatisticas }
-    return { versao: 1, dia: diaAtual, partidas: salvo.partidas ?? {}, estatisticas }
+    const partidas = Object.fromEntries(
+      Object.entries(salvo.partidas ?? {}).map(([n, p]) => [n, migrar(p as Partida)]),
+    ) as Partial<Record<Nivel, Partida>>
+    return { versao: 1, dia: diaAtual, partidas, estatisticas }
   } catch {
     return { ...estadoInicial(), dia: diaAtual }
   }

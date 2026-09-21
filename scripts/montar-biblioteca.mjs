@@ -33,7 +33,8 @@ import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
 import { CANONICOS } from './clubes-canonicos.mjs'
 import { mesmoClube, tokensDoNome } from './nomes-clube.mjs'
-import { montarDica, fatosDoHistorico } from './dicas.mjs'
+import { montarDicas, fatosDoHistorico, naturalidadeSegura } from './dicas.mjs'
+import { torneiosDe, torneiosQueContam } from './torneios.mjs'
 import {
   passagensDoTransfermarkt, idsDoTransfermarkt,
   historicoDoTransfermarkt, perfilDoTransfermarkt,
@@ -76,6 +77,7 @@ for (const c of externos) {
  * pelo menos uma palavra, então basta olhar quem divide alguma.
  */
 const paisDoClube = new Map(catalogo.map((c) => [c.id, c.pais]))
+const nomeDoClube = new Map(catalogo.map((c) => [c.id, c.nome]))
 
 const porToken = new Map()
 for (const c of catalogo) {
@@ -341,12 +343,18 @@ async function trabalhador() {
       nome,
       apelidos: [...new Set([nome, dados.nome, ...apelidosDe(dados.nome)].map((n) => n.toLowerCase()))],
       clubes,
-      dica: montarDica({
+      dicas: montarDicas({
         ...dados,
         posicao: perfil?.posicao ?? dados.posicao,
         pais: perfil?.nacionalidade ?? dados.pais,
         fatos: fatosDoHistorico(historico?.transfers ?? []),
         paises,
+        naturalidade: naturalidadeSegura(
+          perfil?.naturalidade,
+          clubes.map((c) => nomeDoClube.get(c)).filter(Boolean),
+          nome,
+        ),
+        torneios: torneiosQueContam((await torneiosDe([qid]))[qid] ?? []),
       }),
       fama: famaCorrigida(qid, clubes.some((c) => paisDoClube.get(c) === 'BR')),
       qid, tm, obrigatorio: qid in OBRIGATORIOS,
@@ -399,7 +407,7 @@ const bloco = (j) => `  {
     apelidos: [${j.apelidos.map((a) => JSON.stringify(a)).join(', ')}],
     nivel: '${j.nivel}',
     clubes: [${j.clubes.map((c) => `'${c}'`).join(', ')}],
-    dica: ${JSON.stringify(j.dica)},
+    dicas: [${j.dicas.map((d) => JSON.stringify(d)).join(', ')}],
     verificado: true,
     fonte: 'https://www.transfermarkt.com.br/-/transfers/spieler/${j.tm}',
   },`

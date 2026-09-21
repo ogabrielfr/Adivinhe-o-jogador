@@ -25,7 +25,9 @@ function Resultado({ partida }: { partida: Partida }) {
   return (
     <span className="t-rotulo text-xs text-acerto">
       {n === 1 ? 'De primeira' : `Em ${n} chutes`}
-      {partida.usouDica && <span className="text-dica"> · com dica</span>}
+      {partida.dicasUsadas > 0 && (
+        <span className="text-dica"> · com {partida.dicasUsadas === 1 ? 'uma dica' : 'as duas dicas'}</span>
+      )}
     </span>
   )
 }
