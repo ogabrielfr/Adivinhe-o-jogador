@@ -25,6 +25,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run validar-dados
+      - run: npm run teste-palpites
+      - run: npm run teste-nomes
       - run: npm run build
         env:
           GITHUB_PAGES: 'true'

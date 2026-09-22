@@ -15,7 +15,14 @@
   /* linha de cal */
   --color-cal: #f2f0e9;
   --color-cal-500: #8fa096;
-  --color-cal-700: #5c6f64;
+  /*
+   * Era #5c6f64, com contraste de 3,4:1 — abaixo dos 4,5:1 que texto pequeno
+   * pede. É o tom do texto que orienta ("Toque num escudo", a descrição de
+   * cada nível, "Desistir e ver o nome"), e no celular ao sol ele sumia.
+   * Este passa com 5,0:1 no fundo e 4,6:1 nos cartões, e segue mais apagado
+   * que o cal-500, então a hierarquia do texto não muda.
+   */
+  --color-cal-700: #738b7d;
 
   /* só três sinais semânticos, usados com parcimônia */
   --color-acerto: #5bd08a;

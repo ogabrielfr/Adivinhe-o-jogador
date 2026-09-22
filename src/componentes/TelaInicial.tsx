@@ -49,7 +49,7 @@ export function TelaInicial({ dia, data, partidas, estatisticas, aoEscolher }: P
           pela carreira
         </h1>
         <p className="mt-5 max-w-[34ch] text-[15px] leading-relaxed text-cal-500">
-          Os escudos mostram por onde ele passou. Você tem {TENTATIVAS} chutes e uma dica para
+          Os escudos mostram por onde ele passou. Você tem {TENTATIVAS} chutes e duas dicas para
           descobrir quem é.
         </p>
       </header>

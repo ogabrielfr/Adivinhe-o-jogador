@@ -288,10 +288,21 @@ function noClube(nome) {
  */
 const COM_ARTIGO = /^(Rio de Janeiro|Porto|Recife|Cairo|Havre|Haia|Guarujá)$/i
 
+/**
+ * Grafia em português de lugar que o Transfermarkt manda em outra língua ou
+ * sem acento. São os que aparecem nos perfis hoje; o resto já vem certo.
+ */
+const EM_PORTUGUES = {
+  'Sao Paulo': 'São Paulo',
+  Montevideo: 'Montevidéu',
+  London: 'Londres',
+}
+
 /** "Araraquara (SP)" -> "de Araraquara"; "Rio de Janeiro" -> "do Rio de Janeiro" */
 function deOnde(lugar) {
   // o Transfermarkt às vezes anexa a sigla do estado, que não entra na frase
-  const limpo = String(lugar).replace(/\s*\([^)]*\)\s*$/, '').trim()
+  const semSigla = String(lugar).replace(/\s*\([^)]*\)\s*$/, '').trim()
+  const limpo = EM_PORTUGUES[semSigla] ?? semSigla
   return COM_ARTIGO.test(limpo) ? `do ${limpo}` : `de ${limpo}`
 }
 

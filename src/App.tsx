@@ -62,21 +62,26 @@ export function App() {
       const acertou = exato ||
         formasDerivadas(jogador.nome, jogador.apelidos).some((alvo) => pareceIgual(palpite, alvo))
 
-      let resultado: ResultadoChute = 'errou'
+      /**
+       * O resultado sai do estado que está na tela, antes de pedir a
+       * atualização. Antes ele era descoberto DENTRO da função passada ao
+       * setEstado, o que só funcionava porque o React costuma rodá-la na
+       * hora; com duas ações na fila, a função roda depois e um acerto
+       * voltava como erro. A função de atualização continua conferindo tudo
+       * de novo, e é ela que vale para o estado.
+       */
+      const naTela = estado.partidas[nivel] ?? partidaNova()
+      if (naTela.status !== 'jogando') return 'vazio'
+      if (naTela.palpites.some((p) => normalizar(p) === palpite)) return 'repetido'
 
       setEstado((anterior) => {
         const atual = anterior.partidas[nivel] ?? partidaNova()
         if (atual.status !== 'jogando') return anterior
-
         // o mesmo palpite repetido não consome chute
-        if (atual.palpites.some((p) => normalizar(p) === palpite)) {
-          resultado = 'errou'
-          return anterior
-        }
+        if (atual.palpites.some((p) => normalizar(p) === palpite)) return anterior
 
         const palpites = [...atual.palpites, limpo]
         const status = acertou ? 'ganhou' : palpites.length >= TENTATIVAS ? 'perdeu' : 'jogando'
-        resultado = acertou ? 'acertou' : 'errou'
 
         const partidas = { ...anterior.partidas, [nivel]: { ...atual, palpites, status } }
         if (status === 'jogando') return { ...anterior, partidas }
@@ -91,9 +96,9 @@ export function App() {
         }
       })
 
-      return resultado
+      return acertou ? 'acertou' : 'errou'
     },
-    [jogadores, dia],
+    [jogadores, dia, estado.partidas],
   )
 
   /**

@@ -34,3 +34,6 @@ let falhas = 0
 for (const [a, b] of deveCasar) if (!mesmoClube(a, b)) { console.log(`FALHOU (devia casar)     ${a}  |  ${b}`); falhas++ }
 for (const [a, b] of naoDeveCasar) if (mesmoClube(a, b)) { console.log(`FALHOU (não devia casar) ${a}  |  ${b}`); falhas++ }
 console.log(falhas ? `\n${falhas} falha(s)` : `\ntodos os ${deveCasar.length + naoDeveCasar.length} casos passaram`)
+
+// o deploy roda este teste; sem código de saída, uma falha passava calada
+if (falhas) process.exitCode = 1

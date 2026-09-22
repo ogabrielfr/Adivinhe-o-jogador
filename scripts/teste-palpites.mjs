@@ -87,6 +87,9 @@ console.log(bloqueados
   ? `\n${bloqueados} jogadores recusariam o próprio nome`
   : `\nos ${JOGADORES.length} jogadores aceitam o próprio nome`)
 
+// o deploy roda este teste; sem código de saída, uma falha passava calada
+if (falhas || bloqueados) process.exitCode = 1
+
 // e um pedaço ambíguo continua pedindo desempate
 const doisHenriques = JOGADORES.filter((j) => normalizar(j.nome) === 'henrique')
 if (doisHenriques.length > 1) {

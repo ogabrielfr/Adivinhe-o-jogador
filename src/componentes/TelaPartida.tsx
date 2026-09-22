@@ -7,7 +7,7 @@ import { Carreira } from './Carreira'
 import { MarcadorNivel } from './MarcadorNivel'
 import { Compartilhar } from './Compartilhar'
 
-export type ResultadoChute = 'acertou' | 'errou' | 'ambiguo' | 'vazio'
+export type ResultadoChute = 'acertou' | 'errou' | 'ambiguo' | 'repetido' | 'vazio'
 
 interface Props {
   nivel: Nivel
@@ -57,6 +57,11 @@ export function TelaPartida({
     if (resultado === 'vazio') return
     if (resultado === 'ambiguo') {
       setAviso('Mais de um jogador atende por esse nome. Escreva o nome completo.')
+      return
+    }
+    // antes a tela tremia como erro e o contador não mexia: parecia travado
+    if (resultado === 'repetido') {
+      setAviso('Você já tentou esse nome.')
       return
     }
     setTexto('')
@@ -116,19 +121,28 @@ export function TelaPartida({
 
         {acabou ? (
           <section className="assentar text-center" style={{ animationDelay: `${jogador.clubes.length * 70 + 120}ms` }}>
+            {/*
+              O aviso de dica entra no meio da frase, antes do ponto. Colado
+              no fim ficava "Era ele: Com as duas dicas." e o nome vinha na
+              linha de baixo, como se "com as duas dicas" fosse a resposta.
+            */}
             <p className="t-rotulo text-sm text-cal-500">
               {partida.status === 'ganhou'
                 ? partida.palpites.length === 1
-                  ? 'De primeira.'
-                  : `Você acertou no ${partida.palpites.length}º chute.`
+                  ? 'De primeira'
+                  : `Você acertou no ${partida.palpites.length}º chute`
                 : partida.desistiu
-                  ? 'Você desistiu. Era ele:'
-                  : 'Acabaram os chutes. Era ele:'}
+                  ? 'Você desistiu'
+                  : 'Acabaram os chutes'}
               {partida.dicasUsadas > 0 && (
-                <span className="text-dica">
-                  {partida.dicasUsadas === 1 ? ' Com uma dica.' : ' Com as duas dicas.'}
-                </span>
+                <>
+                  ,{' '}
+                  <span className="text-dica">
+                    {partida.dicasUsadas === 1 ? 'com uma dica' : 'com as duas dicas'}
+                  </span>
+                </>
               )}
+              {partida.status === 'ganhou' ? '.' : '. Era ele:'}
             </p>
             <h2 className="t-camisa mt-3 text-[clamp(1.9rem,8.5vw,2.9rem)]">{jogador.nome}</h2>
 
