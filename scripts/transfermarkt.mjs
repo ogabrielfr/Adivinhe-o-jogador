@@ -412,14 +412,56 @@ export async function selecaoDoTransfermarkt(tmId) {
 }
 
 /**
+ * A edição do torneio de um jogo, que nem sempre é o ano da temporada nem o do
+ * jogo.
+ *
+ * Competição de ano civil — Copa, Libertadores, Copa do Brasil — o
+ * Transfermarkt mostra pelo ano ("2020"), e esse é a edição, mesmo quando a
+ * final caiu em janeiro de 2021. Competição europeia vem como temporada
+ * ("15/16"), e aí vale o ano do jogo: a Champions 14/15 é a de 2015, mas o
+ * Mundial de Clubes da temporada 15/16 foi em dezembro de 2015. Tomar o fim da
+ * temporada, como antes, dava ao Messi o Mundial de 2016.
+ *
+ * As edições 2020, 2021 e 2022 do Mundial tiveram a final em fevereiro do ano
+ * seguinte; a de 2000, em janeiro do próprio ano.
+ */
+function edicaoDoJogo(info) {
+  const mostrado = String(info.season?.display ?? '')
+  if (/^\d{4}$/.test(mostrado)) return Number(mostrado)
+  const dia = info.date?.dateTimeUTC ?? ''
+  const ano = Number(dia.slice(0, 4))
+  if (!ano) return Number(info.season?.cyclicalName) || null
+  const adiado = info.competitionId === 'KLUB' && /^(2021|2022|2023)-0[1-3]/.test(dia)
+  return adiado ? ano - 1 : ano
+}
+
+/** Final em jogo único ("FF") ou em ida ("FFH") e volta ("FFR"). */
+const FINAL = /^FF[HR]?$/
+
+/**
+ * Torneio de seleção que vale como dica, pelo id do Transfermarkt. A Copa
+ * América do centenário, de 2016, tem id próprio.
+ */
+const TORNEIO_DE_SELECAO = { FIWC: 'copa', COPA: 'america', CA16: 'america', EURO: 'euro', OLYM: 'olimpiada' }
+
+/**
  * O que o jogador fez em campo, para a dica: jogos e gols por clube, e as
  * finais que disputou, com os gols de cada uma.
  *
  * O cliente pediu dica que aproxime do acerto — o gol decisivo, o ídolo de um
  * time — e o registro de partidas do Transfermarkt tem as duas coisas em
- * dado: a partida da final vem marcada (`competitionGroupId` "FF"), com os
- * gols do jogador nela; os dois do Ronaldo na final de 2002 estão lá. Jogos e
- * gols por clube medem o ídolo: "fez 434 jogos pelo Grêmio".
+ * dado: a partida da final vem marcada, com os gols do jogador nela; os dois
+ * do Ronaldo na final de 2002 estão lá. Jogos e gols por clube medem o ídolo:
+ * "fez 434 jogos pelo Grêmio".
+ *
+ * Final de ida e volta é uma final só: os gols das duas partidas somam, e o
+ * saldo também. Só marcar o jogo único deixava de fora toda final da Copa do
+ * Brasil e dos estaduais, e as Libertadores até 2018.
+ *
+ * Os torneios de seleção saem daqui também: a Copa, a Copa América, a
+ * Eurocopa e a Olimpíada em que ele entrou em campo. O Wikidata, que dava
+ * isso antes, esquecia Copa (o Neymar sem a de 2022) e contava a de técnico
+ * (o Zagallo com seis).
  *
  * Só conta a partida em que ele entrou. Época sem escalação no site fica de
  * fora sozinha — o número sai menor, nunca maior.
@@ -428,7 +470,9 @@ export async function desempenhoDoJogador(tmId) {
   const arquivo = join(CACHE, `desempenho-${tmId}.json`)
   if (existsSync(arquivo)) {
     try {
-      return JSON.parse(readFileSync(arquivo, 'utf8'))
+      const salvo = JSON.parse(readFileSync(arquivo, 'utf8'))
+      // os formatos de antes não tinham a data, as finais de ida e volta e os torneios
+      if (salvo.versao === 3) return salvo
     } catch {
       // cache corrompido: busca de novo
     }
@@ -436,7 +480,9 @@ export async function desempenhoDoJogador(tmId) {
   const dados = await apiDoTransfermarkt(`player/${tmId}/performance-game`)
   if (!dados) return null
   const porClube = {}
-  const finais = []
+  const porFinal = new Map()
+  let jogosDeSelecao = 0
+  const torneios = {}
   for (const jogo of dados.performance ?? []) {
     const info = jogo.gameInformation ?? {}
     const estatisticas = jogo.statistics ?? {}
@@ -450,20 +496,34 @@ export async function desempenhoDoJogador(tmId) {
       registro.jogos++
       registro.gols += gols
     }
-    if (info.competitionGroupId === 'FF') {
-      const ciclo = Number(info.season?.cyclicalName)
-      finais.push({
+    if (info.isNationalGame) {
+      jogosDeSelecao++
+      const torneio = TORNEIO_DE_SELECAO[info.competitionId]
+      const edicao = torneio && edicaoDoJogo(info)
+      if (edicao && !(torneios[torneio] ??= []).includes(edicao)) torneios[torneio].push(edicao)
+    }
+    if (FINAL.test(info.competitionGroupId ?? '')) {
+      const ano = edicaoDoJogo(info)
+      const chave = `${info.competitionId}|${ano}|${clube?.clubId}`
+      const final = porFinal.get(chave) ?? {
         competicao: info.competitionId,
-        // a edição, não o dia: a final da Libertadores de 2020 foi em janeiro de 2021
-        ano: ciclo || Number(info.date?.dateTimeUTC?.slice(0, 4)) || null,
+        ano,
+        data: null,
         clubeTm: clube?.clubId ?? null,
         nacional: Boolean(info.isNationalGame),
-        gols,
-        venceu: (clube?.goalsTotal ?? 0) > (clube?.opponentGoalsTotal ?? 0),
-      })
+        gols: 0,
+        saldo: 0,
+      }
+      final.gols += gols
+      final.saldo += (clube?.goalsTotal ?? 0) - (clube?.opponentGoalsTotal ?? 0)
+      // a data que fica é a do jogo que decidiu: a volta
+      const dia = info.date?.dateTimeUTC?.slice(0, 10) ?? null
+      if (dia && (!final.data || dia > final.data)) final.data = dia
+      porFinal.set(chave, final)
     }
   }
-  const saida = { porClube, finais }
+  for (const anos of Object.values(torneios)) anos.sort((a, b) => a - b)
+  const saida = { versao: 3, porClube, finais: [...porFinal.values()], jogosDeSelecao, torneios }
   writeFileSync(arquivo, JSON.stringify(saida))
   return saida
 }
@@ -487,6 +547,14 @@ export async function competicoesDoTransfermarkt(ids) {
 }
 
 /**
+ * Ano de dois dígitos que caiu no futuro é do século passado: "48/49" é a
+ * Copa América de 1949, não de 2049. Um corte fixo em 50, como antes, jogava
+ * para 2049 tudo que o Ademir e o Zizinho ganharam. A folga cobre título de
+ * temporada que ainda termina.
+ */
+const anoPassado = (ano) => (ano > new Date().getFullYear() + 1 ? ano - 100 : ano)
+
+/**
  * Os títulos do jogador, da página "Títulos" do perfil: cada conquista com o
  * ano e o clube (ou a seleção) pelo qual ela veio.
  *
@@ -503,7 +571,10 @@ export async function titulosDoTransfermarkt(tmId) {
   const arquivo = join(CACHE, `titulos-${tmId}.json`)
   if (existsSync(arquivo)) {
     try {
-      return JSON.parse(readFileSync(arquivo, 'utf8'))
+      // o cache de antes tinha a Copa América de 1949 como 2049
+      return JSON.parse(readFileSync(arquivo, 'utf8')).map((t) => ({
+        ...t, conquistas: t.conquistas.map((q) => ({ ...q, ano: anoPassado(q.ano) })),
+      }))
     } catch {
       // cache corrompido: busca de novo
     }
@@ -512,11 +583,11 @@ export async function titulosDoTransfermarkt(tmId) {
   if (!html || html.length < 20_000) return null
 
   const limpar = (t) => t.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim()
-  // "12/13" é 2013 e "99/00" é 2000: o ano da final é o seguinte ao do início
+  // "12/13" é 2013, "99/00" é 2000 e "48/49" é 1949: o ano da final é o seguinte ao do início
   const ano = (temporada) => {
     const [a, b] = temporada.split('/')
     if (!b) return Number(a) || null
-    return (Number(a) >= 50 ? 1900 : 2000) + Number(a) + 1
+    return anoPassado(2000 + Number(a) + 1)
   }
   const titulos = []
   const blocos = html.split(/<h2[^>]*class="content-box-headline[^"]*"[^>]*>/).slice(1)

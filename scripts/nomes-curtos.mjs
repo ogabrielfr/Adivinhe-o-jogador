@@ -122,8 +122,18 @@ export const NOME_CURTO = {
   'club-universidad-nacional': 'Pumas',
   'los-angeles-football-club': 'Los Angeles FC',
   'toros-neza-futbol-club': 'Toros Neza',
-  // o Junior de Barranquilla do Garrincha; a fonte deu o nome em minúscula
+  // a fonte deu o nome em minúscula, igual ao id: o Junior de Barranquilla do
+  // Garrincha, e os uruguaios e mexicanos de Suárez, Forlán, Cavani e Ronaldinho
   'junior': 'Atlético Junior',
+  'penarol': 'Peñarol',
+  'nacional': 'Nacional',
+  'danubio': 'Danubio',
+  'america': 'América do México',
+  'queretaro': 'Querétaro',
+  'tigres': 'Tigres',
+  'toluca': 'Toluca',
+  'emelec': 'Emelec',
+  'millonarios': 'Millonarios',
 
   // Ásia, África e Oceania
   'adelaide-united-football-club': 'Adelaide United',

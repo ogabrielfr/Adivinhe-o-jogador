@@ -145,6 +145,9 @@ export function TelaPartida({
               {partida.status === 'ganhou' ? '.' : '. Era ele:'}
             </p>
             <h2 className="t-camisa mt-3 text-[clamp(1.9rem,8.5vw,2.9rem)]">{jogador.nome}</h2>
+            {jogador.complemento && (
+              <p className="t-rotulo mt-2 text-sm text-cal-500">{jogador.complemento}</p>
+            )}
 
             <div className="mt-8 flex flex-col items-center gap-3">
               <Compartilhar texto={textoCompartilhar} />

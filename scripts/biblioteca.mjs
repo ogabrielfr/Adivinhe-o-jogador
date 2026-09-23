@@ -15,7 +15,7 @@ const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
 export const ARQUIVO_BIBLIOTECA = join(raiz, 'src/dados/jogadores.json')
 
 /** Ordem fixa dos campos, para o diff de uma mudança mostrar só ela. */
-const CAMPOS = ['id', 'nome', 'apelidos', 'nivel', 'clubes', 'dicas', 'verificado', 'fonte']
+const CAMPOS = ['id', 'nome', 'complemento', 'apelidos', 'nivel', 'clubes', 'dicas', 'verificado', 'fonte']
 
 export function lerBiblioteca() {
   return JSON.parse(readFileSync(ARQUIVO_BIBLIOTECA, 'utf8'))

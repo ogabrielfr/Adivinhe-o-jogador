@@ -30,6 +30,12 @@ export interface Jogador {
   id: string
   /** resposta canônica, exibida no fim da partida */
   nome: string
+  /**
+   * Linha embaixo do nome na revelação, só para quem divide o nome com outro
+   * jogador da biblioteca: posição e o clube em que ele mais jogou. "ADRIANO"
+   * sozinho não diz se era o Imperador ou o lateral do Barcelona.
+   */
+  complemento?: string
   /** outras grafias aceitas como acerto (sem acento e caixa são tratados no código) */
   apelidos: string[]
   nivel: Nivel
