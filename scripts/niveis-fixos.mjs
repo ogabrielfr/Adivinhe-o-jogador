@@ -40,4 +40,14 @@ export const NIVEL_FIXO = {
    * o enigma que ela é.
    */
   'josep-guardiola': 'intermediario',
+
+  /**
+   * Decisões do cliente jogando, no dia em que os dois caíram (23/09): o
+   * Mário Fernandes, lateral do CSKA que defendeu a seleção russa, o torcedor
+   * conhece mas precisa pensar; o Desailly, campeão do mundo pela França, o
+   * torcedor brasileiro não situa pelos escudos. São também exemplos da
+   * régua por amostra: a fama no mundo superestima o europeu.
+   */
+  'mario-fernandes': 'intermediario',
+  'marcel-desailly': 'dificil',
 }
