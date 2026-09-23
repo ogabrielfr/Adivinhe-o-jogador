@@ -16,48 +16,42 @@ import { historicoDoTransfermarkt, passagensDoTransfermarkt, perfilDoTransfermar
 import { montarDicas, fatosDoHistorico, papelConhecido, escalaDosFatos, naturalidadeSegura } from './dicas.mjs'
 import { torneiosDe, torneiosQueContam } from './torneios.mjs'
 import { CARREIRA_FIXA } from './carreiras-corrigidas.mjs'
+import { lerBiblioteca, gravarBiblioteca, idTmDe } from './biblioteca.mjs'
+import { criarResolvedor } from './resolver-clube.mjs'
 import { latinizar } from '../src/logica/texto.ts'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
-const ARQUIVO = join(raiz, 'src/dados/jogadores.ts')
 const ARQUIVO_SELECAO = join(raiz, 'scripts/selecoes-jogadores.json')
 
-// ------------------------------------------------- jogadores do arquivo atual
-const fonte = readFileSync(ARQUIVO, 'utf8')
-const blocos = [...fonte.matchAll(/\{\s*\n\s*id: '([^']+)',[\s\S]*?\n  \},/g)]
-console.log(`jogadores no arquivo: ${blocos.length}`)
-
-const tmDoBloco = (b) => b[0].match(/spieler\/(\d+)/)?.[1] ?? null
-const paisesDoBloco = (b) => b[0].match(/clubes: \[([^\]]*)\]/)?.[1] ?? ''
-const clubesDoBloco = (b) => [...paisesDoBloco(b).matchAll(/'([^']+)'/g)].map((m) => m[1])
+const jogadores = lerBiblioteca()
+console.log(`jogadores na biblioteca: ${jogadores.length}`)
 
 // ------------------------------------------------------ do id do TM ao QID
 const tmPorQid = JSON.parse(readFileSync(join(raiz, 'scripts/tm-jogadores.json'), 'utf8'))
 const qidPorTm = new Map(Object.entries(tmPorQid).map(([qid, tm]) => [String(tm), qid]))
+const qidDoJogador = (j) => qidPorTm.get(idTmDe(j))
 
 const meta = JSON.parse(readFileSync(join(raiz, 'scripts/meta-jogadores.json'), 'utf8'))
-const catalogo = JSON.parse(readFileSync(join(raiz, 'scripts/catalogo-completo.json'), 'utf8'))
-const paisDoClube = new Map(catalogo.map((c) => [c.id, c.pais]))
-const nomeDoClube = new Map(catalogo.map((c) => [c.id, c.nome]))
+const resolvedor = criarResolvedor()
+const paisDoClube = (id) => resolvedor.paisDoClube(id)
+const nomeDoClube = (id) => resolvedor.nomeDoClube(id)
+
 /**
- * id do clube no Transfermarkt -> nome que o jogo mostra.
- *
- * O mapa curado cobre 2585 clubes, o que deixava 17 dos 28 jogadores com
- * tempo de casa sem saber o nome da casa. `clubes-externos.json` guarda a URL
- * do escudo no Transfermarkt, e o id do clube está dentro dela: é o mesmo
- * preenchimento que o `reparar` usa para resolver carreira.
+ * id do clube no Transfermarkt -> nome que o jogo mostra, para a dica de tempo
+ * de casa. Vem do mesmo mapa que resolve as carreiras, e o que ele não cobre
+ * é aprendido com as próprias carreiras mais abaixo: sem o Manchester United
+ * no mapa, a dica caía no nome abreviado do Transfermarkt e saía "no Man Utd".
  */
 const nomePorTm = new Map(
-  Object.entries(JSON.parse(readFileSync(join(raiz, 'scripts/clubes-transfermarkt.json'), 'utf8')))
-    .map(([tm, id]) => [String(tm), nomeDoClube.get(id)])
-    .filter(([, nome]) => nome),
+  [...resolvedor.idPorTm].map(([tm, id]) => [String(tm), nomeDoClube(id)]).filter(([, nome]) => nome),
 )
-const idPorQid = new Map(catalogo.filter((c) => c.qid).map((c) => [c.qid, c.id]))
-for (const c of JSON.parse(readFileSync(join(raiz, 'scripts/clubes-externos.json'), 'utf8'))) {
-  const tm = c.url?.match(/\/wappen\/head\/(\d+)\.png/)?.[1]
-  const nome = nomeDoClube.get(idPorQid.get(c.qid))
-  if (tm && nome && !nomePorTm.has(tm)) nomePorTm.set(tm, nome)
+const passagensDe = new Map()
+for (const j of jogadores) {
+  const tm = idTmDe(j)
+  passagensDe.set(j.id, tm ? await passagensDoTransfermarkt(tm) : null)
 }
+// as bandeiras antes de resolver por nome, como no `reparar`
+resolvedor.aquecer([...passagensDe.values()])
 
 // --------------------------------------------- jogos pela seleção principal
 /**
@@ -68,7 +62,7 @@ const selecoes = existsSync(ARQUIVO_SELECAO)
   ? JSON.parse(readFileSync(ARQUIVO_SELECAO, 'utf8'))
   : {}
 
-const qidsFaltando = [...new Set(blocos.map((b) => qidPorTm.get(tmDoBloco(b))).filter(Boolean))]
+const qidsFaltando = [...new Set(jogadores.map(qidDoJogador).filter(Boolean))]
   .filter((q) => !(q in selecoes))
 
 if (qidsFaltando.length) {
@@ -101,10 +95,9 @@ if (qidsFaltando.length) {
  * Wikidata e fica em cache, porque consulta perdida faria o jogador parecer
  * que nunca jogou torneio nenhum.
  */
-const torneios = await torneiosDe(blocos.map((b) => qidPorTm.get(tmDoBloco(b))).filter(Boolean))
+const torneios = await torneiosDe(jogadores.map(qidDoJogador).filter(Boolean))
 
 // --------------------------------------------------------------- montagem
-let novoTexto = fonte
 let semFato = 0
 let semPerfil = 0
 let renomeados = 0
@@ -118,8 +111,8 @@ const dicas = new Map()
  * na biblioteca —, então nada pode ser escrito antes de ler todos.
  */
 const coletado = []
-for (const b of blocos) {
-  const tm = tmDoBloco(b)
+for (const j of jogadores) {
+  const tm = idTmDe(j)
   const qid = qidPorTm.get(tm)
   const m = meta[qid] ?? {}
   const sel = selecoes[qid] ?? { selecao: null, jogos: 0 }
@@ -132,29 +125,19 @@ for (const b of blocos) {
   const perfil = tm ? await perfilDoTransfermarkt(tm) : null
   if (!perfil?.posicao) semPerfil++
   const historico = tm ? await historicoDoTransfermarkt(tm) : null
-  const passagens = tm ? await passagensDoTransfermarkt(tm) : null
+  const passagens = passagensDe.get(j.id)
   const fatos = fatosDoHistorico(historico?.transfers ?? [])
-  const idsDeClube = clubesDoBloco(b)
-  const paises = new Set(idsDeClube.map((x) => paisDoClube.get(x))).size
+  const idsDeClube = j.clubes
+  const paises = new Set(idsDeClube.map((x) => paisDoClube(x))).size
 
-  /**
-   * Aprende o nome bonito de cada clube com os próprios jogadores.
-   *
-   * O mapa curado só tem clube que precisou de entrada à mão, então faltavam
-   * justamente os grandes — sem o Manchester United nele, a dica caía no nome
-   * abreviado do Transfermarkt e saía "no Man Utd". Quando a lista de
-   * passagens e a de clubes resolvidos têm o mesmo tamanho, as duas estão na
-   * mesma ordem e o par id-do-TM/clube-nosso é certo; é só anotar.
-   */
-  if (passagens && passagens.length === idsDeClube.length) {
-    passagens.forEach((p, i) => {
-      const nome = nomeDoClube.get(idsDeClube[i])
-      if (p.idTm && nome && !nomePorTm.has(String(p.idTm))) nomePorTm.set(String(p.idTm), nome)
-    })
+  // o clube de cada passagem que resolveu por nome também dá nome ao id dela
+  for (const p of passagens ? resolvedor.montarCarreira(passagens).resolvidas : []) {
+    const nome = p.id && nomeDoClube(p.id)
+    if (p.idTm && nome && !nomePorTm.has(String(p.idTm))) nomePorTm.set(String(p.idTm), nome)
   }
 
   coletado.push({
-    bloco: b,
+    jogador: j,
     perfil,
     dados: {
       ...m,
@@ -163,8 +146,8 @@ for (const b of blocos) {
       jogosSelecao: sel.jogos, selecao: sel.selecao, fatos, paises,
       naturalidade: naturalidadeSegura(
         perfil?.naturalidade,
-        idsDeClube.map((id) => nomeDoClube.get(id)).filter(Boolean),
-        b[0].match(/nome: "((?:[^"\\]|\\.)*)"/)?.[1] ?? '',
+        idsDeClube.map((id) => nomeDoClube(id)).filter(Boolean),
+        j.nome,
       ),
       torneios: torneiosQueContam(torneios[qid] ?? []),
       /**
@@ -175,7 +158,7 @@ for (const b of blocos) {
        */
       clubeDaCasa: nomePorTm.get(String(fatos.clubeDaPermanencia)) ?? fatos.nomeDaPermanencia ?? null,
       // carreira corrigida à mão: a linha do tempo do Transfermarkt não vale
-      historicoSuspeito: b[1] in CARREIRA_FIXA,
+      historicoSuspeito: j.id in CARREIRA_FIXA,
     },
   })
 }
@@ -183,8 +166,8 @@ for (const b of blocos) {
 const escala = escalaDosFatos(coletado.map((c) => c.dados))
 
 // ------------------------------------- segunda passada: escrever cada dica
-for (const { bloco: b, perfil, dados } of coletado) {
-  const id = b[1]
+for (const { jogador: j, perfil, dados } of coletado) {
+  const id = j.id
 
   const par = montarDicas(dados, escala)
   // dica repetida não é dica; a segunda é a que precisa distinguir
@@ -195,9 +178,7 @@ for (const { bloco: b, perfil, dados } of coletado) {
     posicoesSoltas.set(perfil.posicao, (posicoesSoltas.get(perfil.posicao) ?? 0) + 1)
   }
 
-  const antigo = b[0]
-  const escritas = `dicas: [${par.map((d) => JSON.stringify(d)).join(', ')}]`
-  let atualizado = antigo.replace(/dicas?: (?:\[[^\]]*\]|"(?:[^"\\]|\\.)*")/, escritas)
+  j.dicas = par
 
   /**
    * O nome da camisa vira o nome canônico quando é mais curto que o de
@@ -205,25 +186,19 @@ for (const { bloco: b, perfil, dados } of coletado) {
    * continua valendo como palpite, porque quem souber o nome completo também
    * tem que acertar.
    */
-  const nomeAtual = antigo.match(/nome: "((?:[^"\\]|\\.)*)"/)?.[1]
   // sósia grego ou cirílico vira letra latina antes de virar nome na tela
   const nomeTm = perfil?.nome ? latinizar(perfil.nome) : null
-  if (nomeTm && nomeAtual && nomeTm !== nomeAtual &&
-      nomeTm.split(' ').length < nomeAtual.split(' ').length) {
-    const apelidos = new Set([nomeAtual.toLowerCase(), nomeTm.toLowerCase()])
-    atualizado = atualizado
-      .replace(/nome: "(?:[^"\\]|\\.)*"/, `nome: ${JSON.stringify(nomeTm)}`)
-      .replace(/apelidos: \[[^\]]*\]/, `apelidos: [${[...apelidos].map((a) => JSON.stringify(a)).join(', ')}]`)
+  if (nomeTm && nomeTm !== j.nome && nomeTm.split(' ').length < j.nome.split(' ').length) {
+    j.apelidos = [...new Set([j.nome.toLowerCase(), nomeTm.toLowerCase()])]
+    j.nome = nomeTm
     renomeados++
   }
-
-  novoTexto = novoTexto.replace(antigo, atualizado)
 }
 
-writeFileSync(ARQUIVO, novoTexto)
+gravarBiblioteca(jogadores)
 
 const distintas = new Set(dicas.keys()).size
-console.log(`\n${distintas} segundas dicas distintas para ${blocos.length} jogadores`)
+console.log(`\n${distintas} segundas dicas distintas para ${jogadores.length} jogadores`)
 if (semFato) console.log(`  ${semFato} continuam repetidas: faltam fatos para separá-las`)
 if (semPerfil) console.log(`  ${semPerfil} sem posição no Transfermarkt`)
 console.log(`${renomeados} passaram a usar o nome da camisa em vez do de registro`)

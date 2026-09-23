@@ -22,15 +22,14 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
 import { visualizacoesDe } from './visualizacoes.mjs'
-import { passagensDoTransfermarkt, perfilDoTransfermarkt, historicoDoTransfermarkt } from './transfermarkt.mjs'
+import { passagensDoTransfermarkt, perfilDoTransfermarkt, historicoDoTransfermarkt, jogosPorClube } from './transfermarkt.mjs'
 import { montarDicas, fatosDoHistorico, naturalidadeSegura } from './dicas.mjs'
 import { torneiosDe, torneiosQueContam } from './torneios.mjs'
-import { mesmoClube, tokensDoNome } from './nomes-clube.mjs'
-import { CANONICOS } from './clubes-canonicos.mjs'
+import { lerBiblioteca, gravarBiblioteca, idTmDe } from './biblioteca.mjs'
+import { criarResolvedor } from './resolver-clube.mjs'
 import { latinizar } from '../src/logica/texto.ts'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
-const ARQUIVO = join(raiz, 'src/dados/jogadores.ts')
 const ARQUIVO_VIEWS = join(raiz, 'scripts/visualizacoes-jogadores.json')
 
 /** Abaixo disto, ninguém procura o nome em português. */
@@ -38,51 +37,19 @@ const PISO = Number(process.env.PISO ?? 250)
 /** O substituto entra com folga, senão a troca só adia o problema. */
 const PISO_DO_SUBSTITUTO = Number(process.env.PISO_NOVO ?? 800)
 
-const fonte = readFileSync(ARQUIVO, 'utf8')
-const blocos = [...fonte.matchAll(/\{\s*\n\s*id: '([^']+)',[\s\S]*?\n {2}\},/g)]
-console.log(`jogadores no arquivo: ${blocos.length}`)
+const jogadores = lerBiblioteca()
+console.log(`jogadores na biblioteca: ${jogadores.length}`)
 
 const tmPorQid = JSON.parse(readFileSync(join(raiz, 'scripts/tm-jogadores.json'), 'utf8'))
 const qidPorTm = new Map(Object.entries(tmPorQid).map(([q, t]) => [String(t), q]))
 const meta = JSON.parse(readFileSync(join(raiz, 'scripts/meta-jogadores.json'), 'utf8'))
 const candidatos = JSON.parse(readFileSync(join(raiz, 'scripts/candidatos-jogadores.json'), 'utf8'))
-const catalogo = JSON.parse(readFileSync(join(raiz, 'scripts/catalogo-completo.json'), 'utf8'))
-const externos = JSON.parse(readFileSync(join(raiz, 'scripts/clubes-externos.json'), 'utf8'))
 const views = JSON.parse(readFileSync(ARQUIVO_VIEWS, 'utf8'))
 
-// --------------------------------------------------- resolução de clube
-const idPorQid = new Map(catalogo.filter((c) => c.qid).map((c) => [c.qid, c.id]))
-const idPorTm = new Map(Object.entries(JSON.parse(readFileSync(join(raiz, 'scripts/clubes-transfermarkt.json'), 'utf8'))))
-for (const c of externos) {
-  const tm = c.url?.match(/\/wappen\/head\/(\d+)\.png/)?.[1]
-  const nosso = idPorQid.get(c.qid)
-  if (tm && nosso && !idPorTm.has(tm)) idPorTm.set(tm, nosso)
-}
-const paisDoClube = new Map(catalogo.map((c) => [c.id, c.pais]))
-const nomeDoClube = new Map(catalogo.map((c) => [c.id, c.nome]))
-const porToken = new Map()
-for (const c of catalogo) {
-  for (const t of tokensDoNome(c.nome)) {
-    if (t.length < 3) continue
-    if (!porToken.has(t)) porToken.set(t, [])
-    porToken.get(t).push(c)
-  }
-}
-function resolverClube(passagem) {
-  if (passagem.idTm && idPorTm.has(passagem.idTm)) return idPorTm.get(passagem.idTm)
-  const ids = new Set()
-  const vistos = new Set()
-  for (const t of tokensDoNome(passagem.nome)) {
-    for (const c of porToken.get(t) ?? []) {
-      if (vistos.has(c.id)) continue
-      vistos.add(c.id)
-      if (mesmoClube(c.nome, passagem.nome)) ids.add(c.id)
-    }
-  }
-  if (ids.size === 1) return [...ids][0]
-  const curados = [...ids].filter((id) => id in CANONICOS)
-  return curados.length === 1 ? curados[0] : null
-}
+const resolvedor = criarResolvedor()
+const daBiblioteca = []
+for (const j of jogadores) daBiblioteca.push(await passagensDoTransfermarkt(idTmDe(j)))
+resolvedor.aquecer(daBiblioteca)
 
 // ------------------------------------------- título do artigo em português
 async function artigosDe(qids) {
@@ -103,13 +70,9 @@ async function artigosDe(qids) {
   return mapa
 }
 
-const daCasa = blocos.map((b) => {
-  const tm = b[0].match(/spieler\/(\d+)/)?.[1] ?? null
-  return {
-    bloco: b, id: b[1], tm, qid: qidPorTm.get(tm),
-    nome: b[0].match(/nome: "((?:[^"\\]|\\.)*)"/)?.[1] ?? b[1],
-    nivel: b[0].match(/nivel: '([^']+)'/)?.[1] ?? '?',
-  }
+const daCasa = jogadores.map((j) => {
+  const tm = idTmDe(j)
+  return { jogador: j, id: j.id, tm, qid: qidPorTm.get(tm), nome: j.nome, nivel: j.nivel }
 })
 
 const artigoDaCasa = await artigosDe([...new Set(daCasa.map((j) => j.qid).filter(Boolean))])
@@ -159,16 +122,11 @@ for (const qid of fila) {
   const passagens = await passagensDoTransfermarkt(tm)
   if (!passagens) continue
 
-  const clubes = []
-  let falhou = false
-  for (const p of passagens) {
-    const id = resolverClube(p)
-    if (!id) { falhou = true; break }
-    if (clubes[clubes.length - 1] !== id) clubes.push(id)
-  }
-  if (falhou || clubes.length < 2 || clubes.length > 12) continue
-
   const dados = meta[qid]
+  // sem teto de escudos: carreira longa e confusa é a graça do jogo
+  const { clubes, travas } = resolvedor.montarCarreira(passagens, { nasc: dados.nasc, jogos: await jogosPorClube(tm) })
+  if (travas.length || clubes.length < 2) continue
+
   const perfil = await perfilDoTransfermarkt(tm)
   // o Transfermarkt já mandou "Arda Güler" com alfa grego no lugar do A
   const nome = latinizar(
@@ -189,10 +147,10 @@ for (const qid of fila) {
       posicao: perfil?.posicao ?? dados.posicao,
       pais: perfil?.nacionalidade ?? dados.pais,
       fatos: fatosDoHistorico(historico?.transfers ?? []),
-      paises: new Set(clubes.map((c) => paisDoClube.get(c))).size,
+      paises: new Set(clubes.map((c) => resolvedor.paisDoClube(c))).size,
       naturalidade: naturalidadeSegura(
         perfil?.naturalidade,
-        clubes.map((c) => nomeDoClube.get(c)).filter(Boolean),
+        clubes.map((c) => resolvedor.nomeDoClube(c)).filter(Boolean),
         nome,
       ),
       torneios: torneiosQueContam((await torneiosDe([qid]))[qid] ?? []),
@@ -208,25 +166,22 @@ if (escolhidos.length < aSair.length) {
 }
 
 // ---------------------------------------------------------------- troca
-const aspas = (s) => JSON.stringify(s)
-let novoTexto = fonte
 for (let i = 0; i < escolhidos.length; i++) {
   const sai = aSair[i]
   const entra = escolhidos[i]
-  const nivel = sai.nivel // `npm run reparar` recalcula depois
-  const bloco = `  {
-    id: '${entra.id}',
-    nome: ${aspas(entra.nome)},
-    apelidos: [${entra.apelidos.map(aspas).join(', ')}],
-    nivel: '${nivel}',
-    clubes: [${entra.clubes.map((c) => `'${c}'`).join(', ')}],
-    dicas: [${entra.dicas.map(aspas).join(', ')}],
+  const lugar = jogadores.indexOf(sai.jogador)
+  jogadores[lugar] = {
+    id: entra.id,
+    nome: entra.nome,
+    apelidos: entra.apelidos,
+    nivel: sai.nivel, // a régua de nível está em revisão; o substituto herda o lugar de quem sai
+    clubes: entra.clubes,
+    dicas: entra.dicas,
     verificado: true,
-    fonte: 'https://www.transfermarkt.com.br/-/transfers/spieler/${entra.tm}',
-  },`
-  novoTexto = novoTexto.replace(sai.bloco[0], bloco)
+    fonte: `https://www.transfermarkt.com.br/-/transfers/spieler/${entra.tm}`,
+  }
   console.log(`  ${sai.nome} (${sai.procura}) -> ${entra.nome} (${entra.procura})`)
 }
-writeFileSync(ARQUIVO, novoTexto)
+gravarBiblioteca(jogadores)
 
-console.log(`\n${escolhidos.length} trocados. Rode: npm run reparar && npm run dicas && npm run catalogo`)
+console.log(`\n${escolhidos.length} trocados. Rode: npm run dicas && npm run catalogo`)

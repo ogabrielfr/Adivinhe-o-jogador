@@ -135,6 +135,31 @@ export const SEM_ESCUDO = {
   'shanghai-sipg': { nome: "Shanghai Port", pais: 'CN', cores: ['#E30613', '#1A1A1A'], wd: 'Q564216' },
   'shandong-luneng': { nome: "Shandong Taishan", pais: 'CN', cores: ['#F58220', '#1A1A1A'], wd: 'Q1046367' },
   'guangzhou-evergrande': { nome: "Guangzhou Evergrande", pais: 'CN', cores: ['#E30613', '#FFD700'], wd: 'Q130521' },
+
+  /**
+   * Clubes que o casamento por nome trocava por um homônimo — de outra época,
+   * outro país ou só parecido. `tm` busca o escudo no Transfermarkt quando o
+   * Wikidata não tem, ou tem o de outra fase do clube.
+   *
+   * - Yokohama Flügels (1964–1998): virava o Yokohama FC, fundado em 1998 pelos
+   *   torcedores do Flügels. Zinho e César Sampaio.
+   * - Miami FC de 2006: virava o Inter Miami, de 2018. Zinho. Fica com o brasão
+   *   desenhado: o clube virou Fort Lauderdale Strikers, e é esse o escudo que
+   *   as duas fontes mostram.
+   * - Belenenses de 1991: virava o Belenenses SAD, de 2018. Mirandinha. O
+   *   escudo é o da cruz, do clube; o do "B" é o da SAD.
+   * - Campinas FC (1998): virava o Campinas de Mato Grosso. Careca.
+   * - Atlético Dallas: virava o FC Dallas. Chicharito.
+   * - Quick Boys, de Katwijk: virava o Sport Boys do Peru. Kuyt.
+   * - Miami United: virava o United FC dos Emirados. Adriano.
+   */
+  'yokohama-flugels': { nome: "Yokohama Flügels", pais: 'JP', cores: ['#0A3D91', '#FFFFFF'], wd: 'Q1368488', tm: '26093' },
+  'miami-fc-2006': { nome: "Miami FC", pais: 'US', cores: ['#0A3D91', '#FFFFFF'] },
+  'os-belenenses': { nome: "Belenenses", pais: 'PT', cores: ['#0A3D91', '#FFFFFF'], wd: 'Q216510', tm: '68608' },
+  'campinas-fc': { nome: "Campinas FC", pais: 'BR', cores: ['#E30613', '#FFFFFF'], wd: 'Q48855991', tm: '23002' },
+  'atletico-dallas': { nome: "Atlético Dallas", pais: 'US', cores: ['#E30613', '#0A3D91'], wd: 'Q131384708' },
+  'quick-boys': { nome: "Quick Boys", pais: 'NL', cores: ['#0A3D91', '#FFFFFF'], wd: 'Q2108810', tm: '7110' },
+  'miami-united': { nome: "Miami United", pais: 'US', cores: ['#1A1A1A', '#FFFFFF'], wd: 'Q16844935', tm: '46181' },
 }
 
 /**
@@ -143,3 +168,36 @@ export const SEM_ESCUDO = {
  * não bate com o id curto vindo do sprite brasileiro.
  */
 export const DESCARTAR = ['interrs', 'santossp', 'vascodagama', 'sportrecife', 'atletico-pr', 'atleticomg', 'atleticogo', 'atleticopr', 'pontepreta', 'saopaulo']
+
+/**
+ * Pares id-do-clube-no-Transfermarkt -> clube do catálogo, conferidos à mão.
+ * Vencem o que `npm run mapa-tm` tira do Wikidata.
+ *
+ * Existem para o clube cujo QID no catálogo não é dele (e por isso não dá par
+ * nenhum) e para o clube que o Transfermarkt registra com um id que o
+ * Wikidata não conhece. Cada um foi conferido pela passagem que o usa.
+ */
+export const PARES_TM = {
+  // o QID do catálogo é o do time feminino (2015)
+  398: 'lazio',
+  // o QID do catálogo aponta um homônimo fundado em 2008
+  449: 'trabzonspor',
+  // "Willem II" terminava em "II" e caía no filtro de time reserva; Frenkie de Jong
+  403: 'willem-ii',
+  // o Al-Ahli de Dubai antes da fusão de 2017, que o Transfermarkt guarda com outro id; Everton Ribeiro
+  15541: 'al-ahli-emirados-arabes-unidos',
+  // Talleres de Remedios de Escalada, não o de Córdoba; Zanetti
+  14519: 'club-atletico-talleres-remedios-de-escalada',
+  // "Tigres UANL" tem uma palavra que o nosso "Tigres" não tem; Rafael Sobis e Enner Valencia
+  7055: 'tigres',
+  // o catálogo tem o Betis duas vezes, e o nome inteiro do Transfermarkt casava com a cópia
+  150: 'real-betis',
+  // os homônimos de SEM_ESCUDO
+  26093: 'yokohama-flugels',
+  9713: 'miami-fc-2006',
+  68608: 'os-belenenses',
+  23002: 'campinas-fc',
+  130372: 'atletico-dallas',
+  7110: 'quick-boys',
+  46181: 'miami-united',
+}

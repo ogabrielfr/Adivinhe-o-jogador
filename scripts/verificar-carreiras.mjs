@@ -48,7 +48,23 @@ const log = (...a) => { if (!comoJson) console.log(...a) }
 // ------------------------------------------------------- resolução de QID
 const cache = existsSync(ARQUIVO_CACHE) ? JSON.parse(readFileSync(ARQUIVO_CACHE, 'utf8')) : {}
 
+/**
+ * O QID sai do id do Transfermarkt que a `fonte` de cada jogador já traz, e
+ * não de busca por nome. Pelo nome, "Jorginho" virava o Jorginho do Chelsea,
+ * "Adriano" o Imperador e "Alisson" outro Alisson: um terço das divergências
+ * que esta conferência apontava era comparação com a pessoa errada.
+ */
+const tmPorQid = JSON.parse(readFileSync(join(raiz, 'scripts/tm-jogadores.json'), 'utf8'))
+const qidPorTm = new Map(Object.entries(tmPorQid).map(([qid, tm]) => [String(tm), qid]))
+
 async function qidDoJogador(jogador) {
+  const peloTm = qidPorTm.get(jogador.fonte?.match(/spieler\/(\d+)/)?.[1])
+  if (peloTm) {
+    cache[jogador.id] = { ...cache[jogador.id], qid: peloTm, termo: 'id do Transfermarkt' }
+    return peloTm
+  }
+  // sem id do Transfermarkt na fonte: a busca por nome é o último recurso, e pode errar de pessoa
+  log(`         aviso: ${jogador.id} sem id do Transfermarkt; buscando pelo nome`)
   if (cache[jogador.id]?.qid) return cache[jogador.id].qid
   for (const termo of [jogador.nome, ...jogador.apelidos]) {
     for (const idioma of ['pt', 'en']) {
@@ -124,11 +140,8 @@ const periodo = (p) => (p.inicio || p.fim ? ` (${p.inicio || '?'}–${p.fim || '
 
 const SIGLAS = { wikidata: 'wd', wikipedia: 'wp', transfermarkt: 'tm' }
 
-/** Resolve os ids do Transfermarkt de todos de uma vez, antes do laço. */
-const qidsConhecidos = lista.map((j) => cache[j.id]?.qid).filter(Boolean)
-const idTm = qidsConhecidos.length
-  ? await idsDoTransfermarkt(qidsConhecidos).catch(() => new Map())
-  : new Map()
+/** O id do Transfermarkt vem da própria `fonte`; o Wikidata só cobre quem não tem. */
+const idTmDaFonte = (j) => j.fonte?.match(/spieler\/(\d+)/)?.[1] ?? null
 
 const relatorio = []
 let conferem = 0
@@ -141,7 +154,7 @@ for (const j of lista) {
 
     if (!cache[j.id].artigo) cache[j.id].artigo = await artigoDe(qid)
     const artigo = cache[j.id].artigo
-    const tm = idTm.get(qid) ?? (await idsDoTransfermarkt([qid]).catch(() => new Map())).get(qid)
+    const tm = idTmDaFonte(j) ?? (await idsDoTransfermarkt([qid]).catch(() => new Map())).get(qid)
 
     // as três fontes; null distingue "não consultei / não veio" de "veio vazia"
     const wikidata = await carreiraDe(qid)

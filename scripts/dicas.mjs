@@ -16,6 +16,7 @@
  * A dica nunca cita o nome do jogador nem um clube que está à mostra; quem
  * garante isso é `npm run validar-dados`.
  */
+import { NAO_E_CLUBE, jaAconteceu } from './transfermarkt.mjs'
 
 /**
  * O rótulo de posição vem do Wikidata numa mistura de português de Portugal e
@@ -138,12 +139,6 @@ export function anoDaTemporada(t) {
 }
 
 // ------------------------------------------------------------------ fatos
-/**
- * O que o Transfermarkt lista como destino sem ser clube. Sem este filtro,
- * "Pausa" — o intervalo de carreira — virava tempo de casa, e a dica dizia
- * "ficou 6 anos seguidos no Pausa". Mesma lista de transfermarkt.mjs.
- */
-const NAO_E_CLUBE = /^(sem clube|aposentad|fim de carreira|carreira encerrada|unknown|retired|pausa)/i
 
 const EMPRESTIMO = /empr[eé]stimo/i
 const FIM_DE_EMPRESTIMO = /fim do empr[eé]stimo/i
@@ -167,7 +162,9 @@ const paisDaBandeira = (url) => String(url ?? '').match(/\/(\d+)\.png/)?.[1] ?? 
  * é dica. Tempo de casa, empréstimo e idade da mudança de país, não: são
  * forma de carreira invisível no escudo.
  */
-export function fatosDoHistorico(transferencias = []) {
+export function fatosDoHistorico(todas = []) {
+  // o fim de um empréstimo em curso vem com data futura e não é fato ainda
+  const transferencias = todas.filter((t) => jaAconteceu(t))
   let maiorTaxa = null
   let maiorTaxaAno = null
   let valorPico = null

@@ -105,20 +105,6 @@
   "qid": "Q2158769"
  },
  {
-  "id": "a-e-karitsa-f-c",
-  "nome": "A.E. Karitsa F.C.",
-  "pais": "GR",
-  "escudo": "a-e-karitsa-f-c.png",
-  "qid": "Q48837039"
- },
- {
-  "id": "a-e-kifisia-f-c",
-  "nome": "A.E. Kifisia F.C.",
-  "pais": "GR",
-  "escudo": "a-e-kifisia-f-c.png",
-  "qid": "Q16245443"
- },
- {
   "id": "a-e-trikala",
   "nome": "A.E. Trikala",
   "pais": "GR",
@@ -431,7 +417,7 @@
   "nome": "Aarhus GF",
   "pais": "DK",
   "escudo": "aarhus-gf.png",
-  "qid": null
+  "qid": "Q301431"
  },
  {
   "id": "abaete-futebol-clube",
@@ -508,7 +494,7 @@
   "nome": "AC Ajaccio",
   "pais": "FR",
   "escudo": "ac-ajaccio.png",
-  "qid": null
+  "qid": "Q270051"
  },
  {
   "id": "ac-connecticut",
@@ -543,7 +529,7 @@
   "nome": "AC Sparta Prague",
   "pais": "CZ",
   "escudo": "ac-sparta-prague.png",
-  "qid": null
+  "qid": "Q193481"
  },
  {
   "id": "academia-deportiva-cantolao",
@@ -732,7 +718,7 @@
   "nome": "AD Ceuta FC",
   "pais": "ES",
   "escudo": "ad-ceuta-fc.png",
-  "qid": null
+  "qid": "Q5773365"
  },
  {
   "id": "ad-comerciantes-fc",
@@ -768,6 +754,13 @@
   "pais": "TR",
   "escudo": "adana-demirspor.png",
   "qid": "Q352251"
+ },
+ {
+  "id": "adanaspor",
+  "nome": "Adanaspor",
+  "pais": "TR",
+  "escudo": "adanaspor.png",
+  "qid": "Q352270"
  },
  {
   "id": "adap-galo-maringa-futebol-clube",
@@ -823,7 +816,7 @@
   "nome": "AE Kifisia",
   "pais": "GR",
   "escudo": "ae-kifisia.png",
-  "qid": null
+  "qid": "Q16245443"
  },
  {
   "id": "ae-kifisias",
@@ -837,7 +830,7 @@
   "nome": "AE Larisa",
   "pais": "GR",
   "escudo": "ae-larisa.png",
-  "qid": null
+  "qid": "Q48837039"
  },
  {
   "id": "ae-mylopotamos-f-c",
@@ -1138,7 +1131,7 @@
   "nome": "Ajax",
   "pais": "NL",
   "escudo": "ajax.png",
-  "qid": null
+  "qid": "Q81888"
  },
  {
   "id": "ajax-amsterdam",
@@ -1558,7 +1551,7 @@
   "nome": "Al-Nassr",
   "pais": "SA",
   "escudo": "al-nassr.svg",
-  "qid": "Q115804941"
+  "qid": "Q482764"
  },
  {
   "id": "al-okhdood",
@@ -1579,7 +1572,7 @@
   "nome": "Al-Qadsiah",
   "pais": "SA",
   "escudo": "al-qadsiah.svg",
-  "qid": "Q123514942"
+  "qid": "Q286191"
  },
  {
   "id": "al-qaisumah-fc",
@@ -1838,7 +1831,7 @@
   "nome": "Alanyaspor",
   "pais": "TR",
   "escudo": "alanyaspor.png",
-  "qid": "Q352270"
+  "qid": "Q1636019"
  },
  {
   "id": "alaves",
@@ -2709,6 +2702,13 @@
   "qid": "Q4784289"
  },
  {
+  "id": "araxa-esporte-clube",
+  "nome": "Araxá Esporte Clube",
+  "pais": "BR",
+  "escudo": "araxa-esporte-clube.svg",
+  "qid": "Q4784545"
+ },
+ {
   "id": "araz-pfk",
   "nome": "Araz PFK",
   "pais": "AZ",
@@ -2849,6 +2849,13 @@
   "qid": "Q97204408"
  },
  {
+  "id": "arona-calcio",
+  "nome": "Arona Calcio",
+  "pais": "IT",
+  "escudo": "arona-calcio.png",
+  "qid": "Q3626746"
+ },
+ {
   "id": "arosa-sc",
   "nome": "Arosa SC",
   "pais": "ES",
@@ -2867,7 +2874,7 @@
   "nome": "Arsenal",
   "pais": "EN",
   "escudo": "arsenal.svg",
-  "qid": "Q971274"
+  "qid": "Q9617"
  },
  {
   "id": "arsenal-esporte-clube",
@@ -4095,6 +4102,13 @@
   "qid": "Q18711"
  },
  {
+  "id": "asuka-fc",
+  "nome": "Asuka FC",
+  "pais": "JP",
+  "escudo": "asuka-fc.png",
+  "qid": "Q48747154"
+ },
+ {
   "id": "atalanta",
   "nome": "Atalanta",
   "pais": "IT",
@@ -4113,7 +4127,7 @@
   "nome": "Athens Kallithea",
   "pais": "GR",
   "escudo": "athens-kallithea.png",
-  "qid": null
+  "qid": "Q1547133"
  },
  {
   "id": "atherton-collieries-a-f-c",
@@ -4162,7 +4176,7 @@
   "nome": "Athletico Paranaense",
   "pais": "BR",
   "escudo": "athletico-pr.svg",
-  "qid": "Q4784545"
+  "qid": "Q260834"
  },
  {
   "id": "athletikos-podosferikos-omilos-ellinon-lefkosias",
@@ -4331,6 +4345,13 @@
   "pais": "BR",
   "escudo": "atletico-clube-tres-coracoes.png",
   "qid": "Q9636771"
+ },
+ {
+  "id": "atletico-dallas",
+  "nome": "Atlético Dallas",
+  "pais": "US",
+  "escudo": "atletico-dallas.png",
+  "qid": "Q131384708"
  },
  {
   "id": "atletico-de-kolkata",
@@ -4617,7 +4638,7 @@
   "nome": "Augsburg",
   "pais": "DE",
   "escudo": "augsburg.svg",
-  "qid": null
+  "qid": "Q97905916"
  },
  {
   "id": "auriense-ca",
@@ -4645,7 +4666,7 @@
   "nome": "Austria Vienna",
   "pais": "AT",
   "escudo": "austria-vienna.png",
-  "qid": null
+  "qid": "Q131209"
  },
  {
   "id": "auto-esporte-clube-amazonas",
@@ -4673,7 +4694,7 @@
   "nome": "Auxerre",
   "pais": "FR",
   "escudo": "auxerre.svg",
-  "qid": null
+  "qid": "Q182876"
  },
  {
   "id": "av-alta-fc",
@@ -4715,7 +4736,7 @@
   "nome": "Avs Futebol",
   "pais": "PT",
   "escudo": "avs-futebol.png",
-  "qid": null
+  "qid": "Q120775987"
  },
  {
   "id": "ayacucho-futbol-club",
@@ -4757,7 +4778,7 @@
   "nome": "AZ Alkmaar",
   "pais": "NL",
   "escudo": "az-alkmaar.png",
-  "qid": null
+  "qid": "Q191264"
  },
  {
   "id": "az-picerno",
@@ -5037,7 +5058,7 @@
   "nome": "Barcelona",
   "pais": "ES",
   "escudo": "barcelona.svg",
-  "qid": "Q636457"
+  "qid": "Q7156"
  },
  {
   "id": "barcelona-esporte-clube",
@@ -5061,11 +5082,18 @@
   "qid": "Q106325458"
  },
  {
+  "id": "barcelona-sporting-club",
+  "nome": "Barcelona Sporting Club",
+  "pais": "EC",
+  "escudo": "barcelona-sporting-club.png",
+  "qid": "Q248782"
+ },
+ {
   "id": "barcelonaguayaquil",
   "nome": "barcelonaguayaquil",
   "pais": "EC",
   "escudo": "barcelonaguayaquil.png",
-  "qid": "Q248782"
+  "qid": null
  },
  {
   "id": "bare-esporte-clube",
@@ -5087,6 +5115,13 @@
   "pais": "EN",
   "escudo": "barnet-football-club.png",
   "qid": "Q9408"
+ },
+ {
+  "id": "barnsley-football-club",
+  "nome": "Barnsley Football Club",
+  "pais": "EN",
+  "escudo": "barnsley-football-club.png",
+  "qid": "Q19442"
  },
  {
   "id": "barra-do-garcas-futebol-clube",
@@ -5177,7 +5212,7 @@
   "nome": "Basel",
   "pais": "CH",
   "escudo": "basel.png",
-  "qid": null
+  "qid": "Q189671"
  },
  {
   "id": "basingstoke-town-football-club",
@@ -5401,7 +5436,7 @@
   "nome": "Benfica",
   "pais": "PT",
   "escudo": "benfica.png",
-  "qid": null
+  "qid": "Q131499"
  },
  {
   "id": "bengaluru-football-club",
@@ -5597,7 +5632,7 @@
   "nome": "BK Häcken",
   "pais": "SE",
   "escudo": "bk-hacken.png",
-  "qid": null
+  "qid": "Q639723"
  },
  {
   "id": "black-leopards-football-club",
@@ -5674,14 +5709,14 @@
   "nome": "Boavista FC",
   "pais": "PT",
   "escudo": "boavista-fc.png",
-  "qid": null
+  "qid": "Q219703"
  },
  {
   "id": "boca-juniors",
   "nome": "Boca Juniors",
   "pais": "AR",
   "escudo": "boca-juniors.svg",
-  "qid": null
+  "qid": "Q170703"
  },
  {
   "id": "boca-juniors-f-c",
@@ -5702,7 +5737,7 @@
   "nome": "Bodrum FK",
   "pais": "TR",
   "escudo": "bodrum-fk.png",
-  "qid": null
+  "qid": "Q20472948"
  },
  {
   "id": "bogor-fc",
@@ -5814,7 +5849,7 @@
   "nome": "Bordeaux",
   "pais": "FR",
   "escudo": "bordeaux.png",
-  "qid": null
+  "qid": "Q172476"
  },
  {
   "id": "boreham-wood-football-club",
@@ -5912,7 +5947,7 @@
   "nome": "Botafogo",
   "pais": "BR",
   "escudo": "botafogo.svg",
-  "qid": "Q4095130"
+  "qid": "Q80958"
  },
  {
   "id": "botafogo-futebol-clube-acre",
@@ -5996,7 +6031,7 @@
   "nome": "Bragantino",
   "pais": "BR",
   "escudo": "bragantino.svg",
-  "qid": "Q4955379"
+  "qid": "Q541744"
  },
  {
   "id": "braintree-town-football-club",
@@ -6290,7 +6325,7 @@
   "nome": "Bryne FK",
   "pais": "NO",
   "escudo": "bryne-fk.png",
-  "qid": null
+  "qid": "Q995313"
  },
  {
   "id": "bsc-young-boys",
@@ -6381,7 +6416,7 @@
   "nome": "Burnley",
   "pais": "EN",
   "escudo": "burnley.svg",
-  "qid": "Q19442"
+  "qid": "Q19458"
  },
  {
   "id": "bursaspor-kulubu-dernegi",
@@ -6515,6 +6550,13 @@
   "pais": "BR",
   "escudo": "caicara-esporte-clube.png",
   "qid": "Q5017961"
+ },
+ {
+  "id": "caico-esporte-clube",
+  "nome": "Caicó Esporte Clube",
+  "pais": "BR",
+  "escudo": "caico-esporte-clube.png",
+  "qid": "Q10294708"
  },
  {
   "id": "cal-football-club",
@@ -6676,6 +6718,13 @@
   "pais": "BR",
   "escudo": "campinas-esporte-clube-mato-grosso.png",
   "qid": "Q65162375"
+ },
+ {
+  "id": "campinas-fc",
+  "nome": "Campinas FC",
+  "pais": "BR",
+  "escudo": "campinas-fc.png",
+  "qid": "Q48855991"
  },
  {
   "id": "campinense-clube",
@@ -7123,7 +7172,7 @@
   "nome": "CD Nacional",
   "pais": "PT",
   "escudo": "cd-nacional.png",
-  "qid": null
+  "qid": "Q216459"
  },
  {
   "id": "cd-san-jose",
@@ -7249,14 +7298,14 @@
   "nome": "Celta",
   "pais": "ES",
   "escudo": "celta.png",
-  "qid": "Q5773365"
+  "qid": "Q8749"
  },
  {
   "id": "celta-de-vigo",
   "nome": "Celta de Vigo",
   "pais": "ES",
   "escudo": "celta-de-vigo.png",
-  "qid": "Q6161909"
+  "qid": "Q8749"
  },
  {
   "id": "celtic-fc",
@@ -7494,7 +7543,7 @@
   "nome": "Cercle Brugge",
   "pais": "BE",
   "escudo": "cercle-brugge.png",
-  "qid": null
+  "qid": "Q364698"
  },
  {
   "id": "ceres-futebol-clube",
@@ -7536,7 +7585,7 @@
   "nome": "CF Estrela Amadora",
   "pais": "PT",
   "escudo": "cf-estrela-amadora.png",
-  "qid": null
+  "qid": "Q838134"
  },
  {
   "id": "cf-estrela-amadora-sad",
@@ -7564,7 +7613,7 @@
   "nome": "CF Monterrey",
   "pais": "MX",
   "escudo": "cf-monterrey.svg",
-  "qid": "Q8347175"
+  "qid": "Q768253"
  },
  {
   "id": "cf-montreal",
@@ -7896,6 +7945,13 @@
   "qid": "Q100375141"
  },
  {
+  "id": "chiapas-futbol-club",
+  "nome": "Chiapas Fútbol Club",
+  "pais": "MX",
+  "escudo": "chiapas-futbol-club.svg",
+  "qid": "Q1426348"
+ },
+ {
   "id": "chicago",
   "nome": "chicago",
   "pais": "US",
@@ -7949,7 +8005,7 @@
   "nome": "chivas",
   "pais": "MX",
   "escudo": "chivas.png",
-  "qid": "Q1426348"
+  "qid": null
  },
  {
   "id": "chivas-el-paso-patriots",
@@ -8824,7 +8880,7 @@
   "nome": "Club Brugge",
   "pais": "BE",
   "escudo": "club-brugge.png",
-  "qid": null
+  "qid": "Q190916"
  },
  {
   "id": "club-brugge-kv",
@@ -9420,6 +9476,13 @@
   "pais": "VE",
   "escudo": "club-deportivo-mineros-de-guayana.png",
   "qid": "Q289407"
+ },
+ {
+  "id": "club-deportivo-moron",
+  "nome": "Club Deportivo Morón",
+  "pais": "AR",
+  "escudo": "club-deportivo-moron.png",
+  "qid": "Q2318771"
  },
  {
   "id": "club-deportivo-numancia-de-soria",
@@ -10549,6 +10612,13 @@
   "qid": "Q5136514"
  },
  {
+  "id": "clube-de-regatas-guara",
+  "nome": "Clube de Regatas Guará",
+  "pais": "BR",
+  "escudo": "clube-de-regatas-guara.png",
+  "qid": "Q777267"
+ },
+ {
   "id": "clube-desportivo-da-huila",
   "nome": "Clube Desportivo da Huíla",
   "pais": "AO",
@@ -11155,7 +11225,7 @@
   "nome": "Corinthians",
   "pais": "BR",
   "escudo": "corinthians.png",
-  "qid": "Q10260600"
+  "qid": "Q35933"
  },
  {
   "id": "coritiba",
@@ -11274,7 +11344,7 @@
   "nome": "Corum FK",
   "pais": "TR",
   "escudo": "corum-fk.png",
-  "qid": "Q20472948"
+  "qid": null
  },
  {
   "id": "corumbaense-futebol-clube",
@@ -11753,13 +11823,6 @@
   "qid": "Q1146848"
  },
  {
-  "id": "d-c-united",
-  "nome": "D.C. United",
-  "pais": "US",
-  "escudo": "d-c-united.svg",
-  "qid": "Q238593"
- },
- {
   "id": "daegu-fc",
   "nome": "Daegu FC",
   "pais": "KR",
@@ -11886,6 +11949,13 @@
   "qid": null
  },
  {
+  "id": "dartford-football-club",
+  "nome": "Dartford Football Club",
+  "pais": "EN",
+  "escudo": "dartford-football-club.png",
+  "qid": "Q18510"
+ },
+ {
   "id": "dayton-dutch-lions",
   "nome": "Dayton Dutch Lions",
   "pais": "US",
@@ -11904,7 +11974,7 @@
   "nome": "DC United",
   "pais": "US",
   "escudo": "dc-united.svg",
-  "qid": null
+  "qid": "Q238593"
  },
  {
   "id": "ddm-f-c",
@@ -11956,6 +12026,13 @@
   "qid": "Q108320248"
  },
  {
+  "id": "defensor-sporting-club",
+  "nome": "Defensor Sporting Club",
+  "pais": "UY",
+  "escudo": "defensor-sporting-club.png",
+  "qid": "Q844238"
+ },
+ {
   "id": "defensor-zarumilla",
   "nome": "Defensor Zarumilla",
   "pais": "PE",
@@ -11967,7 +12044,7 @@
   "nome": "defensorsporting",
   "pais": "UY",
   "escudo": "defensorsporting.png",
-  "qid": "Q844238"
+  "qid": null
  },
  {
   "id": "degerfors-if",
@@ -12331,7 +12408,7 @@
   "nome": "Dinamo Makhachkala",
   "pais": "RU",
   "escudo": "dinamo-makhachkala.png",
-  "qid": "Q2494171"
+  "qid": "Q64842483"
  },
  {
   "id": "dinamo-zagreb",
@@ -12429,7 +12506,7 @@
   "nome": "Dortmund",
   "pais": "DE",
   "escudo": "dortmund.svg",
-  "qid": null
+  "qid": "Q41420"
  },
  {
   "id": "dos-hermanas-cf",
@@ -12604,7 +12681,7 @@
   "nome": "Düsseldorf",
   "pais": "DE",
   "escudo": "dusseldorf.svg",
-  "qid": null
+  "qid": "Q151747"
  },
  {
   "id": "dynamo-dresden",
@@ -12926,7 +13003,7 @@
   "nome": "Empoli",
   "pais": "IT",
   "escudo": "empoli.svg",
-  "qid": "Q28229337"
+  "qid": "Q6703"
  },
  {
   "id": "enad-polis-chrysochou",
@@ -13094,7 +13171,7 @@
   "nome": "Espanyol",
   "pais": "ES",
   "escudo": "espanyol.svg",
-  "qid": null
+  "qid": "Q8780"
  },
  {
   "id": "esperanca-futebol-clube",
@@ -13228,6 +13305,13 @@
   "pais": "BR",
   "escudo": "esporte-clube-cruzeiro-porto-alegre.png",
   "qid": "Q3543861"
+ },
+ {
+  "id": "esporte-clube-de-patos",
+  "nome": "Esporte Clube de Patos",
+  "pais": "BR",
+  "escudo": "esporte-clube-de-patos.png",
+  "qid": "Q5399153"
  },
  {
   "id": "esporte-clube-democrata",
@@ -13368,6 +13452,13 @@
   "pais": "BR",
   "escudo": "esporte-clube-limoeiro.png",
   "qid": "Q10275182"
+ },
+ {
+  "id": "esporte-clube-macapa",
+  "nome": "Esporte Clube Macapá",
+  "pais": "BR",
+  "escudo": "esporte-clube-macapa.png",
+  "qid": "Q3058506"
  },
  {
   "id": "esporte-clube-maceio",
@@ -14084,13 +14175,6 @@
   "qid": "Q19577058"
  },
  {
-  "id": "f-c-new-york",
-  "nome": "F.C. New York",
-  "pais": "US",
-  "escudo": "f-c-new-york.png",
-  "qid": "Q1164520"
- },
- {
   "id": "f-c-olympique-13",
   "nome": "F.C. Olympique 13",
   "pais": "EN",
@@ -14368,7 +14452,7 @@
   "nome": "FC Alverca",
   "pais": "PT",
   "escudo": "fc-alverca.png",
-  "qid": null
+  "qid": "Q1386850"
  },
  {
   "id": "fc-amkar-perm",
@@ -14522,7 +14606,7 @@
   "nome": "FC Banik Ostrava",
   "pais": "CZ",
   "escudo": "fc-banik-ostrava.png",
-  "qid": null
+  "qid": "Q329471"
  },
  {
   "id": "fc-barcelona-c-women",
@@ -14704,7 +14788,7 @@
   "nome": "FC Dallas",
   "pais": "US",
   "escudo": "fc-dallas.svg",
-  "qid": "Q131384708"
+  "qid": "Q5211400"
  },
  {
   "id": "fc-davis",
@@ -14914,7 +14998,7 @@
   "nome": "FC Famalicão",
   "pais": "PT",
   "escudo": "fc-famalicao.png",
-  "qid": null
+  "qid": "Q1387105"
  },
  {
   "id": "fc-feniks-illichovets-kalinine",
@@ -14991,7 +15075,7 @@
   "nome": "FC Groningen",
   "pais": "NL",
   "escudo": "fc-groningen.png",
-  "qid": null
+  "qid": "Q24711"
  },
  {
   "id": "fc-gubkin",
@@ -15516,14 +15600,14 @@
   "nome": "FC Metz",
   "pais": "FR",
   "escudo": "fc-metz.svg",
-  "qid": null
+  "qid": "Q221525"
  },
  {
   "id": "fc-midtjylland",
   "nome": "FC Midtjylland",
   "pais": "DK",
   "escudo": "fc-midtjylland.png",
-  "qid": null
+  "qid": "Q618520"
  },
  {
   "id": "fc-monmouth",
@@ -15573,6 +15657,13 @@
   "pais": "UA",
   "escudo": "fc-mykolaiv.png",
   "qid": "Q2088821"
+ },
+ {
+  "id": "fc-mynai",
+  "nome": "FC Mynai",
+  "pais": "UA",
+  "escudo": "fc-mynai.png",
+  "qid": "Q54877936"
  },
  {
   "id": "fc-naftovyk-ukrnafta-okhtyrka",
@@ -15670,14 +15761,14 @@
   "nome": "FC Osaka",
   "pais": "JP",
   "escudo": "fc-osaka.png",
-  "qid": "Q48747154"
+  "qid": "Q7105560"
  },
  {
   "id": "fc-pacos-de-ferreira",
   "nome": "FC Paços de Ferreira",
   "pais": "PT",
   "escudo": "fc-pacos-de-ferreira.png",
-  "qid": null
+  "qid": "Q371136"
  },
  {
   "id": "fc-pakhtakor-tashkent",
@@ -15978,7 +16069,7 @@
   "nome": "FC Sion",
   "pais": "CH",
   "escudo": "fc-sion.png",
-  "qid": null
+  "qid": "Q321061"
  },
  {
   "id": "fc-ska-energiya-khabarovsk",
@@ -16041,7 +16132,7 @@
   "nome": "FC Slovan Liberec",
   "pais": "CZ",
   "escudo": "fc-slovan-liberec.png",
-  "qid": null
+  "qid": "Q221671"
  },
  {
   "id": "fc-sluch-berezne",
@@ -16384,7 +16475,7 @@
   "nome": "FC Ulytau",
   "pais": "KZ",
   "escudo": "fc-ulytau.png",
-  "qid": "Q1046326"
+  "qid": "Q117244714"
  },
  {
   "id": "fc-universitatea-cluj",
@@ -16405,7 +16496,7 @@
   "nome": "FC Utrecht",
   "pais": "NL",
   "escudo": "fc-utrecht.png",
-  "qid": null
+  "qid": "Q24680"
  },
  {
   "id": "fc-uzhhorod",
@@ -16545,7 +16636,7 @@
   "nome": "FC Winterthur",
   "pais": "CH",
   "escudo": "fc-winterthur.png",
-  "qid": null
+  "qid": "Q201969"
  },
  {
   "id": "fc-yakutiya-yakutsk",
@@ -16765,6 +16856,13 @@
   "qid": "Q24190895"
  },
  {
+  "id": "feira-futebol-clube",
+  "nome": "Feira Futebol Clube",
+  "pais": "BR",
+  "escudo": "feira-futebol-clube.png",
+  "qid": "Q138507602"
+ },
+ {
   "id": "feirense-futebol-clube",
   "nome": "Feirense Futebol Clube",
   "pais": "BR",
@@ -16888,7 +16986,7 @@
   "nome": "Feyenoord",
   "pais": "NL",
   "escudo": "feyenoord.png",
-  "qid": null
+  "qid": "Q134241"
  },
  {
   "id": "feyenoord-rotterdam",
@@ -16902,7 +17000,7 @@
   "nome": "Figueirense",
   "pais": "BR",
   "escudo": "figueirense.svg",
-  "qid": "Q10282157"
+  "qid": "Q218334"
  },
  {
   "id": "fiorentina",
@@ -17070,7 +17168,7 @@
   "nome": "FK Jablonec",
   "pais": "CZ",
   "escudo": "fk-jablonec.png",
-  "qid": null
+  "qid": "Q425599"
  },
  {
   "id": "fk-jagodina",
@@ -17140,7 +17238,7 @@
   "nome": "FK Mlada Boleslav",
   "pais": "CZ",
   "escudo": "fk-mlada-boleslav.png",
-  "qid": null
+  "qid": "Q328332"
  },
  {
   "id": "fk-mladost-lucani",
@@ -17385,7 +17483,7 @@
   "nome": "FK Teplice",
   "pais": "CZ",
   "escudo": "fk-teplice.png",
-  "qid": null
+  "qid": "Q738886"
  },
  {
   "id": "fk-timok-1919",
@@ -17455,7 +17553,7 @@
   "nome": "Flamengo",
   "pais": "BR",
   "escudo": "flamengo.svg",
-  "qid": "Q4810204"
+  "qid": "Q17479"
  },
  {
   "id": "flamengo-futebol-clube-americana",
@@ -17525,7 +17623,7 @@
   "nome": "Fluminense",
   "pais": "BR",
   "escudo": "fluminense.svg",
-  "qid": "Q2667700"
+  "qid": "Q80987"
  },
  {
   "id": "fluminense-atletico-clube-niteroi",
@@ -17819,7 +17917,7 @@
   "nome": "Fortuna Sittard",
   "pais": "NL",
   "escudo": "fortuna-sittard.png",
-  "qid": null
+  "qid": "Q854167"
  },
  {
   "id": "forward-madison-fc",
@@ -17945,7 +18043,7 @@
   "nome": "Freiburg",
   "pais": "DE",
   "escudo": "freiburg.svg",
-  "qid": null
+  "qid": "Q106394"
  },
  {
   "id": "fresno-football-club",
@@ -18396,6 +18494,13 @@
   "qid": "Q824850"
  },
  {
+  "id": "gaziantepspor-kulubu",
+  "nome": "Gaziantepspor Kulübü",
+  "pais": "TR",
+  "escudo": "gaziantepspor-kulubu.png",
+  "qid": "Q285722"
+ },
+ {
   "id": "gd-chaves",
   "nome": "GD Chaves",
   "pais": "PT",
@@ -18519,7 +18624,7 @@
   "nome": "Gil Vicente FC",
   "pais": "PT",
   "escudo": "gil-vicente-fc.png",
-  "qid": null
+  "qid": "Q926438"
  },
  {
   "id": "gillingham-football-club",
@@ -18582,7 +18687,7 @@
   "nome": "Girona",
   "pais": "ES",
   "escudo": "girona.svg",
-  "qid": "Q85870247"
+  "qid": "Q11945"
  },
  {
   "id": "gks-katowice",
@@ -18736,7 +18841,7 @@
   "nome": "Górnik Zabrze",
   "pais": "PL",
   "escudo": "gornik-zabrze.png",
-  "qid": null
+  "qid": "Q134255"
  },
  {
   "id": "goround",
@@ -18848,7 +18953,7 @@
   "nome": "Grêmio",
   "pais": "BR",
   "escudo": "gremio.svg",
-  "qid": "Q5612797"
+  "qid": "Q221695"
  },
  {
   "id": "gremio-atletico-sampaio-acre",
@@ -19289,7 +19394,7 @@
   "nome": "Halmstads BK",
   "pais": "SE",
   "escudo": "halmstads-bk.png",
-  "qid": null
+  "qid": "Q584858"
  },
  {
   "id": "hamarkameratene",
@@ -19303,7 +19408,7 @@
   "nome": "Hamburgo",
   "pais": "DE",
   "escudo": "hamburgo.svg",
-  "qid": null
+  "qid": "Q51974"
  },
  {
   "id": "hamilton-academical-football-club",
@@ -19338,7 +19443,7 @@
   "nome": "Hannover",
   "pais": "DE",
   "escudo": "hannover.svg",
-  "qid": null
+  "qid": "Q33748"
  },
  {
   "id": "hanoi-t-e-t-fc",
@@ -19723,7 +19828,7 @@
   "nome": "Helsingborgs IF",
   "pais": "SE",
   "escudo": "helsingborgs-if.png",
-  "qid": null
+  "qid": "Q207503"
  },
  {
   "id": "henan-songshan-longmen-football-club",
@@ -19961,7 +20066,7 @@
   "nome": "Hoffenheim",
   "pais": "DE",
   "escudo": "hoffenheim.svg",
-  "qid": null
+  "qid": "Q22707"
  },
  {
   "id": "hokkaido-consadole",
@@ -20129,7 +20234,7 @@
   "nome": "Hvidovre IF",
   "pais": "DK",
   "escudo": "hvidovre-if.png",
-  "qid": null
+  "qid": "Q843097"
  },
  {
   "id": "hwaseong",
@@ -20570,7 +20675,7 @@
   "nome": "Internacional",
   "pais": "BR",
   "escudo": "internacional.svg",
-  "qid": "Q48867116"
+  "qid": "Q80845"
  },
  {
   "id": "internacional-esporte-clube-sao-paulo",
@@ -21406,13 +21511,6 @@
   "qid": "Q3804552"
  },
  {
-  "id": "kallithea-f-c",
-  "nome": "Kallithea F.C.",
-  "pais": "GR",
-  "escudo": "kallithea-f-c.png",
-  "qid": "Q1547133"
- },
- {
   "id": "kalmar-ff",
   "nome": "Kalmar FF",
   "pais": "SE",
@@ -21501,7 +21599,7 @@
   "nome": "Karlsruher",
   "pais": "DE",
   "escudo": "karlsruher.svg",
-  "qid": null
+  "qid": "Q105853"
  },
  {
   "id": "karmiotissa-fc",
@@ -21529,7 +21627,7 @@
   "nome": "KAS Eupen",
   "pais": "BE",
   "escudo": "kas-eupen.png",
-  "qid": null
+  "qid": "Q1423718"
  },
  {
   "id": "kas-mpasa-spor-kulubu",
@@ -21837,7 +21935,7 @@
   "nome": "Kitchee SC",
   "pais": "HK",
   "escudo": "kitchee-sc.svg",
-  "qid": null
+  "qid": "Q141045"
  },
  {
   "id": "kitsap-soccer-club",
@@ -21991,7 +22089,7 @@
   "nome": "KRC Genk",
   "pais": "BE",
   "escudo": "krc-genk.png",
-  "qid": null
+  "qid": "Q216032"
  },
  {
   "id": "kristiansund-bk",
@@ -22127,13 +22225,6 @@
   "qid": "Q11370326"
  },
  {
-  "id": "l-a-wolves-fc",
-  "nome": "L.A. Wolves FC",
-  "pais": "US",
-  "escudo": "l-a-wolves-fc.png",
-  "qid": "Q19864865"
- },
- {
   "id": "l-aquila-calcio-1927",
   "nome": "L'Aquila Calcio 1927",
   "pais": "IT",
@@ -22152,7 +22243,7 @@
   "nome": "LA FC",
   "pais": "US",
   "escudo": "la-fc.svg",
-  "qid": null
+  "qid": "Q19864865"
  },
  {
   "id": "la-galaxy",
@@ -22174,6 +22265,13 @@
   "pais": "US",
   "escudo": "la-maquina-football-club.png",
   "qid": "Q25006213"
+ },
+ {
+  "id": "la-palma",
+  "nome": "La Palma",
+  "pais": "IT",
+  "escudo": "la-palma.png",
+  "qid": "Q3821025"
  },
  {
   "id": "la-salle-futbol-club",
@@ -22320,7 +22418,7 @@
   "nome": "Las Palmas",
   "pais": "ES",
   "escudo": "las-palmas.png",
-  "qid": "Q595690"
+  "qid": "Q11979"
  },
  {
   "id": "las-vegas-lights-fc",
@@ -22334,7 +22432,7 @@
   "nome": "LASK",
   "pais": "AT",
   "escudo": "lask.png",
-  "qid": null
+  "qid": "Q392310"
  },
  {
   "id": "latina-calcio-1932",
@@ -22362,7 +22460,7 @@
   "nome": "Lazio",
   "pais": "IT",
   "escudo": "lazio.svg",
-  "qid": "Q59390189"
+  "qid": "Q2609"
  },
  {
   "id": "ld-alajuelense",
@@ -22376,7 +22474,7 @@
   "nome": "Le Havre",
   "pais": "FR",
   "escudo": "le-havre.png",
-  "qid": null
+  "qid": "Q328658"
  },
  {
   "id": "le-mans-fc",
@@ -22397,7 +22495,7 @@
   "nome": "Lech Poznan",
   "pais": "PL",
   "escudo": "lech-poznan.png",
-  "qid": null
+  "qid": "Q52942"
  },
  {
   "id": "lechia-gdansk",
@@ -22467,7 +22565,7 @@
   "nome": "Leipzig",
   "pais": "DE",
   "escudo": "leipzig.png",
-  "qid": null
+  "qid": "Q702455"
  },
  {
   "id": "lekhwiya-sports-club",
@@ -22488,7 +22586,7 @@
   "nome": "Lens",
   "pais": "FR",
   "escudo": "lens.png",
-  "qid": null
+  "qid": "Q191843"
  },
  {
   "id": "lentigione-calcio",
@@ -22523,7 +22621,7 @@
   "nome": "Levante",
   "pais": "ES",
   "escudo": "levante.svg",
-  "qid": "Q32538"
+  "qid": "Q8823"
  },
  {
   "id": "leven-united-afc",
@@ -22621,7 +22719,7 @@
   "nome": "Lille",
   "pais": "FR",
   "escudo": "lille.svg",
-  "qid": null
+  "qid": "Q19516"
  },
  {
   "id": "lillestr-m-sk",
@@ -23041,7 +23139,7 @@
   "nome": "Macae",
   "pais": "BR",
   "escudo": "macae.png",
-  "qid": "Q3058506"
+  "qid": "Q1028538"
  },
  {
   "id": "macambira-futebol-clube",
@@ -23070,6 +23168,13 @@
   "pais": "CN",
   "escudo": "macau-chiba-fc.png",
   "qid": "Q137289651"
+ },
+ {
+  "id": "macau-esporte-clube",
+  "nome": "Macau Esporte Clube",
+  "pais": "BR",
+  "escudo": "macau-esporte-clube.png",
+  "qid": "Q6722700"
  },
  {
   "id": "maccabi-ahi-nazareth",
@@ -23230,7 +23335,7 @@
   "nome": "Mainz",
   "pais": "DE",
   "escudo": "mainz.svg",
-  "qid": null
+  "qid": "Q105254"
  },
  {
   "id": "makedonikos-f-c",
@@ -23252,6 +23357,13 @@
   "pais": "IN",
   "escudo": "malappuram-fc.png",
   "qid": "Q128995862"
+ },
+ {
+  "id": "malatya-spor-kulubu",
+  "nome": "Malatya Spor Kulübü",
+  "pais": "TR",
+  "escudo": "malatya-spor-kulubu.png",
+  "qid": "Q1368064"
  },
  {
   "id": "malavan-f-c",
@@ -23363,7 +23475,7 @@
   "nome": "Manchester United",
   "pais": "EN",
   "escudo": "manchester-united.png",
-  "qid": "Q18274"
+  "qid": "Q18656"
  },
  {
   "id": "manchete-futebol-clube-do-recife",
@@ -23475,7 +23587,7 @@
   "nome": "Marítimo",
   "pais": "PT",
   "escudo": "maritimo.png",
-  "qid": null
+  "qid": "Q216503"
  },
  {
   "id": "maritzburg-united-football-club",
@@ -23496,7 +23608,7 @@
   "nome": "Olympique de Marseille",
   "pais": "FR",
   "escudo": "marseille.svg",
-  "qid": null
+  "qid": "Q132885"
  },
  {
   "id": "marumo-gallants-football-club",
@@ -23821,6 +23933,13 @@
   "qid": null
  },
  {
+  "id": "miami-fc-2006",
+  "nome": "Miami FC",
+  "pais": "US",
+  "escudo": null,
+  "qid": null
+ },
+ {
   "id": "miami-fusion-football-club",
   "nome": "Miami Fusion Football Club",
   "pais": "US",
@@ -23840,6 +23959,13 @@
   "pais": "US",
   "escudo": "miami-toros.png",
   "qid": "Q2797432"
+ },
+ {
+  "id": "miami-united",
+  "nome": "Miami United",
+  "pais": "US",
+  "escudo": "miami-united.png",
+  "qid": "Q16844935"
  },
  {
   "id": "michigan-stars-football-club",
@@ -23881,7 +24007,7 @@
   "nome": "Milan",
   "pais": "IT",
   "escudo": "milan.svg",
-  "qid": "Q55602896"
+  "qid": "Q1543"
  },
  {
   "id": "milford-f-c",
@@ -24175,7 +24301,7 @@
   "nome": "Molde FK",
   "pais": "NO",
   "escudo": "molde-fk.png",
-  "qid": null
+  "qid": "Q208552"
  },
  {
   "id": "monaco",
@@ -24294,7 +24420,7 @@
   "nome": "Montpellier",
   "pais": "FR",
   "escudo": "montpellier.png",
-  "qid": null
+  "qid": "Q19513"
  },
  {
   "id": "montpellier-hsc",
@@ -24570,6 +24696,13 @@
   "qid": null
  },
  {
+  "id": "nacao-esportes",
+  "nome": "Nação Esportes",
+  "pais": "BR",
+  "escudo": "nacao-esportes.png",
+  "qid": "Q86734111"
+ },
+ {
   "id": "nacional",
   "nome": "nacional",
   "pais": "UY",
@@ -24756,7 +24889,7 @@
   "nome": "Nantes",
   "pais": "FR",
   "escudo": "nantes.svg",
-  "qid": null
+  "qid": "Q192071"
  },
  {
   "id": "napa-valley-1839-fc",
@@ -24777,7 +24910,7 @@
   "nome": "Napoli",
   "pais": "IT",
   "escudo": "napoli.svg",
-  "qid": "Q22936201"
+  "qid": "Q2641"
  },
  {
   "id": "nara-club",
@@ -25001,7 +25134,7 @@
   "nome": "New York City",
   "pais": "US",
   "escudo": "new-york-city.svg",
-  "qid": "Q104530989"
+  "qid": "Q13361030"
  },
  {
   "id": "new-york-cosmos",
@@ -25176,7 +25309,7 @@
   "nome": "Nice",
   "pais": "FR",
   "escudo": "nice.png",
-  "qid": null
+  "qid": "Q185163"
  },
  {
   "id": "nigertornadoes",
@@ -25268,6 +25401,13 @@
   "pais": "HR",
   "escudo": "nk-belisce.png",
   "qid": "Q1288460"
+ },
+ {
+  "id": "nk-bistra",
+  "nome": "NK Bistra",
+  "pais": "HR",
+  "escudo": "nk-bistra.png",
+  "qid": "Q12637540"
  },
  {
   "id": "nk-bjelovar",
@@ -25365,7 +25505,7 @@
   "nome": "NK Istra",
   "pais": "HR",
   "escudo": "nk-istra.png",
-  "qid": "Q12637540"
+  "qid": null
  },
  {
   "id": "nk-istra-1961",
@@ -25498,7 +25638,7 @@
   "nome": "NK Osijek",
   "pais": "HR",
   "escudo": "nk-osijek.png",
-  "qid": "Q9189128"
+  "qid": "Q738876"
  },
  {
   "id": "nk-pazinka",
@@ -26453,6 +26593,20 @@
   "qid": "Q3123751"
  },
  {
+  "id": "os-belenenses",
+  "nome": "Belenenses",
+  "pais": "PT",
+  "escudo": "os-belenenses.png",
+  "qid": "Q216510"
+ },
+ {
+  "id": "osasco-futebol-clube",
+  "nome": "Osasco Futebol Clube",
+  "pais": "BR",
+  "escudo": "osasco-futebol-clube.png",
+  "qid": "Q4392758"
+ },
+ {
   "id": "osasuna",
   "nome": "Osasuna",
   "pais": "ES",
@@ -26656,6 +26810,13 @@
   "qid": "Q10343740"
  },
  {
+  "id": "palamos-club-de-futbol",
+  "nome": "Palamós Club de Futbol",
+  "pais": "ES",
+  "escudo": "palamos-club-de-futbol.png",
+  "qid": "Q595690"
+ },
+ {
   "id": "palayesh-naft-f-c",
   "nome": "Palayesh Naft F.C.",
   "pais": "IR",
@@ -26723,7 +26884,7 @@
   "nome": "Palmeiras",
   "pais": "BR",
   "escudo": "palmeiras.svg",
-  "qid": "Q286402"
+  "qid": "Q80964"
  },
  {
   "id": "panama-city-beach-pirates",
@@ -26845,6 +27006,13 @@
   "qid": "Q18480938"
  },
  {
+  "id": "paranoa-esporte-clube",
+  "nome": "Paranoá Esporte Clube",
+  "pais": "BR",
+  "escudo": "paranoa-esporte-clube.png",
+  "qid": "Q3363577"
+ },
+ {
   "id": "parauapebas-futebol-clube",
   "nome": "Parauapebas Futebol Clube",
   "pais": "BR",
@@ -26863,7 +27031,7 @@
   "nome": "Paris",
   "pais": "FR",
   "escudo": "paris.svg",
-  "qid": null
+  "qid": "Q1051013"
  },
  {
   "id": "paris-sg",
@@ -26884,7 +27052,7 @@
   "nome": "Parma",
   "pais": "IT",
   "escudo": "parma.svg",
-  "qid": "Q3821025"
+  "qid": "Q2693"
  },
  {
   "id": "parma-calcio-1913",
@@ -27829,7 +27997,7 @@
   "nome": "Platense",
   "pais": "AR",
   "escudo": "platense.svg",
-  "qid": null
+  "qid": "Q151907"
  },
  {
   "id": "plymouth-argyle-football-club",
@@ -28074,7 +28242,7 @@
   "nome": "Porto",
   "pais": "PT",
   "escudo": "porto.png",
-  "qid": null
+  "qid": "Q128446"
  },
  {
   "id": "porto-alegre-futebol-clube",
@@ -28305,7 +28473,7 @@
   "nome": "Paris Saint-Germain",
   "pais": "FR",
   "escudo": "psg.png",
-  "qid": null
+  "qid": "Q483020"
  },
  {
   "id": "psim-yogyakarta",
@@ -28347,7 +28515,7 @@
   "nome": "PSV",
   "pais": "NL",
   "escudo": "psv.png",
-  "qid": null
+  "qid": "Q11938"
  },
  {
   "id": "puebla",
@@ -28536,7 +28704,14 @@
   "nome": "queretaro",
   "pais": "MX",
   "escudo": "queretaro.png",
-  "qid": null
+  "qid": "Q606210"
+ },
+ {
+  "id": "quick-boys",
+  "nome": "Quick Boys",
+  "pais": "NL",
+  "escudo": "quick-boys.png",
+  "qid": "Q2108810"
  },
  {
   "id": "quilmes",
@@ -28956,7 +29131,7 @@
   "nome": "Real Betis",
   "pais": "ES",
   "escudo": "real-betis.svg",
-  "qid": "Q2698432"
+  "qid": "Q8723"
  },
  {
   "id": "real-betis-balompie",
@@ -29285,7 +29460,7 @@
   "nome": "Reims",
   "pais": "FR",
   "escudo": "reims.svg",
-  "qid": null
+  "qid": "Q208228"
  },
  {
   "id": "reinmeer-aomori",
@@ -29460,7 +29635,7 @@
   "nome": "Rio Ave FC",
   "pais": "PT",
   "escudo": "rio-ave-fc.png",
-  "qid": null
+  "qid": "Q622432"
  },
  {
   "id": "rio-bananal-futebol-clube",
@@ -29642,7 +29817,7 @@
   "nome": "RKC Waalwijk",
   "pais": "NL",
   "escudo": "rkc-waalwijk.png",
-  "qid": null
+  "qid": "Q24699"
  },
  {
   "id": "rnk-split",
@@ -29747,7 +29922,7 @@
   "nome": "Roma",
   "pais": "IT",
   "escudo": "roma.png",
-  "qid": "Q610482"
+  "qid": "Q2739"
  },
  {
   "id": "roma-esporte-apucarana",
@@ -30107,6 +30282,13 @@
   "qid": "Q43082535"
  },
  {
+  "id": "sabia-futebol-clube",
+  "nome": "Sabiá Futebol Clube",
+  "pais": "BR",
+  "escudo": "sabia-futebol-clube.png",
+  "qid": "Q7396234"
+ },
+ {
   "id": "sabugy-futebol-clube",
   "nome": "Sabugy Futebol Clube",
   "pais": "BR",
@@ -30188,7 +30370,7 @@
   "nome": "Saint-Étienne",
   "pais": "FR",
   "escudo": "saint-etienne.svg",
-  "qid": null
+  "qid": "Q19521"
  },
  {
   "id": "saint-louis-fc",
@@ -30741,7 +30923,7 @@
   "nome": "Santos",
   "pais": "BR",
   "escudo": "santos.svg",
-  "qid": "Q5399153"
+  "qid": "Q80955"
  },
  {
   "id": "santos-de-guapiles",
@@ -30965,7 +31147,7 @@
   "nome": "Saprissa",
   "pais": "CR",
   "escudo": "saprissa.svg",
-  "qid": null
+  "qid": "Q868582"
  },
  {
   "id": "saquarema-futebol-clube",
@@ -31049,7 +31231,7 @@
   "nome": "SC Braga",
   "pais": "PT",
   "escudo": "sc-braga.png",
-  "qid": null
+  "qid": "Q75684"
  },
  {
   "id": "sc-cambuur",
@@ -31070,14 +31252,14 @@
   "nome": "SC Farense",
   "pais": "PT",
   "escudo": "sc-farense.png",
-  "qid": null
+  "qid": "Q744353"
  },
  {
   "id": "sc-heerenveen",
   "nome": "SC Heerenveen",
   "pais": "NL",
   "escudo": "sc-heerenveen.png",
-  "qid": null
+  "qid": "Q200321"
  },
  {
   "id": "sc-jiul-petrosani",
@@ -31133,7 +31315,7 @@
   "nome": "SC Telstar",
   "pais": "NL",
   "escudo": "sc-telstar.png",
-  "qid": null
+  "qid": "Q1071713"
  },
  {
   "id": "sc-ticha-varna",
@@ -31616,7 +31798,7 @@
   "nome": "Seongnam FC",
   "pais": "KR",
   "escudo": "seongnam-fc.png",
-  "qid": null
+  "qid": "Q482540"
  },
  {
   "id": "seoul-e-land",
@@ -31728,7 +31910,7 @@
   "nome": "Servette FC",
   "pais": "CH",
   "escudo": "servette-fc.png",
-  "qid": null
+  "qid": "Q219235"
  },
  {
   "id": "sestao-river-club",
@@ -31763,7 +31945,7 @@
   "nome": "Sevilla",
   "pais": "ES",
   "escudo": "sevilla.png",
-  "qid": "Q950835"
+  "qid": "Q10329"
  },
  {
   "id": "sevilla-futbol-club-puerto-rico",
@@ -31924,7 +32106,7 @@
   "nome": "Sheffield United",
   "pais": "EN",
   "escudo": "sheffield-united.png",
-  "qid": "Q18491"
+  "qid": "Q19607"
  },
  {
   "id": "sheffield-wednesday",
@@ -32204,7 +32386,7 @@
   "nome": "SK Sigma Olomouc",
   "pais": "CZ",
   "escudo": "sk-sigma-olomouc.png",
-  "qid": null
+  "qid": "Q385518"
  },
  {
   "id": "sk-slavia-prague",
@@ -32324,6 +32506,13 @@
   "pais": "BR",
   "escudo": "sociedade-desportiva-juazeirense.png",
   "qid": "Q9210971"
+ },
+ {
+  "id": "sociedade-desportiva-serra-futebol-clube",
+  "nome": "Sociedade Desportiva Serra Futebol Clube",
+  "pais": "BR",
+  "escudo": "sociedade-desportiva-serra-futebol-clube.png",
+  "qid": "Q3487431"
  },
  {
   "id": "sociedade-desportiva-sete-de-setembro-de-cupira",
@@ -33002,7 +33191,7 @@
   "nome": "Sport Recife",
   "pais": "BR",
   "escudo": "sport.png",
-  "qid": "Q4796384"
+  "qid": "Q219098"
  },
  {
   "id": "sport-boys-association",
@@ -33191,7 +33380,7 @@
   "nome": "Sporting",
   "pais": "PT",
   "escudo": "sporting-cp.png",
-  "qid": null
+  "qid": "Q75729"
  },
  {
   "id": "sporting-fc",
@@ -33450,7 +33639,7 @@
   "nome": "Standard Liège",
   "pais": "BE",
   "escudo": "standard-liege.png",
-  "qid": null
+  "qid": "Q190561"
  },
  {
   "id": "staplehurst-monarchs-f-c",
@@ -33576,7 +33765,7 @@
   "nome": "Strømsgodset IF",
   "pais": "NO",
   "escudo": "str-msgodset-if.png",
-  "qid": null
+  "qid": "Q7482049"
  },
  {
   "id": "strabane-athletic-f-c",
@@ -33611,7 +33800,7 @@
   "nome": "Stuttgart",
   "pais": "DE",
   "escudo": "stuttgart.svg",
-  "qid": null
+  "qid": "Q4512"
  },
  {
   "id": "sudeva-moonlight-f-c",
@@ -34318,7 +34507,7 @@
   "nome": "tigres",
   "pais": "MX",
   "escudo": "tigres.png",
-  "qid": null
+  "qid": "Q849823"
  },
  {
   "id": "tijuana",
@@ -34405,6 +34594,13 @@
   "qid": "Q7813282"
  },
  {
+  "id": "tokai-fc",
+  "nome": "Tokai FC",
+  "pais": "JP",
+  "escudo": "tokai-fc.png",
+  "qid": "Q130283370"
+ },
+ {
   "id": "tokai-gakuen-university-soccer-club",
   "nome": "Tokai Gakuen University Soccer Club",
   "pais": "JP",
@@ -34423,7 +34619,7 @@
   "nome": "Tokyo Verdy",
   "pais": "JP",
   "escudo": "tokyo-verdy.svg",
-  "qid": null
+  "qid": "Q620499"
  },
  {
   "id": "toledo-colonia-work",
@@ -34437,7 +34633,7 @@
   "nome": "toluca",
   "pais": "MX",
   "escudo": "toluca.png",
-  "qid": "Q30115942"
+  "qid": "Q670186"
  },
  {
   "id": "tombense-futebol-clube",
@@ -34535,7 +34731,7 @@
   "nome": "Toulouse",
   "pais": "FR",
   "escudo": "toulouse.png",
-  "qid": null
+  "qid": "Q19518"
  },
  {
   "id": "toxotis-larissa",
@@ -34552,6 +34748,13 @@
   "qid": "Q11456425"
  },
  {
+  "id": "trabzon",
+  "nome": "Trabzon",
+  "pais": "TR",
+  "escudo": "trabzon.png",
+  "qid": "Q189847"
+ },
+ {
   "id": "trabzon-akcaabat-futbol-kulubu",
   "nome": "Trabzon Akçaabat Futbol Kulübü",
   "pais": "TR",
@@ -34563,7 +34766,7 @@
   "nome": "Trabzonspor",
   "pais": "TR",
   "escudo": "trabzonspor.png",
-  "qid": "Q189847"
+  "qid": "Q192641"
  },
  {
   "id": "tractor-sazi-tabriz-football-club",
@@ -35196,6 +35399,13 @@
   "qid": "Q958008"
  },
  {
+  "id": "umraniye-spor-kulubu",
+  "nome": "Ümraniye Spor Kulübü",
+  "pais": "TR",
+  "escudo": "umraniye-spor-kulubu.png",
+  "qid": "Q6062228"
+ },
+ {
   "id": "umraniyespor",
   "nome": "Ümraniyespor",
   "pais": "TR",
@@ -35424,7 +35634,7 @@
   "nome": "Union Berlin",
   "pais": "DE",
   "escudo": "union-berlin.svg",
-  "qid": null
+  "qid": "Q141971"
  },
  {
   "id": "union-brescia",
@@ -36054,7 +36264,7 @@
   "nome": "Vasco da Gama",
   "pais": "BR",
   "escudo": "vasco.svg",
-  "qid": "Q2868248"
+  "qid": "Q5014111"
  },
  {
   "id": "vasteras-sk",
@@ -36439,7 +36649,7 @@
   "nome": "Vitesse",
   "pais": "NL",
   "escudo": "vitesse.png",
-  "qid": null
+  "qid": "Q219233"
  },
  {
   "id": "vitesse-arnhem",
@@ -36477,18 +36687,11 @@
   "qid": "Q10392318"
  },
  {
-  "id": "volos-n-f-c",
-  "nome": "Volos N.F.C.",
-  "pais": "GR",
-  "escudo": "volos-n-f-c.png",
-  "qid": "Q43375974"
- },
- {
   "id": "volos-nfc",
   "nome": "Volos NFC",
   "pais": "GR",
   "escudo": "volos-nfc.png",
-  "qid": null
+  "qid": "Q43375974"
  },
  {
   "id": "volos-nps",
@@ -36582,13 +36785,6 @@
   "qid": "Q19644"
  },
  {
-  "id": "wanderers-f-c",
-  "nome": "Wanderers F.C.",
-  "pais": "EN",
-  "escudo": "wanderers-f-c.png",
-  "qid": "Q841201"
- },
- {
   "id": "wanderers-futbol-club",
   "nome": "Wanderers Fútbol Club",
   "pais": "UY",
@@ -36642,7 +36838,7 @@
   "nome": "Watford FC",
   "pais": "EN",
   "escudo": "watford-fc.png",
-  "qid": "Q18510"
+  "qid": "Q2714"
  },
  {
   "id": "welling-united-football-club",
@@ -36677,7 +36873,7 @@
   "nome": "Werder Bremen",
   "pais": "DE",
   "escudo": "werder-bremen.png",
-  "qid": null
+  "qid": "Q51976"
  },
  {
   "id": "west-adelaide-soccer-club",
@@ -36747,7 +36943,7 @@
   "nome": "Western Sydney Wanderers",
   "pais": "EN",
   "escudo": "western-sydney-wanderers.svg",
-  "qid": null
+  "qid": "Q841201"
  },
  {
   "id": "western-sydney-wanderers-football-club",
@@ -36852,7 +37048,7 @@
   "nome": "Willem II",
   "pais": "NL",
   "escudo": "willem-ii.png",
-  "qid": null
+  "qid": "Q332664"
  },
  {
   "id": "willem-ii-tilburg",
@@ -36936,7 +37132,7 @@
   "nome": "Wolfsburg",
   "pais": "DE",
   "escudo": "wolfsburg.svg",
-  "qid": null
+  "qid": "Q101859"
  },
  {
   "id": "wollongong-football-club",
@@ -37139,7 +37335,7 @@
   "nome": "Y. Malatyaspor",
   "pais": "TR",
   "escudo": "y-malatyaspor.png",
-  "qid": "Q1368064"
+  "qid": "Q303121"
  },
  {
   "id": "y-s-c-c-yokohama",
@@ -37238,6 +37434,13 @@
   "pais": "JP",
   "escudo": "yokohama-fc-hong-kong.png",
   "qid": "Q1187218"
+ },
+ {
+  "id": "yokohama-flugels",
+  "nome": "Yokohama Flügels",
+  "pais": "JP",
+  "escudo": "yokohama-flugels.png",
+  "qid": "Q1368488"
  },
  {
   "id": "yokohama-marinos",

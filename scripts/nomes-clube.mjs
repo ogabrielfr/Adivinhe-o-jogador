@@ -19,7 +19,7 @@ const semAcento = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '')
 /** Tokens que aparecem no nome oficial e não distinguem clube nenhum. */
 const GENERICOS = new Set([
   'fc','cf','ac','acf','sc','afc','ca','cd','ud','rcd','as','ss','ssc','bk','sk','if','fk','nk','hk',
-  'jk','sv','vfl','vfb','tsg','sl','bv','rc','us','ogc','cr','ec','se','aa','ad','fk','ko',
+  'jk','sv','vfl','vfb','tsg','sl','bv','rc','us','ogc','cr','ec','se','aa','ad','fk','ko','uc','cfc','sfc',
   'club','clube','futbol','football','foot','ball','futebol','soccer','esporte','esportes','esportivo',
   'sportivo','sportiva','sporting','sport','sports','associazione','associacao','association','associacao',
   'sociedade','societa','calcio','spor','kulubu','kulube','regatas','recreativo','deportivo','deportes','desportivo','desportiva','desportos',
@@ -30,8 +30,14 @@ const GENERICOS = new Set([
   'team','klub','futbolniy','boldklub',
 ])
 
+/**
+ * "F.C." e "A.C." são sigla, não duas letras soltas: sem juntar, "F.C. Tokyo"
+ * e "FC Tokyo" tinham palavras diferentes.
+ */
 const partir = (nome) =>
-  semAcento(nome).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(' ').filter(Boolean)
+  semAcento(nome).toLowerCase()
+    .replace(/\b([a-z])\.(?=[a-z]\b)/g, '$1')
+    .replace(/[^a-z0-9]+/g, ' ').trim().split(' ').filter(Boolean)
 
 /** distância de edição, limitada — só interessa saber se é pequena */
 function distancia(a, b) {
@@ -88,6 +94,20 @@ function ufDe(tokens) {
   return tokens.find((t) => UFS.has(t) && t.length === 2) ?? null
 }
 
+/**
+ * Quando cada lado tem uma palavra só, a palavra é o clube inteiro, e a
+ * comparação aproximada vira sorteio: "Burnley" e "Barnsley", "Watford" e
+ * "Dartford", "Parma" e "La Palma", "Celta" e "Ceuta", "Santos" e "Patos"
+ * estão a uma ou duas letras. Todos esses pares casaram, e o catálogo deu ao
+ * Burnley o código de Wikidata do Barnsley — de onde o John Stones começou a
+ * carreira no clube errado. Aqui só passa diferença de uma letra em palavra
+ * longa, que é grafia de outra língua ("Sevilha", "Sevilla"), não outro clube.
+ */
+function mesmaPalavraSo(a, b) {
+  if (a === b) return true
+  return Math.min(a.length, b.length) >= 7 && distancia(a, b) <= 1
+}
+
 export function mesmoClube(a, b) {
   const distintivos = (n) => partir(n).filter((t) => !GENERICOS.has(t))
   const da = distintivos(a)
@@ -97,6 +117,7 @@ export function mesmoClube(a, b) {
 
   // camada 1: os dois lados têm parte distintiva
   if (da.length && db.length) {
+    if (da.length === 1 && db.length === 1) return mesmaPalavraSo(da[0], db[0])
     const [menor, maior] = da.length <= db.length ? [da, db] : [db, da]
     return cabe(menor, maior, menor.length === 1 && maior.length > 1)
   }
@@ -107,5 +128,33 @@ export function mesmoClube(a, b) {
   const [menor, maior] = fa.length <= fb.length ? [fa, fb] : [fb, fa]
   return cabe(menor, maior, true)
 }
+
+/**
+ * Tudo o que `nome` diz está em `outro`? "Sao Paulo" cabe em "São Paulo
+ * Futebol Clube"; "Atl. Dallas" não cabe em "FC Dallas", porque "Atl." é o
+ * que distingue o clube e não está lá.
+ *
+ * É a regra do resolvedor para o nome do Transfermarkt, que abrevia mas não
+ * acrescenta: palavra a mais no nome dele é outro clube. Foi assim que o
+ * Quick Boys do Kuyt virou o Sport Boys do Peru e o Miami United do Adriano,
+ * o United FC dos Emirados — `mesmoClube` aceita um nome contido no outro nos
+ * dois sentidos.
+ */
+export function cabeNoNome(nome, outro) {
+  const distintivos = (n) => partir(n).filter((t) => !GENERICOS.has(t))
+  const dn = distintivos(nome)
+  const doOutro = distintivos(outro)
+  if (!dn.length) return true
+  if (dn.length === 1 && doOutro.length === 1) return mesmaPalavraSo(dn[0], doOutro[0])
+  return cabe(dn, doOutro, dn.length === 1 && doOutro.length > 1)
+}
+
+/**
+ * Os dois nomes dizem exatamente as mesmas coisas, nenhum abrevia o outro.
+ * Desempata quando mais de um clube cabe: "F.C. Tokyo" cabe no FC Tokyo e no
+ * Tokyo Verdy, mas só diz o mesmo que o primeiro; "Paris FC" cabe no Paris
+ * Saint-Germain e é outro clube.
+ */
+export const mesmasPalavras = (a, b) => cabeNoNome(a, b) && cabeNoNome(b, a)
 
 export { partir as tokensDoNome }

@@ -25,11 +25,12 @@ npm run dev
 | `npm run teste-nomes` | testa o comparador de nomes de clube |
 | `npm run coletar` | remonta `scripts/clubes-externos.json` a partir do Wikidata |
 | `npm run dicas` | refaz as dicas sem mexer no elenco |
-| `npm run reparar` | corrige clubes mal resolvidos e recalcula os níveis |
+| `npm run reparar` | refaz a carreira de cada jogador e mostra o que mudou (`-- --simular` não grava) |
+| `npm run mapa-tm` | confere o mapa de clubes do Transfermarkt e o ano de fundação de cada clube |
 | `npm run tecnicos` | lista quem é mais conhecido pelo banco do que pelo campo |
 | `npm run repor` | troca quem tem procura baixa demais para estar na biblioteca |
 | `npm run teste-palpites` | testa o que o jogo aceita como acerto |
-| `npm run biblioteca` | regera `src/dados/jogadores.ts` a partir do Transfermarkt |
+| `npm run biblioteca` | regera `src/dados/jogadores.json` a partir do Transfermarkt |
 | `npm run teste-visual` | roda a partida ponta a ponta no Chromium e salva capturas |
 
 O teste visual precisa do Chromium do Playwright (`npx playwright install chromium`)
@@ -53,8 +54,14 @@ virar um problema, a saída é mover o sorteio para um endpoint.
 
 ## A biblioteca
 
-`src/dados/jogadores.ts` tem **300 jogadores, 100 por nível**, e é **gerado**
-por `npm run biblioteca`. Não edite à mão sem motivo.
+`src/dados/jogadores.json` tem **300 jogadores, 100 por nível**. É dado, não
+código: o jogo importa o arquivo por `src/dados/jogadores.ts`, que só dá tipo a
+ele, e os scripts leem e gravam por `scripts/biblioteca.mjs`. Até setembro a
+biblioteca era um arquivo TypeScript que quatro scripts reescreviam por
+busca-e-troca com expressão regular, cada um com a sua versão da regex.
+
+A biblioteca foi **gerada** por `npm run biblioteca` e hoje é mantida por
+`npm run reparar` (carreiras) e `npm run dicas` (dicas).
 
 A carreira de cada um vem do histórico de transferências do **Transfermarkt**,
 na ordem em que aconteceu, e `fonte` aponta a página de onde saiu. Isso existe
@@ -64,17 +71,76 @@ problema.
 
 ### Como um clube do Transfermarkt vira um id do catálogo
 
-**Por id, não por nome.** Cada transferência traz `/verein/<id>` no link, e
-`scripts/clubes-transfermarkt.json` liga esse id ao nosso, via a propriedade
-P7223 do Wikidata. Casar por nome seria pedir para errar: o catálogo tem dez
-Guaranis, cinco Botafogos e um Esporte Clube Milan. Só quando o id é
-desconhecido é que cai para nome, e aí exige resposta única no mesmo país —
-com desempate pelo clube curado em `CANONICOS`, que é o famoso por construção.
+Num lugar só: `scripts/resolver-clube.mjs`, que o gerador, o reparo e a
+reposição usam. Antes eram três cópias da mesma função, e cada correção
+precisava ser feita três vezes — foi numa delas que o West Ham do Mascherano
+virou o Western United.
 
-**Jogador com qualquer clube não resolvido fica de fora.** O escudo é a
-informação principal do jogo; carreira com buraco não serve. Na última
-execução isso recusou 983 candidatos, e o script imprime quais clubes mais
-derrubaram jogador — é por onde vale ampliar o catálogo.
+**Por id, não por nome.** Cada transferência traz `/verein/<id>` no link, e
+`scripts/clubes-transfermarkt.json` liga esse id ao nosso. Casar por nome seria
+pedir para errar: o catálogo tem dez Guaranis, cinco Botafogos e um Esporte
+Clube Milan.
+
+**O mapa é conferido pelo dono do id.** Ele saía do código de Wikidata que o
+catálogo guarda para cada clube — e o catálogo dava código por semelhança de
+nome. O Burnley ficou com o do Barnsley, o Watford com o do Dartford, o Parma
+com o do La Palma, e o id do Transfermarkt de cada um veio junto: o John
+Stones começava a carreira no Burnley. `npm run mapa-tm` pergunta ao Wikidata
+de quem é cada id do Transfermarkt (o P7223 pertence a um clube só) e tira o
+par quando o dono tem outro nome. Foram dez pares desmentidos. O mesmo dono
+confirma pares novos: São Paulo, Flamengo, Real Madrid e Manchester United,
+cujo código no catálogo era de outra entidade, passaram a resolver pelo id.
+
+**Quando cai para nome, três provas.** Sem id conhecido, a passagem casa pelo
+nome — e é por aí que entravam os homônimos. Agora ela só vale se:
+
+1. **o nome do Transfermarkt cabe no do clube.** Ele abrevia, mas não
+   acrescenta: "Quick Boys" não é o "Sport Boys", e o Kuyt terminava a carreira
+   no Peru. "Miami United" não é o "United FC" dos Emirados, onde o Adriano
+   aparecia;
+2. **o país confere** com a bandeira que o Transfermarkt mostra. Foi o que
+   pegou o Al-Ahli saudita no lugar do de Dubai do Everton Ribeiro, e o
+   Deportivo Maldonado peruano no lugar do uruguaio do Alex Sandro e do Allan;
+3. **o clube existe no ano da passagem.** O Yokohama FC foi fundado em 1998, e
+   o Zinho e o César Sampaio jogaram no Yokohama Flügels em 1994; o Inter Miami
+   é de 2018, e o Miami FC do Zinho, de 2006. O ano vem do mesmo dono do id,
+   em `scripts/fundacao-clubes.json`.
+
+Falhando uma, a passagem **trava** e aparece no relatório do `reparar`, em vez
+de escolher um clube errado em silêncio. Travar é recuperável; escudo trocado,
+não. O conserto é um par em `PARES_TM` (`scripts/clubes-canonicos.mjs`) ou o
+clube que falta em `SEM_ESCUDO`.
+
+O comparador de nomes (`scripts/nomes-clube.mjs`) também apertou: com uma
+palavra de cada lado, só aceita diferença de uma letra em palavra longa
+("Sevilha", "Sevilla"). Antes, "Burnley" e "Barnsley", "Santos" e "Patos",
+"Celta" e "Ceuta" eram o mesmo clube.
+
+### Só jogo profissional
+
+O cliente pediu que a carreira mostre só onde o jogador jogou como
+profissional. O histórico de transferências do Transfermarkt não sabe disso:
+lista a base, o time B, o clube-ponte que comprou para emprestar no mesmo dia e
+o empréstimo em que o jogador não entrou em campo. Cinco filtros, em
+`scripts/transfermarkt.mjs` e `scripts/resolver-clube.mjs`:
+
+| Filtro | O que tira | Exemplo |
+| --- | --- | --- |
+| Categoria de base e time B | nome com marca de base ou reserva, inclusive a tradução do site em português | "OB Juventude" (a base do Odense) virava o Juventude de Caxias na carreira do Eriksen; "Real Madrid Castilla", "Man City For", "Seiryo HS" |
+| Formação | as primeiras passagens de onde o jogador saiu antes dos 17 anos | Albacete do Iniesta, West Ham do John Terry |
+| Compra relâmpago | clube que comprou e emprestou em até um mês | Deportivo Maldonado do Alex Sandro, Granada do Allan, Tombense do Firmino, Rio Ave do Fabinho |
+| Volta de empréstimo | a volta ao clube dono só entra quando é lá que a passagem de verdade começa | o Coutinho foi vendido à Inter aos 16 e emprestado ao Vasco no mesmo dia: a Inter aparece depois do Vasco, onde ele jogou |
+| Sem jogo oficial | clube com partida registrada e nenhum jogo | ver abaixo |
+
+O último vem do registro de partidas do Transfermarkt (`jogosPorClube`), o
+mesmo que o quadro de desempenho do perfil lê: cada partida oficial do clube
+com a participação do jogador — jogou, no banco, fora da lista, lesionado. Só
+conta como prova a partida em que o site sabe onde o jogador estava, **no banco
+ou lesionado**: o Filipe Luís ficou duas vezes no banco do Ajax e nunca entrou.
+"Fora da lista" em todas as partidas não prova nada, porque é assim que o site
+marca a temporada da qual não tem a escalação — o Zanetti aparece com zero
+jogos no Banfield de 1993, onde jogou 66 vezes. O clube atual fica sempre:
+quem chegou há pouco ainda não estreou.
 
 ### A dica
 
@@ -164,6 +230,11 @@ nome que serve a mais de um. `npm run teste-palpites` guarda os casos.
 
 ### O nível
 
+**Em revisão.** O cliente recusou as visualizações da Wikipédia como régua, e
+até a nova ser decidida o nível é o que está na biblioteca: `npm run reparar`
+não recalcula mais, e `scripts/niveis-fixos.mjs` guarda as decisões tomadas à
+mão. O que segue é a régua que foi usada até aqui.
+
 Sai quase todo da **mediana de visualizações do artigo na Wikipédia em
 português**: é a única medida direta da pergunta do jogo — quanta gente procura
 esse jogador em português. Mediana e não soma porque transferência e polêmica
@@ -228,7 +299,7 @@ elenco novo:
 | Comando | O que faz |
 | --- | --- |
 | `npm run dicas` | refaz as dicas |
-| `npm run reparar` | re-resolve os clubes de cada carreira e recalcula os níveis |
+| `npm run reparar` | refaz a carreira de cada jogador pelo resolvedor único e lista, clube a clube, o que mudou |
 
 `npm run reparar` existe porque um erro de comparação de nomes chegou ao jogo:
 "West Ham United" casou com "Western United", um clube australiano, e o

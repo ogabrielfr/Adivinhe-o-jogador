@@ -61,21 +61,91 @@ const porIdTm = (() => {
 })()
 
 /** Linhas do histórico que marcam ausência de clube, não um clube. */
-const NAO_E_CLUBE = /^(sem clube|aposentad|fim de carreira|carreira encerrada|unknown|retired|pausa)/i
+export const NAO_E_CLUBE = /^(sem clube|aposentad|fim de carreira|carreira encerrada|unknown|desconhecido|retired|pausa|suspens)/i
+
+/**
+ * O histórico traz também o que ainda não aconteceu: o fim de um empréstimo
+ * em curso vem com a data de junho do ano que vem e `upcoming`.
+ */
+export const jaAconteceu = (t, agora = Date.now()) =>
+  !t.upcoming && !t.futureTransfer && !(Date.parse(t.dateUnformatted ?? '') > agora)
 
 /**
  * Categoria de base e time reserva, que o histórico lista junto do profissional:
  * "Coritiba U20", "Dunkerque Jgd" (Jugend), "Le Mans UC 72 B", "SD Taishan Res.".
+ *
+ * O site em português TRADUZ a base: "OB Jugend" vira "OB Juventude", "Newell's
+ * Jugend" vira "Newells Jv", "AS Monaco Jugend" vira "As Monaco Juven". A lista
+ * só conhecia o alemão e o inglês, e foi assim que o Juventude de Caxias entrou
+ * na carreira do Eriksen e que o Messi caiu do gerador. O time reserva também
+ * escapava quando não era "B": "Barcelona C", "Real Madrid Castilla", "Jong Ajax".
+ *
+ * E abrevia: "Real Madrid S19" (sub-19), "Man City For" (formação), "Sevilla Fc
+ * Juve", "Albacete F Base" (fútbol base), "Perugia Gio" (giovanili), "West Ham
+ * Cj", "Portimonense 15" e "Willem II RKC 17" (a idade sozinha). "Talleres RE"
+ * parece reserva e não é: é o Talleres de Remedios de Escalada, onde o Zanetti
+ * começou. Todos esses passaram pelo filtro antigo e viraram o escudo do time
+ * principal na carreira de alguém.
+ *
+ * Time de escola também é base: "Seiryo HS" (colegial japonês), "Myongji Uni",
+ * "Yukminkwan MS". E time B com nome próprio: "V. Mestalla" (Valencia),
+ * "Atl. Madrileño", "Barça Atlètic", "Bilbao Athletic", "Sporting Atl.".
+ *
+ * "Juniors" e "Jrs" ficam de fora de propósito: Boca Juniors e Argentinos Juniors
+ * são clubes, não base. "Juve" só no fim do nome, porque a Juve Stabia é clube.
  */
-const CATEGORIA_DE_BASE =
-  /\b(U\d{1,2}|Sub[-\s]?\d{1,2}|Youth|Yth|Jugend|Jgd|Juv|Juvenil|Juniores|Jun|Academy|Acad|Form|Formation|Abi|Amateure?|Res|Reserves?)\b\.?|\s(B|II|2)$/i
+/**
+ * A fronteira de palavra do JavaScript só conhece letra sem acento: para `\b`,
+ * o "é" de "Académica" separa palavras, e "Acad" casava com a Académica de
+ * Viseu, "Res" com o Céres. A fronteira aqui é de qualquer letra.
+ */
+const LETRA = String.raw`[\p{L}\p{N}]`
+const inteira = (termos) => `(?<!${LETRA})(?:${termos})(?!${LETRA})\\.?`
+const CATEGORIA_DE_BASE = new RegExp([
+  inteira([
+    String.raw`U\d{1,2}|Sub[-\s]?\d{1,2}|S(1[3-9]|2[0-3])`,
+    'Youth|Yth|Jugend|Jgd|Jeugd|Jug|Juv|Juven|(?<!Clan )Juveni\\p{L}*|Juniore\\p{L}*|Júniores|Jun|Infantil|Aspirantes',
+    'Academy|Acad|Form|Forma(ção|cao)?|Formation|Abi|Amateure?|Aficionados|Res|Reserves?',
+    'Castilla|Mestalla|Madrileño|Atlètic|Promesas|Giovanili|Cj|Mł(d|odzi)\\p{L}*',
+    String.raw`F\.?\s?Base|F[úu]tb?\.?\s?b(ase)?`,
+  ].join('|')),
+  // abreviação no fim do nome: "Man City For", "Rio Ave Y", "Seiryo HS", "Newells Jv"
+  String.raw`\s(B|C|J|Y|(?<!Willem\s)II|2|Juve|Gio|Frm|For|Fo|Fr|Prom|You|Atl|ES|MS|HS|THS|Uni|Jv|(?<!(Clube|EC|E\.\s?C\.)\s)Primavera|Base)\.?\s*$`,
+  // a idade sozinha: "Portimonense 15", "Willem II/RKC-17"; e o "-2" do time reserva
+  String.raw`[\s-](1[5-9]|2[0-3])\s*$|-2(\s|$)`,
+  String.raw`^Jong\s|^Bilbao Athletic|^Dragon\s?Force`,
+].join('|'), 'iu')
 
 /**
- * O retorno de empréstimo não é uma passagem nova: leva o jogador de volta ao
- * clube dono, muitas vezes sem que ele jogue lá. Sem este filtro, o Keirrison
- * volta ao Barcelona seis vezes, entre um empréstimo e o seguinte.
+ * "Juventude" sozinho é o clube de Caxias; depois do nome de outro clube é a
+ * tradução de Jugend. "OB Juventude" é base; "Esporte Clube Juventude" não.
+ */
+const BASE_JUVENTUDE = /^(?!(esporte clube|sociedade esportiva|e\.?\s?c\.?|s\.?\s?e\.?)\s)\S.*\sJuventude$/i
+
+export const ehCategoriaDeBase = (nome) => CATEGORIA_DE_BASE.test(nome) || BASE_JUVENTUDE.test(nome)
+
+/**
+ * Empréstimo e volta.
+ *
+ * A carreira mostra o clube dono uma vez, no lugar em que o jogador chegou, e
+ * os empréstimos depois dele — como o quadro de carreira da Wikipédia. A volta
+ * de empréstimo não é passagem nova: muitas vezes só devolve o jogador ao dono
+ * para o próximo empréstimo, e contada sempre, o Keirrison voltava ao
+ * Barcelona seis vezes.
+ *
+ * A exceção é o clube que comprou e emprestou na mesma hora. O Coutinho foi
+ * vendido à Inter aos 16 anos e emprestado ao Vasco no mesmo dia; os três anos
+ * em que jogou na Inter chegam no histórico como volta de empréstimo. A
+ * compra que vira empréstimo em até um mês não é passagem (ele não jogou lá),
+ * e a volta entra no lugar dela — desde que o jogador fique seis meses, que é
+ * o que separa quem jogou de quem estava de passagem para o próximo
+ * empréstimo. Quem decide se a volta entra é `montarCarreira`, que sabe se o
+ * clube já está na carreira.
  */
 const FIM_DE_EMPRESTIMO = /fim do empr[ée]stimo|end of loan|leihe\s*-?\s*ende/i
+const IDA_DE_EMPRESTIMO = /empr[ée]stimo|loan|leihe/i
+const DIAS_DE_COMPRA_RELAMPAGO = 31
+const MESES_PARA_A_VOLTA_CONTAR = 6
 
 /** Busca os ids do Transfermarkt de vários jogadores de uma vez. */
 export async function idsDoTransfermarkt(qids) {
@@ -138,6 +208,8 @@ async function pedirComInsistencia(url, tentativas = 6) {
   return null
 }
 
+const idDoClube = (clube) => clube?.href?.match(/\/verein\/(\d+)/)?.[1] ?? null
+
 function nomeDoClube(clube) {
   if (!clube) return null
   const idTm = clube.href?.match(/\/verein\/(\d+)/)?.[1]
@@ -162,22 +234,61 @@ export async function passagensDoTransfermarkt(tmId) {
   const dados = await historicoDoTransfermarkt(tmId)
   if (!dados) return null
 
-  // a API devolve do mais recente para o mais antigo
-  const transferencias = (dados.transfers ?? []).slice().reverse()
+  /**
+   * A API devolve do mais recente para o mais antigo, e inclui o que ainda
+   * não aconteceu: o fim de um empréstimo em curso vem com data de junho do
+   * ano que vem e `upcoming`. Contado, o ter Stegen já estaria de volta ao
+   * Barcelona e o Gabigol, ao Cruzeiro.
+   */
+  const transferencias = (dados.transfers ?? []).filter((t) => jaAconteceu(t)).reverse()
   if (!transferencias.length) return []
 
+  /**
+   * Cada passagem leva, além do nome e do id, o país do clube (id da bandeira
+   * no Transfermarkt) e os anos de chegada e saída. É com eles que o
+   * resolvedor de clube recusa homônimo de outro país ou de outra época —
+   * o Inter Miami de 2018 na carreira de quem jogou em Miami em 2005.
+   */
+  const anoDe = (t) => Number(String(t?.dateUnformatted ?? '').slice(0, 4)) || null
+  const bandeiraDe = (clube) => clube?.countryFlag?.match(/\/(\d+)\.png/)?.[1] ?? null
+
   const sequencia = []
-  const acrescentar = (clube) => {
+  const acrescentar = (clube, ano, volta = false) => {
     const nome = nomeDoClube(clube)
-    if (!nome || NAO_E_CLUBE.test(nome) || CATEGORIA_DE_BASE.test(nome)) return
-    const idTm = clube?.href?.match(/\/verein\/(\d+)/)?.[1] ?? null
-    if (sequencia[sequencia.length - 1]?.nome !== nome) sequencia.push({ nome, idTm })
+    if (!nome || NAO_E_CLUBE.test(nome) || ehCategoriaDeBase(nome)) return
+    if (sequencia.at(-1)?.nome === nome) return
+    const idTm = idDoClube(clube)
+    sequencia.push({ nome, idTm, bandeira: bandeiraDe(clube), ano, anoSaida: null, ...(volta && { volta }) })
   }
 
-  acrescentar(transferencias[0]?.from)
-  for (const t of transferencias) {
-    if (FIM_DE_EMPRESTIMO.test(t.fee ?? '')) continue
-    acrescentar(t.to)
+  const quando = (t) => Date.parse(t?.dateUnformatted ?? '') || null
+  const dias = (a, b) => (quando(b) - quando(a)) / (1000 * 60 * 60 * 24)
+  const ehIda = (t) => IDA_DE_EMPRESTIMO.test(t?.fee ?? '') && !FIM_DE_EMPRESTIMO.test(t?.fee ?? '')
+  const ficouNaVolta = (i) => {
+    const proxima = transferencias[i + 1]
+    if (!proxima) return true
+    return quando(transferencias[i]) && quando(proxima)
+      ? dias(transferencias[i], proxima) / 30.44 >= MESES_PARA_A_VOLTA_CONTAR
+      : false
+  }
+  /** Comprado e emprestado pelo mesmo clube em seguida: não jogou lá. */
+  const compraRelampago = (i) => {
+    const t = transferencias[i]
+    const proxima = transferencias[i + 1]
+    return Boolean(proxima && ehIda(proxima) && idDoClube(proxima.from) === idDoClube(t.to) &&
+      quando(t) && quando(proxima) && dias(t, proxima) <= DIAS_DE_COMPRA_RELAMPAGO)
+  }
+
+  acrescentar(transferencias[0]?.from, null)
+  for (const [i, t] of transferencias.entries()) {
+    const volta = FIM_DE_EMPRESTIMO.test(t.fee ?? '')
+    if (volta && !ficouNaVolta(i)) continue
+    const ano = anoDe(t)
+    // a saída do clube anterior é nesta data, mesmo quando o destino é descartado
+    const ultima = sequencia.at(-1)
+    if (ultima && !ultima.anoSaida && nomeDoClube(t.to) !== ultima.nome) ultima.anoSaida = ano
+    if (!volta && compraRelampago(i)) continue
+    acrescentar(t.to, ano, volta)
   }
   return sequencia
 }
@@ -186,6 +297,57 @@ export async function passagensDoTransfermarkt(tmId) {
 export async function carreiraDoTransfermarkt(tmId) {
   const passagens = await passagensDoTransfermarkt(tmId)
   return passagens && passagens.map((p) => p.nome)
+}
+
+/**
+ * Quantos jogos oficiais o jogador fez por clube, pelo id do clube.
+ *
+ * O cliente pediu carreira só de jogo profissional, e o histórico de
+ * transferências não sabe disso: lista o empréstimo em que o jogador ficou no
+ * banco o ano inteiro, a compra de papel por um clube-ponte, o contrato que
+ * nunca virou partida. O Transfermarkt guarda também cada partida oficial com
+ * a participação do jogador (jogou, no banco, fora da lista, lesionado), e é
+ * isso que o widget de desempenho do perfil lê.
+ *
+ * Volta `{ idDoClube: { registros, jogou } }`. Clube sem registro nenhum não
+ * aparece — o Transfermarkt não acompanha partida de toda liga em toda época,
+ * então ausência não prova nada. Registro com zero jogos prova.
+ */
+export async function jogosPorClube(tmId) {
+  const arquivo = join(CACHE, `jogos-${tmId}.json`)
+  if (existsSync(arquivo)) {
+    try {
+      return JSON.parse(readFileSync(arquivo, 'utf8'))
+    } catch {
+      // cache corrompido: busca de novo
+    }
+  }
+  const bruto = await pedirComInsistencia(`https://tmapi.transfermarkt.technology/player/${tmId}/performance-game`)
+  if (!bruto) return null
+  let dados
+  try {
+    dados = JSON.parse(bruto)
+  } catch {
+    return null
+  }
+  if (!dados?.success) return null
+
+  const porClube = {}
+  for (const jogo of dados.data?.performance ?? []) {
+    if (jogo.gameInformation?.isNationalGame) continue
+    const clube = jogo.clubsInformation?.club?.clubId
+    if (!clube) continue
+    const estado = jogo.statistics?.generalStatistics?.participationState ?? '?'
+    const ano = jogo.gameInformation?.seasonId
+    const registro = (porClube[clube] ??= { registros: 0, jogou: 0, estados: {}, de: ano, ate: ano })
+    registro.registros++
+    registro.estados[estado] = (registro.estados[estado] ?? 0) + 1
+    if (estado === 'played' || jogo.statistics?.playingTimeStatistics?.playedMinutes > 0) registro.jogou++
+    if (ano && (!registro.de || ano < registro.de)) registro.de = ano
+    if (ano && (!registro.ate || ano > registro.ate)) registro.ate = ano
+  }
+  writeFileSync(arquivo, JSON.stringify(porClube))
+  return porClube
 }
 
 /**

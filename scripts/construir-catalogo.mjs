@@ -207,6 +207,31 @@ if (existsSync(ARQ_EXTERNOS)) {
   const externos = JSON.parse(readFileSync(ARQ_EXTERNOS, 'utf8'))
   const idsUsados = new Set([...candidatos.values()].map((c) => c.id))
 
+  /**
+   * Clube de SEM_ESCUDO com `tm` pega o escudo do Transfermarkt, mesmo que o
+   * Wikidata traga outro: o Miami FC em que o Zinho jogou em 2006 virou Fort
+   * Lauderdale Strikers, e o escudo que o Wikidata tem é o do clube renomeado.
+   * Clube que o Wikidata nem lista entra por aqui também.
+   */
+  for (const dados of Object.values(SEM_ESCUDO)) {
+    if (!dados.tm || !dados.wd) continue
+    const i = externos.findIndex((c) => c.qid === dados.wd)
+    const doTm = {
+      qid: dados.wd, nome: dados.nome, pais: dados.pais, local: null, uf: null, artigo: null,
+      url: `https://tmssl.akamaized.net/images/wappen/head/${dados.tm}.png`,
+      origem: 'transfermarkt', licenca: 'marca',
+    }
+    if (i >= 0) externos[i] = doTm
+    else externos.push(doTm)
+  }
+
+  /**
+   * Clube que o jogo pede separado não é engolido por um de nome parecido. O
+   * Yokohama Flügels, que fechou em 1998, casava por nome com o Yokohama FC e
+   * nunca entrava no catálogo; o Atlético Dallas casava com o FC Dallas.
+   */
+  const separados = new Set(Object.values(SEM_ESCUDO).map((d) => d.wd).filter(Boolean))
+
   // comparar cada externo com o catálogo inteiro seria milhões de chamadas;
   // clube só colide com clube do mesmo país
   const porPais = new Map()
@@ -229,7 +254,8 @@ if (existsSync(ARQ_EXTERNOS)) {
     // e os jogadores já apontam para ele. Nome com parêntese é desambiguado
     // ("... (Ribeirão Preto)"), logo não é o clube famoso de mesmo nome.
     const desambiguado = nome.includes('(')
-    const jaTem = !desambiguado && (porPais.get(c.pais) ?? []).find((a) => mesmoClube(a.nome, nome))
+    const jaTem = !desambiguado && !separados.has(c.qid) &&
+      (porPais.get(c.pais) ?? []).find((a) => mesmoClube(a.nome, nome))
     if (jaTem) {
       /**
        * O clube já veio de repositório e fica com a versão de lá, mas o QID é
@@ -441,6 +467,17 @@ async function gravarEscudo(c, destinoSemExt) {
 
 // -------------------------------------------------------------- 7. gravação
 const clubes = [...candidatos.values()].sort((a, b) => a.id.localeCompare(b.id))
+
+/**
+ * O QID que veio por semelhança de nome perde para o do dono do id do
+ * Transfermarkt, conferido por `npm run mapa-tm`: pelo nome, o FC Dallas
+ * ficava com o QID do Dallas Roma e o Gijón com o do Gijón Sport Club.
+ */
+const ARQ_QIDS = join(raiz, 'scripts', 'qid-dos-clubes.json')
+if (existsSync(ARQ_QIDS)) {
+  const qidDoClube = JSON.parse(readFileSync(ARQ_QIDS, 'utf8'))
+  for (const c of clubes) c.qid = qidDoClube[c.id] ?? c.qid
+}
 const arquivoDe = {}
 let feitos = 0
 for (const c of clubes) {

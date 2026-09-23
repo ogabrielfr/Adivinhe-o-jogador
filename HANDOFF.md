@@ -11,8 +11,8 @@ falta. Leia junto com o `README.md`, que cobre a arquitetura.
 ## O jogo
 
 "Acerte o jogador pela carreira". Os escudos dos clubes por onde um jogador
-passou aparecem em ordem cronológica, e o usuário tem 3 chutes e uma dica para
-descobrir quem é. Três níveis independentes, um jogador novo em cada um por dia.
+passou aparecem em ordem cronológica, e o usuário tem 3 chutes e duas dicas
+para descobrir quem é. Três níveis independentes, um jogador novo em cada um por dia.
 Público brasileiro; jogadores do mundo todo, filtrados por "o torcedor
 brasileiro reconhece".
 
@@ -31,6 +31,8 @@ Site estático (Vite + React + TS + Tailwind), sem back-end e sem chave de API.
 | Desistir | Revela o nome e encerra o nível; conta como derrota, com confirmação em dois toques |
 | Entrada de texto | Livre, sem autocomplete (entregaria a lista de respostas); tolera acento, caixa e um erro de digitação |
 | Clube repetido | Válido — o escudo reaparece na posição certa quando o jogador voltou |
+| Carreira | **Só jogo profissional**: sem base, sem time B, sem clube-ponte, sem empréstimo em que o jogador não entrou em campo |
+| Nível | A régua de visualizações da Wikipédia foi **recusada**; o nível está congelado até a nova ser decidida |
 
 ---
 
@@ -77,40 +79,36 @@ Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
 
 - Jogo completo: tela inicial, partida, derrota (com o nome revelado), vitória, compartilhamento estilo Wordle, streak e estatísticas em `localStorage`.
 - Sorteio diário determinístico por data, sem servidor, com reembaralhamento por ciclo para ninguém repetir antes da volta completa.
-- **300 jogadores, 100 por nível**, com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e os 300 têm `verificado: true`.
-- **Catálogo de 5352 clubes de 66 países**, sendo 1142 brasileiros. Os 385 que o jogo usa têm escudo real — nenhum brasão de reserva em uso.
+- **300 jogadores, 100 por nível**, com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e os 300 têm `verificado: true`. A biblioteca é dado (`src/dados/jogadores.json`), lida e gravada por `scripts/biblioteca.mjs`.
+- **Um resolvedor de clube só** (`scripts/resolver-clube.mjs`) para gerar, reparar e repor. Casa por id do Transfermarkt; por nome, só com nome contido, país e época conferidos.
+- **Mapa do Transfermarkt conferido pelo dono do id** (`npm run mapa-tm`): o Wikidata diz de quem é cada id, e o par que ele desmente sai.
+- **Catálogo de 5381 clubes de 66 países**, sendo 1155 brasileiros. Dos 374 que o jogo usa, só o Miami FC de 2006 fica com o brasão desenhado, de propósito: as duas fontes mostram o escudo do Fort Lauderdale Strikers, que o clube virou depois.
 - **Duas dicas por jogador**, montadas de números verificáveis e escolhidas pelo que cada um tem de raro; a naturalidade tem vaga cativa quando existe, porque é o fato que localiza.
 - `npm run validar-dados` confere integridade e recusa dica que entregue nome de jogador ou clube visível.
-- `npm run teste-nomes` (26 casos) testa o comparador de nomes de clube; `npm run teste-palpites` (25 casos) testa a aceitação de palpite.
+- `npm run teste-nomes` (71 casos) testa o comparador de nomes de clube; `npm run teste-palpites` (25 casos) testa a aceitação de palpite.
 - `npm run teste-visual` roda a partida ponta a ponta no Chromium e salva capturas.
 
 ---
 
 ## Pontos em aberto, por prioridade
 
-### 1. Três nomes grandes continuam fora
+### 1. Os 21 maiores nomes que faltam
 
-**Romário, Rivaldo e Bebeto** não entraram na biblioteca. Cada um esbarra em
-mais de um clube que a resolução não fecha, e a regra é não gravar carreira com
-buraco.
+Messi, Ronaldo Fenômeno, Maradona, Zidane, Romário, Rivaldo, Bebeto, Garrincha,
+Mbappé, Totti, Buffon, Ibrahimović, Salah, Pirlo, Haaland, Lewandowski,
+Riquelme, Thiago Silva, Raphinha, Marquinhos e Juninho Pernambucano. O cliente
+decidiu **trazer todos e crescer para ~320**, e **tirar o teto de escudos**
+(Romário tem 15, Rivaldo 16). Antes de entrar, a agenda precisa estar congelada
+— jogador novo muda a lista do nível e, sem agenda, o jogador de todos os dias.
 
-O conserto é o mesmo dos outros oito nomes já resolvidos: achar o id do clube
-no Transfermarkt e acrescentar o par `id do TM -> id do catálogo` em
-`scripts/clubes-transfermarkt.json`, depois `npm run reparar`. Desde a última
-sessão o comando **lista quais carreiras congelou e que nome travou cada uma**,
-então o trabalho começa rodando ele e lendo a lista.
+### 2. A régua do nível
 
-### 2. Nível de quem é famoso por outra coisa
-
-O nível sai de visualizações medianas da Wikipédia em português, que é a melhor
-medida de reconhecimento brasileiro que achamos — e erra quando a fama não vem
-de jogar. **Guardiola está no fácil** porque é procuradíssimo como treinador;
-como jogador, a carreira dele é um enigma difícil.
-
-`scripts/niveis-fixos.mjs` existe para isso: um id e um nível, e o cálculo é
-ignorado para aquele jogador. Está **vazio de propósito** — toda vez que
-tentei corrigir o nível por regra eu piorei o conjunto (ver README, seção
-"O nível"). Use para o caso isolado, não para uma nova teoria de ranking.
+O cliente recusou as visualizações da Wikipédia como régua de nível ("melhor
+achar outro caminho"), e pediu que a medida de procura passe a olhar os últimos
+12 meses. Até a nova régua ser decidida com ele, `npm run reparar` não
+recalcula nível: vale o que está na biblioteca, e `scripts/niveis-fixos.mjs`
+guarda as decisões à mão (Roger Machado e Joel Santana no difícil, Guardiola no
+intermediário).
 
 ### 3. Texto que vem das fontes e lê mal
 
@@ -119,9 +117,9 @@ tentei corrigir o nível por regra eu piorei o conjunto (ver README, seção
 
 ### 4. Tamanho do repositório
 
-`public/escudos/` está em **77 MB** com os 5352 clubes. Dentro dos limites do
+`public/escudos/` está em **77 MB** com os 5381 clubes. Dentro dos limites do
 GitHub Pages com folga, e o pacote enviado ao navegador **não** cresce com
-isso: `clubes.ts` leva só os 385 clubes em uso.
+isso: `clubes.ts` leva só os 374 clubes em uso.
 
 O custo é de repositório, não de carregamento — clone mais lento e 77 MB
 publicados a cada push. Se incomodar, o corte natural é gravar em
@@ -144,6 +142,8 @@ acesso a essas fontes se mostrou frágil.
 - **`npm run catalogo` demora bastante** (baixa milhares de imagens e processa com sharp). Rode em background. O `.cache/` guarda os originais, então a segunda vez é rápida.
 - **`npm run coletar` demora ~25 min** e refaz `scripts/clubes-externos.json` do zero. Só precisa rodar quando quiser ampliar países ou atualizar a fonte.
 - **`src/dados/clubes.ts` é gerado e só tem os clubes em uso.** O catálogo completo, para consultar ao escrever carreira nova, está em `scripts/catalogo-completo.json`. Ao acrescentar jogador, rode `npm run catalogo` de novo para os clubes novos entrarem no pacote.
+- **O registro de partidas do Transfermarkt engana em época antiga.** `jogosPorClube` lê cada partida oficial com a participação do jogador, e é o que tira da carreira o clube onde ele não jogou. Mas temporada sem escalação no site vem inteira como "fora da lista": o Zanetti aparece com zero jogos no Banfield de 1993, onde jogou 66. Só conta como prova quando há escalação de verdade. O endereço (`tmapi.transfermarkt.technology`) não passa pelo WAF.
+- **O nome do Transfermarkt abrevia até no endereço** ("/man-utd/"), e o código do Wikidata guardado no catálogo foi dado por nome e errou em dezenas de clubes. Para ligar clube a id, confie no dono do id (P7223), não no nome — é o que `npm run mapa-tm` faz.
 - **Carreira que não resolve fica congelada, e isso já escondeu erro por semanas.** `npm run reparar` não reescreve uma carreira quando algum clube dela não tem id — a regra existe para não gravar lista com buraco, mas congela junto os clubes que o mapa já sabia corrigir. Foi assim que o Chicharito seguiu com o escudo do Western United depois de o West Ham já estar certo no mapa. O comando agora **lista o que congelou e o nome que travou**; leia essa lista toda vez.
 - **Clube homônimo é a armadilha do Brasil.** Há dez Guaranis e cinco Botafogos no catálogo, de cidades diferentes. O id sai desambiguado pela cidade quando o nome colide. Confira o id antes de usar.
 - **Imagem de topo de artigo da Wikipédia nem sempre é o escudo** — em clube pequeno costuma ser foto da sede. `pareceEscudo()` em `scripts/wikidata.mjs` barra isso pelo formato e pelo nome do arquivo.

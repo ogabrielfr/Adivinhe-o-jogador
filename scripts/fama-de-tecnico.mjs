@@ -22,29 +22,20 @@ import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
 import { historicoDoTransfermarkt } from './transfermarkt.mjs'
 import { fatosDoHistorico } from './dicas.mjs'
+import { lerBiblioteca, idTmDe } from './biblioteca.mjs'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
-const ARQUIVO = join(raiz, 'src/dados/jogadores.ts')
 const ARQUIVO_TECNICOS = join(raiz, 'scripts/tecnicos-jogadores.json')
 const ARQUIVO_VIEWS = join(raiz, 'scripts/visualizacoes-jogadores.json')
-
-const fonte = readFileSync(ARQUIVO, 'utf8')
-const blocos = [...fonte.matchAll(/\{\s*\n\s*id: '([^']+)',[\s\S]*?\n {2}\},/g)]
 
 const tmPorQid = JSON.parse(readFileSync(join(raiz, 'scripts/tm-jogadores.json'), 'utf8'))
 const qidPorTm = new Map(Object.entries(tmPorQid).map(([qid, tm]) => [String(tm), qid]))
 const selecoes = JSON.parse(readFileSync(join(raiz, 'scripts/selecoes-jogadores.json'), 'utf8'))
 const views = JSON.parse(readFileSync(ARQUIVO_VIEWS, 'utf8'))
 
-const jogadores = blocos.map((b) => {
-  const tm = b[0].match(/spieler\/(\d+)/)?.[1] ?? null
-  return {
-    id: b[1],
-    tm,
-    qid: qidPorTm.get(tm),
-    nome: b[0].match(/nome: "((?:[^"\\]|\\.)*)"/)?.[1] ?? b[1],
-    nivel: b[0].match(/nivel: '([^']+)'/)?.[1] ?? '?',
-  }
+const jogadores = lerBiblioteca().map((j) => {
+  const tm = idTmDe(j)
+  return { id: j.id, tm, qid: qidPorTm.get(tm), nome: j.nome, nivel: j.nivel }
 })
 const qids = [...new Set(jogadores.map((j) => j.qid).filter(Boolean))]
 

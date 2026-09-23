@@ -1,5 +1,5 @@
 /**
- * Monta src/dados/jogadores.ts com a carreira vinda do Transfermarkt.
+ * Monta a biblioteca (src/dados/jogadores.json) com a carreira vinda do Transfermarkt.
  *
  *   npm run biblioteca              # 100 por nível
  *   npm run biblioteca -- 20        # menos, para testar rápido
@@ -11,15 +11,10 @@
  *
  * ## Como um clube do Transfermarkt vira um id do nosso catálogo
  *
- * Por id, não por nome. Cada transferência traz `/verein/<id>` no link, e o
- * manifesto do catálogo guarda esse mesmo id para os clubes cujo escudo veio
- * de lá. Casar por nome seria pedir para errar: "Guangzhou Evergrande" casa
- * tanto com o clube certo quanto com o Guangzhou City, e há dez Guaranis no
- * Brasil. Só quando o id não é conhecido é que cai para nome, e aí exige
- * resposta única no mesmo país — havendo duas, o jogador inteiro é descartado.
- *
- * Jogador com qualquer clube não resolvido fica de fora. O escudo é a
- * informação principal do jogo; carreira com buraco não serve.
+ * Pelo resolvedor de `resolver-clube.mjs`, o mesmo do reparo e da reposição:
+ * por id do Transfermarkt quando o mapa conhece, e por nome só com país e
+ * época conferidos. Jogador com qualquer passagem travada fica de fora — o
+ * escudo é a informação principal do jogo, e carreira com buraco não serve.
  *
  * ## A dica
  *
@@ -31,91 +26,27 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
-import { CANONICOS } from './clubes-canonicos.mjs'
-import { mesmoClube, tokensDoNome } from './nomes-clube.mjs'
 import { montarDicas, fatosDoHistorico, naturalidadeSegura } from './dicas.mjs'
 import { torneiosDe, torneiosQueContam } from './torneios.mjs'
 import {
   passagensDoTransfermarkt, idsDoTransfermarkt,
-  historicoDoTransfermarkt, perfilDoTransfermarkt,
+  historicoDoTransfermarkt, perfilDoTransfermarkt, jogosPorClube,
 } from './transfermarkt.mjs'
+import { gravarBiblioteca, lerBiblioteca, idTmDe } from './biblioteca.mjs'
+import { criarResolvedor } from './resolver-clube.mjs'
 import { numeroDoDia, origemDaPosicao, posicaoDoDia, semente } from '../src/logica/sorteio.ts'
 import { latinizar } from '../src/logica/texto.ts'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
 const POR_NIVEL = Number(process.argv[2]) || 100
 
-// ------------------------------------------------- catálogo e chaves de clube
-const catalogo = JSON.parse(readFileSync(join(raiz, 'scripts/catalogo-completo.json'), 'utf8'))
-const externos = JSON.parse(readFileSync(join(raiz, 'scripts/clubes-externos.json'), 'utf8'))
-
-const idPorQid = new Map(catalogo.filter((c) => c.qid).map((c) => [c.qid, c.id]))
-
-/**
- * id do Transfermarkt -> id do nosso catálogo. Duas origens:
- *
- * - `clubes-transfermarkt.json`, montado da propriedade P7223 do Wikidata, que
- *   cobre todo clube do catálogo com QID;
- * - a URL do escudo, para os que vieram do CDN do Transfermarkt e trazem o id
- *   embutido nela.
- */
-const idPorTm = new Map()
-if (existsSync(join(raiz, 'scripts/clubes-transfermarkt.json'))) {
-  const doWikidata = JSON.parse(readFileSync(join(raiz, 'scripts/clubes-transfermarkt.json'), 'utf8'))
-  for (const [tm, id] of Object.entries(doWikidata)) idPorTm.set(tm, id)
-}
-for (const c of externos) {
-  const tm = c.url?.match(/\/wappen\/head\/(\d+)\.png/)?.[1]
-  const nosso = idPorQid.get(c.qid)
-  if (tm && nosso && !idPorTm.has(tm)) idPorTm.set(tm, nosso)
-}
-
-/**
- * Índice por token para não comparar cada clube do Transfermarkt com os cinco
- * mil do catálogo: são trezentos jogadores vezes oito clubes, e a comparação
- * de nomes não é barata. Dois nomes que descrevem o mesmo clube compartilham
- * pelo menos uma palavra, então basta olhar quem divide alguma.
- */
-const paisDoClube = new Map(catalogo.map((c) => [c.id, c.pais]))
-const nomeDoClube = new Map(catalogo.map((c) => [c.id, c.nome]))
-
-const porToken = new Map()
-for (const c of catalogo) {
-  for (const t of tokensDoNome(c.nome)) {
-    if (t.length < 3) continue
-    if (!porToken.has(t)) porToken.set(t, [])
-    porToken.get(t).push(c)
-  }
-}
-
-/** Resolve um clube do Transfermarkt; devolve null quando não dá para ter certeza. */
-function resolverClube(passagem) {
-  if (passagem.idTm && idPorTm.has(passagem.idTm)) return idPorTm.get(passagem.idTm)
-
-  // sem id conhecido: cai para nome, e só aceita se a resposta for única —
-  // havendo dois candidatos não há como saber qual, e escudo trocado é o pior
-  // erro possível neste jogo
-  const vistos = new Set()
-  const ids = new Set()
-  for (const t of tokensDoNome(passagem.nome)) {
-    for (const c of porToken.get(t) ?? []) {
-      if (vistos.has(c.id)) continue
-      vistos.add(c.id)
-      if (mesmoClube(c.nome, passagem.nome)) ids.add(c.id)
-    }
-  }
-  if (ids.size === 1) return [...ids][0]
-
-  /**
-   * Muitos candidatos é o normal depois que o catálogo cresceu: "Barcelona"
-   * casa com o Barcelona e com o Barcelona Esporte Clube de Ilhéus, "Milan"
-   * com o Milan e com o Esporte Clube Milan. Quando exatamente um deles é
-   * clube curado em CANONICOS, é ele — a curadoria existe justamente porque
-   * são os clubes que o torcedor reconhece pelo nome curto.
-   */
-  const curados = [...ids].filter((id) => id in CANONICOS)
-  return curados.length === 1 ? curados[0] : null
-}
+const resolvedor = criarResolvedor()
+// as bandeiras conhecidas antes de resolver por nome: as da biblioteca atual, que estão em cache
+const atuais = []
+for (const j of lerBiblioteca()) atuais.push(await passagensDoTransfermarkt(idTmDe(j)))
+resolvedor.aquecer(atuais)
+const paisDoClube = (id) => resolvedor.paisDoClube(id)
+const nomeDoClube = (id) => resolvedor.nomeDoClube(id)
 
 // ------------------------------------------------------------- candidatos
 /**
@@ -297,26 +228,19 @@ async function trabalhador() {
     const passagens = await passagensDoTransfermarkt(tm)
     if (!passagens) { recusas.semCarreira++; continue }
 
-    const clubes = []
-    let falhou = false
-    for (const p of passagens) {
-      const id = resolverClube(p)
-      if (!id) {
-        naoResolvidos.set(p.nome, (naoResolvidos.get(p.nome) ?? 0) + 1)
-        falhou = true
-        break
-      }
-      if (clubes[clubes.length - 1] !== id) clubes.push(id)
+    const { clubes, travas } = resolvedor.montarCarreira(passagens, { nasc: dados.nasc, jogos: await jogosPorClube(tm) })
+    if (travas.length) {
+      for (const t of travas) naoResolvidos.set(t.nome, (naoResolvidos.get(t.nome) ?? 0) + 1)
+      recusas.clubeNaoResolvido++
+      continue
     }
-    if (falhou) { recusas.clubeNaoResolvido++; continue }
 
     /**
-     * Um escudo só não é charada. O teto existe porque a parede de escudos
-     * fica ilegível: doze cabem em quatro linhas no celular, mais que isso
-     * não. O teto de nove recusava cem candidatos, e carreira longa é
-     * justamente a graça do nível difícil.
+     * Um escudo só não é charada. Não há teto: o cliente pediu todos os
+     * escudos, porque carreira longa e confusa é a graça do jogo — o de doze
+     * deixava Romário, Rivaldo e Bebeto de fora.
      */
-    if (clubes.length < 2 || clubes.length > 12) { recusas.tamanho++; continue }
+    if (clubes.length < 2) { recusas.tamanho++; continue }
 
     /**
      * O nome da camisa vem do Transfermarkt e vale mais que o rótulo do
@@ -336,7 +260,7 @@ async function trabalhador() {
     idsUsados.add(id)
 
     const historico = await historicoDoTransfermarkt(tm)
-    const paises = new Set(clubes.map((c) => paisDoClube.get(c))).size
+    const paises = new Set(clubes.map((c) => paisDoClube(c))).size
 
     aceitos.push({
       id,
@@ -351,12 +275,12 @@ async function trabalhador() {
         paises,
         naturalidade: naturalidadeSegura(
           perfil?.naturalidade,
-          clubes.map((c) => nomeDoClube.get(c)).filter(Boolean),
+          clubes.map((c) => nomeDoClube(c)).filter(Boolean),
           nome,
         ),
         torneios: torneiosQueContam((await torneiosDe([qid]))[qid] ?? []),
       }),
-      fama: famaCorrigida(qid, clubes.some((c) => paisDoClube.get(c) === 'BR')),
+      fama: famaCorrigida(qid, clubes.some((c) => paisDoClube(c) === 'BR')),
       qid, tm, obrigatorio: qid in OBRIGATORIOS,
     })
     if (aceitos.length % 25 === 0) console.log(`  ${aceitos.length}/${ALVO}`)
@@ -401,43 +325,16 @@ function escalarParaHoje(qidAlvo) {
 escalarParaHoje(LUCAS_LIMA)
 
 // ------------------------------------------------------------- gravação
-const bloco = (j) => `  {
-    id: '${j.id}',
-    nome: ${JSON.stringify(j.nome)},
-    apelidos: [${j.apelidos.map((a) => JSON.stringify(a)).join(', ')}],
-    nivel: '${j.nivel}',
-    clubes: [${j.clubes.map((c) => `'${c}'`).join(', ')}],
-    dicas: [${j.dicas.map((d) => JSON.stringify(d)).join(', ')}],
-    verificado: true,
-    fonte: 'https://www.transfermarkt.com.br/-/transfers/spieler/${j.tm}',
-  },`
-
-const secoes = NIVEIS.map((n) => {
-  const rotulo = { facil: 'FÁCIL', intermediario: 'INTERMEDIÁRIO', dificil: 'DIFÍCIL' }[n]
-  const linhas = porNivel[n].map((j) => bloco({ ...j, nivel: n })).join('\n')
-  return `  // ==================================================================\n` +
-    `  // ${rotulo} — ${porNivel[n].length} jogadores\n` +
-    `  // ==================================================================\n${linhas}`
-}).join('\n\n')
-
-writeFileSync(join(raiz, 'src/dados/jogadores.ts'),
-  `import type { Jogador } from './tipos'\n\n` +
-  `/**\n` +
-  ` * GERADO POR scripts/montar-biblioteca.mjs — não edite à mão sem motivo.\n` +
-  ` *\n` +
-  ` * A carreira de cada jogador vem do histórico de transferências do\n` +
-  ` * Transfermarkt, na ordem em que aconteceu, e cada clube foi resolvido pelo\n` +
-  ` * id que o Transfermarkt usa, não por casamento de nome. \`fonte\` aponta a\n` +
-  ` * página de onde saiu, para conferir.\n` +
-  ` *\n` +
-  ` * A dica é montada de atributo estruturado (posição, nacionalidade, países,\n` +
-  ` * década). Nada aqui é texto gerado de memória — foi o que produziu os erros\n` +
-  ` * da onda 1.\n` +
-  ` *\n` +
-  ` * O NÍVEL é aproximação: sai do número de links de Wikipédia, o melhor proxy\n` +
-  ` * calculável de reconhecimento. Ajuste à mão onde discordar.\n` +
-  ` */\n` +
-  `export const JOGADORES: Jogador[] = [\n${secoes}\n]\n`)
+gravarBiblioteca(NIVEIS.flatMap((nivel) => porNivel[nivel].map((j) => ({
+  id: j.id,
+  nome: j.nome,
+  apelidos: j.apelidos,
+  nivel,
+  clubes: j.clubes,
+  dicas: j.dicas,
+  verificado: true,
+  fonte: `https://www.transfermarkt.com.br/-/transfers/spieler/${j.tm}`,
+}))))
 
 console.log(`\n${aceitos.length} jogadores: ` +
   NIVEIS.map((n) => `${n} ${porNivel[n].length}`).join(' | '))
