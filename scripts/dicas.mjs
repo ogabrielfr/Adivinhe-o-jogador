@@ -684,8 +684,12 @@ function fatoDeFinal(finais) {
     })
   }
   if (!achadas.length) return null
-  // a mais importante; no empate, a que ele ganhou — o Havertz decidiu a Champions de 2021
-  const [melhor] = achadas.sort((a, b) => b.peso - a.peso || b.venceu - a.venceu || b.gols - a.gols)
+  /**
+   * A mais importante; no empate, a de mais gols — os três do Mbappé na final
+   * de 2022 valem mais que o gol do título de 2018 —, e aí a que ele ganhou:
+   * o Havertz decidiu a Champions de 2021.
+   */
+  const [melhor] = achadas.sort((a, b) => b.peso - a.peso || b.gols - a.gols || b.venceu - a.venceu)
   return {
     peso: melhor.peso, texto: melhor.texto, evento: melhor.evento, ano: melhor.ano,
     copas: melhor.evento === 'copa' ? [melhor.ano] : [],
