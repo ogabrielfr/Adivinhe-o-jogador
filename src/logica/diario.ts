@@ -1,7 +1,7 @@
 import { JOGADORES } from '../dados/jogadores'
 import agenda from '../dados/agenda.json' with { type: 'json' }
 import type { Jogador, Nivel } from '../dados/tipos'
-import { formasDerivadas } from './texto'
+import { formasDerivadas, formasExatas } from './texto'
 import { dataDoDia, embaralhar, numeroDoDia, posicaoDoDia, semente } from './sorteio'
 
 export { numeroDoDia } from './sorteio'
@@ -81,11 +81,16 @@ export function totalNoNivel(nivel: Nivel): number {
  * Paulinhos na biblioteca, e quem digita "Paulinho" no dia de um deles não tem
  * como ser mais específico. Recusar seria pedir o nome de registro, que
  * ninguém sabe.
+ *
+ * O nome inteiro de um jogador também conta contra o pedaço do outro:
+ * "ronaldo" é pedaço do Cristiano Ronaldo e nome do Ronaldo Fenômeno, então
+ * no dia do Cristiano pede desempate — e no do Fenômeno acerta, porque lá é
+ * nome inteiro.
  */
 export const PALPITES_AMBIGUOS: ReadonlySet<string> = (() => {
   const contagem = new Map<string, Set<string>>()
   for (const j of JOGADORES) {
-    for (const k of formasDerivadas(j.nome, j.apelidos)) {
+    for (const k of [...formasDerivadas(j.nome, j.apelidos), ...formasExatas(j.nome, j.apelidos)]) {
       if (!contagem.has(k)) contagem.set(k, new Set())
       contagem.get(k)!.add(j.id)
     }

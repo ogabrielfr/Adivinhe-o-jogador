@@ -253,12 +253,14 @@ export async function passagensDoTransfermarkt(tmId) {
   const bandeiraDe = (clube) => clube?.countryFlag?.match(/\/(\d+)\.png/)?.[1] ?? null
 
   const sequencia = []
-  const acrescentar = (clube, ano, volta = false) => {
+  const acrescentar = (clube, ano, volta = false, desde = null) => {
     const nome = nomeDoClube(clube)
     if (!nome || NAO_E_CLUBE.test(nome) || ehCategoriaDeBase(nome)) return
     if (sequencia.at(-1)?.nome === nome) return
     const idTm = idDoClube(clube)
-    sequencia.push({ nome, idTm, bandeira: bandeiraDe(clube), ano, anoSaida: null, ...(volta && { volta }) })
+    sequencia.push({
+      nome, idTm, bandeira: bandeiraDe(clube), ano, anoSaida: null, desde, saida: null, ...(volta && { volta }),
+    })
   }
 
   const quando = (t) => Date.parse(t?.dateUnformatted ?? '') || null
@@ -286,9 +288,12 @@ export async function passagensDoTransfermarkt(tmId) {
     const ano = anoDe(t)
     // a saída do clube anterior é nesta data, mesmo quando o destino é descartado
     const ultima = sequencia.at(-1)
-    if (ultima && !ultima.anoSaida && nomeDoClube(t.to) !== ultima.nome) ultima.anoSaida = ano
+    if (ultima && !ultima.anoSaida && nomeDoClube(t.to) !== ultima.nome) {
+      ultima.anoSaida = ano
+      ultima.saida = t.dateUnformatted ?? null
+    }
     if (!volta && compraRelampago(i)) continue
-    acrescentar(t.to, ano, volta)
+    acrescentar(t.to, ano, volta, t.dateUnformatted ?? null)
   }
   return sequencia
 }
@@ -317,7 +322,9 @@ export async function jogosPorClube(tmId) {
   const arquivo = join(CACHE, `jogos-${tmId}.json`)
   if (existsSync(arquivo)) {
     try {
-      return JSON.parse(readFileSync(arquivo, 'utf8'))
+      const guardado = JSON.parse(readFileSync(arquivo, 'utf8'))
+      // registro gravado antes das datas dos jogos: vale buscar de novo
+      if (Object.values(guardado).every((r) => Array.isArray(r.datas))) return guardado
     } catch {
       // cache corrompido: busca de novo
     }
@@ -339,13 +346,19 @@ export async function jogosPorClube(tmId) {
     if (!clube) continue
     const estado = jogo.statistics?.generalStatistics?.participationState ?? '?'
     const ano = jogo.gameInformation?.seasonId
-    const registro = (porClube[clube] ??= { registros: 0, jogou: 0, estados: {}, de: ano, ate: ano })
+    const registro = (porClube[clube] ??= { registros: 0, jogou: 0, estados: {}, de: ano, ate: ano, datas: [] })
     registro.registros++
     registro.estados[estado] = (registro.estados[estado] ?? 0) + 1
-    if (estado === 'played' || jogo.statistics?.playingTimeStatistics?.playedMinutes > 0) registro.jogou++
+    if (estado === 'played' || jogo.statistics?.playingTimeStatistics?.playedMinutes > 0) {
+      registro.jogou++
+      // o dia de cada jogo em que ele entrou: é o que diz se a volta de um empréstimo teve jogo
+      const dia = jogo.gameInformation?.date?.dateTimeUTC?.slice(0, 10)
+      if (dia) registro.datas.push(dia)
+    }
     if (ano && (!registro.de || ano < registro.de)) registro.de = ano
     if (ano && (!registro.ate || ano > registro.ate)) registro.ate = ano
   }
+  for (const registro of Object.values(porClube)) registro.datas.sort()
   writeFileSync(arquivo, JSON.stringify(porClube))
   return porClube
 }
@@ -396,6 +409,132 @@ export async function selecaoDoTransfermarkt(tmId) {
   }
   writeFileSync(arquivo, JSON.stringify(saida))
   return saida
+}
+
+/**
+ * O que o jogador fez em campo, para a dica: jogos e gols por clube, e as
+ * finais que disputou, com os gols de cada uma.
+ *
+ * O cliente pediu dica que aproxime do acerto — o gol decisivo, o ídolo de um
+ * time — e o registro de partidas do Transfermarkt tem as duas coisas em
+ * dado: a partida da final vem marcada (`competitionGroupId` "FF"), com os
+ * gols do jogador nela; os dois do Ronaldo na final de 2002 estão lá. Jogos e
+ * gols por clube medem o ídolo: "fez 434 jogos pelo Grêmio".
+ *
+ * Só conta a partida em que ele entrou. Época sem escalação no site fica de
+ * fora sozinha — o número sai menor, nunca maior.
+ */
+export async function desempenhoDoJogador(tmId) {
+  const arquivo = join(CACHE, `desempenho-${tmId}.json`)
+  if (existsSync(arquivo)) {
+    try {
+      return JSON.parse(readFileSync(arquivo, 'utf8'))
+    } catch {
+      // cache corrompido: busca de novo
+    }
+  }
+  const dados = await apiDoTransfermarkt(`player/${tmId}/performance-game`)
+  if (!dados) return null
+  const porClube = {}
+  const finais = []
+  for (const jogo of dados.performance ?? []) {
+    const info = jogo.gameInformation ?? {}
+    const estatisticas = jogo.statistics ?? {}
+    const entrou = estatisticas.generalStatistics?.participationState === 'played' ||
+      estatisticas.playingTimeStatistics?.playedMinutes > 0
+    if (!entrou) continue
+    const clube = jogo.clubsInformation?.club
+    const gols = estatisticas.goalStatistics?.goalsScoredTotal ?? 0
+    if (!info.isNationalGame && clube?.clubId) {
+      const registro = (porClube[clube.clubId] ??= { jogos: 0, gols: 0 })
+      registro.jogos++
+      registro.gols += gols
+    }
+    if (info.competitionGroupId === 'FF') {
+      const ciclo = Number(info.season?.cyclicalName)
+      finais.push({
+        competicao: info.competitionId,
+        // a edição, não o dia: a final da Libertadores de 2020 foi em janeiro de 2021
+        ano: ciclo || Number(info.date?.dateTimeUTC?.slice(0, 4)) || null,
+        clubeTm: clube?.clubId ?? null,
+        nacional: Boolean(info.isNationalGame),
+        gols,
+        venceu: (clube?.goalsTotal ?? 0) > (clube?.opponentGoalsTotal ?? 0),
+      })
+    }
+  }
+  const saida = { porClube, finais }
+  writeFileSync(arquivo, JSON.stringify(saida))
+  return saida
+}
+
+/** Nome em português de cada competição, pelo id do Transfermarkt ("FIWC" -> "Copa do Mundo"). */
+export async function competicoesDoTransfermarkt(ids) {
+  const arquivo = join(CACHE, 'competicoes.json')
+  let nomes = {}
+  try {
+    nomes = JSON.parse(readFileSync(arquivo, 'utf8'))
+  } catch {
+    // sem cache: busca tudo
+  }
+  const faltando = [...new Set(ids)].filter((id) => id && !nomes[id])
+  for (let i = 0; i < faltando.length; i += 40) {
+    const lote = faltando.slice(i, i + 40).map((id) => `ids%5B%5D=${encodeURIComponent(id)}`).join('&')
+    for (const c of (await apiDoTransfermarkt(`competitions?${lote}`)) ?? []) nomes[c.id] = c.name
+  }
+  writeFileSync(arquivo, JSON.stringify(nomes))
+  return nomes
+}
+
+/**
+ * Os títulos do jogador, da página "Títulos" do perfil: cada conquista com o
+ * ano e o clube (ou a seleção) pelo qual ela veio.
+ *
+ * É o fato que o cliente pediu para a dica — "um título que foi decisivo" — e
+ * o Transfermarkt o guarda por temporada e clube: "3x Campeão da Copa
+ * Libertadores: 20/21 e 19/20 pelo Palmeiras, 12/13 pelo Atlético Mineiro". A
+ * temporada vira ano pela segunda metade, que é o ano da final: a
+ * Libertadores 12/13 é a de 2013, a Champions 12/13 também.
+ *
+ * Volta `[{ titulo, conquistas: [{ ano, clubeTm, clube }] }]`, ou `[]` para quem
+ * não ganhou nada; `null` quando o site não respondeu.
+ */
+export async function titulosDoTransfermarkt(tmId) {
+  const arquivo = join(CACHE, `titulos-${tmId}.json`)
+  if (existsSync(arquivo)) {
+    try {
+      return JSON.parse(readFileSync(arquivo, 'utf8'))
+    } catch {
+      // cache corrompido: busca de novo
+    }
+  }
+  const html = await pedirComInsistencia(`${BASE}/-/erfolge/spieler/${tmId}`)
+  if (!html || html.length < 20_000) return null
+
+  const limpar = (t) => t.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim()
+  // "12/13" é 2013 e "99/00" é 2000: o ano da final é o seguinte ao do início
+  const ano = (temporada) => {
+    const [a, b] = temporada.split('/')
+    if (!b) return Number(a) || null
+    return (Number(a) >= 50 ? 1900 : 2000) + Number(a) + 1
+  }
+  const titulos = []
+  const blocos = html.split(/<h2[^>]*class="content-box-headline[^"]*"[^>]*>/).slice(1)
+  for (const bloco of blocos) {
+    const cabecalho = limpar(bloco.slice(0, bloco.indexOf('</h2>')))
+    // "Todos os títulos" repete os outros blocos
+    const m = cabecalho.match(/^(\d+)x\s+(.+)$/)
+    if (!m) continue
+    const conquistas = []
+    for (const linha of bloco.split('<tr').slice(1)) {
+      const temporada = linha.match(/erfolg_table_saison[^>]*>([^<]+)</)?.[1]?.trim()
+      const clube = linha.match(/<a title="([^"]+)" href="[^"]*\/verein\/(\d+)/)
+      if (temporada) conquistas.push({ ano: ano(temporada), clubeTm: clube?.[2] ?? null, clube: clube?.[1] ?? null })
+    }
+    titulos.push({ titulo: m[2], conquistas })
+  }
+  writeFileSync(arquivo, JSON.stringify(titulos))
+  return titulos
 }
 
 /**

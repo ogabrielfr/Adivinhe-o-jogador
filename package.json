@@ -19,7 +19,8 @@
     "tecnicos": "node scripts/fama-de-tecnico.mjs",
     "repor": "node scripts/repor-obscuros.mjs",
     "mapa-tm": "node scripts/mapa-transfermarkt.mjs",
-    "agenda": "node scripts/agenda.mjs"
+    "agenda": "node scripts/agenda.mjs",
+    "trazer": "node scripts/trazer.mjs"
   },
   "repository": {
     "type": "git",

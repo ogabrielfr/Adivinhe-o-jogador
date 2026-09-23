@@ -29,6 +29,23 @@
  */
 export const CARREIRA_FIXA = {
   /**
+   * O Transfermarkt começa o Ronaldo no São Cristóvão, onde ele jogou na base
+   * de 1990 a 1993; a estreia como profissional foi no Cruzeiro, em 1993. A
+   * regra da formação não pega porque ele saiu no ano em que fez 17.
+   */
+  /**
+   * O Thiago Silva foi do Juventude para o Porto em 2004 e jogou só no time B;
+   * voltou ao Porto em 2026, e aí jogou. O registro de partidas soma por
+   * clube, então os 14 jogos de 2026 escondem que a primeira passagem não
+   * teve nenhum pelo time principal.
+   */
+  'thiago-silva': {
+    clubes: ['rs-futebol', 'esporte-clube-juventude', 'fluminense', 'milan', 'psg', 'chelsea', 'fluminense', 'porto', 'fluminense'],
+  },
+  'ronaldo-fenomeno': {
+    clubes: ['cruzeiro', 'psv', 'barcelona', 'inter', 'real-madrid', 'milan', 'corinthians'],
+  },
+  /**
    * O Transfermarkt lista Comercial-SP (11/12) -> Inter de Lages (17/18) ->
    * fim de carreira, com seis anos de buraco no meio. Wikidata e a infobox da
    * Wikipédia não têm Inter de Lages em lugar nenhum, e as duas continuam a

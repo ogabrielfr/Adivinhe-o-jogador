@@ -80,11 +80,13 @@ Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
 
 - Jogo completo: tela inicial, partida, derrota (com o nome revelado), vitória, compartilhamento estilo Wordle, streak e estatísticas em `localStorage`.
 - **Agenda do jogador do dia** (`npm run agenda`): dia marcado não muda mais, então mexer na biblioteca só afeta os dias que ainda não estão nela. Fora da agenda vale o sorteio determinístico por data. A partida guarda o id do jogador e continua com ele mesmo que o dia seja trocado.
-- **300 jogadores, 100 por nível**, com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e os 300 têm `verificado: true`. A biblioteca é dado (`src/dados/jogadores.json`), lida e gravada por `scripts/biblioteca.mjs`.
+- **317 jogadores** (114 no fácil, 101 no intermediário, 102 no difícil), com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e todos têm `verificado: true`. Jogador pedido pelo nome entra por `npm run trazer`. A biblioteca é dado (`src/dados/jogadores.json`), lida e gravada por `scripts/biblioteca.mjs`.
 - **Um resolvedor de clube só** (`scripts/resolver-clube.mjs`) para gerar, reparar e repor. Casa por id do Transfermarkt; por nome, só com nome contido, país e época conferidos.
 - **Mapa do Transfermarkt conferido por duas testemunhas** (`npm run mapa-tm`): o Wikidata diz de quem é cada id, e o par que ele desmente sai; o nome que o próprio Transfermarkt dá ao id é conferido para todo id em uso, e o que não bate vai para uma lista de leitura. Foi essa lista que achou o CRB do Marcos Rocha ligado ao Brasil de Pelotas e o Instituto do Dybala ao Central Córdoba.
 - **Catálogo de 5381 clubes de 66 países**, sendo 1155 brasileiros. Dos 374 que o jogo usa, só o Miami FC de 2006 fica com o brasão desenhado, de propósito: as duas fontes mostram o escudo do Fort Lauderdale Strikers, que o clube virou depois.
 - **Duas dicas por jogador**, montadas de números verificáveis e escolhidas pelo que cada um tem de raro; a naturalidade tem vaga cativa quando existe, porque é o fato que localiza. A primeira diz o país de **nascimento** e, quando o jogador defendeu a seleção de outro país, qual ("Lateral brasileiro nascido em 1990, que defendeu a seleção russa"). País e jogos de seleção vêm da API do Transfermarkt.
+- **Volta de empréstimo com jogo entra na carreira**: o registro de partidas guarda o dia de cada jogo, e a volta ao clube dono aparece quando há jogo entre a volta e a saída seguinte (o Marcos Rocha voltou ao Atlético-MG e jogou 275 vezes). Mudou 47 carreiras.
+- **A página recarrega na virada do dia**, para aba esquecida no celular não mostrar biblioteca velha.
 - **Nome curto embaixo do escudo** (`scripts/nomes-curtos.mjs`): o nome que o torcedor fala, na tela e na dica — "Inter de Limeira", não "Associação Atlética Internacional (Limeira)". O catálogo guarda o nome inteiro, que é o que casa com as fontes.
 - `npm run validar-dados` confere integridade e recusa dica que entregue nome de jogador ou clube visível.
 - `npm run teste-nomes` (71 casos) testa o comparador de nomes de clube; `npm run teste-palpites` (25 casos) testa a aceitação de palpite.
@@ -94,23 +96,19 @@ Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
 
 ## Pontos em aberto, por prioridade
 
-### 1. Os 21 maiores nomes que faltam
+### 1. Os grandes nomes: feito, com duas pendências
 
-Messi, Ronaldo Fenômeno, Maradona, Zidane, Romário, Rivaldo, Bebeto, Garrincha,
-Mbappé, Totti, Buffon, Ibrahimović, Salah, Pirlo, Haaland, Lewandowski,
-Riquelme, Thiago Silva, Raphinha, Marquinhos e Juninho Pernambucano. O cliente
-decidiu **trazer todos e crescer para ~320**, e **tirar o teto de escudos**
-(Romário tem 15, Rivaldo 16). A agenda já está congelada até 22/10. Ao
-trazê-los, rode `npm run agenda` **antes** de mexer na biblioteca, e use os ids
-`messi`, `ronaldo-fenomeno` e `juninho-pernambucano`: os três saíram no jogo em
-setembro, na versão de 45 jogadores, e é por esse id que a regra dos 90 dias
-os reconhece (`scripts/antes-da-agenda.mjs`).
+Entraram 19 dos 21 (`npm run trazer`). O **Totti** não entra: só jogou no Roma,
+e um escudo não é charada. O **Buffon** já estava. Saíram **Gavi e Phil Foden**,
+que só jogaram num clube; o dia 21/10, que era do Gavi, passou ao Asensio.
 
-No mesmo lote saem **Gavi e Phil Foden**, que só jogaram profissionalmente num
-clube. O reparo não conseguiu refazer a carreira deles e manteve a antiga, que
-está errada: a do Gavi começa pela base do Betis, a do Foden repete o Manchester
-City com dois ids do catálogo. O Gavi está agendado para 21/10 no
-intermediário; esse dia precisa de outro nome antes de ele sair.
+Os níveis dos 19 foram decididos à mão enquanto não há régua: 16 no fácil e
+Garrincha, Pirlo e Riquelme no intermediário. O fácil ficou com 114 — vale
+revisar com o cliente junto da régua nova.
+
+Três carreiras vieram com o fim novo que o Transfermarkt já registra: Salah no
+Trabzonspor (agosto de 2026), Lewandowski no Chicago Fire (julho de 2026) e
+Thiago Silva de volta ao Fluminense depois de meio ano no Porto.
 
 ### 2. A régua do nível
 

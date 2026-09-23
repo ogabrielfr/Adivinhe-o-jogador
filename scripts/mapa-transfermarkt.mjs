@@ -172,7 +172,8 @@ const desmentidos = []
 for (const [tm, id] of Object.entries(antes)) {
   const dono = donoDoTm.get(tm)
   const clube = porId.get(id)
-  if (!clube) continue
+  // o par à mão já foi conferido; o dono não reconhece sigla ("CRB")
+  if (!clube || tm in PARES_TM) continue
   if (dono && !descreve(dono, clube) && !doQid.get(clube.qid)?.tms.has(tm)) {
     desmentidos.push({ tm, id, dono: [...dono.rotulos][0] ?? dono.qid })
     continue

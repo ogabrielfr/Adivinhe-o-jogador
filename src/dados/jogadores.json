@@ -65,7 +65,7 @@
     "apelidos": ["casemiro"],
     "nivel": "facil",
     "clubes": ["sao-paulo","real-madrid","porto","real-madrid","manchester-united","inter-miami"],
-    "dicas": ["Volante brasileiro nascido em 1992.","É de São José dos Campos. Vestiu a camisa da seleção brasileira 91 vezes."],
+    "dicas": ["Volante brasileiro nascido em 1992.","Disputou as Copas do Mundo de 2018 e 2026. É de São José dos Campos."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/16306"
   },
@@ -254,7 +254,7 @@
     "nome": "Adriano",
     "apelidos": ["adriano imperador","adriano"],
     "nivel": "facil",
-    "clubes": ["flamengo","inter","fiorentina","parma","inter","sao-paulo","flamengo","roma","corinthians","flamengo","club-athletico-paranaense","miami-united"],
+    "clubes": ["flamengo","inter","fiorentina","parma","inter","sao-paulo","inter","flamengo","roma","corinthians","flamengo","club-athletico-paranaense","miami-united"],
     "dicas": ["Centroavante brasileiro nascido em 1982.","Disputou a Copa do Mundo de 2006. É do Rio de Janeiro."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/5876"
@@ -354,7 +354,7 @@
     "nome": "Philippe Coutinho",
     "apelidos": ["philippe coutinho"],
     "nivel": "facil",
-    "clubes": ["vasco","inter","espanyol","liverpool","barcelona","bayern","aston-villa","lekhwiya-sports-club","vasco","santos"],
+    "clubes": ["vasco","inter","espanyol","inter","liverpool","barcelona","bayern","barcelona","aston-villa","lekhwiya-sports-club","vasco","santos"],
     "dicas": ["Meia brasileiro nascido em 1992.","Disputou a Copa do Mundo de 2018. É do Rio de Janeiro."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/80444"
@@ -364,7 +364,7 @@
     "nome": "Hernanes",
     "apelidos": ["hernanes"],
     "nivel": "intermediario",
-    "clubes": ["sao-paulo","esporte-clube-santo-andre","lazio","inter","juventus","hebei-football-club","sao-paulo","sport"],
+    "clubes": ["sao-paulo","esporte-clube-santo-andre","sao-paulo","lazio","inter","juventus","hebei-football-club","sao-paulo","hebei-football-club","sao-paulo","sport"],
     "dicas": ["Meia brasileiro nascido em 1985.","Disputou a Copa do Mundo de 2014. Vestiu a camisa da seleção brasileira 27 vezes."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/52897"
@@ -414,7 +414,7 @@
     "nome": "Anderson",
     "apelidos": ["anderson (futebolista)","anderson"],
     "nivel": "dificil",
-    "clubes": ["gremio","porto","manchester-united","fiorentina","internacional","coritiba","adana-demirspor"],
+    "clubes": ["gremio","porto","manchester-united","fiorentina","manchester-united","internacional","coritiba","adana-demirspor"],
     "dicas": ["Meio-campista brasileiro nascido em 1988.","Vestiu a camisa da seleção brasileira 8 vezes. Foi jogar fora do país aos 18 anos."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/31645"
@@ -574,7 +574,7 @@
     "nome": "Djalminha",
     "apelidos": ["djalminha"],
     "nivel": "facil",
-    "clubes": ["flamengo","guarani-futebol-clube","shimizu-s-pulse","guarani-futebol-clube","palmeiras","deportivo-a-coruna","austria-vienna","america"],
+    "clubes": ["flamengo","guarani-futebol-clube","shimizu-s-pulse","guarani-futebol-clube","palmeiras","deportivo-a-coruna","austria-vienna","deportivo-a-coruna","america"],
     "dicas": ["Meia brasileiro nascido em 1970.","É de Santos. Vestiu a camisa da seleção brasileira 14 vezes."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/2960"
@@ -654,7 +654,7 @@
     "nome": "Belletti",
     "apelidos": ["belletti"],
     "nivel": "intermediario",
-    "clubes": ["cruzeiro","sao-paulo","clube-atletico-mineiro","villarreal","barcelona","chelsea","fluminense","ceara"],
+    "clubes": ["cruzeiro","sao-paulo","clube-atletico-mineiro","sao-paulo","villarreal","barcelona","chelsea","fluminense","ceara"],
     "dicas": ["Lateral brasileiro nascido em 1976.","Disputou a Copa do Mundo de 2002. É de Cascavel."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/7829"
@@ -744,7 +744,7 @@
     "nome": "Elano",
     "apelidos": ["elano"],
     "nivel": "intermediario",
-    "clubes": ["santos","shakhtar","manchester-city","galatasaray","santos","gremio","flamengo","chennaiyin-football-club","santos","chennaiyin-football-club"],
+    "clubes": ["santos","shakhtar","manchester-city","galatasaray","santos","gremio","flamengo","chennaiyin-football-club","santos","chennaiyin-football-club","santos"],
     "dicas": ["Meia brasileiro nascido em 1981.","Disputou a Copa do Mundo de 2010. É de Iracemápolis."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/20053"
@@ -764,7 +764,7 @@
     "nome": "Nelsinho",
     "apelidos": ["nélson luís kerchner","nelsinho"],
     "nivel": "dificil",
-    "clubes": ["sao-paulo","flamengo","corinthians","kashiwa-reysol"],
+    "clubes": ["sao-paulo","flamengo","sao-paulo","corinthians","kashiwa-reysol"],
     "dicas": ["Lateral brasileiro nascido em 1962.","Vestiu a camisa da seleção brasileira 18 vezes. Foi jogar fora do país aos 30 anos."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/181699"
@@ -814,7 +814,7 @@
     "nome": "Joe Hart",
     "apelidos": ["joe hart"],
     "nivel": "dificil",
-    "clubes": ["shrewsbury-town-football-club","manchester-city","tranmere-rovers-football-club","blackpool-football-club","birmingham-city","torino","west-ham","burnley","hotspur","celtic-football-club"],
+    "clubes": ["shrewsbury-town-football-club","manchester-city","tranmere-rovers-football-club","blackpool-football-club","manchester-city","birmingham-city","manchester-city","torino","west-ham","burnley","hotspur","celtic-football-club"],
     "dicas": ["Goleiro nascido na Inglaterra em 1987.","Disputou as Copas do Mundo de 2010 e 2014. Ficou 6 anos seguidos no Manchester City."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/40204"
@@ -884,7 +884,7 @@
     "nome": "Euller",
     "apelidos": ["euller"],
     "nivel": "dificil",
-    "clubes": ["america-futebol-clube-belo-horizonte","sao-paulo","clube-atletico-mineiro","palmeiras","tokyo-verdy","vasco","kashima-antlers","associacao-desportiva-sao-caetano","clube-atletico-mineiro","america-futebol-clube-belo-horizonte","tupynambas-futebol-clube"],
+    "clubes": ["america-futebol-clube-belo-horizonte","sao-paulo","clube-atletico-mineiro","palmeiras","tokyo-verdy","palmeiras","vasco","kashima-antlers","associacao-desportiva-sao-caetano","clube-atletico-mineiro","america-futebol-clube-belo-horizonte","tupynambas-futebol-clube","america-futebol-clube-belo-horizonte"],
     "dicas": ["Centroavante brasileiro nascido em 1971.","É de Felixlândia. Vestiu a camisa da seleção brasileira 7 vezes."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/145710"
@@ -954,7 +954,7 @@
     "nome": "Thierry Henry",
     "apelidos": ["thierry henry"],
     "nivel": "facil",
-    "clubes": ["monaco","juventus","arsenal","barcelona","red-bull-new-york","arsenal"],
+    "clubes": ["monaco","juventus","arsenal","barcelona","red-bull-new-york","arsenal","red-bull-new-york"],
     "dicas": ["Centroavante nascido na França em 1977.","Disputou 4 Copas do Mundo. É de Les Ulis."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3207"
@@ -1034,7 +1034,7 @@
     "nome": "Cicinho",
     "apelidos": ["cicinho"],
     "nivel": "intermediario",
-    "clubes": ["botafogo-futebol-clube-ribeirao-preto","clube-atletico-mineiro","botafogo","sao-paulo","real-madrid","roma","sao-paulo","villarreal","sport","sivasspor","brasiliense-futebol-clube"],
+    "clubes": ["botafogo-futebol-clube-ribeirao-preto","clube-atletico-mineiro","botafogo","clube-atletico-mineiro","sao-paulo","real-madrid","roma","sao-paulo","roma","villarreal","roma","sport","sivasspor","brasiliense-futebol-clube"],
     "dicas": ["Lateral brasileiro nascido em 1980.","Disputou a Copa do Mundo de 2006. É de Pradópolis."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/26101"
@@ -1084,7 +1084,7 @@
     "nome": "Harry Kane",
     "apelidos": ["harry kane"],
     "nivel": "facil",
-    "clubes": ["hotspur","leyton-orient-football-club","millwall-football-club","norwich","leicester","bayern"],
+    "clubes": ["hotspur","leyton-orient-football-club","hotspur","millwall-football-club","norwich","leicester","hotspur","bayern"],
     "dicas": ["Centroavante nascido na Inglaterra em 1993.","Disputou as Copas do Mundo de 2018, 2022 e 2026. É de Londres."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/132098"
@@ -1115,7 +1115,7 @@
     "apelidos": ["renan lodi"],
     "nivel": "intermediario",
     "clubes": ["club-athletico-paranaense","atletico-madrid","nottingham","marseille","al-hilal","clube-atletico-mineiro"],
-    "dicas": ["Lateral brasileiro nascido em 1998.","É de Serrana. Já soma 9 anos de estrada desde 2016."],
+    "dicas": ["Lateral brasileiro nascido em 1998.","É de Serrana. Vestiu a camisa da seleção brasileira 19 vezes."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/476352"
   },
@@ -1134,7 +1134,7 @@
     "nome": "Gareth Bale",
     "apelidos": ["gareth bale"],
     "nivel": "facil",
-    "clubes": ["southampton","hotspur","real-madrid","hotspur","los-angeles-football-club"],
+    "clubes": ["southampton","hotspur","real-madrid","hotspur","real-madrid","los-angeles-football-club"],
     "dicas": ["Ponta nascido no País de Gales em 1989.","É de Cardiff. Vestiu a camisa da seleção galesa 111 vezes."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/39381"
@@ -1294,7 +1294,7 @@
     "nome": "Jordan Pickford",
     "apelidos": ["jordan pickford"],
     "nivel": "intermediario",
-    "clubes": ["darlington-football-club-1883","alfreton-town-football-club","sunderland","burton-albion-football-club","carlisle-united-football-club","bradford-city-association-football-club","preston-north-end-football-club","everton"],
+    "clubes": ["darlington-football-club-1883","alfreton-town-football-club","sunderland","burton-albion-football-club","carlisle-united-football-club","bradford-city-association-football-club","preston-north-end-football-club","sunderland","everton"],
     "dicas": ["Goleiro nascido na Inglaterra em 1994.","Disputou as Copas do Mundo de 2018, 2022 e 2026. É de Washington."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/130164"
@@ -1405,7 +1405,7 @@
     "apelidos": ["alex de souza","alex"],
     "nivel": "facil",
     "clubes": ["coritiba","palmeiras","parma","flamengo","palmeiras","cruzeiro","palmeiras","cruzeiro","fenerbahce","coritiba"],
-    "dicas": ["Meia brasileiro nascido em 1977.","É de Curitiba. Rodou o profissionalismo de 1994 a 2014."],
+    "dicas": ["Meia brasileiro nascido em 1977.","É de Curitiba. Vestiu a camisa da seleção brasileira 48 vezes."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/18537"
   },
@@ -1434,7 +1434,7 @@
     "nome": "John Terry",
     "apelidos": ["john terry"],
     "nivel": "intermediario",
-    "clubes": ["chelsea","nottingham","aston-villa"],
+    "clubes": ["chelsea","nottingham","chelsea","aston-villa"],
     "dicas": ["Zagueiro nascido na Inglaterra em 1980.","É de Barking. Ficou 17 anos seguidos no Chelsea."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3160"
@@ -1454,7 +1454,7 @@
     "nome": "Hernán Crespo",
     "apelidos": ["hernán crespo"],
     "nivel": "facil",
-    "clubes": ["river-plate","parma","lazio","inter","chelsea","milan","inter","genoa","parma"],
+    "clubes": ["river-plate","parma","lazio","inter","chelsea","milan","chelsea","inter","genoa","parma"],
     "dicas": ["Centroavante nascido na Argentina em 1975.","Disputou as Copas do Mundo de 1998, 2002 e 2006. É de Florida."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3410"
@@ -1464,7 +1464,7 @@
     "nome": "Didier Deschamps",
     "apelidos": ["didier deschamps"],
     "nivel": "intermediario",
-    "clubes": ["nantes","marseille","bordeaux","juventus","chelsea","valencia"],
+    "clubes": ["nantes","marseille","bordeaux","marseille","juventus","chelsea","valencia"],
     "dicas": ["Volante nascido na França em 1968.","É de Bayonne. Vestiu a camisa da seleção francesa 103 vezes."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/75553"
@@ -1504,7 +1504,7 @@
     "nome": "Jordan Henderson",
     "apelidos": ["jordan henderson"],
     "nivel": "intermediario",
-    "clubes": ["sunderland","coventry-city","liverpool","al-ettifaq","ajax","brentford","chelsea"],
+    "clubes": ["sunderland","coventry-city","sunderland","liverpool","al-ettifaq","ajax","brentford","chelsea"],
     "dicas": ["Meio-campista nascido na Inglaterra em 1990.","Disputou 4 Copas do Mundo. Foi jogar fora do país aos 33 anos."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/61651"
@@ -1524,7 +1524,7 @@
     "nome": "Nemanja Vidić",
     "apelidos": ["nemanja vidić"],
     "nivel": "dificil",
-    "clubes": ["estrela-vermelha-de-belgrado","spartak","spartak-moscow","manchester-united","inter"],
+    "clubes": ["estrela-vermelha-de-belgrado","spartak","estrela-vermelha-de-belgrado","spartak-moscow","manchester-united","inter"],
     "dicas": ["Zagueiro nascido na Iugoslávia em 1981, que defendeu a seleção sérvia.","Disputou as Copas do Mundo de 2006 e 2010. É de Titovo Užice."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/19726"
@@ -1544,7 +1544,7 @@
     "nome": "Gonzalo Higuaín",
     "apelidos": ["gonzalo higuaín"],
     "nivel": "intermediario",
-    "clubes": ["river-plate","real-madrid","napoli","juventus","milan","chelsea","inter-miami"],
+    "clubes": ["river-plate","real-madrid","napoli","juventus","milan","chelsea","juventus","inter-miami"],
     "dicas": ["Centroavante nascido na França em 1987, que defendeu a seleção argentina.","Disputou as Copas do Mundo de 2010, 2014 e 2018. É de Brest."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/39153"
@@ -1574,7 +1574,7 @@
     "nome": "Gabriel",
     "apelidos": ["gabriel vasconcellos ferreira","gabriel"],
     "nivel": "dificil",
-    "clubes": ["milan","carpi-f-c-1909","napoli","cagliari","empoli","perugia-calcio","lecce","coritiba","esporte-clube-juventude","vitoria","sport"],
+    "clubes": ["milan","carpi-f-c-1909","napoli","cagliari","empoli","perugia-calcio","lecce","coritiba","esporte-clube-juventude","vitoria","sport","vitoria"],
     "dicas": ["Goleiro brasileiro nascido em 1992.","É de Unaí. Vestiu a camisa da seleção brasileira 2 vezes."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/79242"
@@ -1674,7 +1674,7 @@
     "nome": "André Bahia",
     "apelidos": ["andré bahia"],
     "nivel": "dificil",
-    "clubes": ["flamengo","palmeiras","feyenoord","samsunspor","botafogo","shonan-bellmare"],
+    "clubes": ["flamengo","palmeiras","flamengo","feyenoord","samsunspor","botafogo","shonan-bellmare"],
     "dicas": ["Zagueiro brasileiro nascido em 1983.","É do Rio de Janeiro. Ficou 6 anos seguidos no Feyenoord."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/27032"
@@ -1774,7 +1774,7 @@
     "nome": "Guilherme Arana",
     "apelidos": ["guilherme arana"],
     "nivel": "dificil",
-    "clubes": ["corinthians","club-athletico-paranaense","sevilla","atalanta","clube-atletico-mineiro","fluminense"],
+    "clubes": ["corinthians","club-athletico-paranaense","corinthians","sevilla","atalanta","clube-atletico-mineiro","fluminense"],
     "dicas": ["Lateral brasileiro nascido em 1997.","É de São Paulo. Vestiu a camisa da seleção brasileira 13 vezes."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/346766"
@@ -1804,7 +1804,7 @@
     "nome": "Aaron Ramsey",
     "apelidos": ["aaron ramsey"],
     "nivel": "intermediario",
-    "clubes": ["cardiff-city-football-club","arsenal","nottingham","cardiff-city-football-club","juventus","rangers-football-club","nice","cardiff-city-football-club","club-universidad-nacional"],
+    "clubes": ["cardiff-city-football-club","arsenal","nottingham","cardiff-city-football-club","arsenal","juventus","rangers-football-club","nice","cardiff-city-football-club","club-universidad-nacional"],
     "dicas": ["Meio-campista nascido no País de Gales em 1990.","É de Caerphilly. Foi jogar fora do país aos 17 anos."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/50057"
@@ -1814,7 +1814,7 @@
     "nome": "Ashley Cole",
     "apelidos": ["ashley cole"],
     "nivel": "intermediario",
-    "clubes": ["arsenal","crystal-palace","chelsea","roma","la-galaxy","derby-county-football-club"],
+    "clubes": ["arsenal","crystal-palace","arsenal","chelsea","roma","la-galaxy","derby-county-football-club"],
     "dicas": ["Lateral nascido na Inglaterra em 1980.","Disputou as Copas do Mundo de 2002, 2006 e 2010. É de Londres."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3182"
@@ -1834,8 +1834,8 @@
     "nome": "Arda Turan",
     "apelidos": ["arda turan"],
     "nivel": "intermediario",
-    "clubes": ["galatasaray","vestel-manisaspor","atletico-madrid","barcelona","istanbul-buyuksehir-belediyespor","galatasaray"],
-    "dicas": ["Ponta nascido na Turquia em 1987.","Vestiu a camisa da seleção turca 100 vezes. Custou € 34 milhões na transferência mais cara (2015)."],
+    "clubes": ["galatasaray","vestel-manisaspor","galatasaray","atletico-madrid","barcelona","istanbul-buyuksehir-belediyespor","galatasaray"],
+    "dicas": ["Ponta nascido na Turquia em 1987.","Vestiu a camisa da seleção turca 100 vezes. Disputou a Eurocopa de 2008."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/21369"
   },
@@ -1914,7 +1914,7 @@
     "nome": "Léo Pereira",
     "apelidos": ["léo pereira"],
     "nivel": "intermediario",
-    "clubes": ["club-athletico-paranaense","guaratingueta-futebol-ltda","nautico","orlando-city","flamengo"],
+    "clubes": ["club-athletico-paranaense","guaratingueta-futebol-ltda","nautico","orlando-city","club-athletico-paranaense","flamengo"],
     "dicas": ["Zagueiro brasileiro nascido em 1996.","Disputou a Copa do Mundo de 2026. É de Curitiba."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/288431"
@@ -1984,7 +1984,7 @@
     "nome": "Michael Carrick",
     "apelidos": ["michael carrick"],
     "nivel": "dificil",
-    "clubes": ["west-ham","swindon-town-football-club","birmingham-city","hotspur","manchester-united"],
+    "clubes": ["west-ham","swindon-town-football-club","birmingham-city","west-ham","hotspur","manchester-united"],
     "dicas": ["Volante nascido na Inglaterra em 1981.","Disputou as Copas do Mundo de 2006 e 2010. É de Wallsend."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3878"
@@ -2064,7 +2064,7 @@
     "nome": "Marlon",
     "apelidos": ["marlon santos da silva barbosa","marlon"],
     "nivel": "dificil",
-    "clubes": ["fluminense","barcelona","nice","sassuolo","shakhtar","monza","fluminense","los-angeles-football-club"],
+    "clubes": ["fluminense","barcelona","nice","sassuolo","shakhtar","monza","fluminense","los-angeles-football-club","shakhtar"],
     "dicas": ["Zagueiro brasileiro nascido em 1995.","É de Duque de Caxias. Já soma 12 anos de estrada desde 2013."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/273236"
@@ -2154,7 +2154,7 @@
     "nome": "Vitinho",
     "apelidos": ["vitinho (futebolista)","vitinho"],
     "nivel": "intermediario",
-    "clubes": ["botafogo","cska-moscow","internacional","flamengo","al-ettifaq","al-shabab","corinthians"],
+    "clubes": ["botafogo","cska-moscow","internacional","cska-moscow","flamengo","al-ettifaq","al-shabab","al-ettifaq","corinthians"],
     "dicas": ["Ponta brasileiro nascido em 1993.","É do Rio de Janeiro. Já soma 13 anos de estrada desde 2012."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/213605"
@@ -2164,7 +2164,7 @@
     "nome": "Dejan Lovren",
     "apelidos": ["dejan lovren"],
     "nivel": "dificil",
-    "clubes": ["gnk-dinamo-zagreb","nk-inter-zapresic","olympique-lyon","southampton","liverpool","fc-zenit-sao-petersburgo","olympique-lyon","paok-thessaloniki"],
+    "clubes": ["gnk-dinamo-zagreb","nk-inter-zapresic","gnk-dinamo-zagreb","olympique-lyon","southampton","liverpool","fc-zenit-sao-petersburgo","olympique-lyon","paok-thessaloniki"],
     "dicas": ["Zagueiro nascido na Iugoslávia em 1989, que defendeu a seleção croata.","É de Zenica. Ficou 6 anos seguidos no Liverpool."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/37838"
@@ -2194,7 +2194,7 @@
     "nome": "Radamel Falcao",
     "apelidos": ["radamel falcao garcía","radamel falcao"],
     "nivel": "facil",
-    "clubes": ["river-plate","porto","atletico-madrid","monaco","manchester-united","chelsea","galatasaray","vallecano","millonarios"],
+    "clubes": ["river-plate","porto","atletico-madrid","monaco","manchester-united","chelsea","monaco","galatasaray","vallecano","millonarios"],
     "dicas": ["Centroavante nascido na Colômbia em 1986.","Disputou a Copa do Mundo de 2018. É de Santa Marta."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/39152"
@@ -2260,16 +2260,6 @@
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/57500"
   },
   {
-    "id": "gavi",
-    "nome": "Gavi",
-    "apelidos": ["gavi"],
-    "nivel": "intermediario",
-    "clubes": ["real-betis","barcelona"],
-    "dicas": ["Meio-campista nascido na Espanha em 2004.","Disputou as Copas do Mundo de 2022 e 2026. É de Los Palacios y Villafranca."],
-    "verificado": true,
-    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/646740"
-  },
-  {
     "id": "bill-shankly",
     "nome": "Bill Shankly",
     "apelidos": ["bill shankly"],
@@ -2330,16 +2320,6 @@
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/72343"
   },
   {
-    "id": "phil-foden",
-    "nome": "Phil Foden",
-    "apelidos": ["phil foden"],
-    "nivel": "intermediario",
-    "clubes": ["man-city","manchester-city"],
-    "dicas": ["Meia nascido na Inglaterra em 2000.","Disputou a Copa do Mundo de 2022. É de Stockport."],
-    "verificado": true,
-    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/406635"
-  },
-  {
     "id": "nacho",
     "nome": "Nacho",
     "apelidos": ["nacho"],
@@ -2384,7 +2364,7 @@
     "nome": "Ansu Fati",
     "apelidos": ["ansu fati"],
     "nivel": "dificil",
-    "clubes": ["barcelona","brighton","monaco"],
+    "clubes": ["barcelona","brighton","barcelona","monaco"],
     "dicas": ["Ponta nascido na Guiné-Bissau em 2002, que defendeu a seleção espanhola.","É de Bissau. Já soma 9 anos de estrada desde 2017."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/466810"
@@ -2464,7 +2444,7 @@
     "nome": "Thomas Vermaelen",
     "apelidos": ["thomas vermaelen"],
     "nivel": "dificil",
-    "clubes": ["ajax","rkc-waalwijk","arsenal","barcelona","roma","vissel-kobe"],
+    "clubes": ["ajax","rkc-waalwijk","ajax","arsenal","barcelona","roma","barcelona","vissel-kobe"],
     "dicas": ["Zagueiro nascido na Bélgica em 1985.","Disputou as Copas do Mundo de 2014 e 2018. É de Kapellen."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/15904"
@@ -2524,7 +2504,7 @@
     "nome": "Denis Cheryshev",
     "apelidos": ["denis cheryshev"],
     "nivel": "dificil",
-    "clubes": ["real-madrid","sevilla","villarreal","valencia","villarreal","valencia","venezia","panionios","enosi-neon-ypsona-digenis-ipsona"],
+    "clubes": ["real-madrid","sevilla","villarreal","real-madrid","valencia","villarreal","valencia","venezia","panionios","enosi-neon-ypsona-digenis-ipsona"],
     "dicas": ["Ponta nascido na União Soviética em 1990, que defendeu a seleção russa.","Disputou a Copa do Mundo de 2018. É de Nizhniy Novgorod."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/98322"
@@ -2564,7 +2544,7 @@
     "nome": "Emiliano Martínez",
     "apelidos": ["emiliano martínez"],
     "nivel": "facil",
-    "clubes": ["oxford-united-football-club","arsenal","sheffield-wednesday","rotherham-united-football-club","wolverhampton-wanderers","getafe","reading","aston-villa","chelsea"],
+    "clubes": ["oxford-united-football-club","arsenal","sheffield-wednesday","arsenal","rotherham-united-football-club","wolverhampton-wanderers","arsenal","getafe","arsenal","reading","arsenal","aston-villa","chelsea"],
     "dicas": ["Goleiro nascido na Argentina em 1992.","Disputou a Copa do Mundo de 2026. É de Mar del Plata."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/111873"
@@ -2584,7 +2564,7 @@
     "nome": "Jonathan",
     "apelidos": ["jonathan cícero moreira","jonathan"],
     "nivel": "dificil",
-    "clubes": ["cruzeiro","santos","inter","parma","fluminense","club-athletico-paranaense"],
+    "clubes": ["cruzeiro","santos","inter","parma","inter","fluminense","club-athletico-paranaense"],
     "dicas": ["Lateral brasileiro nascido em 1986.","É de Conselheiro Lafaiete. Custou € 5 milhões na transferência mais cara (2011)."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/54149"
@@ -2644,7 +2624,7 @@
     "nome": "Zé Mario",
     "apelidos": ["zé mario"],
     "nivel": "dificil",
-    "clubes": ["bonsucesso-futebol-clube","flamengo","fluminense","vasco","sao-jose-esporte-clube","portuguesa"],
+    "clubes": ["bonsucesso-futebol-clube","flamengo","fluminense","vasco","sao-jose-esporte-clube","vasco","portuguesa"],
     "dicas": ["Volante brasileiro nascido em 1949.","É do Rio de Janeiro. Rodou o profissionalismo de 1969 a 1982."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/783646"
@@ -2704,7 +2684,7 @@
     "nome": "Jack Wilshere",
     "apelidos": ["jack wilshere"],
     "nivel": "dificil",
-    "clubes": ["arsenal","bolton-wanderers-football-club","bournemouth","west-ham","bournemouth","aarhus-gf"],
+    "clubes": ["arsenal","bolton-wanderers-football-club","arsenal","bournemouth","arsenal","west-ham","bournemouth","aarhus-gf"],
     "dicas": ["Meio-campista nascido na Inglaterra em 1992.","Disputou a Copa do Mundo de 2014. É de Stevenage."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/74223"
@@ -2714,7 +2694,7 @@
     "nome": "Jan Vertonghen",
     "apelidos": ["jan vertonghen"],
     "nivel": "intermediario",
-    "clubes": ["ajax","rkc-waalwijk","hotspur","benfica","rsc-anderlecht"],
+    "clubes": ["ajax","rkc-waalwijk","ajax","hotspur","benfica","rsc-anderlecht"],
     "dicas": ["Zagueiro nascido na Bélgica em 1987.","É de Sint-Niklaas. Vestiu a camisa da seleção belga 157 vezes."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/43250"
@@ -2774,7 +2754,7 @@
     "nome": "Adrien Rabiot",
     "apelidos": ["adrien rabiot"],
     "nivel": "intermediario",
-    "clubes": ["psg","toulouse","juventus","marseille","milan"],
+    "clubes": ["psg","toulouse","psg","juventus","marseille","milan"],
     "dicas": ["Meio-campista nascido na França em 1995.","É de Saint-Maurice. Ficou 6 anos seguidos no PSG."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/182913"
@@ -2784,7 +2764,7 @@
     "nome": "Claudio Marchisio",
     "apelidos": ["claudio marchisio"],
     "nivel": "dificil",
-    "clubes": ["juventus","empoli","fc-zenit-sao-petersburgo"],
+    "clubes": ["juventus","empoli","juventus","fc-zenit-sao-petersburgo"],
     "dicas": ["Meio-campista nascido na Itália em 1986.","É de Torino. Foi jogar fora do país aos 32 anos."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/44716"
@@ -2854,7 +2834,7 @@
     "nome": "Ibrahim Afellay",
     "apelidos": ["ibrahim afellay"],
     "nivel": "dificil",
-    "clubes": ["psv","barcelona","schalke","olympiacos-piraeus","stoke-city-football-club","psv"],
+    "clubes": ["psv","barcelona","schalke","barcelona","olympiacos-piraeus","stoke-city-football-club","psv"],
     "dicas": ["Meia nascido na Holanda em 1986.","Disputou a Copa do Mundo de 2010. É de Utrecht."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/15760"
@@ -2924,7 +2904,7 @@
     "nome": "Marco Asensio",
     "apelidos": ["marco asensio"],
     "nivel": "intermediario",
-    "clubes": ["mallorca","real-madrid","espanyol","psg","aston-villa","fenerbahce"],
+    "clubes": ["mallorca","real-madrid","espanyol","real-madrid","psg","aston-villa","fenerbahce"],
     "dicas": ["Meia nascido na Espanha em 1996.","Disputou a Copa do Mundo de 2018. Já soma 13 anos de estrada desde 2012."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/296622"
@@ -2954,7 +2934,7 @@
     "nome": "Marcos Rocha",
     "apelidos": ["marcos rocha"],
     "nivel": "dificil",
-    "clubes": ["crb","clube-atletico-mineiro","ponte-preta","america-futebol-clube-belo-horizonte","palmeiras","gremio"],
+    "clubes": ["crb","clube-atletico-mineiro","ponte-preta","america-futebol-clube-belo-horizonte","clube-atletico-mineiro","palmeiras","gremio"],
     "dicas": ["Lateral brasileiro nascido em 1988.","É de Sete Lagoas. Vestiu a camisa da seleção brasileira 2 vezes."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/75435"
@@ -2998,5 +2978,195 @@
     "dicas": ["Zagueiro brasileiro nascido em 1993.","É de Vitória. Foi jogar fora do país aos 31 anos."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/178984"
+  },
+  {
+    "id": "messi",
+    "nome": "Lionel Messi",
+    "apelidos": ["lionel messi"],
+    "nivel": "facil",
+    "clubes": ["barcelona","psg","inter-miami"],
+    "dicas": ["Ponta nascido na Argentina em 1987.","Disputou 6 Copas do Mundo. É de Rosario."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/28003"
+  },
+  {
+    "id": "ronaldo-fenomeno",
+    "nome": "Ronaldo Fenômeno",
+    "apelidos": ["ronaldo fenômeno","ronaldo","ronaldo nazário"],
+    "nivel": "facil",
+    "clubes": ["cruzeiro","psv","barcelona","inter","real-madrid","milan","corinthians"],
+    "dicas": ["Centroavante brasileiro nascido em 1976.","Disputou 4 Copas do Mundo. É do Rio de Janeiro."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3140"
+  },
+  {
+    "id": "diego-maradona",
+    "nome": "Diego Maradona",
+    "apelidos": ["diego maradona"],
+    "nivel": "facil",
+    "clubes": ["argentinos-juniors","boca-juniors","barcelona","napoli","sevilla","newell-s","boca-juniors"],
+    "dicas": ["Meia nascido na Argentina em 1960.","Disputou 4 Copas do Mundo. É de Lanús."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/8024"
+  },
+  {
+    "id": "zinedine-zidane",
+    "nome": "Zinédine Zidane",
+    "apelidos": ["zinédine zidane"],
+    "nivel": "facil",
+    "clubes": ["as-cannes","bordeaux","juventus","real-madrid"],
+    "dicas": ["Meia nascido na França em 1972.","Disputou as Copas do Mundo de 1998, 2002 e 2006. É de Marseille."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3111"
+  },
+  {
+    "id": "romario",
+    "nome": "Romário",
+    "apelidos": ["romário"],
+    "nivel": "facil",
+    "clubes": ["vasco","psv","barcelona","flamengo","valencia","flamengo","vasco","fluminense","al-sadd-sports-club","fluminense","vasco","miami-fc-2006","adelaide-united-football-club","vasco","america-football-club-rio-de-janeiro"],
+    "dicas": ["Centroavante brasileiro nascido em 1966.","Disputou as Copas do Mundo de 1990 e 1994. Rodou o profissionalismo de 1988 a 2024."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/7942"
+  },
+  {
+    "id": "rivaldo",
+    "nome": "Rivaldo",
+    "apelidos": ["rivaldo"],
+    "nivel": "facil",
+    "clubes": ["santa-cruz","mogi-mirim","corinthians","palmeiras","deportivo-a-coruna","barcelona","milan","cruzeiro","olympiacos-piraeus","aek-athens","football-club-bunyodkor","mogi-mirim","sao-paulo","kabuscorp-sport-clube-do-palanca","associacao-desportiva-sao-caetano","mogi-mirim"],
+    "dicas": ["Meia brasileiro nascido em 1972.","É de Paulista. Rodou o profissionalismo de 1989 a 2015."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3372"
+  },
+  {
+    "id": "bebeto",
+    "nome": "Bebeto",
+    "apelidos": ["bebeto"],
+    "nivel": "facil",
+    "clubes": ["vitoria","flamengo","vasco","deportivo-a-coruna","flamengo","sevilla","vitoria","cruzeiro","botafogo","toros-neza-futbol-club","kashima-antlers","vitoria","vasco","al-ittihad"],
+    "dicas": ["Centroavante brasileiro nascido em 1964.","Disputou as Copas do Mundo de 1990, 1994 e 1998. É de Salvador."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/26541"
+  },
+  {
+    "id": "kylian-mbappe",
+    "nome": "Kylian Mbappé",
+    "apelidos": ["kylian mbappé"],
+    "nivel": "facil",
+    "clubes": ["monaco","psg","real-madrid"],
+    "dicas": ["Centroavante nascido na França em 1998.","Disputou as Copas do Mundo de 2018, 2022 e 2026. Foi jogar fora do país aos 15 anos."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/342229"
+  },
+  {
+    "id": "zlatan-ibrahimovic",
+    "nome": "Zlatan Ibrahimović",
+    "apelidos": ["zlatan ibrahimović"],
+    "nivel": "facil",
+    "clubes": ["malmo-ff","ajax","juventus","inter","barcelona","milan","psg","manchester-united","la-galaxy","milan"],
+    "dicas": ["Centroavante nascido na Suécia em 1981.","Vestiu a camisa da seleção sueca 122 vezes. Rodou o profissionalismo de 1997 a 2023."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3455"
+  },
+  {
+    "id": "mohamed-salah",
+    "nome": "Mohamed Salah",
+    "apelidos": ["mohamed salah"],
+    "nivel": "facil",
+    "clubes": ["al-mokawloon","basel","chelsea","fiorentina","roma","liverpool","trabzonspor"],
+    "dicas": ["Ponta nascido no Egito em 1992.","É de Nagrig, Basyoun. Vestiu a camisa da seleção do Egito 119 vezes."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/148455"
+  },
+  {
+    "id": "erling-haaland",
+    "nome": "Erling Haaland",
+    "apelidos": ["erling haaland"],
+    "nivel": "facil",
+    "clubes": ["bryne-fk","molde-fk","rb-salzburg","dortmund","manchester-city"],
+    "dicas": ["Centroavante nascido na Inglaterra em 2000, que defendeu a seleção norueguesa.","Disputou a Copa do Mundo de 2026. É de Leeds."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/418560"
+  },
+  {
+    "id": "robert-lewandowski",
+    "nome": "Robert Lewandowski",
+    "apelidos": ["robert lewandowski"],
+    "nivel": "facil",
+    "clubes": ["delta-warszawa","znicz-pruszkow","lech-poznan","dortmund","bayern","barcelona","chicago-fire"],
+    "dicas": ["Centroavante nascido na Polônia em 1988.","Disputou a Copa do Mundo de 2018. Vestiu a camisa da seleção polonesa 167 vezes."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/38253"
+  },
+  {
+    "id": "thiago-silva",
+    "nome": "Thiago Silva",
+    "apelidos": ["thiago silva"],
+    "nivel": "facil",
+    "clubes": ["rs-futebol","esporte-clube-juventude","fluminense","milan","psg","chelsea","fluminense","porto","fluminense"],
+    "dicas": ["Zagueiro brasileiro nascido em 1984.","Disputou as Copas do Mundo de 2010, 2014 e 2018. É do Rio de Janeiro."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/29241"
+  },
+  {
+    "id": "raphinha",
+    "nome": "Raphinha",
+    "apelidos": ["raphinha"],
+    "nivel": "facil",
+    "clubes": ["vit-guimaraes","sporting-cp","rennais","leeds-united","barcelona"],
+    "dicas": ["Centroavante brasileiro nascido em 1996.","Disputou a Copa do Mundo de 2026. É de Porto Alegre."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/411295"
+  },
+  {
+    "id": "marquinhos",
+    "nome": "Marquinhos",
+    "apelidos": ["marquinhos"],
+    "nivel": "facil",
+    "clubes": ["corinthians","roma","psg"],
+    "dicas": ["Zagueiro brasileiro nascido em 1994.","É de São Paulo. Vestiu a camisa da seleção brasileira 110 vezes."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/181767"
+  },
+  {
+    "id": "juninho-pernambucano",
+    "nome": "Juninho Pernambucano",
+    "apelidos": ["juninho pernambucano"],
+    "nivel": "facil",
+    "clubes": ["sport","vasco","olympique-lyon","al-gharafa","vasco","red-bull-new-york","vasco"],
+    "dicas": ["Meia brasileiro nascido em 1975.","Disputou a Copa do Mundo de 2006. Custou € 2,5 milhões na transferência mais cara (2009)."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/5354"
+  },
+  {
+    "id": "garrincha",
+    "nome": "Garrincha",
+    "apelidos": ["garrincha"],
+    "nivel": "intermediario",
+    "clubes": ["serrano-foot-ball-club","botafogo","corinthians","junior","flamengo","olaria-atletico-clube"],
+    "dicas": ["Ponta brasileiro nascido em 1933.","Disputou as Copas do Mundo de 1958, 1962 e 1966. É de Pau Grande."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/151263"
+  },
+  {
+    "id": "andrea-pirlo",
+    "nome": "Andrea Pirlo",
+    "apelidos": ["andrea pirlo"],
+    "nivel": "intermediario",
+    "clubes": ["brescia","inter","reggina-1914","inter","brescia","milan","juventus","new-york-city"],
+    "dicas": ["Volante nascido na Itália em 1979.","Disputou as Copas do Mundo de 2006, 2010 e 2014. É de Flero."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/5817"
+  },
+  {
+    "id": "juan-roman-riquelme",
+    "nome": "Juan Román Riquelme",
+    "apelidos": ["juan román riquelme"],
+    "nivel": "intermediario",
+    "clubes": ["boca-juniors","barcelona","villarreal","boca-juniors","argentinos-juniors"],
+    "dicas": ["Meia nascido na Argentina em 1978.","Disputou a Copa do Mundo de 2006. É de San Fernando."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3854"
   }
 ]

@@ -161,6 +161,17 @@ export const SEM_ESCUDO = {
   'atletico-dallas': { nome: "Atlético Dallas", pais: 'US', cores: ['#E30613', '#0A3D91'], wd: 'Q131384708' },
   'quick-boys': { nome: "Quick Boys", pais: 'NL', cores: ['#0A3D91', '#FFFFFF'], wd: 'Q2108810', tm: '7110' },
   'miami-united': { nome: "Miami United", pais: 'US', cores: ['#1A1A1A', '#FFFFFF'], wd: 'Q16844935', tm: '46181' },
+
+  /**
+   * Primeiros clubes dos grandes nomes que o catálogo não tinha, com o escudo
+   * do Transfermarkt: o Cannes do Zidane, o Al Mokawloon do Salah, o Delta
+   * Warszawa e o Znicz do Lewandowski e o RS Futebol do Thiago Silva.
+   */
+  'as-cannes': { nome: "Cannes", pais: 'FR', cores: ['#E30613', '#FFFFFF'], tm: '895' },
+  'al-mokawloon': { nome: "Al Mokawloon", pais: 'EG', cores: ['#FFD700', '#1A1A1A'], tm: '3369' },
+  'delta-warszawa': { nome: "Delta Warszawa", pais: 'PL', cores: ['#0A3D91', '#FFFFFF'], tm: '30379' },
+  'znicz-pruszkow': { nome: "Znicz Pruszków", pais: 'PL', cores: ['#E30613', '#FFFFFF'], tm: '9109' },
+  'rs-futebol': { nome: "RS Futebol", pais: 'BR', cores: ['#0A3D91', '#E30613'], tm: '10495' },
 }
 
 /**
@@ -209,6 +220,15 @@ export const PARES_TM = {
   918: 'nk-inter-zapresic', // NK Inker; Lovren
   10948: 'guangzhou-evergrande', // Guangzhou FC; Robinho
   17276: 'hangzhou-greentown-football-club', // Zhejiang FC; Tim Cahill
+  // os grandes nomes: abreviação que não casa ("Argentinos Jrs", "Rennes") e clube novo acima
+  1030: 'argentinos-juniors', // Maradona e Riquelme
+  273: 'rennais', // Raphinha
+  95478: 'serrano-foot-ball-club', // o Serrano de Petrópolis; Garrincha
+  895: 'as-cannes',
+  3369: 'al-mokawloon',
+  30379: 'delta-warszawa',
+  9109: 'znicz-pruszkow',
+  10495: 'rs-futebol',
 }
 
 /**

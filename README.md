@@ -33,6 +33,7 @@ npm run dev
 | `npm run biblioteca` | regera `src/dados/jogadores.json` a partir do Transfermarkt |
 | `npm run teste-visual` | roda a partida ponta a ponta no Chromium e salva capturas |
 | `npm run agenda` | estende a agenda do jogador do dia até 30 dias à frente (`-- 60` para mais) |
+| `npm run trazer` | traz jogador escolhido à mão, pelo QID e com o nível (`-- Q615:facil:messi`) |
 
 O teste visual precisa do Chromium do Playwright (`npx playwright install chromium`)
 e de um `npm run build && npx vite preview` rodando na porta 4173.
@@ -79,6 +80,12 @@ servidor.
 A partida guarda o id do jogador no primeiro chute ou dica, e continua com ele
 mesmo que a agenda mude no meio do dia.
 
+**Na virada do dia a página recarrega.** O código aberto é o da versão do dia
+em que a aba foi aberta, e aba esquecida no celular mostrava o jogador, as
+dicas e os escudos de uma biblioteca velha — foi assim que o cliente viu o
+Marcos Rocha com o Brasil de Pelotas depois de corrigido. A volta à aba
+confere na hora; um intervalo cobre a aba que ficou à mostra.
+
 O progresso do dia e as estatísticas ficam em `localStorage`. Se o navegador
 bloquear o armazenamento, a partida continua funcionando — só não guarda
 histórico.
@@ -89,7 +96,8 @@ virar um problema, a saída é mover o sorteio para um endpoint.
 
 ## A biblioteca
 
-`src/dados/jogadores.json` tem **300 jogadores, 100 por nível**. É dado, não
+`src/dados/jogadores.json` tem **317 jogadores**: 114 no fácil, 101 no
+intermediário e 102 no difícil. É dado, não
 código: o jogo importa o arquivo por `src/dados/jogadores.ts`, que só dá tipo a
 ele, e os scripts leem e gravam por `scripts/biblioteca.mjs`. Até setembro a
 biblioteca era um arquivo TypeScript que quatro scripts reescreviam por
@@ -97,6 +105,28 @@ busca-e-troca com expressão regular, cada um com a sua versão da regex.
 
 A biblioteca foi **gerada** por `npm run biblioteca` e hoje é mantida por
 `npm run reparar` (carreiras) e `npm run dicas` (dicas).
+
+**Jogador pedido pelo nome entra por `npm run trazer`**, com o QID do Wikidata
+e o nível decidido à mão: `npm run trazer -- Q615:facil:messi`. O caminho de
+aceitação é o do gerador — carreira do histórico do Transfermarkt, só jogo
+profissional, toda passagem ligada a um clube do catálogo — e o que trava sai
+com o motivo, para o conserto ir ao mapa ou às carreiras corrigidas. Foi
+assim que entraram 19 dos 21 grandes nomes que faltavam (Messi, Ronaldo
+Fenômeno, Maradona, Zidane, Romário, Rivaldo...). O Totti ficou fora porque
+só jogou no Roma, e o Buffon já estava. Saíram Gavi e Phil Foden, que também
+só jogaram num clube.
+
+**Sem teto de escudos.** O gerador recusava carreira com mais de 12 escudos,
+porque no celular a partir de 13 o campo de palpite descia para fora da tela.
+O cliente pediu todos — carreira confusa é a graça do jogo, e o Rivaldo tem
+16. Em vez do teto, o escudo encolhe (`src/componentes/Carreira.tsx`): até
+12, três por fileira no celular; de 13 a 16, quatro; acima disso, cinco.
+
+O nome que o jogo mostra é o da camisa, do Transfermarkt; quando ele não
+separa um jogador de outro, o nome vem de `scripts/nomes-fixos.mjs`. O
+Transfermarkt chama o Ronaldo de "Ronaldo", e com o Cristiano Ronaldo na
+biblioteca "Era ele: RONALDO" não diria qual; ele é Ronaldo Fenômeno, e
+"ronaldo" continua acertando no dia dele.
 
 A carreira de cada um vem do histórico de transferências do **Transfermarkt**,
 na ordem em que aconteceu, e `fonte` aponta a página de onde saiu. Isso existe
@@ -174,8 +204,16 @@ o empréstimo em que o jogador não entrou em campo. Cinco filtros, em
 | Categoria de base e time B | nome com marca de base ou reserva, inclusive a tradução do site em português | "OB Juventude" (a base do Odense) virava o Juventude de Caxias na carreira do Eriksen; "Real Madrid Castilla", "Man City For", "Seiryo HS" |
 | Formação | as primeiras passagens de onde o jogador saiu antes dos 17 anos | Albacete do Iniesta, West Ham do John Terry |
 | Compra relâmpago | clube que comprou e emprestou em até um mês | Deportivo Maldonado do Alex Sandro, Granada do Allan, Tombense do Firmino, Rio Ave do Fabinho |
-| Volta de empréstimo | a volta ao clube dono só entra quando é lá que a passagem de verdade começa | o Coutinho foi vendido à Inter aos 16 e emprestado ao Vasco no mesmo dia: a Inter aparece depois do Vasco, onde ele jogou |
+| Volta de empréstimo | a volta ao clube dono entra quando o jogador jogou por ele entre a volta e a saída seguinte | o Marcos Rocha voltou do América-MG ao Atlético-MG e jogou 275 vezes até 2018; o Keirrison voltou ao Barcelona seis vezes sem jogar, e nenhuma aparece |
 | Sem jogo oficial | clube com partida registrada e nenhum jogo | ver abaixo |
+
+A volta de empréstimo ficou de fora por um tempo sempre que o clube já estava
+na carreira — era o jeito de o Keirrison não voltar ao Barcelona seis vezes. O
+cliente apontou o que isso escondia: os quatro anos do Marcos Rocha no
+Atlético-MG depois do empréstimo ao América, o tempo da Libertadores de 2013.
+Agora o registro de partidas guarda o dia de cada jogo, a passagem guarda a
+data da volta e a da saída seguinte, e a volta entra quando há jogo entre as
+duas. Sem registro de partidas do clube, fica como antes.
 
 O último vem do registro de partidas do Transfermarkt (`jogosPorClube`), o
 mesmo que o quadro de desempenho do perfil lê: cada partida oficial do clube

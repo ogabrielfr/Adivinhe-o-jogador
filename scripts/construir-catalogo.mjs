@@ -370,6 +370,21 @@ for (const [id, dados] of Object.entries(SEM_ESCUDO)) {
     continue
   }
 
+  /**
+   * Sem QID, o escudo vem direto do Transfermarkt pelo id: o Delta Warszawa e
+   * o Znicz do Lewandowski e o RS Futebol do Thiago Silva não têm clube no
+   * Wikidata que diga ser o dono do id, e sem isto ficavam com o brasão
+   * desenhado.
+   */
+  if (dados.tm) {
+    const arquivo = join(cacheExternos, `tm-${dados.tm}.png`)
+    if (await baixar(`https://tmssl.akamaized.net/images/wappen/head/${dados.tm}.png`, arquivo)) {
+      const c = { id, nome: dados.nome, pais: dados.pais, cores: dados.cores, fonte: 'tm', qualidade: QUALIDADE.wd, origem: arquivo }
+      candidatos.set(chaveDedup(c), c)
+      continue
+    }
+  }
+
   const c = { id, nome: dados.nome, pais: dados.pais, cores: dados.cores, fonte: 'reserva', qualidade: 9 }
   candidatos.set(chaveDedup(c), c)
 }

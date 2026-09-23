@@ -21,6 +21,7 @@ import { CARREIRA_FIXA } from './carreiras-corrigidas.mjs'
 import { lerBiblioteca, gravarBiblioteca, idTmDe } from './biblioteca.mjs'
 import { criarResolvedor } from './resolver-clube.mjs'
 import { nomeCurto } from './nomes-curtos.mjs'
+import { NOME_FIXO } from './nomes-fixos.mjs'
 import { latinizar } from '../src/logica/texto.ts'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -191,7 +192,9 @@ for (const { jogador: j, perfil, dados } of coletado) {
    */
   // sósia grego ou cirílico vira letra latina antes de virar nome na tela
   const nomeTm = perfil?.nome ? latinizar(perfil.nome) : null
-  if (nomeTm && nomeTm !== j.nome && nomeTm.split(' ').length < j.nome.split(' ').length) {
+  if (NOME_FIXO[j.id]) {
+    j.nome = NOME_FIXO[j.id]
+  } else if (nomeTm && nomeTm !== j.nome && nomeTm.split(' ').length < j.nome.split(' ').length) {
     j.apelidos = [...new Set([j.nome.toLowerCase(), nomeTm.toLowerCase()])]
     j.nome = nomeTm
     renomeados++

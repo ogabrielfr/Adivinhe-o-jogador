@@ -10,6 +10,18 @@ interface Props {
   animar?: boolean
 }
 
+/**
+ * Carreira longa encolhe o escudo para caber em quatro fileiras no celular.
+ * Com três por fileira, 13 escudos já eram cinco fileiras e o campo de
+ * palpite descia para fora da tela. O cliente pediu todos os escudos, sem
+ * teto — o Rivaldo tem 16, e carreira confusa é a graça do jogo.
+ */
+function largura(quantos: number): string {
+  if (quantos > 16) return 'w-[clamp(48px,14.5vw,76px)]'
+  if (quantos > 12) return 'w-[clamp(56px,18vw,88px)]'
+  return 'w-[clamp(72px,21vw,104px)]'
+}
+
 export function Carreira({ clubes, revelarTudo = false, animar = false }: Props) {
   const [aberto, setAberto] = useState<number | null>(null)
 
@@ -27,7 +39,7 @@ export function Carreira({ clubes, revelarTudo = false, animar = false }: Props)
           const nome = CLUBE_POR_ID.get(id)?.nome ?? id
           const mostrando = revelarTudo || aberto === i
           return (
-            <li key={`${id}-${i}`} className="w-[clamp(72px,21vw,104px)]">
+            <li key={`${id}-${i}`} className={largura(clubes.length)}>
               <button
                 type="button"
                 onClick={() => setAberto(aberto === i ? null : i)}

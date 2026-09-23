@@ -1491,6 +1491,13 @@
   "qid": "Q4702894"
  },
  {
+  "id": "al-mokawloon",
+  "nome": "Al Mokawloon",
+  "pais": "EG",
+  "escudo": "al-mokawloon.png",
+  "qid": "Q2073915"
+ },
+ {
   "id": "al-mu-aidar-sports-club",
   "nome": "Al-Mu'aidar Sports Club",
   "pais": "QA",
@@ -2938,6 +2945,13 @@
   "pais": "BG",
   "escudo": "as-23-sofia.png",
   "qid": "Q4654441"
+ },
+ {
+  "id": "as-cannes",
+  "nome": "Cannes",
+  "pais": "FR",
+  "escudo": "as-cannes.png",
+  "qid": "Q298267"
  },
  {
   "id": "as-jamineiro",
@@ -12061,6 +12075,13 @@
   "qid": "Q5253709"
  },
  {
+  "id": "delta-warszawa",
+  "nome": "Delta Warszawa",
+  "pais": "PL",
+  "escudo": "delta-warszawa.png",
+  "qid": null
+ },
+ {
   "id": "deltras-f-c",
   "nome": "Deltras F.C.",
   "pais": "ID",
@@ -12408,7 +12429,7 @@
   "nome": "Dinamo Makhachkala",
   "pais": "RU",
   "escudo": "dinamo-makhachkala.png",
-  "qid": "Q2494171"
+  "qid": "Q64842483"
  },
  {
   "id": "dinamo-zagreb",
@@ -29488,7 +29509,7 @@
   "nome": "Rennais",
   "pais": "FR",
   "escudo": "rennais.svg",
-  "qid": null
+  "qid": "Q19509"
  },
  {
   "id": "reno-1868-fc",
@@ -30062,6 +30083,13 @@
   "nome": "Royale Union Saint Gilloise",
   "pais": "BE",
   "escudo": "royale-union-saint-gilloise.png",
+  "qid": null
+ },
+ {
+  "id": "rs-futebol",
+  "nome": "RS Futebol",
+  "pais": "BR",
+  "escudo": "rs-futebol.png",
   "qid": null
  },
  {
@@ -37616,6 +37644,13 @@
   "pais": "AZ",
   "escudo": "zir-futbol-klubu.png",
   "qid": "Q18129467"
+ },
+ {
+  "id": "znicz-pruszkow",
+  "nome": "Znicz Pruszków",
+  "pais": "PL",
+  "escudo": "znicz-pruszkow.png",
+  "qid": null
  },
  {
   "id": "zob-ahan-football-club",

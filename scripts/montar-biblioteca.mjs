@@ -139,7 +139,7 @@ for (let i = 0; i < faltaMeta.length; i += 150) {
       OPTIONAL { ?j wdt:P413 ?pos }
       OPTIONAL { ?j wdt:P27 ?pais }
       OPTIONAL { ?j wdt:P569 ?nasc }
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "pt,en". }
+      SERVICE wikibase:label { bd:serviceParam wikibase:language "pt,mul,en". }
     }`).catch(() => [])
   for (const l of linhas) {
     const q = qidDe(l.j)

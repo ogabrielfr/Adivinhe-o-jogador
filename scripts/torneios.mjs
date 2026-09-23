@@ -44,7 +44,7 @@ export async function torneiosDe(qids) {
       const linhas = await comInsistencia(`
         SELECT ?j ?evLabel WHERE { VALUES ?j { ${fatia.map((q) => `wd:${q}`).join(' ')} }
           ?j wdt:P1344 ?ev .
-          SERVICE wikibase:label { bd:serviceParam wikibase:language "pt,en". } }`)
+          SERVICE wikibase:label { bd:serviceParam wikibase:language "pt,mul,en". } }`)
       // lote perdido não vira "não jogou torneio": fica sem resposta para tentar depois
       if (!linhas) continue
       const por = new Map()

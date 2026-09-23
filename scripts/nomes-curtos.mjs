@@ -58,6 +58,7 @@ export const NOME_CURTO = {
   'murici-futebol-clube': 'Murici',
   'sinop-futebol-clube': 'Sinop',
   'brasil-de-pelotas': 'Brasil de Pelotas',
+  'serrano-foot-ball-club': 'Serrano',
   'abc': 'ABC',
 
   // Inglaterra e Escócia
@@ -98,6 +99,7 @@ export const NOME_CURTO = {
   'us-salernitana-1919': 'Salernitana',
   'u-s-livorno-1915': 'Livorno',
   'marseille': 'Marselha',
+  'rennais': 'Rennes',
   'psg': 'PSG',
   'estrela-vermelha-de-belgrado': 'Estrela Vermelha',
   'fk-partizan-belgrade': 'Partizan',
@@ -111,6 +113,7 @@ export const NOME_CURTO = {
   'paok-thessaloniki': 'PAOK',
   'gnk-dinamo-zagreb': 'Dinamo Zagreb',
   'nk-inter-zapresic': 'Inter Zaprešić',
+  'vit-guimaraes': 'Vitória de Guimarães',
 
   // Américas
   'club-atletico-talleres-remedios-de-escalada': 'Talleres de Escalada',
@@ -118,8 +121,14 @@ export const NOME_CURTO = {
   'club-deportivo-guadalajara': 'Chivas',
   'club-universidad-nacional': 'Pumas',
   'los-angeles-football-club': 'Los Angeles FC',
+  'toros-neza-futbol-club': 'Toros Neza',
+  // o Junior de Barranquilla do Garrincha; a fonte deu o nome em minúscula
+  'junior': 'Atlético Junior',
 
-  // Ásia e Oceania
+  // Ásia, África e Oceania
+  'adelaide-united-football-club': 'Adelaide United',
+  'football-club-bunyodkor': 'Bunyodkor',
+  'kabuscorp-sport-clube-do-palanca': 'Kabuscorp',
   'henan-songshan-longmen-football-club': 'Henan',
   'hangzhou-greentown-football-club': 'Hangzhou Greentown',
   'wuhan-three-towns-football-club': 'Wuhan Three Towns',

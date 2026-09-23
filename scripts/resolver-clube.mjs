@@ -56,6 +56,23 @@ const IDADE_PROFISSIONAL = 17
  * registro nenhum também fica. E o clube atual fica sempre: quem chegou há
  * pouco ainda não estreou, e é lá que ele está.
  */
+/**
+ * A volta de um empréstimo a clube que já está na carreira entra quando o
+ * jogador jogou por ele depois de voltar — conta o jogo entre a data da volta
+ * e a da saída seguinte.
+ *
+ * Antes ela nunca entrava, para o Keirrison não voltar ao Barcelona seis vezes
+ * sem jogar; e com isso sumiam os quatro anos do Marcos Rocha no Atlético-MG
+ * depois do empréstimo ao América, o tempo da Libertadores de 2013. Sem
+ * registro de partidas do clube, fica como antes: a volta não entra.
+ */
+function jogouNaVolta(passagem, jogos) {
+  const datas = jogos?.[passagem.idTm]?.datas
+  if (!datas?.length || !passagem.desde) return false
+  const ate = passagem.saida ?? '9999'
+  return datas.some((dia) => dia >= passagem.desde && dia < ate)
+}
+
 function naoJogou(passagem, jogos, ultima) {
   const registro = jogos?.[passagem.idTm]
   if (!registro || registro.jogou > 0) return false
@@ -187,7 +204,7 @@ export function criarResolvedor() {
       const r = resolver(p)
       resolvidas.push({ ...p, ...r })
       if (!r.id) { travas.push({ nome: p.nome, idTm: p.idTm, motivo: r.motivo }); continue }
-      if (p.volta && clubes.includes(r.id)) continue
+      if (p.volta && clubes.includes(r.id) && !jogouNaVolta(p, jogos)) continue
       if (clubes.at(-1) !== r.id) clubes.push(r.id)
     }
     return { clubes, travas, resolvidas, semJogo, formacao: passagens.slice(0, inicio).map((p) => p.nome) }

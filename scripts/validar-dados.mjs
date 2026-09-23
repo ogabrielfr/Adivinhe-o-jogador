@@ -2,7 +2,7 @@
 import { readdirSync, existsSync, readFileSync } from 'node:fs'
 import { JOGADORES } from '../src/dados/jogadores.ts'
 import { CLUBES } from '../src/dados/clubes.ts'
-import { formasDerivadas } from '../src/logica/texto.ts'
+import { formasDerivadas, formasExatas } from '../src/logica/texto.ts'
 import { dataDoDia, numeroDoDia } from '../src/logica/sorteio.ts'
 import { NIVEIS } from '../src/dados/tipos.ts'
 
@@ -52,19 +52,21 @@ for (const j of JOGADORES) {
 }
 
 /**
- * Pedaço de nome servindo a dois jogadores pede desempate no jogo. O nome
- * canônico, não: existem dois Paulinhos, e quem digita "Paulinho" no dia de um
- * deles não tem como ser mais específico. Só os pedaços entram no aviso.
+ * Pedaço de nome servindo a dois jogadores pede desempate no jogo — também
+ * quando é o nome inteiro do outro: "ronaldo" é pedaço do Cristiano e nome do
+ * Fenômeno. O nome canônico repetido, não: existem dois Paulinhos, e quem
+ * digita "Paulinho" no dia de um deles não tem como ser mais específico. Só o
+ * que é pedaço de alguém entra no aviso.
  */
 const porPedaco = new Map()
+const pedacos = new Set()
+const anotar = (p, id) => (porPedaco.get(p) ?? porPedaco.set(p, new Set()).get(p)).add(id)
 for (const j of JOGADORES) {
-  for (const p of formasDerivadas(j.nome, j.apelidos)) {
-    if (!porPedaco.has(p)) porPedaco.set(p, new Set())
-    porPedaco.get(p).add(j.id)
-  }
+  for (const p of formasDerivadas(j.nome, j.apelidos)) { pedacos.add(p); anotar(p, j.id) }
+  for (const p of formasExatas(j.nome, j.apelidos)) anotar(p, j.id)
 }
 for (const [k, lista] of porPedaco) {
-  if (lista.size > 1) avisos.push(`pedaço de nome ambíguo "${k}" → ${[...lista].join(', ')}`)
+  if (pedacos.has(k) && lista.size > 1) avisos.push(`pedaço de nome ambíguo "${k}" → ${[...lista].join(', ')}`)
 }
 
 /**

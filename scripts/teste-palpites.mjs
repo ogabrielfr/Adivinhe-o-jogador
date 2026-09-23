@@ -60,7 +60,7 @@ const { formasExatas, formasDerivadas } = await import('../src/logica/texto.ts')
 // mesma conta que diario.ts faz; refeita aqui porque ele importa sem extensão
 const donos = new Map()
 for (const j of JOGADORES) {
-  for (const f of formasDerivadas(j.nome, j.apelidos)) {
+  for (const f of [...formasDerivadas(j.nome, j.apelidos), ...formasExatas(j.nome, j.apelidos)]) {
     if (!donos.has(f)) donos.set(f, new Set())
     donos.get(f).add(j.id)
   }
@@ -87,8 +87,22 @@ console.log(bloqueados
   ? `\n${bloqueados} jogadores recusariam o próprio nome`
   : `\nos ${JOGADORES.length} jogadores aceitam o próprio nome`)
 
+/**
+ * "Ronaldo" é o Fenômeno: é o apelido declarado dele, então no dia dele
+ * acerta. No dia do Cristiano Ronaldo o mesmo palpite é ambíguo e o jogo pede
+ * o nome inteiro, sem gastar chute.
+ */
+let ronaldo = 0
+const fenomeno = JOGADORES.find((j) => j.id === 'ronaldo-fenomeno')
+const cristiano = JOGADORES.find((j) => j.id === 'cristiano-ronaldo')
+if (fenomeno && cristiano) {
+  if (!jogoAceita(fenomeno, 'ronaldo')) { console.log('"ronaldo" não acerta o Ronaldo Fenômeno'); ronaldo++ }
+  if (jogoAceita(cristiano, 'ronaldo')) { console.log('"ronaldo" acerta o Cristiano sem pedir desempate'); ronaldo++ }
+  if (!jogoAceita(cristiano, 'cristiano ronaldo')) { console.log('"cristiano ronaldo" não acerta o Cristiano'); ronaldo++ }
+}
+
 // o deploy roda este teste; sem código de saída, uma falha passava calada
-if (falhas || bloqueados) process.exitCode = 1
+if (falhas || bloqueados || ronaldo) process.exitCode = 1
 
 // e um pedaço ambíguo continua pedindo desempate
 const doisHenriques = JOGADORES.filter((j) => normalizar(j.nome) === 'henrique')

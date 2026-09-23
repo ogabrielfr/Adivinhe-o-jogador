@@ -10,24 +10,31 @@ import { TelaPartida } from './componentes/TelaPartida'
 import type { ResultadoChute } from './componentes/TelaPartida'
 
 export function App() {
-  const [agora, setAgora] = useState(() => new Date())
+  const [agora] = useState(() => new Date())
   const chave = chaveDoDia(agora)
   const dia = numeroDoDia(agora)
 
   const [estado, setEstado] = useState(() => carregar(chave))
   const [nivelAtivo, setNivelAtivo] = useState<Nivel | null>(null)
 
-  // a aba pode ficar aberta durante a virada do dia
+  /**
+   * A aba pode ficar aberta durante a virada do dia — e por dias, no celular.
+   * Na virada a página recarrega, em vez de só trocar o estado: o código aberto
+   * é o da versão do dia em que a aba foi aberta, e uma aba esquecida mostrava
+   * o jogador, as dicas e os escudos de uma biblioteca velha. Foi assim que o
+   * Marcos Rocha seguiu com o Brasil de Pelotas depois de corrigido. A volta à
+   * aba confere na hora; o intervalo cobre a aba que ficou à mostra.
+   */
   useEffect(() => {
-    const id = setInterval(() => {
-      const hoje = new Date()
-      if (chaveDoDia(hoje) !== chave) {
-        setAgora(hoje)
-        setEstado(carregar(chaveDoDia(hoje)))
-        setNivelAtivo(null)
-      }
-    }, 20_000)
-    return () => clearInterval(id)
+    const conferir = () => {
+      if (chaveDoDia(new Date()) !== chave) window.location.reload()
+    }
+    const id = setInterval(conferir, 20_000)
+    document.addEventListener('visibilitychange', conferir)
+    return () => {
+      clearInterval(id)
+      document.removeEventListener('visibilitychange', conferir)
+    }
   }, [chave])
 
   useEffect(() => {
