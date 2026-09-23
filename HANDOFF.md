@@ -123,6 +123,14 @@ recalcula nível: vale o que está na biblioteca, e `scripts/niveis-fixos.mjs`
 guarda as decisões à mão (Roger Machado e Joel Santana no difícil, Guardiola no
 intermediário).
 
+Testado e descartado como régua sozinha: **número de idiomas da Wikipédia com
+artigo do jogador** (sitelinks do Wikidata). É estável e não tem pico de
+notícia, mas mede fama no mundo: mudaria 151 dos 317 de nível e mandaria
+Pedro, Bruno Henrique, Gerson e Everton Ribeiro para o difícil, enquanto
+Vidić e Pepe Reina subiriam para o fácil. Para público brasileiro, precisa de
+um peso de carreira no Brasil (jogos por clube brasileiro e pela seleção, que
+o registro de partidas já tem) ou da curadoria do cliente.
+
 ### 3. Texto que vem das fontes e lê mal
 
 - **Posição vem do Transfermarkt** e às vezes soa estranha em português de jogo: o Neymar aparece como "Meia".
