@@ -103,6 +103,15 @@ export function salvar(estado: Estado): void {
   }
 }
 
+/**
+ * A sequência que ainda vale hoje. A gravada só é zerada na próxima partida
+ * terminada; quem jogou até anteontem e pulou ontem ainda a tem gravada, mas
+ * ela já quebrou.
+ */
+export function sequenciaAtual(e: Estatistica, dia: number): number {
+  return e.ultimoDia !== null && e.ultimoDia >= dia - 1 ? e.sequencia : 0
+}
+
 /** Atualiza as estatísticas de um nível quando a partida do dia termina. */
 export function registrarResultado(
   anterior: Estatistica,

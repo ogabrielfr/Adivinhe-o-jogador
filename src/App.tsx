@@ -7,6 +7,7 @@ import { carregar, DICAS, partidaNova, registrarResultado, salvar, TENTATIVAS } 
 import { textoDeCompartilhamento } from './logica/compartilhar'
 import { TelaInicial } from './componentes/TelaInicial'
 import { TelaPartida } from './componentes/TelaPartida'
+import { TelaEstatisticas } from './componentes/TelaEstatisticas'
 import type { ResultadoChute } from './componentes/TelaPartida'
 
 export function App() {
@@ -16,6 +17,7 @@ export function App() {
 
   const [estado, setEstado] = useState(() => carregar(chave))
   const [nivelAtivo, setNivelAtivo] = useState<Nivel | null>(null)
+  const [verEstatisticas, setVerEstatisticas] = useState(false)
 
   /**
    * A aba pode ficar aberta durante a virada do dia — e por dias, no celular.
@@ -176,6 +178,10 @@ export function App() {
     )
   }
 
+  if (verEstatisticas) {
+    return <TelaEstatisticas dia={dia} estatisticas={estado.estatisticas} aoVoltar={() => setVerEstatisticas(false)} />
+  }
+
   return (
     <TelaInicial
       dia={dia}
@@ -183,6 +189,7 @@ export function App() {
       partidas={estado.partidas}
       estatisticas={estado.estatisticas}
       aoEscolher={setNivelAtivo}
+      aoVerEstatisticas={() => setVerEstatisticas(true)}
     />
   )
 }

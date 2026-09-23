@@ -20,7 +20,8 @@
     "repor": "node scripts/repor-obscuros.mjs",
     "mapa-tm": "node scripts/mapa-transfermarkt.mjs",
     "agenda": "node scripts/agenda.mjs",
-    "trazer": "node scripts/trazer.mjs"
+    "trazer": "node scripts/trazer.mjs",
+    "previa": "node scripts/previa.mjs"
   },
   "repository": {
     "type": "git",

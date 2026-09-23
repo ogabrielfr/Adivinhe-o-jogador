@@ -1,7 +1,7 @@
 import { NIVEIS, ROTULO_NIVEL, DESCRICAO_NIVEL } from '../dados/tipos'
 import type { Nivel } from '../dados/tipos'
 import type { Estatistica, Partida } from '../logica/armazenamento'
-import { TENTATIVAS } from '../logica/armazenamento'
+import { sequenciaAtual, TENTATIVAS } from '../logica/armazenamento'
 import { ParedeDeEscudos } from './ParedeDeEscudos'
 import { MarcadorNivel } from './MarcadorNivel'
 import { ContagemRegressiva } from './ContagemRegressiva'
@@ -12,6 +12,7 @@ interface Props {
   partidas: Partial<Record<Nivel, Partida>>
   estatisticas: Record<Nivel, Estatistica>
   aoEscolher: (nivel: Nivel) => void
+  aoVerEstatisticas: () => void
 }
 
 function Resultado({ partida }: { partida: Partida }) {
@@ -32,9 +33,9 @@ function Resultado({ partida }: { partida: Partida }) {
   )
 }
 
-export function TelaInicial({ dia, data, partidas, estatisticas, aoEscolher }: Props) {
+export function TelaInicial({ dia, data, partidas, estatisticas, aoEscolher, aoVerEstatisticas }: Props) {
   const concluidos = NIVEIS.filter((n) => partidas[n] && partidas[n]!.status !== 'jogando').length
-  const totalSequencia = Math.max(...NIVEIS.map((n) => estatisticas[n].sequencia))
+  const totalSequencia = Math.max(...NIVEIS.map((n) => sequenciaAtual(estatisticas[n], dia)))
 
   return (
     <div className="relative mx-auto min-h-dvh w-full max-w-lg px-4 pb-10">
@@ -94,11 +95,20 @@ export function TelaInicial({ dia, data, partidas, estatisticas, aoEscolher }: P
           Desafio {dia} de{' '}
           {data.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' })}
         </span>
-        {totalSequencia > 0 && (
-          <span className="text-cal-500">
-            Sequência de {totalSequencia} {totalSequencia === 1 ? 'dia' : 'dias'}
-          </span>
-        )}
+        <span className="flex items-baseline gap-4">
+          {totalSequencia > 0 && (
+            <span className="text-cal-500">
+              Sequência de {totalSequencia} {totalSequencia === 1 ? 'dia' : 'dias'}
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={aoVerEstatisticas}
+            className="t-rotulo cursor-pointer text-cal-500 underline underline-offset-2 transition-colors hover:text-cal"
+          >
+            Estatísticas
+          </button>
+        </span>
         <span className="basis-full">
           {concluidos === NIVEIS.length ? (
             <>

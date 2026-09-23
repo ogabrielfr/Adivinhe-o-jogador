@@ -90,6 +90,13 @@ O progresso do dia e as estatísticas ficam em `localStorage`. Se o navegador
 bloquear o armazenamento, a partida continua funcionando — só não guarda
 histórico.
 
+**As estatísticas têm tela própria**, no link do rodapé da tela inicial: por
+nível, partidas, aproveitamento, sequência atual e maior, e em que chute a
+pessoa acertou. O jogo sempre guardou tudo isso, mas só mostrava a sequência —
+e em jogo diário a estatística é boa parte do motivo para voltar amanhã. A
+sequência exibida é a que ainda vale: a gravada só zera na próxima partida
+terminada, e quem pulou ontem a teria na tela já quebrada.
+
 **As respostas estão no pacote enviado ao navegador.** É a mesma escolha do
 Wordle original: quem quiser abrir o código-fonte encontra a lista. Se isso
 virar um problema, a saída é mover o sorteio para um endpoint.
@@ -305,6 +312,51 @@ que defendeu a seleção russa."* A segunda dica, então, não repete a seleçã
 Wikidata atrasa para quem está em atividade: o Vitor Roque aparecia com 1 jogo,
 e já são 2.
 
+#### O fato que aproxima do acerto
+
+Raridade ainda deixava a segunda dica genérica: "vestiu a camisa da seleção 9
+vezes" é raro e não leva a ninguém. O cliente pediu **informação específica — o
+gol icônico, o título decisivo, o ídolo de um time**, para todos os jogadores.
+São os três fatos que hoje abrem a segunda dica, nessa ordem:
+
+| Fato | Exemplo | Fonte |
+| --- | --- | --- |
+| Gol em final | "Marcou 2 gols na final da Copa do Mundo de 2022." | registro de partidas do Transfermarkt |
+| Título | "Campeão da Libertadores de 2013 pelo Atlético-MG e de 2020 e 2021 pelo Palmeiras." | página de títulos do Transfermarkt |
+| Clube de ídolo | "Fez mais de 300 jogos pelo Palmeiras." | registro de partidas do Transfermarkt |
+
+Naturalidade, Copa disputada e o resto ficam para quem não tem nenhum dos três.
+A dica cita o clube nesses três casos, e só neles: o clube citado é sempre um
+dos escudos à mostra, e dizer **qual** deles foi a casa dele é justamente o que
+o mural não mostra. O `validar-dados` recusa citação de clube fora dessas
+frases.
+
+Cada um tem sua armadilha, e as três estão tratadas em código:
+
+- **Jogos por clube são um piso, não a conta.** O registro do Transfermarkt só
+  tem a partida com escalação no site — o Pelé aparece com 18 jogos pelo
+  Santos. Por isso a frase diz "mais de 300", arredondado para baixo, que é
+  sempre verdade; e o fato só entra a partir de 150 jogos, que é o "quando muito
+  relevante" que o cliente pediu.
+- **Final de ida e volta é uma final só.** O site marca o jogo único e as duas
+  partidas de outro jeito; ler só o jogo único deixava de fora toda final da
+  Copa do Brasil, dos estaduais e das Libertadores até 2018. Os gols das duas
+  partidas somam.
+- **O ano de título de jogo único não é confiável na página de títulos.** O
+  Mundial de Clubes de dezembro de 2007 do Milan está como 2007 no perfil do
+  Emerson e como 2008 no do Kaká; o Messi aparecia com os Mundiais de 2010, 2012
+  e 2016, que são os de 2009, 2011 e 2015. Para Mundial, Intercontinental e
+  Supercopa da Uefa, o ano sai da **data da final** que ele jogou
+  (`titulosConferidos`); sem a final, o título fica de fora — melhor calar que
+  errar o ano. A final também dá a edição certa quando o calendário foge: a
+  Libertadores de 2020 teve a final em janeiro de 2021.
+
+Supercopa nacional, prêmio vago ("Futebolista do ano") e título de base não
+entram: não levam a ninguém. A exceção é o Mundial Sub-20, que passa na TV
+aberta e marca geração — a do Oscar, com três gols na final de 2011. A tabela `TITULOS` em `scripts/dicas.mjs` diz o que
+cada título vale e como o torcedor brasileiro fala dele — o site escreve à moda
+de Portugal ("Taça", "Supertaça") e às vezes em inglês.
+
 ### O nome do jogador
 
 O nome canônico é o **nome da camisa**, do cabeçalho do Transfermarkt, e não o
@@ -318,10 +370,16 @@ que faz "ter Stegen" acertar "Marc-André ter Stegen", "van Dijk" acertar
 "Virgil van Dijk" e "de Bruyne" acertar "Kevin De Bruyne". Partícula sozinha
 ("ter", "van", "de") não vale.
 
-**Nome canônico sempre ganha, mesmo repetido.** Há dois Paulinhos e dois
-Henriques na biblioteca; quem digita "Paulinho" no dia de um deles não tem como
-ser mais específico, então acerta. O pedido de desempate fica só para pedaço de
-nome que serve a mais de um. `npm run teste-palpites` guarda os casos.
+**Nome canônico sempre ganha, mesmo repetido.** Há dois Adrianos e dois Freds
+na biblioteca; quem digita "Adriano" no dia de um deles não tem como ser mais
+específico, então acerta. O pedido de desempate fica só para pedaço de nome que
+serve a mais de um. `npm run teste-palpites` guarda os casos.
+
+**Na revelação, o homônimo ganha uma linha embaixo do nome**: posição e o clube
+em que mais jogou — "Centroavante, Inter de Milão" para o Imperador, "Lateral,
+Barcelona" para o outro Adriano. Só "ADRIANO" não dizia qual dos dois era. O
+`npm run dicas` escreve o `complemento` de quem divide o nome, e o
+`validar-dados` recusa homônimo sem ele ou com o mesmo do outro.
 
 ### O nível
 
@@ -526,3 +584,14 @@ push na `main`, e toda segunda às 6h de Brasília estende a agenda antes de
 publicar (dá para disparar à mão em Actions → Publicar no GitHub Pages → Run
 workflow). `vite.config.ts` só aplica o caminho base do Pages quando
 `GITHUB_PAGES=true`, então o desenvolvimento local segue na raiz.
+
+**A prévia do link** — a imagem e o texto que o WhatsApp mostra quando alguém
+cola o endereço — vem das tags `og:` do `index.html` e de `public/previa.png`.
+Sem elas, o resultado compartilhado chegava como link cru, e compartilhar é o
+principal jeito de um jogo diário chegar a gente nova. A imagem repete a
+abertura do jogo (parede de escudos e título) e é gerada por `npm run previa`,
+que abre um navegador; por isso o arquivo vai para o repositório em vez de
+sair da publicação. O endereço da imagem é completo porque quem monta a prévia
+é o servidor do aplicativo, e o WhatsApp guarda a prévia de um link por um
+tempo: a troca da imagem pode demorar a aparecer em conversa que já tinha o
+link.
