@@ -17,6 +17,11 @@ export function numeroDoDia(d = new Date()): number {
   return Math.floor((local - EPOCA) / UM_DIA)
 }
 
+/** O caminho de volta: número do dia -> "AAAA-MM-DD", a chave da agenda. */
+export function dataDoDia(dia: number): string {
+  return new Date(EPOCA + dia * UM_DIA).toISOString().slice(0, 10)
+}
+
 export function semente(texto: string): number {
   let h = 2166136261
   for (let i = 0; i < texto.length; i++) {

@@ -1,7 +1,8 @@
 import { JOGADORES } from '../dados/jogadores'
+import agenda from '../dados/agenda.json' with { type: 'json' }
 import type { Jogador, Nivel } from '../dados/tipos'
 import { formasDerivadas } from './texto'
-import { embaralhar, numeroDoDia, posicaoDoDia, semente } from './sorteio'
+import { dataDoDia, embaralhar, numeroDoDia, posicaoDoDia, semente } from './sorteio'
 
 export { numeroDoDia } from './sorteio'
 
@@ -35,15 +36,40 @@ const POR_NIVEL: Record<Nivel, Jogador[]> = {
   dificil: JOGADORES.filter((j) => j.nivel === 'dificil' && elegivel(j)),
 }
 
+const POR_ID = new Map(JOGADORES.map((j) => [j.id, j]))
+
 /**
- * Jogador do dia. A lista de cada nível é reembaralhada a cada ciclo completo,
- * então ninguém se repete antes de todos terem aparecido uma vez.
+ * A agenda: quem cai em cada dia, já decidido. Vence o sorteio.
+ *
+ * O sorteio sozinho embaralha a lista inteira do nível, então qualquer troca
+ * na biblioteca mudava o jogador de todos os dias — inclusive o de hoje, para
+ * quem já tinha jogado, que via "Era ele:" com outro nome. Com a agenda, mexer
+ * na biblioteca só afeta os dias que ainda não estão nela. `npm run agenda`
+ * estende a agenda a partir do sorteio, e o arquivo pode ser editado à mão.
+ */
+const AGENDA: Record<string, Partial<Record<Nivel, string>>> = agenda.dias
+
+/**
+ * Jogador do dia: o da agenda, e sem agenda o do sorteio. A lista de cada nível
+ * é reembaralhada a cada ciclo completo, então ninguém se repete antes de
+ * todos terem aparecido uma vez.
  */
 export function jogadorDoDia(nivel: Nivel, dia = numeroDoDia()): Jogador {
+  const marcado = POR_ID.get(AGENDA[dataDoDia(dia)]?.[nivel] ?? '')
+  if (marcado && elegivel(marcado)) return marcado
+  return sorteado(nivel, dia)
+}
+
+/** O que o sorteio dá para o dia, sem olhar a agenda. */
+export function sorteado(nivel: Nivel, dia: number): Jogador {
   const lista = POR_NIVEL[nivel]
   const { posicao, ciclo } = posicaoDoDia(dia, lista.length)
   return embaralhar(lista, semente(`${nivel}:${ciclo}`))[posicao]
 }
+
+/** Jogador pelo id, para a partida salva continuar com quem ela começou. */
+export const jogadorPorId = (id: string | undefined): Jogador | undefined =>
+  id ? POR_ID.get(id) : undefined
 
 export function totalNoNivel(nivel: Nivel): number {
   return POR_NIVEL[nivel].length

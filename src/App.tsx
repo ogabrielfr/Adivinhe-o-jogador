@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { NIVEIS } from './dados/tipos'
 import type { Jogador, Nivel } from './dados/tipos'
-import { chaveDoDia, jogadorDoDia, numeroDoDia, PALPITES_AMBIGUOS } from './logica/diario'
+import { chaveDoDia, jogadorDoDia, jogadorPorId, numeroDoDia, PALPITES_AMBIGUOS } from './logica/diario'
 import { formasDerivadas, formasExatas, normalizar, pareceIgual } from './logica/texto'
 import { carregar, DICAS, partidaNova, registrarResultado, salvar, TENTATIVAS } from './logica/armazenamento'
 import { textoDeCompartilhamento } from './logica/compartilhar'
@@ -34,9 +34,17 @@ export function App() {
     salvar(estado)
   }, [estado])
 
+  /**
+   * A partida começada continua com o jogador com que começou. A agenda já
+   * impede que o jogador do dia mude com uma atualização da biblioteca; isto
+   * cobre o resto — a agenda editada à mão no meio do dia, um jogador que saiu
+   * da biblioteca — sem que quem já jogou veja "Era ele:" com outro nome.
+   */
   const jogadores = useMemo(
-    () => Object.fromEntries(NIVEIS.map((n) => [n, jogadorDoDia(n, dia)])) as Record<Nivel, Jogador>,
-    [dia],
+    () => Object.fromEntries(NIVEIS.map((n) => [
+      n, jogadorPorId(estado.partidas[n]?.jogador) ?? jogadorDoDia(n, dia),
+    ])) as Record<Nivel, Jogador>,
+    [dia, estado.partidas],
   )
 
   const partidaDe = useCallback((nivel: Nivel) => estado.partidas[nivel] ?? partidaNova(), [estado.partidas])
@@ -83,7 +91,7 @@ export function App() {
         const palpites = [...atual.palpites, limpo]
         const status = acertou ? 'ganhou' : palpites.length >= TENTATIVAS ? 'perdeu' : 'jogando'
 
-        const partidas = { ...anterior.partidas, [nivel]: { ...atual, palpites, status } }
+        const partidas = { ...anterior.partidas, [nivel]: { ...atual, jogador: jogador.id, palpites, status } }
         if (status === 'jogando') return { ...anterior, partidas }
 
         return {
@@ -114,7 +122,7 @@ export function App() {
 
         const partidas = {
           ...anterior.partidas,
-          [nivel]: { ...atual, status: 'perdeu' as const, desistiu: true },
+          [nivel]: { ...atual, jogador: jogadores[nivel].id, status: 'perdeu' as const, desistiu: true },
         }
         return {
           ...anterior,
@@ -126,7 +134,7 @@ export function App() {
         }
       })
     },
-    [dia],
+    [dia, jogadores],
   )
 
   const aoPedirDica = useCallback((nivel: Nivel) => {
@@ -135,10 +143,13 @@ export function App() {
       if (atual.dicasUsadas >= DICAS || atual.status !== 'jogando') return anterior
       return {
         ...anterior,
-        partidas: { ...anterior.partidas, [nivel]: { ...atual, dicasUsadas: atual.dicasUsadas + 1 } },
+        partidas: {
+          ...anterior.partidas,
+          [nivel]: { ...atual, jogador: jogadores[nivel].id, dicasUsadas: atual.dicasUsadas + 1 },
+        },
       }
     })
-  }, [])
+  }, [jogadores])
 
   if (nivelAtivo) {
     const restantes = NIVEIS.filter((n) => n !== nivelAtivo && partidaDe(n).status === 'jogando')

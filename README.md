@@ -32,17 +32,52 @@ npm run dev
 | `npm run teste-palpites` | testa o que o jogo aceita como acerto |
 | `npm run biblioteca` | regera `src/dados/jogadores.json` a partir do Transfermarkt |
 | `npm run teste-visual` | roda a partida ponta a ponta no Chromium e salva capturas |
+| `npm run agenda` | estende a agenda do jogador do dia até 30 dias à frente (`-- 60` para mais) |
 
 O teste visual precisa do Chromium do Playwright (`npx playwright install chromium`)
 e de um `npm run build && npx vite preview` rodando na porta 4173.
 
 ## Como o jogo escolhe o jogador do dia
 
-`src/logica/diario.ts` converte a data local em um número de dia e usa esse
-número para indexar a lista do nível. A lista é reembaralhada com uma semente
-derivada do ciclo, então nenhum jogador se repete antes de todos terem
-aparecido uma vez. Não há sorteio aleatório em tempo de execução: todo mundo
-recebe o mesmo desafio no mesmo dia, sem servidor.
+**Pela agenda.** `src/dados/agenda.json` diz quem cai em cada dia, em cada
+nível, um dia por linha:
+
+```json
+"2026-09-24": {"facil":"eder-militao","intermediario":"daniele-de-rossi","dificil":"arthur-maia"}
+```
+
+Antes dela o jogador do dia saía só do sorteio, e o sorteio embaralha a lista
+inteira do nível: qualquer troca na biblioteca mudava o jogador de todos os
+dias, inclusive o de hoje. Na semana da revisão isso aconteceu em dois dos
+três níveis, e quem já tinha jogado via "Era ele:" com outro nome. Com a
+agenda, dia marcado não muda mais; mexer na biblioteca só afeta os dias que
+ainda não estão nela.
+
+- **`npm run agenda` preenche os dias que faltam** até 30 à frente, com o
+  mesmo sorteio que o jogo faria, e pula quem saiu nos últimos 90 dias em
+  qualquer nível. A agenda guarda esses 90 dias de passado para isso; o que
+  saiu antes de ela existir está em `scripts/antes-da-agenda.mjs`,
+  reconstruído rodando o sorteio de cada versão publicada.
+- **Toda segunda, o GitHub roda o script e publica**, e grava a agenda
+  estendida na `main` (commit "Estende a agenda", do github-actions). Puxe
+  antes de trabalhar.
+- **Rode à mão antes de mexer na lista de um nível** — jogador novo, jogador
+  que sai, troca de nível —, com a biblioteca ainda igual à publicada. É isso
+  que congela o mês seguinte com o sorteio que já está no ar.
+- **Trocar quem cai num dia é trocar um id** no arquivo. Tirar um jogador da
+  biblioteca pede trocar os dias em que ele está agendado.
+- **`npm run validar-dados` recusa** agenda que aponte jogador fora da
+  biblioteca ou que não cubra os próximos 7 dias — e o deploy roda o validador.
+
+Fora da agenda, vale o sorteio: `src/logica/diario.ts` converte a data local
+em um número de dia e usa esse número para indexar a lista do nível. A lista é
+reembaralhada com uma semente derivada do ciclo, então nenhum jogador se
+repete antes de todos terem aparecido uma vez. Não há sorteio aleatório em
+tempo de execução: todo mundo recebe o mesmo desafio no mesmo dia, sem
+servidor.
+
+A partida guarda o id do jogador no primeiro chute ou dica, e continua com ele
+mesmo que a agenda mude no meio do dia.
 
 O progresso do dia e as estatísticas ficam em `localStorage`. Se o navegador
 bloquear o armazenamento, a partida continua funcionando — só não guarda
@@ -409,5 +444,7 @@ isolada num único componente, então trocar a origem não encosta no resto do j
 ## Publicação
 
 O workflow em `.github/workflows/deploy.yml` publica no GitHub Pages a cada
-push na `main`. `vite.config.ts` só aplica o caminho base do Pages quando
+push na `main`, e toda segunda às 6h de Brasília estende a agenda antes de
+publicar (dá para disparar à mão em Actions → Publicar no GitHub Pages → Run
+workflow). `vite.config.ts` só aplica o caminho base do Pages quando
 `GITHUB_PAGES=true`, então o desenvolvimento local segue na raiz.

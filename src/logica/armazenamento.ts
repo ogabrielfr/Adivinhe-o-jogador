@@ -8,6 +8,11 @@ export const DICAS = 2
 export type StatusPartida = 'jogando' | 'ganhou' | 'perdeu'
 
 export interface Partida {
+  /**
+   * Id do jogador da partida. Opcional porque partida salva antes desta
+   * versão não tem o campo; sem ele, vale o jogador do dia.
+   */
+  jogador?: string
   status: StatusPartida
   /** o que a pessoa digitou, na ordem */
   palpites: string[]

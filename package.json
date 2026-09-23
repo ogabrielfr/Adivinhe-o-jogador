@@ -18,7 +18,8 @@
     "biblioteca": "node scripts/montar-biblioteca.mjs",
     "tecnicos": "node scripts/fama-de-tecnico.mjs",
     "repor": "node scripts/repor-obscuros.mjs",
-    "mapa-tm": "node scripts/mapa-transfermarkt.mjs"
+    "mapa-tm": "node scripts/mapa-transfermarkt.mjs",
+    "agenda": "node scripts/agenda.mjs"
   },
   "repository": {
     "type": "git",

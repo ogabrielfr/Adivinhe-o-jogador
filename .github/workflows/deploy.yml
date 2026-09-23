@@ -4,9 +4,13 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # toda segunda, 6h em Brasília: estende a agenda e publica, para ela nunca acabar
+  schedule:
+    - cron: '0 9 * * 1'
 
 permissions:
-  contents: read
+  # a execução semanal grava a agenda estendida de volta na main
+  contents: write
   pages: write
   id-token: write
 
@@ -24,6 +28,16 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Estender a agenda
+        if: github.event_name != 'push'
+        run: |
+          npm run agenda
+          if ! git diff --quiet -- src/dados/agenda.json; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'Estende a agenda' -- src/dados/agenda.json
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
       - run: npm run validar-dados
       - run: npm run teste-palpites
       - run: npm run teste-nomes

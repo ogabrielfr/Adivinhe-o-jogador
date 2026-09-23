@@ -33,6 +33,7 @@ Site estático (Vite + React + TS + Tailwind), sem back-end e sem chave de API.
 | Clube repetido | Válido — o escudo reaparece na posição certa quando o jogador voltou |
 | Carreira | **Só jogo profissional**: sem base, sem time B, sem clube-ponte, sem empréstimo em que o jogador não entrou em campo |
 | Nível | A régua de visualizações da Wikipédia foi **recusada**; o nível está congelado até a nova ser decidida |
+| Jogador do dia | **Pela agenda** (`src/dados/agenda.json`), congelada um mês à frente e estendida toda segunda pelo GitHub; quem saiu não volta em 90 dias |
 
 ---
 
@@ -78,7 +79,7 @@ Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
 ## Pronto e testado
 
 - Jogo completo: tela inicial, partida, derrota (com o nome revelado), vitória, compartilhamento estilo Wordle, streak e estatísticas em `localStorage`.
-- Sorteio diário determinístico por data, sem servidor, com reembaralhamento por ciclo para ninguém repetir antes da volta completa.
+- **Agenda do jogador do dia** (`npm run agenda`): dia marcado não muda mais, então mexer na biblioteca só afeta os dias que ainda não estão nela. Fora da agenda vale o sorteio determinístico por data. A partida guarda o id do jogador e continua com ele mesmo que o dia seja trocado.
 - **300 jogadores, 100 por nível**, com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e os 300 têm `verificado: true`. A biblioteca é dado (`src/dados/jogadores.json`), lida e gravada por `scripts/biblioteca.mjs`.
 - **Um resolvedor de clube só** (`scripts/resolver-clube.mjs`) para gerar, reparar e repor. Casa por id do Transfermarkt; por nome, só com nome contido, país e época conferidos.
 - **Mapa do Transfermarkt conferido pelo dono do id** (`npm run mapa-tm`): o Wikidata diz de quem é cada id, e o par que ele desmente sai.
@@ -98,8 +99,17 @@ Messi, Ronaldo Fenômeno, Maradona, Zidane, Romário, Rivaldo, Bebeto, Garrincha
 Mbappé, Totti, Buffon, Ibrahimović, Salah, Pirlo, Haaland, Lewandowski,
 Riquelme, Thiago Silva, Raphinha, Marquinhos e Juninho Pernambucano. O cliente
 decidiu **trazer todos e crescer para ~320**, e **tirar o teto de escudos**
-(Romário tem 15, Rivaldo 16). Antes de entrar, a agenda precisa estar congelada
-— jogador novo muda a lista do nível e, sem agenda, o jogador de todos os dias.
+(Romário tem 15, Rivaldo 16). A agenda já está congelada até 22/10. Ao
+trazê-los, rode `npm run agenda` **antes** de mexer na biblioteca, e use os ids
+`messi`, `ronaldo-fenomeno` e `juninho-pernambucano`: os três saíram no jogo em
+setembro, na versão de 45 jogadores, e é por esse id que a regra dos 90 dias
+os reconhece (`scripts/antes-da-agenda.mjs`).
+
+No mesmo lote saem **Gavi e Phil Foden**, que só jogaram profissionalmente num
+clube. O reparo não conseguiu refazer a carreira deles e manteve a antiga, que
+está errada: a do Gavi começa pela base do Betis, a do Foden repete o Manchester
+City com dois ids do catálogo. O Gavi está agendado para 21/10 no
+intermediário; esse dia precisa de outro nome antes de ele sair.
 
 ### 2. A régua do nível
 
@@ -139,6 +149,8 @@ acesso a essas fontes se mostrou frágil.
 
 ## Armadilhas conhecidas
 
+- **A `main` recebe commit do github-actions toda segunda** ("Estende a agenda"). Puxe antes de publicar, senão o push é recusado.
+- **Mexer na lista de um nível sem rodar `npm run agenda` antes** congela o mês seguinte já com a lista nova. Só é problema se a agenda tiver vencido — o deploy recusa agenda que não cubra 7 dias à frente, e a execução semanal a mantém em 30.
 - **`npm run catalogo` demora bastante** (baixa milhares de imagens e processa com sharp). Rode em background. O `.cache/` guarda os originais, então a segunda vez é rápida.
 - **`npm run coletar` demora ~25 min** e refaz `scripts/clubes-externos.json` do zero. Só precisa rodar quando quiser ampliar países ou atualizar a fonte.
 - **`src/dados/clubes.ts` é gerado e só tem os clubes em uso.** O catálogo completo, para consultar ao escrever carreira nova, está em `scripts/catalogo-completo.json`. Ao acrescentar jogador, rode `npm run catalogo` de novo para os clubes novos entrarem no pacote.

@@ -1,8 +1,10 @@
 // Confere a integridade da biblioteca antes de qualquer build ou publicação.
-import { readdirSync, existsSync } from 'node:fs'
+import { readdirSync, existsSync, readFileSync } from 'node:fs'
 import { JOGADORES } from '../src/dados/jogadores.ts'
 import { CLUBES } from '../src/dados/clubes.ts'
 import { formasDerivadas } from '../src/logica/texto.ts'
+import { dataDoDia, numeroDoDia } from '../src/logica/sorteio.ts'
+import { NIVEIS } from '../src/dados/tipos.ts'
 
 const erros = []
 const avisos = []
@@ -63,6 +65,35 @@ for (const j of JOGADORES) {
 }
 for (const [k, lista] of porPedaco) {
   if (lista.size > 1) avisos.push(`pedaço de nome ambíguo "${k}" → ${[...lista].join(', ')}`)
+}
+
+/**
+ * A agenda só aponta quem está na biblioteca e pode ser sorteado. Um id que
+ * sumiu faria o jogo cair no sorteio naquele dia — trocando o jogador de quem
+ * já jogou, que é exatamente o que a agenda existe para impedir. O passado
+ * fica de fora: é registro, e pode citar quem já saiu da biblioteca.
+ *
+ * E ela precisa estar à frente. A publicação semanal a estende; se ela parou,
+ * o dia que sair da agenda volta ao sorteio, que muda com qualquer troca na
+ * biblioteca.
+ */
+const AGENDA = JSON.parse(readFileSync(new URL('../src/dados/agenda.json', import.meta.url), 'utf8')).dias
+const MINIMO_A_FRENTE = 7
+const hoje = numeroDoDia()
+const porId = new Map(JOGADORES.map((j) => [j.id, j]))
+for (const [data, dia] of Object.entries(AGENDA)) {
+  if (data < dataDoDia(hoje - 1)) continue
+  for (const [nivel, id] of Object.entries(dia)) {
+    const j = porId.get(id)
+    if (!j) erros.push(`agenda ${data}: "${id}" (${nivel}) não está na biblioteca`)
+    else if (!j.verificado) erros.push(`agenda ${data}: "${id}" (${nivel}) não pode ser sorteado`)
+  }
+}
+for (let dia = hoje; dia <= hoje + MINIMO_A_FRENTE; dia++) {
+  if (NIVEIS.some((n) => !AGENDA[dataDoDia(dia)]?.[n])) {
+    erros.push(`a agenda não cobre ${dataDoDia(dia)}: rode \`npm run agenda\` com a biblioteca publicada`)
+    break
+  }
 }
 
 // o catálogo é propositalmente maior que o uso: serve de biblioteca para novos jogadores
