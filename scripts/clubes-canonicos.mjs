@@ -16,6 +16,7 @@ export const CANONICOS = {
   'ceara': { de: 'ceara', nome: "Ceará", pais: 'BR' },
   'hotspur': { de: 'hotspur', nome: "Tottenham", pais: 'EN' },
   'unione-sportiva-catanzaro': { de: 'unione-sportiva-catanzaro', nome: "Catanzaro", pais: 'IT' },
+  'crb': { de: 'crb', nome: "CRB", pais: 'BR' },
   'comercial-futebol-clube-ribeirao-preto': {
     de: 'comercial-futebol-clube-ribeirao-preto', nome: "Comercial-SP", pais: 'BR',
   },
@@ -200,4 +201,26 @@ export const PARES_TM = {
   130372: 'atletico-dallas',
   7110: 'quick-boys',
   46181: 'miami-united',
+  // o QID do Brasil de Pelotas no catálogo é o do CRB, e o id do CRB veio junto pela URL do escudo; Marcos Rocha
+  11449: 'crb',
+  // "Instituto ACC" é o Instituto Atlético Central Córdoba, e o nome inteiro contém o do Central Córdoba; Dybala
+  1829: 'instituto',
+  // o Transfermarkt guarda o nome de hoje; na época da passagem o clube era o nosso
+  918: 'nk-inter-zapresic', // NK Inker; Lovren
+  10948: 'guangzhou-evergrande', // Guangzhou FC; Robinho
+  17276: 'hangzhou-greentown-football-club', // Zhejiang FC; Tim Cahill
 }
+
+/**
+ * Ids do Transfermarkt que não podem virar par com clube nenhum do catálogo:
+ * o nome casava com um clube nosso, mas o Transfermarkt diz que é outro, e o
+ * clube certo não está no catálogo.
+ */
+export const SEM_PAR_TM = new Set([
+  // Grêmio Osasco Audax, a base do Bruno Uvini; casava com o São Paulo
+  '16083',
+  // aries Toshima; o QID do FC Tokyo no catálogo é o do aries
+  '36176',
+  // SPG Lechtal, da Áustria; casava com o Francavilla, da Itália
+  '26657',
+])

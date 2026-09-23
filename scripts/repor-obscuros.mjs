@@ -21,7 +21,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
-import { visualizacoesDe } from './visualizacoes.mjs'
+import { visualizacoesDe, lerVisualizacoes, gravarVisualizacoes } from './visualizacoes.mjs'
 import { passagensDoTransfermarkt, perfilDoTransfermarkt, historicoDoTransfermarkt, jogosPorClube } from './transfermarkt.mjs'
 import { montarDicas, fatosDoHistorico, naturalidadeSegura } from './dicas.mjs'
 import { torneiosDe, torneiosQueContam } from './torneios.mjs'
@@ -44,7 +44,7 @@ const tmPorQid = JSON.parse(readFileSync(join(raiz, 'scripts/tm-jogadores.json')
 const qidPorTm = new Map(Object.entries(tmPorQid).map(([q, t]) => [String(t), q]))
 const meta = JSON.parse(readFileSync(join(raiz, 'scripts/meta-jogadores.json'), 'utf8'))
 const candidatos = JSON.parse(readFileSync(join(raiz, 'scripts/candidatos-jogadores.json'), 'utf8'))
-const views = JSON.parse(readFileSync(ARQUIVO_VIEWS, 'utf8'))
+const views = lerVisualizacoes(ARQUIVO_VIEWS)
 
 const resolvedor = criarResolvedor()
 const daBiblioteca = []
@@ -80,7 +80,7 @@ const semViews = [...artigoDaCasa.values()].filter((a) => !(a in views))
 if (semViews.length) {
   console.log(`buscando visualizações de ${semViews.length} artigos...`)
   for (const [a, v] of await visualizacoesDe(semViews)) views[a] = v
-  writeFileSync(ARQUIVO_VIEWS, JSON.stringify(views) + '\n')
+  gravarVisualizacoes(ARQUIVO_VIEWS, views)
 }
 
 for (const j of daCasa) j.procura = Number(views[artigoDaCasa.get(j.qid)] ?? 0)
@@ -158,7 +158,7 @@ for (const qid of fila) {
   })
   console.log(`  entra: ${String(procura).padStart(6)}  ${nome} (${clubes.length} clubes)`)
 }
-writeFileSync(ARQUIVO_VIEWS, JSON.stringify(views) + '\n')
+gravarVisualizacoes(ARQUIVO_VIEWS, views)
 
 console.log(`\n${escolhidos.length} substitutos achados em ${olhados} candidatos olhados`)
 if (escolhidos.length < aSair.length) {

@@ -89,11 +89,41 @@ function papelDe(bruto) {
 /** Países que não levam artigo: "em Portugal", não "no Portugal". */
 const SEM_ARTIGO = new Set([
   'Portugal', 'Israel', 'Angola', 'Moçambique', 'Cuba', 'Cabo Verde', 'Andorra',
-  'Malta', 'Chipre', 'Omã', 'Gana', 'Marrocos', 'Trinidad e Tobago',
+  'Malta', 'Chipre', 'Omã', 'Gana', 'Marrocos', 'Trinidad e Tobago', 'Mônaco',
+  'Guadalupe', 'Serra Leoa', 'Barbados', 'Samoa',
 ])
+/** Femininos que não terminam em "a". */
+const FEMININO = /^(Sérvia e Montenegro|União Soviética|Guiné-Bissau|Guiné|Guiné Equatorial)$/
 
-const ondeNasceu = (pais) =>
-  SEM_ARTIGO.has(pais) ? `em ${pais}` : /a$/i.test(pais) ? `na ${pais}` : `no ${pais}`
+const artigo = (pais) => (FEMININO.test(pais) || /a$/i.test(pais) ? 'a' : 'o')
+const ondeNasceu = (pais) => (SEM_ARTIGO.has(pais) ? `em ${pais}` : `n${artigo(pais)} ${pais}`)
+const doPais = (pais) => (SEM_ARTIGO.has(pais) ? `de ${pais}` : `d${artigo(pais)} ${pais}`)
+
+/**
+ * O Transfermarkt em português escreve alguns países à moda de Portugal, e
+ * guarda a URSS pela sigla.
+ */
+const NO_BRASIL = {
+  'Mónaco': 'Mônaco', 'Polónia': 'Polônia', 'Jugoslávia (República)': 'Iugoslávia',
+  'Guiné Bissau': 'Guiné-Bissau', 'Suiça': 'Suíça', URSS: 'União Soviética',
+}
+export const nomeDoPais = (bruto) => (bruto ? NO_BRASIL[bruto] ?? bruto : null)
+
+/** "seleção russa"; a seleção sem adjetivo corrente vira "seleção de Sérvia e Montenegro". */
+const ADJETIVO_DA_SELECAO = {
+  Brasil: 'brasileira', Alemanha: 'alemã', Inglaterra: 'inglesa', Portugal: 'portuguesa',
+  Espanha: 'espanhola', Itália: 'italiana', França: 'francesa', Holanda: 'holandesa',
+  Escócia: 'escocesa', Turquia: 'turca', Bélgica: 'belga', Suíça: 'suíça', Bulgária: 'búlgara',
+  Austrália: 'australiana', Dinamarca: 'dinamarquesa', Argentina: 'argentina', Sérvia: 'sérvia',
+  Rússia: 'russa', Uruguai: 'uruguaia', 'República da Irlanda': 'irlandesa', Croácia: 'croata',
+  Suécia: 'sueca', Chile: 'chilena', Colômbia: 'colombiana', 'País de Gales': 'galesa',
+  Equador: 'equatoriana', México: 'mexicana', Iugoslávia: 'iugoslava', Paraguai: 'paraguaia',
+  Peru: 'peruana', Venezuela: 'venezuelana', Polônia: 'polonesa', Japão: 'japonesa',
+  Nigéria: 'nigeriana', Camarões: 'camaronesa', 'Costa do Marfim': 'marfinense',
+  'Estados Unidos': 'americana', Grécia: 'grega', Áustria: 'austríaca', Noruega: 'norueguesa',
+}
+const nomeDaSelecao = (pais) =>
+  ADJETIVO_DA_SELECAO[pais] ? `seleção ${ADJETIVO_DA_SELECAO[pais]}` : `seleção ${doPais(pais)}`
 
 // --------------------------------------------------------------- dinheiro
 /**
@@ -303,18 +333,12 @@ function deOnde(lugar) {
   return COM_ARTIGO.test(limpo) ? `do ${limpo}` : `de ${limpo}`
 }
 
-/** "Seleção Brasileira de Futebol" -> "brasileira" */
-function adjetivoDaSelecao(rotulo) {
-  const m = String(rotulo ?? '').match(/Sele[çc][ãa]o\s+(.+?)(?:\s+de\s+Futebol)?$/i)
-  return m ? m[1].toLowerCase() : null
-}
-
 /**
  * Os pedaços de dica que este jogador tem. Cada um é uma oração que encaixa
  * depois do sujeito, com o número cru ao lado para o desempate de `escolher`.
  */
 function orações({
-  jogosSelecao, selecao, fatos, paises, nasc, naturalidade, torneios, clubeDaCasa,
+  jogosSelecao, selecao, pais, fatos, paises, nasc, naturalidade, torneios, clubeDaCasa,
   historicoSuspeito,
 }) {
   const saida = []
@@ -343,10 +367,10 @@ function orações({
     if (outro) por('torneio', 1, `disputou a ${outro.nome} de ${outro.ano}`)
   }
 
-  if (jogosSelecao >= 1) {
-    const adj = adjetivoDaSelecao(selecao)
+  // a seleção de outro país já está na primeira dica; aqui repetiria o time e só somaria o número
+  if (jogosSelecao >= 1 && !(selecao && pais && selecao !== pais)) {
     por('selecao', jogosSelecao,
-      `vestiu a camisa da seleção${adj ? ` ${adj}` : ''} ${jogosSelecao} ${jogosSelecao === 1 ? 'vez' : 'vezes'}`)
+      `vestiu a camisa da ${selecao ? nomeDaSelecao(selecao) : 'seleção'} ${jogosSelecao} ${jogosSelecao === 1 ? 'vez' : 'vezes'}`)
   }
   if (fatos.maiorTaxa >= 500_000) {
     por('taxa', fatos.maiorTaxa,
@@ -463,20 +487,29 @@ export function montarDicas(dados, escala = null) {
   return [primeiraDica(dados), segundaDica(dados, escala)]
 }
 
-/** Posição, país e ano: o mínimo para situar sem entregar. */
-function primeiraDica({ posicao, pais, nasc }) {
+/**
+ * Posição, país e ano: o mínimo para situar sem entregar.
+ *
+ * O país é o de nascimento, não a nacionalidade. Usar a nacionalidade pôs o
+ * Mário Fernandes, de São Caetano do Sul, como "nascido na Rússia" — na mesma
+ * partida em que a segunda dica dizia de onde ele é. Quando a seleção que o
+ * jogador defendeu é de outro país, isso entra: "brasileiro que defendeu a
+ * seleção russa" situa muito mais que qualquer um dos dois fatos sozinho.
+ */
+function primeiraDica({ posicao, pais, nasc, selecao }) {
   const papel = papelDe(posicao)
   const origem = pais ? (pais === 'Brasil' ? 'brasileiro' : `nascido ${ondeNasceu(pais)}`) : null
   const sujeito = papel
     ? `${papel}${origem ? ` ${origem}` : ''}`
     : origem ? `Jogador ${origem}` : 'Jogador'
 
-  if (!nasc) return `${sujeito}.`
   // "nascido na Escócia nascido em 1951" teria dois "nascido"; com o país
   // dentro da mesma oração sai "nascido na Escócia em 1951"
-  return origem && origem.startsWith('nascido')
-    ? `${sujeito} em ${nasc}.`
-    : `${sujeito} nascido em ${nasc}.`
+  const frase = !nasc ? sujeito
+    : origem && origem.startsWith('nascido') ? `${sujeito} em ${nasc}`
+    : `${sujeito} nascido em ${nasc}`
+  const outraSelecao = selecao && pais && selecao !== pais
+  return outraSelecao ? `${frase}, que defendeu a ${nomeDaSelecao(selecao)}.` : `${frase}.`
 }
 
 /**

@@ -126,6 +126,16 @@ par quando o dono tem outro nome. Foram dez pares desmentidos. O mesmo dono
 confirma pares novos: São Paulo, Flamengo, Real Madrid e Manchester United,
 cujo código no catálogo era de outra entidade, passaram a resolver pelo id.
 
+**E pelo nome que o próprio Transfermarkt dá ao id.** O dono no Wikidata não
+conhece todo clube, e sem dono o par antigo ficava. Foi assim que o CRB seguiu
+ligado ao Brasil de Pelotas na carreira do Marcos Rocha, e o Instituto de
+Córdoba ao Central Córdoba na do Dybala: o código de Wikidata do catálogo era
+de outro clube, e o id do Transfermarkt veio junto. `npm run mapa-tm` lista
+todo par usado por alguma passagem da biblioteca cujo nome no Transfermarkt
+não bate com o nosso. Nome diferente não prova erro — clube muda de nome, e o
+Transfermarkt guarda o de hoje —, então a lista é para ler: o par errado vai
+para `SEM_PAR_TM`, o certo para `PARES_TM`, e os dois saem da lista.
+
 **Quando cai para nome, três provas.** Sem id conhecido, a passagem casa pelo
 nome — e é por aí que entravam os homônimos. Agora ela só vale se:
 
@@ -240,10 +250,22 @@ Ela também não pode entregar de graça: `naturalidadeSegura` recusa o lugar qu
 repete clube à mostra ("é de Santos" com o escudo do Santos na tela) ou que
 carrega o nome do jogador — o Alexandre Pato nasceu em **Pato Branco**.
 
-Posição e nacionalidade vêm do **perfil do Transfermarkt**, não do Wikidata:
-lá as duas propriedades aceitam vários valores e pegar o primeiro saía errado —
-o Zico aparecia como "nascido em Portugal" na mesma frase que citava a seleção
-brasileira.
+Posição vem do **perfil do Transfermarkt**, e país de nascimento e seleção,
+da **API do Transfermarkt** — a mesma dos jogos por clube, que não passa pelo
+WAF. Não do Wikidata: lá as propriedades aceitam vários valores e pegar o
+primeiro saía errado — o Zico aparecia como "nascido em Portugal" na mesma
+frase que citava a seleção brasileira.
+
+**O país da primeira dica é o de nascimento**, não a nacionalidade. Com a
+nacionalidade, o Mário Fernandes, de São Caetano do Sul, saía "nascido na
+Rússia" — e a segunda dica dizia de onde ele é. Quando a seleção que o jogador
+mais defendeu é de outro país, isso entra na primeira dica, porque situa mais
+que qualquer um dos dois fatos sozinho: *"Lateral brasileiro nascido em 1990,
+que defendeu a seleção russa."* A segunda dica, então, não repete a seleção.
+
+**Os jogos pela seleção também vêm de lá**, contando só a seleção principal. O
+Wikidata atrasa para quem está em atividade: o Vitor Roque aparecia com 1 jogo,
+e já são 2.
 
 ### O nome do jogador
 
@@ -274,6 +296,12 @@ Sai quase todo da **mediana de visualizações do artigo na Wikipédia em
 português**: é a única medida direta da pergunta do jogo — quanta gente procura
 esse jogador em português. Mediana e não soma porque transferência e polêmica
 produzem pico de um ou dois meses.
+
+A procura é medida nos **últimos doze meses fechados**, e a janela anda com o
+calendário (`scripts/visualizacoes.mjs`). Eram dois anos fixos, e a mediana de
+dois anos escondia quem subiu: o Estevão ficava no difícil com 803
+visualizações por mês. O arquivo de visualizações guarda a janela junto, e
+número medido em outra janela é medido de novo.
 
 Jogos de seleção e número de links de Wikipédia entram como desempate de peso
 pequeno. Só decidem entre jogadores de procura parecida; **nunca invertem a
@@ -384,8 +412,8 @@ nunca os anos, que é onde erros de dados se escondem.
 ## Escudos
 
 `scripts/construir-catalogo.mjs` monta `public/escudos/` e o catálogo de clubes
-a partir de quatro repositórios públicos **e do Wikidata** — **4521 clubes
-de 66 países**, sendo **1141 brasileiros**. O catálogo é de propósito
+a partir de quatro repositórios públicos **e do Wikidata** — **5381 clubes
+de 66 países**, sendo **1155 brasileiros**. O catálogo é de propósito
 muito maior que o uso atual: o escudo é a informação principal do jogo, e uma
 carreira costuma começar ou terminar num clube pequeno.
 
@@ -409,6 +437,18 @@ reduzidos para 256 px e os SVGs minificados.
 | [FCLOGO/fclogo.top](https://github.com/FCLOGO/fclogo.top) | Japão, MLS, Coreia, Arábia Saudita, México |
 | [sportlogos/football.db.logos](https://github.com/sportlogos/football.db.logos) | Argentina, Uruguai, Chile, Colômbia |
 | Wikidata + Commons + Wikipédia | estaduais brasileiros, Ásia, Golfo, resto do mundo |
+
+### O nome embaixo do escudo
+
+O catálogo guarda o nome inteiro de cada clube, porque é ele que casa com o
+Transfermarkt e o Wikidata. O que o jogador vê — ao tocar no escudo, no fim da
+partida e na dica de tempo de casa — é o nome que o torcedor fala, de
+`scripts/nomes-curtos.mjs`: "Inter de Limeira", e não "Associação Atlética
+Internacional (Limeira)", que quebrava em quatro linhas embaixo de um escudo de
+80 pixels. A escolha segue o nome curto do próprio Transfermarkt, em português
+quando o clube tem nome consagrado aqui (Estrela Vermelha, Marselha), com o
+estado quando há homônimo em uso (América-MG, América-RJ, América-RN). `npm run
+catalogo` avisa se dois clubes em uso ficarem com o mesmo nome.
 
 ### A fonte do Wikidata
 

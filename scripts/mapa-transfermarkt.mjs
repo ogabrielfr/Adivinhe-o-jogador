@@ -40,8 +40,11 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
 import { mesmoClube, cabeNoNome, mesmasPalavras, tokensDoNome } from './nomes-clube.mjs'
-import { PARES_TM, CANONICOS } from './clubes-canonicos.mjs'
+import { PARES_TM, SEM_PAR_TM, CANONICOS } from './clubes-canonicos.mjs'
 import { PAISES } from './paises-alvo.mjs'
+import { passagensDoTransfermarkt, clubesDoTransfermarkt } from './transfermarkt.mjs'
+import { lerBiblioteca, idTmDe } from './biblioteca.mjs'
+import { nomeCurto } from './nomes-curtos.mjs'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
 const ler = (arquivo) => JSON.parse(readFileSync(join(raiz, 'scripts', arquivo), 'utf8'))
@@ -156,7 +159,7 @@ const origem = new Map()
 const por = (bruto, id, de) => {
   if (!bruto || !id || !porId.has(id)) return
   const tm = String(bruto)
-  if (mapa.has(tm)) return
+  if (mapa.has(tm) || SEM_PAR_TM.has(tm)) return
   mapa.set(tm, id)
   origem.set(tm, de)
 }
@@ -279,3 +282,30 @@ for (const d of desmentidos) console.log(`  ${d.tm} -> ${d.id} (${porId.get(d.id
 const qidErrado = Object.entries(qidDosClubes).filter(([id, q]) => porId.get(id)?.qid && porId.get(id).qid !== q)
 console.log(`\n${qidErrado.length} clubes com QID do catálogo diferente do dono do id do TM (o catálogo passa a usar o do dono)`)
 console.log(`ano de fundação de ${Object.keys(fundacao).length} clubes`)
+
+// ------------------------------- o nome que o Transfermarkt dá a cada id em uso
+/**
+ * O dono do id no Wikidata não conhece todo clube, e sem dono o par antigo
+ * fica. Foi assim que o CRB (11449) seguiu ligado ao Brasil de Pelotas na
+ * carreira do Marcos Rocha: o QID do catálogo era o do CRB, e o id veio junto
+ * pela URL do escudo. O nome que o próprio Transfermarkt dá ao id é a segunda
+ * testemunha, conferida para todo id que aparece nas passagens da biblioteca.
+ *
+ * Nome diferente não prova erro — clube muda de nome (o Lekhwiya virou
+ * Al-Duhail) e o nosso vem em português. A lista é para ler: o par errado vai
+ * para SEM_PAR_TM, e o certo para PARES_TM, que sai da lista.
+ */
+const tmsDaBiblioteca = new Set()
+for (const j of lerBiblioteca()) {
+  for (const p of (await passagensDoTransfermarkt(idTmDe(j))) ?? []) if (p.idTm) tmsDaBiblioteca.add(String(p.idTm))
+}
+const emUso = [...mapa].filter(([tm]) => tmsDaBiblioteca.has(tm) && origem.get(tm) !== 'à mão')
+const peloTm = await clubesDoTransfermarkt(emUso.map(([tm]) => tm))
+const bateComTm = (tm, clube) => {
+  const t = peloTm[tm]
+  const nossos = [clube.nome, nomeCurto(clube.id, clube.nome)]
+  return !t || [t.nome, t.curto].some((n) => n && nossos.some((o) => mesmoClube(n, o) || cabeNoNome(n, o) || cabeNoNome(o, n)))
+}
+const estranhos = emUso.filter(([tm, id]) => !bateComTm(tm, porId.get(id)))
+console.log(`\n${estranhos.length} pares em uso com nome diferente no Transfermarkt (leia: renomeado ou errado?):`)
+for (const [tm, id] of estranhos) console.log(`  ${tm} "${peloTm[tm].nome}" -> ${id} (${porId.get(id).nome})`)

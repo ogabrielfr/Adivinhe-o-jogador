@@ -96,6 +96,18 @@ for (let dia = hoje; dia <= hoje + MINIMO_A_FRENTE; dia++) {
   }
 }
 
+/**
+ * O nome embaixo do escudo: dois clubes com o mesmo nome deixariam o jogador
+ * sem saber qual é qual, e nome comprido quebra em quatro linhas num escudo de
+ * 80 pixels. O curto mora em scripts/nomes-curtos.mjs.
+ */
+const clubePorNome = new Map()
+for (const c of CLUBES.filter((x) => usados.has(x.id))) {
+  if (clubePorNome.has(c.nome)) erros.push(`dois clubes em uso se chamam "${c.nome}": ${clubePorNome.get(c.nome)} e ${c.id}`)
+  clubePorNome.set(c.nome, c.id)
+  if (c.nome.length > 20) avisos.push(`nome longo embaixo do escudo: "${c.nome}" (${c.id}); encurte em scripts/nomes-curtos.mjs`)
+}
+
 // o catálogo é propositalmente maior que o uso: serve de biblioteca para novos jogadores
 const naoVerificados = JOGADORES.filter((j) => !j.verificado)
 

@@ -4820,7 +4820,7 @@
   "nome": "Bahia",
   "pais": "BR",
   "escudo": "bahia.svg",
-  "qid": "Q3277738"
+  "qid": "Q198032"
  },
  {
   "id": "bahla-club",
@@ -11495,7 +11495,7 @@
  },
  {
   "id": "crb",
-  "nome": "Crb",
+  "nome": "CRB",
   "pais": "BR",
   "escudo": "crb.svg",
   "qid": null
@@ -12408,7 +12408,7 @@
   "nome": "Dinamo Makhachkala",
   "pais": "RU",
   "escudo": "dinamo-makhachkala.png",
-  "qid": "Q64842483"
+  "qid": "Q2494171"
  },
  {
   "id": "dinamo-zagreb",
@@ -16384,7 +16384,7 @@
   "nome": "FC Tokyo",
   "pais": "JP",
   "escudo": "fc-tokyo.svg",
-  "qid": "Q11291000"
+  "qid": "Q856619"
  },
  {
   "id": "fc-tom-tomsk",
@@ -16475,7 +16475,7 @@
   "nome": "FC Ulytau",
   "pais": "KZ",
   "escudo": "fc-ulytau.png",
-  "qid": "Q117244714"
+  "qid": "Q1046326"
  },
  {
   "id": "fc-universitatea-cluj",
@@ -18582,7 +18582,7 @@
   "nome": "Getafe",
   "pais": "ES",
   "escudo": "getafe.png",
-  "qid": "Q2349507"
+  "qid": "Q8806"
  },
  {
   "id": "gfk-sloven",
@@ -18876,7 +18876,7 @@
   "nome": "Granada",
   "pais": "ES",
   "escudo": "granada.svg",
-  "qid": "Q8964927"
+  "qid": "Q8812"
  },
  {
   "id": "grand-rapids-sc",
@@ -20584,7 +20584,7 @@
   "nome": "Instituto",
   "pais": "AR",
   "escudo": "instituto.svg",
-  "qid": null
+  "qid": "Q1421829"
  },
  {
   "id": "instituto-de-administracao-de-projetos-educacionais-futebol-clube",
@@ -21382,7 +21382,7 @@
   "nome": "Juventus",
   "pais": "IT",
   "escudo": "juventus.svg",
-  "qid": "Q1052316"
+  "qid": "Q1422"
  },
  {
   "id": "juventus-futebol-clube",
@@ -23349,7 +23349,7 @@
   "nome": "Malaga",
   "pais": "ES",
   "escudo": "malaga.png",
-  "qid": "Q120937222"
+  "qid": "Q8857"
  },
  {
   "id": "malappuram-fc",
@@ -28760,7 +28760,7 @@
   "nome": "Racing",
   "pais": "AR",
   "escudo": "racing.svg",
-  "qid": "Q632805"
+  "qid": "Q276533"
  },
  {
   "id": "racing-athletic-club-casablanca",
@@ -29250,7 +29250,7 @@
   "nome": "Real Madrid",
   "pais": "ES",
   "escudo": "real-madrid.png",
-  "qid": "Q12217"
+  "qid": "Q8682"
  },
  {
   "id": "real-madrid-club-de-futbol-futebol-feminino",
@@ -29313,7 +29313,7 @@
   "nome": "Real Sociedad",
   "pais": "ES",
   "escudo": "real-sociedad.png",
-  "qid": "Q1067750"
+  "qid": "Q10315"
  },
  {
   "id": "real-sociedade-independente",
@@ -29341,7 +29341,7 @@
   "nome": "Real Valladolid",
   "pais": "ES",
   "escudo": "real-valladolid.png",
-  "qid": "Q7301102"
+  "qid": "Q10319"
  },
  {
   "id": "real-vicenza",
@@ -30090,7 +30090,7 @@
   "nome": "Rubin Kazan",
   "pais": "RU",
   "escudo": "rubin-kazan.png",
-  "qid": "Q65038152"
+  "qid": "Q170040"
  },
  {
   "id": "rubro-social-esporte-clube",
@@ -31063,7 +31063,7 @@
   "nome": "São Paulo",
   "pais": "BR",
   "escudo": "sao-paulo.svg",
-  "qid": "Q3277878"
+  "qid": "Q38568"
  },
  {
   "id": "sao-paulo-futebol-clube-araraquara",
@@ -34612,7 +34612,7 @@
   "nome": "Tokushima Vortis",
   "pais": "JP",
   "escudo": "tokushima-vortis.svg",
-  "qid": "Q28693134"
+  "qid": "Q513145"
  },
  {
   "id": "tokyo-verdy",
@@ -37426,7 +37426,7 @@
   "nome": "Yokohama FC",
   "pais": "JP",
   "escudo": "yokohama-fc.png",
-  "qid": "Q48751943"
+  "qid": "Q1062259"
  },
  {
   "id": "yokohama-fc-hong-kong",

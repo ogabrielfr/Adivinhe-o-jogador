@@ -8,20 +8,22 @@
  * devolve um conjunto de jogadores um pouco diferente. Aqui os trezentos ficam
  * como estão e só o texto muda.
  */
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { consultar, qidDe } from './wikidata.mjs'
-import { historicoDoTransfermarkt, passagensDoTransfermarkt, perfilDoTransfermarkt } from './transfermarkt.mjs'
-import { montarDicas, fatosDoHistorico, papelConhecido, escalaDosFatos, naturalidadeSegura } from './dicas.mjs'
+import {
+  historicoDoTransfermarkt, passagensDoTransfermarkt, perfilDoTransfermarkt,
+  selecaoDoTransfermarkt, clubesDoTransfermarkt, paisesDoTransfermarkt,
+} from './transfermarkt.mjs'
+import { montarDicas, fatosDoHistorico, papelConhecido, escalaDosFatos, naturalidadeSegura, nomeDoPais } from './dicas.mjs'
 import { torneiosDe, torneiosQueContam } from './torneios.mjs'
 import { CARREIRA_FIXA } from './carreiras-corrigidas.mjs'
 import { lerBiblioteca, gravarBiblioteca, idTmDe } from './biblioteca.mjs'
 import { criarResolvedor } from './resolver-clube.mjs'
+import { nomeCurto } from './nomes-curtos.mjs'
 import { latinizar } from '../src/logica/texto.ts'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
-const ARQUIVO_SELECAO = join(raiz, 'scripts/selecoes-jogadores.json')
 
 const jogadores = lerBiblioteca()
 console.log(`jogadores na biblioteca: ${jogadores.length}`)
@@ -34,7 +36,8 @@ const qidDoJogador = (j) => qidPorTm.get(idTmDe(j))
 const meta = JSON.parse(readFileSync(join(raiz, 'scripts/meta-jogadores.json'), 'utf8'))
 const resolvedor = criarResolvedor()
 const paisDoClube = (id) => resolvedor.paisDoClube(id)
-const nomeDoClube = (id) => resolvedor.nomeDoClube(id)
+// o nome que o jogador vê embaixo do escudo, que é o que a dica de tempo de casa tem que repetir
+const nomeDoClube = (id) => nomeCurto(id, resolvedor.nomeDoClube(id))
 
 /**
  * id do clube no Transfermarkt -> nome que o jogo mostra, para a dica de tempo
@@ -53,40 +56,39 @@ for (const j of jogadores) {
 // as bandeiras antes de resolver por nome, como no `reparar`
 resolvedor.aquecer([...passagensDe.values()])
 
-// --------------------------------------------- jogos pela seleção principal
+// ------------------------------------- seleção e país de nascimento
 /**
- * Categoria de base não conta: o interesse está na seleção principal, e
- * "7 jogos pelo sub-20" não leva ninguém a lugar nenhum.
+ * Pela API do Transfermarkt. O número de jogos pela seleção vinha do Wikidata,
+ * que atrasa para quem está em atividade (o Vitor Roque aparecia com 1, e já
+ * são 2). E o país da primeira dica era a nacionalidade, que dizia "nascido na
+ * Rússia" do Mário Fernandes, de São Caetano do Sul. Aqui os dois vêm
+ * separados: onde nasceu e por qual seleção principal jogou mais.
+ *
+ * Categoria de base não conta: "7 jogos pelo sub-20" não leva ninguém a lugar
+ * nenhum, e o sub-20 do Brasil aponta a seleção brasileira como a principal.
  */
-const selecoes = existsSync(ARQUIVO_SELECAO)
-  ? JSON.parse(readFileSync(ARQUIVO_SELECAO, 'utf8'))
-  : {}
-
-const qidsFaltando = [...new Set(jogadores.map(qidDoJogador).filter(Boolean))]
-  .filter((q) => !(q in selecoes))
-
-if (qidsFaltando.length) {
-  console.log(`buscando jogos de seleção de ${qidsFaltando.length}...`)
-  for (let i = 0; i < qidsFaltando.length; i += 120) {
-    const lote = qidsFaltando.slice(i, i + 120).map((q) => `wd:${q}`).join(' ')
-    const linhas = await consultar(`
-      SELECT ?j ?selLabel ?jogos WHERE {
-        VALUES ?j { ${lote} }
-        ?j p:P54 ?s . ?s ps:P54 ?sel .
-        ?sel wdt:P31/wdt:P279* wd:Q6979593 .
-        OPTIONAL { ?s pq:P1350 ?jogos }
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "pt,en". }
-      }`).catch(() => [])
-    for (const l of linhas) {
-      const q = qidDe(l.j)
-      if (/sub-?\d|u-?\d\d|olímpic|olimpic|feminin/i.test(l.selLabel)) continue
-      const jogos = Number(l.jogos ?? 0)
-      const atual = selecoes[q]
-      if (!atual || jogos > atual.jogos) selecoes[q] = { selecao: l.selLabel, jogos }
-    }
-    for (const q of qidsFaltando.slice(i, i + 120)) selecoes[q] ??= { selecao: null, jogos: 0 }
+const selecaoDe = new Map()
+for (const j of jogadores) {
+  const tm = idTmDe(j)
+  if (tm) selecaoDe.set(j.id, await selecaoDoTransfermarkt(tm))
+}
+const times = await clubesDoTransfermarkt([...selecaoDe.values()].flatMap((s) => s?.selecoes.map((x) => x.time) ?? []))
+const ondePedir = new Map()
+for (const j of jogadores) {
+  const s = selecaoDe.get(j.id)
+  for (const pais of [s?.nascimento, ...(s?.nacionalidades ?? [])]) {
+    if (pais && !ondePedir.has(String(pais))) ondePedir.set(String(pais), idTmDe(j))
   }
-  writeFileSync(ARQUIVO_SELECAO, JSON.stringify(selecoes) + '\n')
+}
+const paises = await paisesDoTransfermarkt(times, ondePedir)
+const paisPorId = (id) => (id ? nomeDoPais(paises[id]) : null)
+
+/** A seleção principal em que o jogador mais jogou: país e jogos. */
+function selecaoPrincipal(s) {
+  const [maior] = (s?.selecoes ?? [])
+    .filter((x) => times[x.time]?.principal && x.jogos > 0)
+    .sort((a, b) => b.jogos - a.jogos)
+  return maior ? { pais: paisPorId(times[maior.time].pais), jogos: maior.jogos } : { pais: null, jogos: 0 }
 }
 
 // ------------------------------------------------------- torneios disputados
@@ -115,12 +117,12 @@ for (const j of jogadores) {
   const tm = idTmDe(j)
   const qid = qidPorTm.get(tm)
   const m = meta[qid] ?? {}
-  const sel = selecoes[qid] ?? { selecao: null, jogos: 0 }
+  const sel = selecaoPrincipal(selecaoDe.get(j.id))
 
   /**
-   * Posição e nacionalidade saem do Transfermarkt, que guarda um valor só.
-   * O Wikidata aceita vários e escolher o primeiro dava erro visível: o Zico
-   * saía "nascido em Portugal" na mesma frase que citava a seleção brasileira.
+   * Posição e país saem do Transfermarkt, que guarda um valor só. O Wikidata
+   * aceita vários e escolher o primeiro dava erro visível: o Zico saía
+   * "nascido em Portugal" na mesma frase que citava a seleção brasileira.
    */
   const perfil = tm ? await perfilDoTransfermarkt(tm) : null
   if (!perfil?.posicao) semPerfil++
@@ -142,11 +144,12 @@ for (const j of jogadores) {
     dados: {
       ...m,
       posicao: perfil?.posicao ?? m.posicao,
-      pais: perfil?.nacionalidade ?? m.pais,
-      jogosSelecao: sel.jogos, selecao: sel.selecao, fatos, paises,
+      pais: paisPorId(selecaoDe.get(j.id)?.nascimento) ?? nomeDoPais(perfil?.nacionalidade) ?? m.pais,
+      jogosSelecao: sel.jogos, selecao: sel.pais, fatos, paises,
       naturalidade: naturalidadeSegura(
         perfil?.naturalidade,
-        idsDeClube.map((id) => nomeDoClube(id)).filter(Boolean),
+        // o nome inteiro também: "Limeira" está no escudo da Inter de Limeira, com ou sem o nome curto
+        idsDeClube.flatMap((id) => [nomeDoClube(id), resolvedor.nomeDoClube(id)]).filter(Boolean),
         j.nome,
       ),
       torneios: torneiosQueContam(torneios[qid] ?? []),

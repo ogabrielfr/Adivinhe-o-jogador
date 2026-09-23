@@ -333,6 +333,7 @@ if (existsSync(ARQ_EXTERNOS)) {
 // FIXOS aponta id canônico -> caminho na fonte; garante que "flamengo",
 // "barcelona" etc. mantenham o id que os jogadores já referenciam.
 import { CANONICOS, SEM_ESCUDO, DESCARTAR } from './clubes-canonicos.mjs'
+import { nomeCurto } from './nomes-curtos.mjs'
 for (const [id, dados] of Object.entries(CANONICOS)) {
   const entrada = [...candidatos.entries()].find(([, c]) => c.id === dados.de)
   if (!entrada) {
@@ -510,8 +511,16 @@ if (faltando.length) {
   console.warn(`\n  ATENÇÃO: jogador aponta para clube que o catálogo não tem: ${faltando.join(', ')}`)
 }
 
+// o nome da tela é o curto (scripts/nomes-curtos.mjs); dois clubes em uso não podem dividir um
+const naTela = new Map()
+for (const c of doJogo) {
+  const nome = nomeCurto(c.id, c.nome)
+  if (naTela.has(nome)) console.warn(`\n  ATENÇÃO: "${nome}" é o nome de ${naTela.get(nome)} e de ${c.id}`)
+  naTela.set(nome, c.id)
+}
+
 const linhas = doJogo.map((c) => {
-  const campos = [`id: '${c.id}'`, `nome: ${JSON.stringify(c.nome)}`, `pais: '${c.pais}'`]
+  const campos = [`id: '${c.id}'`, `nome: ${JSON.stringify(nomeCurto(c.id, c.nome))}`, `pais: '${c.pais}'`]
   if (arquivoDe[c.id]) campos.push(`escudo: '${arquivoDe[c.id]}'`)
   if (c.cores) campos.push(`cores: ['${c.cores[0]}', '${c.cores[1]}']`)
   return `  { ${campos.join(', ')} },`

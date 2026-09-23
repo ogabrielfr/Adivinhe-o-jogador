@@ -20,8 +20,9 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { consultar, qidDe } from './wikidata.mjs'
-import { historicoDoTransfermarkt } from './transfermarkt.mjs'
+import { historicoDoTransfermarkt, selecaoDoTransfermarkt, clubesDoTransfermarkt } from './transfermarkt.mjs'
 import { fatosDoHistorico } from './dicas.mjs'
+import { visualizacoesDe, lerVisualizacoes, gravarVisualizacoes } from './visualizacoes.mjs'
 import { lerBiblioteca, idTmDe } from './biblioteca.mjs'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -30,8 +31,7 @@ const ARQUIVO_VIEWS = join(raiz, 'scripts/visualizacoes-jogadores.json')
 
 const tmPorQid = JSON.parse(readFileSync(join(raiz, 'scripts/tm-jogadores.json'), 'utf8'))
 const qidPorTm = new Map(Object.entries(tmPorQid).map(([qid, tm]) => [String(tm), qid]))
-const selecoes = JSON.parse(readFileSync(join(raiz, 'scripts/selecoes-jogadores.json'), 'utf8'))
-const views = JSON.parse(readFileSync(ARQUIVO_VIEWS, 'utf8'))
+const views = lerVisualizacoes(ARQUIVO_VIEWS)
 
 const jogadores = lerBiblioteca().map((j) => {
   const tm = idTmDe(j)
@@ -96,13 +96,24 @@ async function comInsistencia(consulta) {
   return null
 }
 
+// a procura dos que faltam na janela atual (o arquivo de outra janela vem vazio)
+const semProcura = [...new Set(jogadores.map((j) => artigoPorQid.get(j.qid)).filter((a) => a && !(a in views)))]
+if (semProcura.length) {
+  console.log(`medindo a procura de ${semProcura.length}...`)
+  for (const [a, v] of await visualizacoesDe(semProcura)) views[a] = v
+  gravarVisualizacoes(ARQUIVO_VIEWS, views)
+}
+
 // --------------------------------------------------------------- a razão
 const linhas = []
 for (const j of jogadores) {
   const h = j.tm ? await historicoDoTransfermarkt(j.tm) : null
   const f = fatosDoHistorico(h?.transfers ?? [])
   const procura = Number(views[artigoPorQid.get(j.qid)] ?? 0)
-  const jogos = Number(selecoes[j.qid]?.jogos ?? 0)
+  // jogos pela seleção principal em que mais jogou, pelo Transfermarkt; base não conta
+  const selecao = j.tm ? await selecaoDoTransfermarkt(j.tm) : null
+  const times = await clubesDoTransfermarkt(selecao?.selecoes.map((x) => x.time) ?? [])
+  const jogos = Math.max(0, ...(selecao?.selecoes ?? []).filter((x) => times[x.time]?.principal).map((x) => x.jogos))
   const taxa = Math.round((f.maiorTaxa ?? 0) / 1e6)
 
   /**

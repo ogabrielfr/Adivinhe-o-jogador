@@ -350,6 +350,121 @@ export async function jogosPorClube(tmId) {
   return porClube
 }
 
+/** Um recurso da API do Transfermarkt, que não passa pelo WAF. */
+async function apiDoTransfermarkt(caminho) {
+  const bruto = await pedirComInsistencia(`https://tmapi.transfermarkt.technology/${caminho}`)
+  try {
+    const dados = JSON.parse(bruto)
+    return dados?.success ? dados.data : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Onde o jogador nasceu e por quais seleções jogou.
+ *
+ * O número de jogos pela seleção vinha do Wikidata, que atrasa para quem está
+ * em atividade: o Vitor Roque aparecia com 1, e já são 2. E a primeira dica
+ * usava a nacionalidade como se fosse o lugar de nascimento — o Mário
+ * Fernandes, de São Caetano do Sul, saía "nascido na Rússia". A API separa as
+ * coisas: país de nascimento, nacionalidades e, por time nacional, jogos e
+ * gols, de base inclusive (`clubesDoTransfermarkt` diz qual é qual).
+ *
+ * Volta `{ nascimento, nacionalidades, selecoes: [{ time, jogos, gols }] }`,
+ * com ids de país e de time do Transfermarkt.
+ */
+export async function selecaoDoTransfermarkt(tmId) {
+  const arquivo = join(CACHE, `selecao-${tmId}.json`)
+  if (existsSync(arquivo)) {
+    try {
+      return JSON.parse(readFileSync(arquivo, 'utf8'))
+    } catch {
+      // cache corrompido: busca de novo
+    }
+  }
+  const perfil = await apiDoTransfermarkt(`player/${tmId}`)
+  const carreira = await apiDoTransfermarkt(`player/${tmId}/national-career-history`)
+  if (!perfil || !carreira) return null
+  const { nationalityId, secondNationalityId } = perfil.nationalityDetails?.nationalities ?? {}
+  const saida = {
+    nascimento: perfil.birthPlaceDetails?.countryOfBirthId ?? null,
+    nacionalidades: [nationalityId, secondNationalityId].filter(Boolean),
+    selecoes: (carreira.history ?? []).map((h) => ({
+      time: String(h.clubId), jogos: h.gamesPlayed ?? 0, gols: h.goalsScored ?? 0,
+    })),
+  }
+  writeFileSync(arquivo, JSON.stringify(saida))
+  return saida
+}
+
+/**
+ * O nome em português de cada país, pelo id do Transfermarkt.
+ *
+ * A API dá o país de nascimento e a nacionalidade só pelo id. O nome sai de
+ * duas fontes do próprio site: o nome da seleção principal do país, que a API
+ * devolve em português, e, para o país sem seleção entre os times nacionais
+ * que já conhecemos, o título da bandeira no perfil de um jogador de lá.
+ *
+ * `quem` diz, para cada id que faltar, o jogador em cujo perfil procurar.
+ */
+export async function paisesDoTransfermarkt(times, quem = new Map()) {
+  const arquivo = join(CACHE, 'paises.json')
+  let nomes = {}
+  try {
+    nomes = JSON.parse(readFileSync(arquivo, 'utf8'))
+  } catch {
+    // sem cache: monta de novo
+  }
+  for (const time of Object.values(times)) {
+    if (time?.principal && time.pais && !nomes[time.pais]) nomes[time.pais] = time.nome
+  }
+  for (const [pais, tmId] of quem) {
+    if (nomes[pais]) continue
+    const html = await pedirComInsistencia(`${BASE}/-/profil/spieler/${tmId}`)
+    const titulo = html?.match(new RegExp(`/flagge/[a-z]+/${pais}\\.png[^>]*?title="([^"]+)"`))?.[1]
+    if (titulo) nomes[pais] = titulo
+  }
+  writeFileSync(arquivo, JSON.stringify(nomes))
+  return nomes
+}
+
+/**
+ * Nome, nome curto e país de cada clube pelo id, como o próprio Transfermarkt os
+ * registra. Serve para duas coisas:
+ *
+ * - conferir o mapa de clubes: o nome que o Transfermarkt dá ao id tem que
+ *   bater com o do clube do catálogo. Foi assim que o CRB do Marcos Rocha
+ *   apareceu ligado ao Brasil de Pelotas;
+ * - dizer de que país é cada time nacional e se é a seleção principal: o
+ *   sub-20 do Brasil aponta a seleção brasileira como o time principal dele.
+ */
+export async function clubesDoTransfermarkt(ids) {
+  const arquivo = join(CACHE, 'clubes-tm.json')
+  let guardado = {}
+  try {
+    // id que a API não devolveu fica de fora, para ser pedido de novo
+    guardado = Object.fromEntries(Object.entries(JSON.parse(readFileSync(arquivo, 'utf8'))).filter(([, c]) => c))
+  } catch {
+    // sem cache: busca tudo
+  }
+  const faltando = [...new Set(ids.map(String))].filter((id) => !guardado[id] || !('principal' in guardado[id]))
+  for (let i = 0; i < faltando.length; i += 40) {
+    const lote = faltando.slice(i, i + 40)
+    for (const clube of (await apiDoTransfermarkt(`clubs?${lote.map((id) => `ids%5B%5D=${id}`).join('&')}`)) ?? []) {
+      const base = clube.baseDetails ?? {}
+      guardado[clube.id] = {
+        nome: clube.name,
+        curto: base.shortName ?? null,
+        pais: base.countryId ?? null,
+        principal: base.isNationalTeam === true && String(base.mainClubId) === String(clube.id),
+      }
+    }
+  }
+  writeFileSync(arquivo, JSON.stringify(guardado))
+  return guardado
+}
+
 /**
  * Posição e nacionalidade do perfil.
  *

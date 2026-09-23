@@ -82,9 +82,10 @@ Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
 - **Agenda do jogador do dia** (`npm run agenda`): dia marcado não muda mais, então mexer na biblioteca só afeta os dias que ainda não estão nela. Fora da agenda vale o sorteio determinístico por data. A partida guarda o id do jogador e continua com ele mesmo que o dia seja trocado.
 - **300 jogadores, 100 por nível**, com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e os 300 têm `verificado: true`. A biblioteca é dado (`src/dados/jogadores.json`), lida e gravada por `scripts/biblioteca.mjs`.
 - **Um resolvedor de clube só** (`scripts/resolver-clube.mjs`) para gerar, reparar e repor. Casa por id do Transfermarkt; por nome, só com nome contido, país e época conferidos.
-- **Mapa do Transfermarkt conferido pelo dono do id** (`npm run mapa-tm`): o Wikidata diz de quem é cada id, e o par que ele desmente sai.
+- **Mapa do Transfermarkt conferido por duas testemunhas** (`npm run mapa-tm`): o Wikidata diz de quem é cada id, e o par que ele desmente sai; o nome que o próprio Transfermarkt dá ao id é conferido para todo id em uso, e o que não bate vai para uma lista de leitura. Foi essa lista que achou o CRB do Marcos Rocha ligado ao Brasil de Pelotas e o Instituto do Dybala ao Central Córdoba.
 - **Catálogo de 5381 clubes de 66 países**, sendo 1155 brasileiros. Dos 374 que o jogo usa, só o Miami FC de 2006 fica com o brasão desenhado, de propósito: as duas fontes mostram o escudo do Fort Lauderdale Strikers, que o clube virou depois.
-- **Duas dicas por jogador**, montadas de números verificáveis e escolhidas pelo que cada um tem de raro; a naturalidade tem vaga cativa quando existe, porque é o fato que localiza.
+- **Duas dicas por jogador**, montadas de números verificáveis e escolhidas pelo que cada um tem de raro; a naturalidade tem vaga cativa quando existe, porque é o fato que localiza. A primeira diz o país de **nascimento** e, quando o jogador defendeu a seleção de outro país, qual ("Lateral brasileiro nascido em 1990, que defendeu a seleção russa"). País e jogos de seleção vêm da API do Transfermarkt.
+- **Nome curto embaixo do escudo** (`scripts/nomes-curtos.mjs`): o nome que o torcedor fala, na tela e na dica — "Inter de Limeira", não "Associação Atlética Internacional (Limeira)". O catálogo guarda o nome inteiro, que é o que casa com as fontes.
 - `npm run validar-dados` confere integridade e recusa dica que entregue nome de jogador ou clube visível.
 - `npm run teste-nomes` (71 casos) testa o comparador de nomes de clube; `npm run teste-palpites` (25 casos) testa a aceitação de palpite.
 - `npm run teste-visual` roda a partida ponta a ponta no Chromium e salva capturas.
@@ -115,7 +116,8 @@ intermediário; esse dia precisa de outro nome antes de ele sair.
 
 O cliente recusou as visualizações da Wikipédia como régua de nível ("melhor
 achar outro caminho"), e pediu que a medida de procura passe a olhar os últimos
-12 meses. Até a nova régua ser decidida com ele, `npm run reparar` não
+12 meses — feito: a janela anda com o calendário, em `scripts/visualizacoes.mjs`.
+Até a nova régua ser decidida com ele, `npm run reparar` não
 recalcula nível: vale o que está na biblioteca, e `scripts/niveis-fixos.mjs`
 guarda as decisões à mão (Roger Machado e Joel Santana no difícil, Guardiola no
 intermediário).
@@ -123,7 +125,6 @@ intermediário).
 ### 3. Texto que vem das fontes e lê mal
 
 - **Posição vem do Transfermarkt** e às vezes soa estranha em português de jogo: o Neymar aparece como "Meia".
-- **Nome de clube pode ser verboso** — "Associação Atlética Internacional (Limeira)" em vez de "Inter de Limeira". Os nomes curados ficam em `scripts/clubes-canonicos.mjs`.
 
 ### 4. Tamanho do repositório
 
@@ -155,7 +156,7 @@ acesso a essas fontes se mostrou frágil.
 - **`npm run coletar` demora ~25 min** e refaz `scripts/clubes-externos.json` do zero. Só precisa rodar quando quiser ampliar países ou atualizar a fonte.
 - **`src/dados/clubes.ts` é gerado e só tem os clubes em uso.** O catálogo completo, para consultar ao escrever carreira nova, está em `scripts/catalogo-completo.json`. Ao acrescentar jogador, rode `npm run catalogo` de novo para os clubes novos entrarem no pacote.
 - **O registro de partidas do Transfermarkt engana em época antiga.** `jogosPorClube` lê cada partida oficial com a participação do jogador, e é o que tira da carreira o clube onde ele não jogou. Mas temporada sem escalação no site vem inteira como "fora da lista": o Zanetti aparece com zero jogos no Banfield de 1993, onde jogou 66. Só conta como prova quando há escalação de verdade. O endereço (`tmapi.transfermarkt.technology`) não passa pelo WAF.
-- **O nome do Transfermarkt abrevia até no endereço** ("/man-utd/"), e o código do Wikidata guardado no catálogo foi dado por nome e errou em dezenas de clubes. Para ligar clube a id, confie no dono do id (P7223), não no nome — é o que `npm run mapa-tm` faz.
+- **O nome do Transfermarkt abrevia até no endereço** ("/man-utd/"), e o código do Wikidata guardado no catálogo foi dado por nome e errou em dezenas de clubes. Para ligar clube a id, confie no dono do id (P7223), não no nome — é o que `npm run mapa-tm` faz. Quando o Wikidata não conhece o dono, o par errado passa: leia a lista de "pares em uso com nome diferente no Transfermarkt" que o comando imprime.
 - **Carreira que não resolve fica congelada, e isso já escondeu erro por semanas.** `npm run reparar` não reescreve uma carreira quando algum clube dela não tem id — a regra existe para não gravar lista com buraco, mas congela junto os clubes que o mapa já sabia corrigir. Foi assim que o Chicharito seguiu com o escudo do Western United depois de o West Ham já estar certo no mapa. O comando agora **lista o que congelou e o nome que travou**; leia essa lista toda vez.
 - **Clube homônimo é a armadilha do Brasil.** Há dez Guaranis e cinco Botafogos no catálogo, de cidades diferentes. O id sai desambiguado pela cidade quando o nome colide. Confira o id antes de usar.
 - **Imagem de topo de artigo da Wikipédia nem sempre é o escudo** — em clube pequeno costuma ser foto da sede. `pareceEscudo()` em `scripts/wikidata.mjs` barra isso pelo formato e pelo nome do arquivo.
