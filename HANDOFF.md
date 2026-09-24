@@ -32,7 +32,8 @@ Site estático (Vite + React + TS + Tailwind), sem back-end e sem chave de API.
 | Entrada de texto | Livre, sem autocomplete (entregaria a lista de respostas); tolera acento, caixa e um erro de digitação |
 | Clube repetido | Válido — o escudo reaparece na posição certa quando o jogador voltou |
 | Carreira | **Só jogo profissional**: sem base, sem time B, sem clube-ponte, sem empréstimo em que o jogador não entrou em campo |
-| Nível | A régua de visualizações da Wikipédia foi **recusada**; o nível está congelado até a nova ser decidida |
+| Nível | **Régua por amostragem** (`npm run regua`): o cliente marcou 66 jogadores e os pesos saem das marcações dele; os três níveis têm o mesmo tamanho. A régua de visualizações da Wikipédia foi recusada |
+| Época | Nada de carreira dos anos 1940 para trás: quem nasceu antes de 1930 não entra |
 | Jogador do dia | **Pela agenda** (`src/dados/agenda.json`), congelada um mês à frente e estendida toda segunda pelo GitHub; quem saiu não volta em 90 dias |
 
 ---
@@ -80,10 +81,10 @@ Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
 
 - Jogo completo: tela inicial, partida, derrota (com o nome revelado), vitória, compartilhamento estilo Wordle, streak e estatísticas em `localStorage`.
 - **Agenda do jogador do dia** (`npm run agenda`): dia marcado não muda mais, então mexer na biblioteca só afeta os dias que ainda não estão nela. Fora da agenda vale o sorteio determinístico por data. A partida guarda o id do jogador e continua com ele mesmo que o dia seja trocado.
-- **317 jogadores** (114 no fácil, 101 no intermediário, 102 no difícil), com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e todos têm `verificado: true`. Jogador pedido pelo nome entra por `npm run trazer`. A biblioteca é dado (`src/dados/jogadores.json`), lida e gravada por `scripts/biblioteca.mjs`.
+- **318 jogadores, 106 em cada nível**, com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e todos têm `verificado: true`. Jogador pedido pelo nome entra por `npm run trazer`. A biblioteca é dado (`src/dados/jogadores.json`), lida e gravada por `scripts/biblioteca.mjs`.
 - **Um resolvedor de clube só** (`scripts/resolver-clube.mjs`) para gerar, reparar e repor. Casa por id do Transfermarkt; por nome, só com nome contido, país e época conferidos.
 - **Mapa do Transfermarkt conferido por duas testemunhas** (`npm run mapa-tm`): o Wikidata diz de quem é cada id, e o par que ele desmente sai; o nome que o próprio Transfermarkt dá ao id é conferido para todo id em uso, e o que não bate vai para uma lista de leitura. Foi essa lista que achou o CRB do Marcos Rocha ligado ao Brasil de Pelotas e o Instituto do Dybala ao Central Córdoba.
-- **Catálogo de 5381 clubes de 66 países**, sendo 1155 brasileiros. Dos 374 que o jogo usa, só o Miami FC de 2006 fica com o brasão desenhado, de propósito: as duas fontes mostram o escudo do Fort Lauderdale Strikers, que o clube virou depois.
+- **Catálogo de 5381 clubes de 66 países**, sendo 1155 brasileiros. Dos 405 que o jogo usa, só o Miami FC de 2006 fica com o brasão desenhado, de propósito: as duas fontes mostram o escudo do Fort Lauderdale Strikers, que o clube virou depois.
 - **Duas dicas por jogador.** A primeira diz posição, país de **nascimento** e ano, e, quando o jogador defendeu a seleção de outro país, qual ("Lateral brasileiro nascido em 1990, que defendeu a seleção russa"). A segunda abre com o **fato específico** que o cliente pediu — gol em final, título com ano e clube, clube de que foi ídolo em jogos ("Campeão da Libertadores de 2013 pelo Atlético-MG e de 2020 e 2021 pelo Palmeiras. Fez mais de 300 jogos pelo Palmeiras.") — e cai para naturalidade, Copa e o resto só quando não há nenhum. Tudo do Transfermarkt: página de títulos, registro de partidas e API.
 - **Estatísticas com tela própria**, no rodapé da tela inicial: partidas, aproveitamento, sequência atual e maior, e em que chute acertou, por nível.
 - **Prévia do link no WhatsApp**: tags `og:` no `index.html` e `public/previa.png`, gerada por `npm run previa`.
@@ -105,31 +106,47 @@ Entraram 19 dos 21 (`npm run trazer`). O **Totti** não entra: só jogou no Roma
 e um escudo não é charada. O **Buffon** já estava. Saíram **Gavi e Phil Foden**,
 que só jogaram num clube; o dia 21/10, que era do Gavi, passou ao Asensio.
 
-Os níveis dos 19 foram decididos à mão enquanto não há régua: 16 no fácil e
-Garrincha, Pirlo e Riquelme no intermediário. O fácil ficou com 114 — vale
-revisar com o cliente junto da régua nova.
+Os níveis dos 19 foram decididos à mão enquanto não havia régua; hoje quem
+decide é a régua por amostragem (item 2).
 
 Três carreiras vieram com o fim novo que o Transfermarkt já registra: Salah no
 Trabzonspor (agosto de 2026), Lewandowski no Chicago Fire (julho de 2026) e
 Thiago Silva de volta ao Fluminense depois de meio ano no Porto.
 
-### 2. A régua do nível
+### 2. A régua do nível: aplicada, falta a segunda rodada
 
-O cliente recusou as visualizações da Wikipédia como régua de nível ("melhor
-achar outro caminho"), e pediu que a medida de procura passe a olhar os últimos
-12 meses — feito: a janela anda com o calendário, em `scripts/visualizacoes.mjs`.
-Até a nova régua ser decidida com ele, `npm run reparar` não
-recalcula nível: vale o que está na biblioteca, e `scripts/niveis-fixos.mjs`
-guarda as decisões à mão (Roger Machado e Joel Santana no difícil, Guardiola no
-intermediário).
+O cliente recusou as visualizações da Wikipédia e escolheu a régua por
+amostragem: ele marca uma amostra, e os pesos de cada dado saem das marcações
+(`scripts/regua.mjs`, explicado no README). Na primeira rodada marcou 66
+jogadores (`scripts/amostra-nivel.json`); a régua acerta 76% deles quando cada
+um fica de fora do ajuste, contra 58% da régua antiga. Aplicada em 24/09, com
+106 jogadores em cada nível e a agenda refeita a partir de 26/09.
+
+Mandou tirar 9 e evitar carreira dos anos 1940 para trás, o que tirou mais 4;
+entraram 14 no lugar (lista no README). **Dudu e James Rodríguez** passaram no
+caminho de aceitação e ficaram de reserva.
+
+**Falta a segunda rodada**, que já está na página de marcação, com 51 jogadores:
+
+- os 35 de `EM_DUVIDA`, que a régua mudaria com pouca certeza e ficaram no
+  nível de antes;
+- os 14 que entraram, 4 deles em `PROVISORIO` (Guerrero, D'Alessandro, Lugano
+  e Seedorf, que a régua mandava para o difícil por não enxergar fama feita em
+  clube brasileiro);
+- os 2 reservas. Num jogador novo, "tirar" quer dizer trocar por um reserva.
+
+As marcações ficam no banco da página (coleção `votos`, id do jogador → nível).
+Para aplicar: passe-as para `scripts/amostra-nivel.json` — quem sair da
+biblioteca vai também para `foraDaBiblioteca`, com o id do Transfermarkt, para
+seguir no ajuste —, rode `npm run regua` para ver o que muda,
+`npm run regua -- --gravar` e `npm run agenda`. Quem foi marcado deixa de
+depender de `EM_DUVIDA` e `PROVISORIO`, porque a marcação vence; depois da
+rodada, as duas listas podem ser esvaziadas.
 
 Testado e descartado como régua sozinha: **número de idiomas da Wikipédia com
-artigo do jogador** (sitelinks do Wikidata). É estável e não tem pico de
-notícia, mas mede fama no mundo: mudaria 151 dos 317 de nível e mandaria
-Pedro, Bruno Henrique, Gerson e Everton Ribeiro para o difícil, enquanto
-Vidić e Pepe Reina subiriam para o fácil. Para público brasileiro, precisa de
-um peso de carreira no Brasil (jogos por clube brasileiro e pela seleção, que
-o registro de partidas já tem) ou da curadoria do cliente.
+artigo do jogador**. Mede fama no mundo e mandaria Pedro, Bruno Henrique,
+Gerson e Everton Ribeiro para o difícil; na régua de hoje ele é um dos sete
+dados, com o peso que as marcações deram.
 
 ### 3. Texto que vem das fontes e lê mal
 
@@ -139,7 +156,7 @@ o registro de partidas já tem) ou da curadoria do cliente.
 
 `public/escudos/` está em **77 MB** com os 5381 clubes. Dentro dos limites do
 GitHub Pages com folga, e o pacote enviado ao navegador **não** cresce com
-isso: `clubes.ts` leva só os 374 clubes em uso.
+isso: `clubes.ts` leva só os 405 clubes em uso.
 
 O custo é de repositório, não de carregamento — clone mais lento e 77 MB
 publicados a cada push. Se incomodar, o corte natural é gravar em
@@ -165,7 +182,7 @@ acesso a essas fontes se mostrou frágil.
 - **`npm run coletar` demora ~25 min** e refaz `scripts/clubes-externos.json` do zero. Só precisa rodar quando quiser ampliar países ou atualizar a fonte.
 - **`src/dados/clubes.ts` é gerado e só tem os clubes em uso.** O catálogo completo, para consultar ao escrever carreira nova, está em `scripts/catalogo-completo.json`. Ao acrescentar jogador, rode `npm run catalogo` de novo para os clubes novos entrarem no pacote.
 - **O registro de partidas do Transfermarkt engana em época antiga.** `jogosPorClube` lê cada partida oficial com a participação do jogador, e é o que tira da carreira o clube onde ele não jogou. Mas temporada sem escalação no site vem inteira como "fora da lista": o Zanetti aparece com zero jogos no Banfield de 1993, onde jogou 66. Só conta como prova quando há escalação de verdade. O endereço (`tmapi.transfermarkt.technology`) não passa pelo WAF.
-- **A página de títulos do Transfermarkt erra o ano de título de jogo único.** O Mundial de Clubes de dezembro de 2007 do Milan está como 2007 no Emerson e 2008 no Kaká; o Messi aparece com os Mundiais de 2010, 2012 e 2016. Para Mundial, Intercontinental e Supercopa da Uefa, o ano vem da data da final (`titulosConferidos` em `scripts/dicas.mjs`), e o título sem final jogada fica fora da dica. No registro de partidas, final é `FF` (jogo único), `FFH` e `FFR` (ida e volta), e a edição sai de `season.display` quando é um ano só — a temporada europeia ("15/16") não diz em que ano foi a final.
+- **A página de títulos do Transfermarkt erra o ano de título de jogo único.** O Mundial de Clubes de dezembro de 2007 do Milan está como 2007 no Emerson e 2008 no Kaká; o Messi aparece com os Mundiais de 2010, 2012 e 2016. Para Mundial, Intercontinental e Supercopa da Uefa, o ano vem da data da final (`titulosConferidos` em `scripts/dicas.mjs`), e o título sem final jogada fica fora da dica. Título de temporada ela dá também a quem saiu no meio dela (o Seedorf aparecia campeão da Champions de 2000 pelo Real Madrid, que deixou em dezembro de 1999): quando o registro de partidas mostra o jogador por outro clube no ano do título e nenhuma vez pelo campeão, a conquista fica fora. No registro de partidas, final é `FF` (jogo único), `FFH` e `FFR` (ida e volta), e a edição sai de `season.display` quando é um ano só — a temporada europeia ("15/16") não diz em que ano foi a final.
 - **O nome do Transfermarkt abrevia até no endereço** ("/man-utd/"), e o código do Wikidata guardado no catálogo foi dado por nome e errou em dezenas de clubes. Para ligar clube a id, confie no dono do id (P7223), não no nome — é o que `npm run mapa-tm` faz. Quando o Wikidata não conhece o dono, o par errado passa: leia a lista de "pares em uso com nome diferente no Transfermarkt" que o comando imprime.
 - **Carreira que não resolve fica congelada, e isso já escondeu erro por semanas.** `npm run reparar` não reescreve uma carreira quando algum clube dela não tem id — a regra existe para não gravar lista com buraco, mas congela junto os clubes que o mapa já sabia corrigir. Foi assim que o Chicharito seguiu com o escudo do Western United depois de o West Ham já estar certo no mapa. O comando agora **lista o que congelou e o nome que travou**; leia essa lista toda vez.
 - **Clube homônimo é a armadilha do Brasil.** Há dez Guaranis e cinco Botafogos no catálogo, de cidades diferentes. O id sai desambiguado pela cidade quando o nome colide. Confira o id antes de usar.

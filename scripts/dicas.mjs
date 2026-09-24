@@ -91,7 +91,7 @@ export function papelDe(bruto) {
 const SEM_ARTIGO = new Set([
   'Portugal', 'Israel', 'Angola', 'Moçambique', 'Cuba', 'Cabo Verde', 'Andorra',
   'Malta', 'Chipre', 'Omã', 'Gana', 'Marrocos', 'Trinidad e Tobago', 'Mônaco',
-  'Guadalupe', 'Serra Leoa', 'Barbados', 'Samoa',
+  'Guadalupe', 'Serra Leoa', 'Barbados', 'Samoa', 'Camarões', 'Honduras',
 ])
 /** Femininos que não terminam em "a". */
 const FEMININO = /^(Sérvia e Montenegro|União Soviética|Guiné-Bissau|Guiné|Guiné Equatorial)$/
@@ -504,11 +504,27 @@ const TITULO_DE_FINAL = {
 const FIM_DA_INTERCONTINENTAL = 2004
 
 /**
- * Os títulos com o ano conferido. `titulos` é o da página do Transfermarkt
- * (`clubeTm` em cada conquista) e `finais` o do registro de partidas, ainda
- * com o id da competição.
+ * Título de temporada o Transfermarkt dá também a quem saiu no meio dela: o
+ * Seedorf aparece campeão da Champions de 2000 pelo Real Madrid, que ele
+ * trocou pela Inter em dezembro de 1999, e o Cole Palmer campeão inglês de
+ * 2024 pelo City, que ele deixou em setembro de 2023. Quando o registro de
+ * partidas mostra o jogador atuando por outro clube no ano do título e
+ * nenhuma vez pelo clube campeão, a conquista não entra. Sem registro da
+ * época (o Ademir da Guia só tem jogos até 1973), fica como o site dá.
  */
-export function titulosConferidos(titulos, finais) {
+function saiuAntesDoTitulo(conquista, jogos) {
+  const noAno = (datas) => (datas ?? []).some((d) => d.startsWith(`${conquista.ano}-`))
+  const campeao = jogos?.[conquista.clubeTm]
+  if (!campeao || noAno(campeao.datas)) return false
+  return Object.entries(jogos).some(([clube, r]) => clube !== String(conquista.clubeTm) && noAno(r.datas))
+}
+
+/**
+ * Os títulos com o ano conferido. `titulos` é o da página do Transfermarkt
+ * (`clubeTm` em cada conquista), `finais` o do registro de partidas, ainda
+ * com o id da competição, e `jogos` o dia de cada jogo por clube.
+ */
+export function titulosConferidos(titulos, finais, jogos) {
   const saida = new Map()
   const juntar = (titulo, conquista) => {
     const lista = saida.get(titulo) ?? saida.set(titulo, []).get(titulo)
@@ -517,7 +533,7 @@ export function titulosConferidos(titulos, finais) {
   for (const t of titulos ?? []) {
     const competicoes = TITULO_DE_FINAL[t.titulo]
     if (!competicoes) {
-      for (const q of t.conquistas) juntar(t.titulo, q)
+      for (const q of t.conquistas) if (!saiuAntesDoTitulo(q, jogos)) juntar(t.titulo, q)
       continue
     }
     const usadas = new Set()

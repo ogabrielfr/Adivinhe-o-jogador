@@ -34,6 +34,7 @@ npm run dev
 | `npm run teste-visual` | roda a partida ponta a ponta no Chromium e salva capturas |
 | `npm run agenda` | estende a agenda do jogador do dia até 30 dias à frente (`-- 60` para mais) |
 | `npm run trazer` | traz jogador escolhido à mão, pelo QID e com o nível (`-- Q615:facil:messi`) |
+| `npm run regua` | mostra o nível que a régua daria a cada jogador (`-- --gravar` grava) |
 
 O teste visual precisa do Chromium do Playwright (`npx playwright install chromium`)
 e de um `npm run build && npx vite preview` rodando na porta 4173.
@@ -103,8 +104,7 @@ virar um problema, a saída é mover o sorteio para um endpoint.
 
 ## A biblioteca
 
-`src/dados/jogadores.json` tem **317 jogadores**: 114 no fácil, 101 no
-intermediário e 102 no difícil. É dado, não
+`src/dados/jogadores.json` tem **318 jogadores, 106 em cada nível**. É dado, não
 código: o jogo importa o arquivo por `src/dados/jogadores.ts`, que só dá tipo a
 ele, e os scripts leem e gravam por `scripts/biblioteca.mjs`. Até setembro a
 biblioteca era um arquivo TypeScript que quatro scripts reescreviam por
@@ -122,6 +122,20 @@ assim que entraram 19 dos 21 grandes nomes que faltavam (Messi, Ronaldo
 Fenômeno, Maradona, Zidane, Romário, Rivaldo...). O Totti ficou fora porque
 só jogou no Roma, e o Buffon já estava. Saíram Gavi e Phil Foden, que também
 só jogaram num clube.
+
+**Nada de carreira dos anos 1940 para trás.** O registro dessa época é o que
+mais erra — a carreira do Di Stéfano no jogo tinha perdido a volta ao River
+Plate —, e o cliente pediu para evitar. Quem nasceu antes de 1930 começou antes
+de 1950: o `trazer` não traz, e o `validar-dados` recusa. Saíram por isso
+Domingos da Guia, Zizinho, Ademir de Menezes e Di Stéfano.
+
+**A reposição de setembro.** O cliente marcou 9 jogadores como obscuros demais
+(Everaldo, Nelsinho Baptista, Bill Shankly, Everton, Ljungberg, Ranieri, Zé
+Mário, Srna, Afellay), que saíram junto com os 4 de antes de 1950. No lugar
+entraram 14, para a biblioteca fechar em três níveis iguais: Luís Fabiano,
+Diego, Edmundo, Dida, Beckham, Benzema, Guerrero, Roberto Baggio, Lugano,
+Fernando Torres, Lampard, Seedorf, Eto'o e D'Alessandro. Dudu e James
+Rodríguez passaram no mesmo caminho e ficaram de reserva.
 
 **Sem teto de escudos.** O gerador recusava carreira com mais de 12 escudos,
 porque no celular a partir de 13 o campo de palpite descia para fora da tela.
@@ -350,6 +364,12 @@ Cada um tem sua armadilha, e as três estão tratadas em código:
   (`titulosConferidos`); sem a final, o título fica de fora — melhor calar que
   errar o ano. A final também dá a edição certa quando o calendário foge: a
   Libertadores de 2020 teve a final em janeiro de 2021.
+- **Título de temporada vai também para quem saiu no meio dela.** O Seedorf
+  aparecia campeão da Champions de 2000 pelo Real Madrid, que ele trocou pela
+  Inter em dezembro de 1999. Se o registro de partidas mostra o jogador por
+  outro clube no ano do título e nenhuma vez pelo campeão, a conquista não
+  entra. Tirou também a Champions do Zé Roberto (1998), do Alex (2012) e do
+  Cheryshev (2016), e a Copa da Itália do Bruno Uvini (2014).
 
 Supercopa nacional, prêmio vago ("Futebolista do ano") e título de base não
 entram: não levam a ninguém. A exceção é o Mundial Sub-20, que passa na TV
@@ -383,12 +403,59 @@ Barcelona" para o outro Adriano. Só "ADRIANO" não dizia qual dos dois era. O
 
 ### O nível
 
-**Em revisão.** O cliente recusou as visualizações da Wikipédia como régua, e
-até a nova ser decidida o nível é o que está na biblioteca: `npm run reparar`
-não recalcula mais, e `scripts/niveis-fixos.mjs` guarda as decisões tomadas à
-mão. O que segue é a régua que foi usada até aqui.
+Sai da **opinião do cliente**, por amostragem (`npm run regua`,
+`scripts/regua.mjs`). Ele marcou 66 jogadores numa página — fácil,
+intermediário, difícil ou tirar — e as marcações estão em
+`scripts/amostra-nivel.json`. A régua acha os pesos que melhor reproduzem essas
+marcações e com eles ordena a biblioteca inteira, inclusive quem entrar depois,
+sem ninguém marcar de novo.
 
-Sai quase todo da **mediana de visualizações do artigo na Wikipédia em
+Os dados são sete, todos do Transfermarkt e do Wikidata, e o peso de cada um sai
+das marcações (negativo deixa mais fácil):
+
+| Dado | Peso |
+| --- | --- |
+| nasceu no Brasil | −1,23 |
+| quão recente é a carreira (último ano com jogo) | −1,02 |
+| Copas do Mundo em que entrou em campo | −0,97 |
+| jogos pela seleção brasileira | −0,80 |
+| idiomas em que a Wikipédia tem artigo sobre ele | −0,53 |
+| jogos nas cinco ligas grandes da Europa | −0,44 |
+| jogos pela seleção principal de qualquer país | +0,06 |
+
+O modelo é ordinal (fácil < intermediário < difícil < tirar), com freio contra
+amostra pequena. Tirando cada jogador da amostra do ajuste e prevendo o dele,
+acerta 50 das 66 marcações (76%); a régua anterior acertava 38 (58%). Os 9 que
+o cliente mandou tirar já saíram da biblioteca, mas continuam no ajuste pelo id
+do Transfermarkt (`foraDaBiblioteca`): são eles que ensinam onde fica o obscuro
+demais.
+
+O cliente quer **o mesmo número de jogadores por nível**. A régua ordena e corta
+onde cada nível fecha com um terço. Vencem o cálculo, nesta ordem:
+
+- a marcação do cliente;
+- `scripts/niveis-fixos.mjs`, a decisão à mão com o motivo escrito;
+- `EM_DUVIDA`, em `scripts/regua.mjs`: 35 jogadores que a régua mudaria com
+  pouca certeza. São craques que ela joga para baixo, porque a amostra tinha
+  poucos (aplicada direto, punha o Bale e o Figo no difícil), brasileiros que
+  ela subiria do difícil direto para o fácil e estrangeiros de muitas Copas que
+  ela punha no fácil (Shaqiri, Cahill, Xhaka). Ficam no nível de antes;
+- `PROVISORIO`: Guerrero, D'Alessandro, Lugano e Seedorf, ídolos no Brasil que
+  entraram na reposição. A régua não enxerga fama feita num clube brasileiro e
+  mandava os quatro para o difícil; ficam no intermediário.
+
+Os dois últimos esperam a **segunda rodada** de marcações, que está na mesma
+página, com os 14 que entraram e os 2 reservas. Marcação nova vai para
+`scripts/amostra-nivel.json`; depois, `npm run regua -- --gravar` e
+`npm run agenda` para os dias ainda não agendados. Quem o cliente marcar sai
+de `EM_DUVIDA` e `PROVISORIO` sem precisar mexer neles, porque a marcação vence.
+
+#### A régua anterior: visualizações da Wikipédia
+
+O cliente recusou esta régua, e ela não roda mais: `npm run reparar` não
+recalcula o nível. O que ela ensinou continua valendo.
+
+Saía quase toda da **mediana de visualizações do artigo na Wikipédia em
 português**: é a única medida direta da pergunta do jogo — quanta gente procura
 esse jogador em português. Mediana e não soma porque transferência e polêmica
 produzem pico de um ou dois meses.
@@ -433,9 +500,11 @@ Rogério Ceni aparece em segundo lugar na lista sendo ídolo conhecidíssimo com
 jogador. Nenhuma fórmula distingue os dois casos; uma pessoa distingue em dois
 segundos.
 
-Por isso `scripts/niveis-fixos.mjs` fixa o nível à mão e vence o cálculo. Hoje
-tem três entradas, cada uma com o motivo escrito: Roger Machado e Joel Santana
-no difícil, Guardiola no intermediário.
+Por isso `scripts/niveis-fixos.mjs` fixa o nível à mão e vence o cálculo — o
+da régua de hoje também. Tem cinco entradas, cada uma com o motivo escrito:
+Roger Machado e Joel Santana no difícil, Guardiola no intermediário, e os dois
+que o cliente corrigiu no dia em que caíram, Mário Fernandes no intermediário e
+Desailly no difícil.
 
 #### O outro piso: difícil não é desconhecido
 

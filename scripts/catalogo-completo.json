@@ -7588,6 +7588,13 @@
   "qid": "Q1055895"
  },
  {
+  "id": "cerro-porteno",
+  "nome": "Cerro Porteño",
+  "pais": "PY",
+  "escudo": "cerro-porteno.png",
+  "qid": null
+ },
+ {
   "id": "cesena-football-club",
   "nome": "Cesena Football Club",
   "pais": "IT",

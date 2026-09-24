@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url'
 import {
   historicoDoTransfermarkt, passagensDoTransfermarkt, perfilDoTransfermarkt,
   selecaoDoTransfermarkt, clubesDoTransfermarkt, paisesDoTransfermarkt,
-  titulosDoTransfermarkt, desempenhoDoJogador, competicoesDoTransfermarkt,
+  titulosDoTransfermarkt, desempenhoDoJogador, competicoesDoTransfermarkt, jogosPorClube,
 } from './transfermarkt.mjs'
 import {
   montarDicas, fatosDoHistorico, papelConhecido, escalaDosFatos, naturalidadeSegura, nomeDoPais,
@@ -113,11 +113,13 @@ function selecaoPrincipal(s) {
  */
 const titulosDe = new Map()
 const desempenhoDe = new Map()
+const jogosDe = new Map()
 for (const j of jogadores) {
   const tm = idTmDe(j)
   if (!tm) continue
   titulosDe.set(j.id, await titulosDoTransfermarkt(tm))
   desempenhoDe.set(j.id, await desempenhoDoJogador(tm))
+  jogosDe.set(j.id, await jogosPorClube(tm))
 }
 const competicoes = await competicoesDoTransfermarkt(
   [...desempenhoDe.values()].flatMap((d) => d?.finais.map((f) => f.competicao) ?? []),
@@ -225,7 +227,7 @@ const nomeDoTm = (tm) => (tm ? nomePorTm.get(String(tm)) ?? null : null)
 for (const c of coletado) {
   const j = c.jogador
   const desempenho = desempenhoDe.get(j.id)
-  c.dados.titulos = titulosConferidos(titulosDe.get(j.id), desempenho?.finais).map((t) => ({
+  c.dados.titulos = titulosConferidos(titulosDe.get(j.id), desempenho?.finais, jogosDe.get(j.id)).map((t) => ({
     titulo: t.titulo,
     conquistas: t.conquistas.map((q) => ({ ano: q.ano, clube: nomeDoTm(q.clubeTm) })),
   }))

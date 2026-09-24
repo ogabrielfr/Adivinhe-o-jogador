@@ -172,6 +172,12 @@ export const SEM_ESCUDO = {
   'delta-warszawa': { nome: "Delta Warszawa", pais: 'PL', cores: ['#0A3D91', '#FFFFFF'], tm: '30379' },
   'znicz-pruszkow': { nome: "Znicz Pruszków", pais: 'PL', cores: ['#E30613', '#FFFFFF'], tm: '9109' },
   'rs-futebol': { nome: "RS Futebol", pais: 'BR', cores: ['#0A3D91', '#E30613'], tm: '10495' },
+
+  /**
+   * O Cerro Porteño de Assunção, onde o Lugano jogou em 2015. O catálogo só
+   * tinha o homônimo de Presidente Franco, e o casamento por nome caía nele.
+   */
+  'cerro-porteno': { nome: "Cerro Porteño", pais: 'PY', cores: ['#0A3D91', '#E30613'], tm: '1214' },
 }
 
 /**
@@ -198,6 +204,7 @@ export const PARES_TM = {
   1038: 'sampdoria',
   1775: 'san-lorenzo',
   338: 'dynamo-kyiv',
+  1214: 'cerro-porteno',
   // o QID do catálogo aponta um homônimo fundado em 2008
   449: 'trabzonspor',
   // "Willem II" terminava em "II" e caía no filtro de time reserva; Frenkie de Jong

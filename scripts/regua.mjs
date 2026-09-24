@@ -19,13 +19,16 @@
  *
  * O modelo é ordinal — fácil < intermediário < difícil < tirar — e os pesos
  * saem por máxima verossimilhança com um freio (L2) contra a amostra pequena.
- * Na amostra, ele acerta o nível de 74% dos jogadores deixados de fora do
- * ajuste, contra 56% dos níveis da régua antiga.
+ * Deixando cada jogador da amostra de fora do ajuste e prevendo o dele, a
+ * régua acerta 50 das 66 marcações (76%), contra 38 (58%) dos níveis da régua
+ * antiga — "tirar" conta como acerto quando cai no difícil, já que o jogo não
+ * tem nível abaixo dele.
  *
  * O cliente quer o mesmo número de jogadores por nível. A régua então ordena, e
  * o corte fica onde cada nível fecha com um terço da biblioteca. Quem o
  * cliente marcou fica exatamente como ele marcou; `scripts/niveis-fixos.mjs`
- * também vence o cálculo.
+ * também vence o cálculo, e `EM_DUVIDA` e `PROVISORIO`, abaixo, seguram quem
+ * espera a segunda rodada de marcações.
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
@@ -165,10 +168,13 @@ function padronizador(fatores) {
 /**
  * O nível de cada jogador. Marcado pelo cliente ou fixado à mão, fica; o resto
  * entra na ordem da régua, até cada nível ter um terço da biblioteca.
+ *
+ * `fora` são os marcados que já saíram da biblioteca: entram só no ajuste. O
+ * "tirar" do cliente é o que ensina à régua onde fica o obscuro demais.
  */
-export function niveisPelaRegua(fatores, marcacoes, fixos = {}) {
+export function niveisPelaRegua(fatores, marcacoes, fixos = {}, fora = []) {
   const { nomes, z } = padronizador(fatores)
-  const amostra = fatores.filter((f) => marcacoes[f.id])
+  const amostra = [...fatores, ...fora].filter((f) => marcacoes[f.id])
   const modelo = ajustar(amostra.map(z), amostra.map((f) => ORDEM[marcacoes[f.id]]))
   const nota = (f) => z(f).reduce((a, v, j) => a + v * modelo.w[j], 0)
 
@@ -193,13 +199,52 @@ export function niveisPelaRegua(fatores, marcacoes, fixos = {}) {
   return { nivel, modelo, nomes, nota, porNivel, vagas }
 }
 
+/**
+ * Jogadores em que a régua mudaria o nível com pouca certeza, em três grupos:
+ * craques que ela joga para baixo, porque a amostra do cliente tinha poucos
+ * (aplicada direto, punha o Bale e o Figo no difícil); brasileiros que ela
+ * subiria do difícil direto para o fácil (Maxwell, Neto, Gomes); e
+ * estrangeiros de muitas Copas que ela punha no fácil (Shaqiri, Cahill,
+ * Xhaka). Até o cliente marcar estes na segunda rodada, ficam no nível que já
+ * tinham.
+ */
+export const EM_DUVIDA = [
+  'maxwell', 'allan-marques-loureiro', 'josue-anunciado-de-oliveira',
+  'anderson-futebolista', 'rafael-pereira-da-silva', 'neto', 'gomes', 'estevao',
+  'gareth-bale', 'luis-enrique-martinez-garcia', 'thiago-alcantara',
+  'radamel-falcao-garcia', 'luis-figo', 'zagallo', 'marco-van-basten', 'zinedine-zidane',
+  'zlatan-ibrahimovic', 'mohamed-salah', 'robert-lewandowski', 'erling-haaland',
+  'arjen-robben', 'rogerio-ceni', 'paulo-roberto-falcao', 'carlos-tevez', 'diego-forlan',
+  'garrincha', 'hugo-lloris', 'jordan-henderson', 'xherdan-shaqiri', 'raheem-sterling',
+  'raphael-varane', 'adriano-correia-claro', 'alex-rodrigo-dias-da-costa',
+  'tim-cahill', 'granit-xhaka',
+]
+
+/**
+ * Estrangeiros que foram ídolos no Brasil. A régua não enxerga fama feita num
+ * clube brasileiro — os dados dela são seleção, Copa, Europa e Wikipédia —, e
+ * mandava os quatro para o difícil. Entraram na reposição de setembro e ficam
+ * no intermediário até o cliente marcar.
+ */
+export const PROVISORIO = {
+  'paolo-guerrero': 'intermediario',
+  'andres-d-alessandro': 'intermediario',
+  'diego-lugano': 'intermediario',
+  'clarence-seedorf': 'intermediario',
+}
+
 // ------------------------------------------------------------ execução
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const gravar = process.argv.includes('--gravar')
   const jogadores = lerBiblioteca()
-  const { marcacoes } = ler('amostra-nivel.json')
+  const { marcacoes, foraDaBiblioteca = {} } = ler('amostra-nivel.json')
   const fatores = await fatoresDe(jogadores)
-  const { nivel, modelo, nomes } = niveisPelaRegua(fatores, marcacoes, NIVEL_FIXO)
+  const fora = await fatoresDe(Object.entries(foraDaBiblioteca)
+    .map(([id, tm]) => ({ id, fonte: `https://www.transfermarkt.com.br/-/profil/spieler/${tm}` })))
+  // em dúvida fica onde estava e o provisório no intermediário; o fixado à mão
+  // vence os dois, e a marcação do cliente vence tudo
+  const mantidos = Object.fromEntries(jogadores.filter((j) => EM_DUVIDA.includes(j.id)).map((j) => [j.id, j.nivel]))
+  const { nivel, modelo, nomes } = niveisPelaRegua(fatores, marcacoes, { ...mantidos, ...PROVISORIO, ...NIVEL_FIXO }, fora)
 
   console.log('pesos (negativo = mais fácil):')
   for (const [i, n] of nomes.entries()) console.log(`  ${n.padEnd(14)} ${modelo.w[i].toFixed(2)}`)
@@ -216,8 +261,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       if (l.length) console.log(`  ${de} → ${para} (${l.length}): ${l.map((j) => j.nome).join(', ')}`)
     }
   }
-  const fora = jogadores.filter((j) => marcacoes[j.id] === 'tirar')
-  if (fora.length) console.log(`\nmarcados para tirar (a régua não tira sozinha): ${fora.map((j) => j.nome).join(', ')}`)
+  const aTirar = jogadores.filter((j) => marcacoes[j.id] === 'tirar')
+  if (aTirar.length) console.log(`\nmarcados para tirar (a régua não tira sozinha): ${aTirar.map((j) => j.nome).join(', ')}`)
 
   if (gravar) {
     for (const j of jogadores) if (nivel.has(j.id)) j.nivel = nivel.get(j.id)

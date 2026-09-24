@@ -1,5 +1,5 @@
 {
- "_leia": "Marcações do cliente: o nível que o torcedor brasileiro daria a cada jogador. Base da régua de nível (scripts/regua.mjs). \"tirar\" é obscuro demais para o jogo.",
+ "_leia": "Marcações do cliente: o nível que o torcedor brasileiro daria a cada jogador. Base da régua de nível (scripts/regua.mjs). \"tirar\" é obscuro demais para o jogo; quem ele tirou saiu da biblioteca, e o id do Transfermarkt em foraDaBiblioteca deixa a marcação continuar na régua.",
  "marcacoes": {
   "alan-shearer": "dificil",
   "aleksandar-mitrovic": "dificil",
@@ -67,5 +67,16 @@
   "wesley-sneijder": "intermediario",
   "ze-mario": "tirar",
   "ze-sergio": "dificil"
+ },
+ "foraDaBiblioteca": {
+  "everaldo": "229673",
+  "nelsinho-baptista": "739615",
+  "bill-shankly": "774205",
+  "everton-nogueira": "532895",
+  "fredrik-ljungberg": "3134",
+  "claudio-ranieri": "169654",
+  "ze-mario": "783646",
+  "darijo-srna": "14942",
+  "ibrahim-afellay": "15760"
  }
 }

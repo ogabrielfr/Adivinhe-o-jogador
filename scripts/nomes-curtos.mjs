@@ -90,7 +90,13 @@ export const NOME_CURTO = {
   'rangers-football-club': 'Rangers',
   'celtic-football-club': 'Celtic',
 
+  'portsmouth-football-club': 'Portsmouth',
+  'swansea-city-association-football-club': 'Swansea',
+  'west-bromwich-albion-football-club': 'West Brom',
+
   // resto da Europa
+  'l-r-vicenza': 'Vicenza',
+  'malaga': 'Málaga',
   'associazione-calcio-reggiana-1919': 'Reggiana',
   'associazione-calcio-mantova': 'Mantova',
   'associazione-calcio-cesena': 'Cesena',
@@ -134,6 +140,11 @@ export const NOME_CURTO = {
   'toluca': 'Toluca',
   'emelec': 'Emelec',
   'millonarios': 'Millonarios',
+  // os clubes que entraram com a reposição de setembro
+  'club-alianza-lima': 'Alianza Lima',
+  'club-deportivo-universidad-cesar-vallejo': 'César Vallejo',
+  'club-plaza-colonia-de-deportes': 'Plaza Colonia',
+  'liga-deportiva-universitaria-quito': 'LDU Quito',
 
   // Ásia, África e Oceania
   'adelaide-united-football-club': 'Adelaide United',
