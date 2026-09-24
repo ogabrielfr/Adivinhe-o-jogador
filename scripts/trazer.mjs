@@ -93,6 +93,8 @@ for (const { qid, nivel, id: idPedido } of pedidos) {
   const rotulo = dados.nome && !/^Q\d+$/.test(dados.nome) ? dados.nome : qid
   if (!tm) { console.log(`  ✗ ${rotulo}: sem id do Transfermarkt no Wikidata`); continue }
   if (tmsUsados.has(String(tm))) { console.log(`  ✗ ${rotulo}: já está na biblioteca`); continue }
+  // carreira dos anos 1940 para trás tem registro demais com erro (o validar-dados também recusa)
+  if (Number(dados.nasc) < 1930) { console.log(`  ✗ ${rotulo}: nasceu em ${dados.nasc}, antes de 1930`); continue }
 
   const passagens = passagensDe.get(qid)
   if (!passagens) { console.log(`  ✗ ${rotulo}: o Transfermarkt não devolveu o histórico — tente de novo`); continue }

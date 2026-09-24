@@ -21,7 +21,8 @@
     "mapa-tm": "node scripts/mapa-transfermarkt.mjs",
     "agenda": "node scripts/agenda.mjs",
     "trazer": "node scripts/trazer.mjs",
-    "previa": "node scripts/previa.mjs"
+    "previa": "node scripts/previa.mjs",
+    "regua": "node scripts/regua.mjs"
   },
   "repository": {
     "type": "git",

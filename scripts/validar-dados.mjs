@@ -75,6 +75,25 @@ for (const [k, lista] of porPedaco) {
 }
 
 /**
+ * Nada de carreira dos anos 1940 para trás: o registro dessa época é o que mais
+ * erra, e a carreira do Di Stéfano no jogo já tinha perdido a volta ao River
+ * Plate. Quem nasceu antes de 1930 começou antes de 1950, e fica de fora.
+ */
+const ANO_MINIMO_DE_NASCIMENTO = 1930
+const meta = JSON.parse(readFileSync(new URL('./meta-jogadores.json', import.meta.url), 'utf8'))
+const qidPorTm = new Map(
+  Object.entries(JSON.parse(readFileSync(new URL('./tm-jogadores.json', import.meta.url), 'utf8')))
+    .map(([qid, tm]) => [String(tm), qid]),
+)
+for (const j of JOGADORES) {
+  const tm = String(j.fonte ?? '').match(/spieler\/(\d+)/)?.[1]
+  const nasc = Number(meta[qidPorTm.get(tm)]?.nasc)
+  if (nasc && nasc < ANO_MINIMO_DE_NASCIMENTO) {
+    erros.push(`${j.id}: nasceu em ${nasc}; carreira anterior a 1950 não entra`)
+  }
+}
+
+/**
  * Dois jogadores com o mesmo nome se distinguem na revelação pela linha de
  * complemento. Sem ela, ou com a mesma nos dois, "ADRIANO" não diz qual era.
  */

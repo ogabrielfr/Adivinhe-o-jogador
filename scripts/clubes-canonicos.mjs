@@ -192,6 +192,12 @@ export const DESCARTAR = ['interrs', 'santossp', 'vascodagama', 'sportrecife', '
 export const PARES_TM = {
   // o QID do catálogo é o do time feminino (2015)
   398: 'lazio',
+  // homônimos que travavam pelo nome na reposição de setembro: o catálogo tem
+  // duas Sampdorias (a mesma imagem), um San Lorenzo paraguaio além do
+  // argentino, e o Transfermarkt chama o Dínamo de "Dinamo De Kiev"
+  1038: 'sampdoria',
+  1775: 'san-lorenzo',
+  338: 'dynamo-kyiv',
   // o QID do catálogo aponta um homônimo fundado em 2008
   449: 'trabzonspor',
   // "Willem II" terminava em "II" e caía no filtro de time reserva; Frenkie de Jong
