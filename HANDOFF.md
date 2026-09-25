@@ -31,6 +31,7 @@ Site estático (Vite + React + TS + Tailwind), sem back-end e sem chave de API.
 | Desistir | Revela o nome e encerra o nível; conta como derrota, com confirmação em dois toques |
 | Entrada de texto | Livre, sem autocomplete (entregaria a lista de respostas); tolera acento, caixa e um erro de digitação |
 | Clube repetido | Válido — o escudo reaparece na posição certa quando o jogador voltou |
+| Nome do clube | À mostra embaixo de cada escudo, a partida inteira. Ficava escondido até o toque; o cliente pediu direto |
 | Carreira | **Só jogo profissional**: sem base, sem time B, sem clube-ponte, sem empréstimo em que o jogador não entrou em campo |
 | Nível | **Régua por amostragem** (`npm run regua`): o cliente marcou 66 jogadores e os pesos saem das marcações dele; os três níveis têm o mesmo tamanho. A régua de visualizações da Wikipédia foi recusada |
 | Época | Nada de carreira dos anos 1940 para trás: quem nasceu antes de 1930 não entra |
@@ -165,11 +166,13 @@ publicados a cada push. Se incomodar, o corte natural é gravar em
 Deixei vendorizado porque o combinado era catálogo maior que o uso e porque o
 acesso a essas fontes se mostrou frágil.
 
-### 5. Decisões de produto pendentes
+### 5. Decisões de produto
 
-- **O nome do clube fica escondido**, revelado ao tocar no escudo e sempre no fim da partida. Escolha minha, ainda não validada pelo cliente.
+- **Volume da biblioteca.** O combinado era 300 e depois ~900 se o cliente gostasse. Os 318 estão no ar; os 900 dependem de ele pedir.
+
+Levados ao cliente em 25/09, que deu as pendências por respondidas sem pedir mudança. Seguem como estão:
+
 - **As respostas estão no pacote enviado ao navegador** (mesma escolha do Wordle original). Se virar problema, a saída é mover o sorteio para um endpoint.
-- **Volume da biblioteca.** O combinado era 300 e depois ~900 se o cliente gostasse. Os 300 estão no ar; os 900 dependem de ele pedir.
 - **Licença dos escudos.** O catálogo mistura três origens: licença livre declarada no Commons, upload local da Wikipédia marcado "Conteúdo restrito" (uso justo) e Transfermarkt, sem licença. Escudo é marca do clube em qualquer caso, e o projeto já os usava para identificação, mas a distinção está explícita no campo `licenca` de `scripts/clubes-externos.json`, caso o cliente queira restringir.
 
 ---

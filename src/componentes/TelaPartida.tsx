@@ -104,7 +104,7 @@ export function TelaPartida({
       </header>
 
       <main className="flex flex-1 flex-col justify-center gap-7 py-8">
-        <Carreira clubes={jogador.clubes} revelarTudo={acabou} animar={acabou} />
+        <Carreira clubes={jogador.clubes} acabou={acabou} animar={acabou} />
 
         {partida.dicasUsadas > 0 && (
           <div className="mx-auto flex w-full max-w-[38ch] flex-col gap-3">

@@ -2,8 +2,8 @@
  * O nome que o torcedor fala, para o clube cujo nome oficial não cabe
  * embaixo do escudo.
  *
- * O nome aparece em duas telas — ao tocar no escudo e no fim da partida — e
- * na dica de tempo de casa. "Associação Atlética Internacional (Limeira)"
+ * O nome aparece embaixo de cada escudo, a partida inteira, e na dica de
+ * tempo de casa. "Associação Atlética Internacional (Limeira)"
  * quebrava em quatro linhas embaixo de um escudo de 80 pixels, e ninguém
  * chama o clube assim: é o Inter de Limeira.
  *

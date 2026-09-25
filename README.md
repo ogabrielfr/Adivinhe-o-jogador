@@ -606,8 +606,8 @@ reduzidos para 256 px e os SVGs minificados.
 ### O nome embaixo do escudo
 
 O catálogo guarda o nome inteiro de cada clube, porque é ele que casa com o
-Transfermarkt e o Wikidata. O que o jogador vê — ao tocar no escudo, no fim da
-partida e na dica de tempo de casa — é o nome que o torcedor fala, de
+Transfermarkt e o Wikidata. O que o jogador vê — embaixo de cada escudo, a
+partida inteira, e na dica de tempo de casa — é o nome que o torcedor fala, de
 `scripts/nomes-curtos.mjs`: "Inter de Limeira", e não "Associação Atlética
 Internacional (Limeira)", que quebrava em quatro linhas embaixo de um escudo de
 80 pixels. A escolha segue o nome curto do próprio Transfermarkt, em português

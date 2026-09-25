@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
 import { Escudo } from './Escudo'
 import { CLUBE_POR_ID } from '../dados/clubes'
 
 interface Props {
   clubes: string[]
-  /** no fim da partida os nomes de todos os clubes ficam à mostra */
-  revelarTudo?: boolean
+  /** no fim da partida a orientação sai de baixo dos escudos */
+  acabou?: boolean
   /** anima a entrada dos escudos quando a partida termina */
   animar?: boolean
 }
@@ -22,50 +21,35 @@ function largura(quantos: number): string {
   return 'w-[clamp(72px,21vw,104px)]'
 }
 
-export function Carreira({ clubes, revelarTudo = false, animar = false }: Props) {
-  const [aberto, setAberto] = useState<number | null>(null)
-
-  // o nome revelado por toque some sozinho — em celular não existe "tirar o mouse"
-  useEffect(() => {
-    if (aberto === null) return
-    const t = setTimeout(() => setAberto(null), 2200)
-    return () => clearTimeout(t)
-  }, [aberto])
-
+/**
+ * O nome do clube fica à mostra embaixo de cada escudo, a partida inteira.
+ * Ficava escondido até o toque; o cliente pediu que aparecesse direto.
+ *
+ * O nome ocupa também o vão entre os escudos: com 18 escudos num celular de
+ * 360 pixels, cada um tem 52 de largura, e "Corinthians" partia no meio da
+ * palavra.
+ */
+export function Carreira({ clubes, acabou = false, animar = false }: Props) {
   return (
     <div>
-      <ul className="flex flex-wrap justify-center gap-x-3 gap-y-3 sm:gap-x-5">
-        {clubes.map((id, i) => {
-          const nome = CLUBE_POR_ID.get(id)?.nome ?? id
-          const mostrando = revelarTudo || aberto === i
-          return (
-            <li key={`${id}-${i}`} className={largura(clubes.length)}>
-              <button
-                type="button"
-                onClick={() => setAberto(aberto === i ? null : i)}
-                onMouseEnter={() => !revelarTudo && setAberto(i)}
-                aria-label={`Clube ${i + 1} de ${clubes.length}: ${nome}`}
-                className={`block w-full cursor-pointer ${animar ? 'assentar' : ''}`}
-                style={animar ? { animationDelay: `${i * 70}ms` } : undefined}
-              >
-                <Escudo id={id} className="aspect-square w-full" />
-                <span
-                  className={`t-rotulo mt-2 block text-center text-[11px] leading-tight transition-opacity duration-200 sm:text-xs ${
-                    mostrando ? 'text-cal-500 opacity-100' : 'text-cal-700 opacity-0'
-                  }`}
-                >
-                  {nome}
-                </span>
-              </button>
-            </li>
-          )
-        })}
+      <ul
+        aria-label="Clubes da carreira, em ordem"
+        className="flex flex-wrap justify-center gap-x-3 gap-y-3 sm:gap-x-5"
+      >
+        {clubes.map((id, i) => (
+          <li
+            key={`${id}-${i}`}
+            className={`${largura(clubes.length)} ${animar ? 'assentar' : ''}`}
+            style={animar ? { animationDelay: `${i * 70}ms` } : undefined}
+          >
+            <Escudo id={id} className="aspect-square w-full" />
+            <span className="t-rotulo -mx-1.5 mt-2 block text-center text-[11px] leading-tight text-cal-500 break-words sm:-mx-2.5 sm:text-xs">
+              {CLUBE_POR_ID.get(id)?.nome ?? id}
+            </span>
+          </li>
+        ))}
       </ul>
-      {!revelarTudo && (
-        <p className="mt-4 text-center text-xs text-cal-700">
-          Em ordem de carreira. Toque num escudo para ver o nome do clube.
-        </p>
-      )}
+      {!acabou && <p className="mt-4 text-center text-xs text-cal-700">Em ordem de carreira.</p>}
     </div>
   )
 }

@@ -8,7 +8,7 @@
 export const CANONICOS = {
   /**
    * Nomes que saíram errados ou longos demais das fontes. O jogador vê este
-   * nome ao tocar no escudo e dentro da dica de tempo de casa, então
+   * nome embaixo do escudo e dentro da dica de tempo de casa, então
    * "Hotspur" e "Goias" não servem.
    */
   'goias': { de: 'goias', nome: "Goiás", pais: 'BR' },
