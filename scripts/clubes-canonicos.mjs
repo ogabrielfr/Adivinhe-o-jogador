@@ -178,6 +178,32 @@ export const SEM_ESCUDO = {
    * tinha o homônimo de Presidente Franco, e o casamento por nome caía nele.
    */
   'cerro-porteno': { nome: "Cerro Porteño", pais: 'PY', cores: ['#0A3D91', '#E30613'], tm: '1214' },
+  // os clubes que entraram com os 90 de 28/09: o jogador de cada um vem ao lado
+  'queens-park-rangers': { nome: "Queens Park Rangers", pais: 'EN', cores: ['#1D5BA4', '#FFFFFF'], tm: '1039' }, // Júlio César, Park Ji-sung, Rio Ferdinand
+  'middlesbrough': { nome: "Middlesbrough", pais: 'EN', cores: ['#E11B22', '#FFFFFF'], tm: '641' }, // Juninho Paulista
+  'sochaux': { nome: "Sochaux", pais: 'FR', cores: ['#FFD200', '#003A70'], tm: '750' }, // Miranda
+  'fc-08-homburg': { nome: "Homburg", pais: 'DE', cores: ['#00843D', '#FFFFFF'], tm: '459' }, // Klose
+  'sg-blaubach-diedelkopf': { nome: "Blaubach-Diedelkopf", pais: 'DE', cores: ['#1D4F91', '#FFFFFF'], tm: '1768' }, // Klose
+  'salgueiros': { nome: "Salgueiros", pais: 'PT', cores: ['#C8102E', '#FFFFFF'], tm: '2434' }, // Deco
+  'penafiel': { nome: "Penafiel", pais: 'PT', cores: ['#C8102E', '#1A1A1A'], tm: '3327' }, // Diego Costa
+  'zrinjski-mostar': { nome: "Zrinjski Mostar", pais: 'BA', cores: ['#C8102E', '#FFFFFF'], tm: '6808' }, // Modrić
+  'mauaense': { nome: "Mauaense", pais: 'BR', cores: ['#1D4F91', '#FFFFFF'], tm: '33115' }, // Willian
+  'pstc': { nome: "PSTC", pais: 'BR', cores: ['#003A70', '#C8102E'], tm: '28488' }, // Fernandinho
+  'audax': { nome: "Audax", pais: 'BR', cores: ['#F58220', '#1D4F91'], tm: '16083' }, // Paulinho, Viola
+  'fc-vilnius': { nome: "FC Vilnius", pais: 'LT', cores: ['#1D4F91', '#FFFFFF'], tm: '8608' }, // Paulinho
+  'ibis': { nome: "Íbis", pais: 'BR', cores: ['#1A1A1A', '#C8102E'], tm: '76157' }, // Denílson
+  'miguelense': { nome: "Miguelense", pais: 'BR', cores: ['#1D4F91', '#FFFFFF'], tm: '81094' }, // Luiz Gustavo
+  'corinthians-alagoano': { nome: "Corinthians Alagoano", pais: 'BR', cores: ['#1A1A1A', '#FFFFFF'], tm: '3266' }, // Luiz Gustavo
+  'sona': { nome: "Sona", pais: 'IT', cores: ['#1D4F91', '#FFFFFF'], tm: '63520' }, // Maicon
+  'tre-penne': { nome: "Tre Penne", pais: 'SM', cores: ['#1D4F91', '#FFFFFF'], tm: '10747' }, // Maicon
+  'parana-clube': { nome: "Paraná Clube", pais: 'BR', cores: ['#003A70', '#C8102E'], tm: '309' }, // Luizão, Thiago Neves, Washington, Dodô
+  'levallois': { nome: "Levallois", pais: 'FR', cores: ['#1D4F91', '#FFFFFF'], tm: '11132' }, // Drogba
+  'guingamp': { nome: "Guingamp", pais: 'FR', cores: ['#C8102E', '#1A1A1A'], tm: '855' }, // Drogba
+  'phoenix-rising': { nome: "Phoenix Rising", pais: 'US', cores: ['#E4002B', '#1A1A1A'], tm: '33414' }, // Drogba
+  'boulogne': { nome: "Boulogne", pais: 'FR', cores: ['#C8102E', '#1A1A1A'], tm: '7042' }, // Ribéry
+  'ales': { nome: "Olympique d'Alès", pais: 'FR', cores: ['#C8102E', '#1D4F91'], tm: '2618' }, // Ribéry
+  'chemnitzer-fc': { nome: "Chemnitzer FC", pais: 'DE', cores: ['#6CACE4', '#FFFFFF'], tm: '21' }, // Ballack
+  'beira-mar': { nome: "Beira-Mar", pais: 'PT', cores: ['#FFD200', '#1A1A1A'], tm: '1436' }, // Jardel
 }
 
 /**
@@ -242,6 +268,53 @@ export const PARES_TM = {
   30379: 'delta-warszawa',
   9109: 'znicz-pruszkow',
   10495: 'rs-futebol',
+  // os 90 de 28/09: abreviação que não casa ("K'lautern", "Js Suning") ou
+  // nome inteiro que difere do nosso ("SER Caxias do Sul", "Nacional AC")
+  2: 'kaiserslautern', // Klose, Ballack
+  3: 'koln', // Podolski
+  22219: 'jiangsu-football-club', // Ramires, Miranda, Jô
+  3302: 'almeria', // UD Almería; Felipe Melo
+  504: 'grasshopper-club-zurich', // Élber
+  44: 'hertha-bsc', // Luizão
+  22878: 'rio-branco-esporte-clube', // o de Americana; Luizão
+  1963: 'clube-de-regatas-guara', // Lúcio
+  1711: 'nacional-atletico-clube-sao-paulo', // Deco, Dodô
+  98856: 'barcelona-esportivo-capela', // o de Ibiúna; Diego Costa
+  9141: 'sociedade-esportiva-e-recreativa-caxias-do-sul', // Washington
+  1770: 'campo-grande-atletico-clube', // o do Rio; Roberto Dinamite
+  468: 'sparta-rotterdam', // Cássio
+  5622: 'corporacion-club-deportivo-universidad-de-concepcion', // Valdivia
+  5623: 'morelia', // Valdivia
+  27414: 'olimpia-futebol-clube', // o de Olímpia (SP); Viola
+  1164: 'le-mans-fc', // Drogba
+  3911: 'stade-brestois-29', // Ribéry
+  // os clubes novos de SEM_ESCUDO
+  1039: 'queens-park-rangers',
+  641: 'middlesbrough',
+  750: 'sochaux',
+  459: 'fc-08-homburg',
+  1768: 'sg-blaubach-diedelkopf',
+  2434: 'salgueiros',
+  3327: 'penafiel',
+  6808: 'zrinjski-mostar',
+  33115: 'mauaense',
+  28488: 'pstc',
+  // o Grêmio Osasco Audax casava com o São Paulo e ficava sem par; agora está no catálogo
+  16083: 'audax',
+  8608: 'fc-vilnius',
+  76157: 'ibis',
+  81094: 'miguelense',
+  3266: 'corinthians-alagoano',
+  63520: 'sona',
+  10747: 'tre-penne',
+  309: 'parana-clube',
+  11132: 'levallois',
+  855: 'guingamp',
+  33414: 'phoenix-rising',
+  7042: 'boulogne',
+  2618: 'ales',
+  21: 'chemnitzer-fc',
+  1436: 'beira-mar',
 }
 
 /**
@@ -250,8 +323,6 @@ export const PARES_TM = {
  * clube certo não está no catálogo.
  */
 export const SEM_PAR_TM = new Set([
-  // Grêmio Osasco Audax, a base do Bruno Uvini; casava com o São Paulo
-  '16083',
   // aries Toshima; o QID do FC Tokyo no catálogo é o do aries
   '36176',
   // SPG Lechtal, da Áustria; casava com o Francavilla, da Itália

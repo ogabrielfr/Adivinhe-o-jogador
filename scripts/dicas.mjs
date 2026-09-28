@@ -69,6 +69,8 @@ const POSICAO_TM = {
   'lateral dir.': 'Lateral', 'lateral esq.': 'Lateral',
   'seg. atacante': 'Atacante', 'meia direita': 'Ponta', 'meia esquerda': 'Ponta',
   'meia central': 'Meio-campista', defensor: 'Zagueiro',
+  // e às vezes com hífen: "Atacante - Ponta-Esquerda"
+  'ponta-direita': 'Ponta', 'ponta-esquerda': 'Ponta', libero: 'Zagueiro',
 }
 
 /** "Lateral (futebol)" e "Avançado" chegam assim; a chave do mapa é limpa. */
@@ -94,7 +96,7 @@ const SEM_ARTIGO = new Set([
   'Guadalupe', 'Serra Leoa', 'Barbados', 'Samoa', 'Camarões', 'Honduras',
 ])
 /** Femininos que não terminam em "a". */
-const FEMININO = /^(Sérvia e Montenegro|União Soviética|Guiné-Bissau|Guiné|Guiné Equatorial)$/
+const FEMININO = /^(Sérvia e Montenegro|União Soviética|Guiné-Bissau|Guiné|Guiné Equatorial|Coreia do Sul|Coreia do Norte|Costa do Marfim|África do Sul|Irlanda do Norte|Macedônia do Norte|República Democrática do Congo)$/
 
 const artigo = (pais) => (FEMININO.test(pais) || /a$/i.test(pais) ? 'a' : 'o')
 const ondeNasceu = (pais) => (SEM_ARTIGO.has(pais) ? `em ${pais}` : `n${artigo(pais)} ${pais}`)
@@ -689,9 +691,11 @@ function fatoDeFinal(finais) {
     // estadual: "do Campeonato Paulista", sem a divisão nem a fase
     const campeonato = f.competicao.replace(/ - .*$/, '')
     const ano = anoDaEdicao(evento, f.ano)
+    // a Champions começou na edição de 1993; antes era a Copa dos Campeões, como no título
+    const nomeDaFinal = evento === 'champions' && ano <= 1992 ? 'da Copa dos Campeões da Europa' : nome
     achadas.push({
       peso,
-      texto: `marcou${f.gols > 1 ? ` ${f.gols} gols` : ''} na final ${nome ?? `do ${campeonato}`} de ${ano}`,
+      texto: `marcou${f.gols > 1 ? ` ${f.gols} gols` : ''} na final ${nomeDaFinal ?? `do ${campeonato}`} de ${ano}`,
       gols: f.gols,
       venceu: f.saldo > 0,
       // "estadual-paulista", para casar com o título de campeão paulista

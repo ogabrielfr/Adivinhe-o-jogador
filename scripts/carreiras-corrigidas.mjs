@@ -77,6 +77,8 @@ export const CARREIRA_FIXA = {
   'sonny-anderson': { sem: ['esporte-clube-xv-de-novembro-jau'], porque: 'base do XV de Jaú; estreou no Vasco' },
   'fabricio-de-souza': { sem: ['uniao-sao-joao-esporte-clube'], porque: 'base do União São João; estreou no Corinthians' },
   ronaldao: { sem: ['rio-preto-esporte-clube'], porque: 'base do Rio Preto; estreou no São Paulo' },
+  // o nome "Generation Foot" casa com o Generation Adidas, dos Estados Unidos, que não é clube dele
+  'sadio-mane': { sem: ['generation-adidas'], porque: 'base na Génération Foot, do Senegal; estreou no Metz' },
   /**
    * Clube-ponte: o Paulínia tinha os direitos, e ele jogava na base do
    * Fluminense até ser vendido ao Rio Ave. Nenhuma fonte tem jogo dele lá.

@@ -104,7 +104,7 @@ virar um problema, a saída é mover o sorteio para um endpoint.
 
 ## A biblioteca
 
-`src/dados/jogadores.json` tem **318 jogadores, 106 em cada nível**. É dado, não
+`src/dados/jogadores.json` tem **408 jogadores, 136 em cada nível**. É dado, não
 código: o jogo importa o arquivo por `src/dados/jogadores.ts`, que só dá tipo a
 ele, e os scripts leem e gravam por `scripts/biblioteca.mjs`. Até setembro a
 biblioteca era um arquivo TypeScript que quatro scripts reescreviam por
@@ -136,6 +136,25 @@ entraram 14, para a biblioteca fechar em três níveis iguais: Luís Fabiano,
 Diego, Edmundo, Dida, Beckham, Benzema, Guerrero, Roberto Baggio, Lugano,
 Fernando Torres, Lampard, Seedorf, Eto'o e D'Alessandro. Dudu e James
 Rodríguez passaram no mesmo caminho e ficaram de reserva.
+
+**Mais 30 por nível, em 28/09.** O cliente pediu 30 jogadores a mais em cada
+nível. A escolha saiu da régua: ela deu nota aos 1.376 candidatos de
+`scripts/candidatos-jogadores.json` que ainda não estavam na biblioteca, e cada
+um caiu na faixa de nível em que a régua o poria hoje, com o corte entre as
+faixas tirado dos jogadores atuais. Ficaram de fora quem a régua dava como
+obscuro demais ("tirar"), técnico mais famoso que o jogador, carreira de um
+clube só e os que o cliente já tinha mandado tirar. Dentro de cada faixa, a
+ordem foi a do reconhecimento para o torcedor brasileiro — Modrić, Klose,
+Júlio César e Lúcio no fácil; Drogba, Van Persie, Luizão e Viola no
+intermediário; Shevchenko, Ballack, Marcelinho Carioca e Jardel no difícil. Com 30 em cada faixa, a régua rodada de novo não mudou o nível de
+nenhum jogador antigo.
+
+Metade dos escolhidos travou no caminho de aceitação porque um clube da
+carreira não casava com o catálogo — "QPR", "K'lautern", "Js Suning". O
+conserto ficou nos dados, não em cada jogador: 18 pares novos em `PARES_TM`
+para clubes que o catálogo já tinha com outro nome, e 25 clubes que ele não
+tinha (Middlesbrough, Sochaux, Paraná Clube, Zrinjski Mostar...) em
+`SEM_ESCUDO`, com o escudo baixado do Transfermarkt.
 
 **Sem teto de escudos.** O gerador recusava carreira com mais de 12 escudos,
 porque no celular a partir de 13 o campo de palpite descia para fora da tela.
@@ -577,8 +596,8 @@ nunca os anos, que é onde erros de dados se escondem.
 ## Escudos
 
 `scripts/construir-catalogo.mjs` monta `public/escudos/` e o catálogo de clubes
-a partir de quatro repositórios públicos **e do Wikidata** — **5381 clubes
-de 66 países**, sendo **1155 brasileiros**. O catálogo é de propósito
+a partir de quatro repositórios públicos **e do Wikidata** — **5412 clubes
+de 69 países**, sendo **1163 brasileiros**. O catálogo é de propósito
 muito maior que o uso atual: o escudo é a informação principal do jogo, e uma
 carreira costuma começar ou terminar num clube pequeno.
 

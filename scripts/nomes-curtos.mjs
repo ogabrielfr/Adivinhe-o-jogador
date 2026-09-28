@@ -60,6 +60,33 @@ export const NOME_CURTO = {
   'brasil-de-pelotas': 'Brasil de Pelotas',
   'serrano-foot-ball-club': 'Serrano',
   'abc': 'ABC',
+  // os clubes que entraram com os 90 de 28/09
+  'associacao-desportiva-ferroviaria-vale-do-rio-doce': 'Desportiva',
+  'sociedade-esportiva-e-recreativa-caxias-do-sul': 'Caxias',
+  'nacional-atletico-clube-sao-paulo': 'Nacional-SP',
+  'clube-esportivo-bento-goncalves': 'Esportivo',
+  'ferroviario-atletico-clube-ceara': 'Ferroviário-CE',
+  'clube-atletico-taboao-da-serra': 'Taboão da Serra',
+  'duque-de-caxias-futebol-clube': 'Duque de Caxias',
+  'angra-dos-reis-esporte-clube': 'Angra dos Reis',
+  'campo-grande-atletico-clube': 'Campo Grande',
+  'barcelona-esportivo-capela': 'Barcelona Capela',
+  'associacao-atletica-coruripe': 'Coruripe',
+  'atletico-clube-goianiense': 'Atlético-GO',
+  'auto-esporte-clube-piaui': 'Auto Esporte-PI',
+  'sociedade-esportiva-do-gama': 'Gama',
+  'capivariano-futebol-clube': 'Capivariano',
+  'villa-nova-atletico-clube': 'Villa Nova',
+  'retro-futebol-clube-brasil': 'Retrô',
+  'planaltina-esporte-clube': 'Planaltina',
+  'rio-branco-esporte-clube': 'Rio Branco-SP',
+  'ipanema-atletico-clube': 'Ipanema',
+  'paulista-futebol-clube': 'Paulista',
+  'resende-futebol-clube': 'Resende',
+  'brusque-futebol-clube': 'Brusque',
+  'clube-de-regatas-guara': 'Guará',
+  // "Olimpia" é o paraguaio; este é o de Olímpia, interior de São Paulo
+  'olimpia-futebol-clube': 'Olímpia-SP',
 
   // Inglaterra e Escócia
   'bradford-city-association-football-club': 'Bradford City',
@@ -120,6 +147,8 @@ export const NOME_CURTO = {
   'gnk-dinamo-zagreb': 'Dinamo Zagreb',
   'nk-inter-zapresic': 'Inter Zaprešić',
   'vit-guimaraes': 'Vitória de Guimarães',
+  'grasshopper-club-zurich': 'Grasshopper',
+  'anorthosis-famagusta-fc': 'Anorthosis',
 
   // Américas
   'club-atletico-talleres-remedios-de-escalada': 'Talleres de Escalada',
@@ -145,6 +174,19 @@ export const NOME_CURTO = {
   'club-deportivo-universidad-cesar-vallejo': 'César Vallejo',
   'club-plaza-colonia-de-deportes': 'Plaza Colonia',
   'liga-deportiva-universitaria-quito': 'LDU Quito',
+  // e com os 90 de 28/09
+  'corporacion-club-deportivo-universidad-de-concepcion': 'U. de Concepción',
+  'corporacion-deportiva-club-atletico-nacional': 'Atlético Nacional',
+  'corporacion-deportiva-envigado-futbol-club': 'Envigado',
+  'club-de-deportes-union-la-calera': 'Unión La Calera',
+  'club-universidad-de-chile': 'U. de Chile',
+  'club-de-deportes-cobreloa': 'Cobreloa',
+  'club-de-deportes-cobresal': 'Cobresal',
+  'defensor-sporting-club': 'Defensor Sporting',
+  'morelia': 'Morelia',
+  'necaxa': 'Necaxa',
+  'olimpia': 'Olimpia',
+  'quilmes': 'Quilmes',
 
   // Ásia, África e Oceania
   'adelaide-united-football-club': 'Adelaide United',
@@ -163,6 +205,12 @@ export const NOME_CURTO = {
   'sydney-united-58-football-club': 'Sydney United',
   'melbourne-city-football-club': 'Melbourne City',
   'sydney-football-club': 'Sydney FC',
+  'melbourne-victory-football-club': 'Melbourne Victory',
+  'newcastle-united-jets-football-club': 'Newcastle Jets',
+  'football-club-of-pune-city': 'Pune City',
+  'baniyas-sports-e-culture-club': 'Baniyas',
+  // o clube se chamava Jiangsu Suning quando Ramires, Miranda e Jô jogaram lá
+  'jiangsu-football-club': 'Jiangsu Suning',
   // três Al-Ahli em uso: o saudita fica com o nome sozinho
   'al-ahli-emirados-arabes-unidos': 'Al-Ahli Dubai',
   'al-ahli-sports-club': 'Al-Ahli Doha',

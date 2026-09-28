@@ -1953,6 +1953,13 @@
   "qid": "Q2832410"
  },
  {
+  "id": "ales",
+  "nome": "Olympique d'Alès",
+  "pais": "FR",
+  "escudo": "ales.png",
+  "qid": null
+ },
+ {
   "id": "alfenense-futebol-clube",
   "nome": "Alfenense Futebol Clube",
   "pais": "BR",
@@ -4627,6 +4634,13 @@
   "qid": null
  },
  {
+  "id": "audax",
+  "nome": "Audax",
+  "pais": "BR",
+  "escudo": "audax.png",
+  "qid": null
+ },
+ {
   "id": "audax-italiano",
   "nome": "Audax Italiano",
   "pais": "CL",
@@ -5362,6 +5376,13 @@
   "qid": "Q4881134"
  },
  {
+  "id": "beira-mar",
+  "nome": "Beira-Mar",
+  "pais": "PT",
+  "escudo": "beira-mar.png",
+  "qid": null
+ },
+ {
   "id": "beitar-avraham-be-er-sheva-f-c",
   "nome": "Beitar Avraham Be'er Sheva F.C.",
   "pais": "IL",
@@ -6011,6 +6032,13 @@
   "pais": "BR",
   "escudo": "botucatu-futebol-clube.png",
   "qid": "Q2911869"
+ },
+ {
+  "id": "boulogne",
+  "nome": "Boulogne",
+  "pais": "FR",
+  "escudo": "boulogne.png",
+  "qid": null
  },
  {
   "id": "bournemouth",
@@ -7866,6 +7894,13 @@
   "pais": "EN",
   "escudo": "cheltenham-town-football-club.png",
   "qid": "Q48932"
+ },
+ {
+  "id": "chemnitzer-fc",
+  "nome": "Chemnitzer FC",
+  "pais": "DE",
+  "escudo": "chemnitzer-fc.png",
+  "qid": null
  },
  {
   "id": "chengdu-blades-football-club",
@@ -11249,6 +11284,13 @@
   "qid": "Q35933"
  },
  {
+  "id": "corinthians-alagoano",
+  "nome": "Corinthians Alagoano",
+  "pais": "BR",
+  "escudo": "corinthians-alagoano.png",
+  "qid": null
+ },
+ {
   "id": "coritiba",
   "nome": "Coritiba",
   "pais": "BR",
@@ -14385,6 +14427,13 @@
   "qid": "Q5424560"
  },
  {
+  "id": "fc-08-homburg",
+  "nome": "Homburg",
+  "pais": "DE",
+  "escudo": "fc-08-homburg.png",
+  "qid": null
+ },
+ {
   "id": "fc-abies",
   "nome": "FC Abies",
   "pais": "JP",
@@ -16581,6 +16630,13 @@
   "pais": "UA",
   "escudo": "fc-viktoriya-mykolaivka.png",
   "qid": "Q55265554"
+ },
+ {
+  "id": "fc-vilnius",
+  "nome": "FC Vilnius",
+  "pais": "LT",
+  "escudo": "fc-vilnius.png",
+  "qid": null
  },
  {
   "id": "fc-vityaz-podolsk",
@@ -19292,6 +19348,13 @@
   "qid": "Q5615797"
  },
  {
+  "id": "guingamp",
+  "nome": "Guingamp",
+  "pais": "FR",
+  "escudo": "guingamp.png",
+  "qid": null
+ },
+ {
   "id": "guiseley-a-f-c",
   "nome": "Guiseley A.F.C.",
   "pais": "EN",
@@ -20291,6 +20354,13 @@
   "pais": "ES",
   "escudo": "iberia-sc.png",
   "qid": "Q1095594"
+ },
+ {
+  "id": "ibis",
+  "nome": "Íbis",
+  "pais": "BR",
+  "escudo": "ibis.png",
+  "qid": null
  },
  {
   "id": "ibri-club",
@@ -22645,6 +22715,13 @@
   "qid": "Q824450"
  },
  {
+  "id": "levallois",
+  "nome": "Levallois",
+  "pais": "FR",
+  "escudo": "levallois.png",
+  "qid": null
+ },
+ {
   "id": "levante",
   "nome": "Levante",
   "pais": "ES",
@@ -23681,6 +23758,13 @@
   "qid": "Q48879751"
  },
  {
+  "id": "mauaense",
+  "nome": "Mauaense",
+  "pais": "BR",
+  "escudo": "mauaense.png",
+  "qid": null
+ },
+ {
   "id": "maybole-f-c",
   "nome": "Maybole F.C.",
   "pais": "EN",
@@ -24003,6 +24087,13 @@
   "qid": "Q5425160"
  },
  {
+  "id": "middlesbrough",
+  "nome": "Middlesbrough",
+  "pais": "EN",
+  "escudo": "middlesbrough.png",
+  "qid": null
+ },
+ {
   "id": "midland-odessa-fc",
   "nome": "Midland-Odessa FC",
   "pais": "US",
@@ -24014,6 +24105,13 @@
   "nome": "Miedz Legnica",
   "pais": "PL",
   "escudo": "miedz-legnica.png",
+  "qid": null
+ },
+ {
+  "id": "miguelense",
+  "nome": "Miguelense",
+  "pais": "BR",
+  "escudo": "miguelense.png",
   "qid": null
  },
  {
@@ -27034,6 +27132,13 @@
   "qid": "Q18480938"
  },
  {
+  "id": "parana-clube",
+  "nome": "Paraná Clube",
+  "pais": "BR",
+  "escudo": "parana-clube.png",
+  "qid": null
+ },
+ {
   "id": "paranoa-esporte-clube",
   "nome": "Paranoá Esporte Clube",
   "pais": "BR",
@@ -27305,6 +27410,13 @@
   "pais": "EN",
   "escudo": "pen-y-bont-fc.png",
   "qid": "Q16847437"
+ },
+ {
+  "id": "penafiel",
+  "nome": "Penafiel",
+  "pais": "PT",
+  "escudo": "penafiel.png",
+  "qid": null
  },
  {
   "id": "penang-fa",
@@ -27851,6 +27963,13 @@
   "pais": "US",
   "escudo": "phoenix-fc-q16847621.png",
   "qid": "Q16847621"
+ },
+ {
+  "id": "phoenix-rising",
+  "nome": "Phoenix Rising",
+  "pais": "US",
+  "escudo": "phoenix-rising.png",
+  "qid": null
  },
  {
   "id": "phrae-united-f-c",
@@ -28539,6 +28658,13 @@
   "qid": "Q3359889"
  },
  {
+  "id": "pstc",
+  "nome": "PSTC",
+  "pais": "BR",
+  "escudo": "pstc.png",
+  "qid": null
+ },
+ {
   "id": "psv",
   "nome": "PSV",
   "pais": "NL",
@@ -28726,6 +28852,13 @@
   "pais": "EN",
   "escudo": "queen-s-university-belfast-a-f-c.svg",
   "qid": "Q2427114"
+ },
+ {
+  "id": "queens-park-rangers",
+  "nome": "Queens Park Rangers",
+  "pais": "EN",
+  "escudo": "queens-park-rangers.png",
+  "qid": null
  },
  {
   "id": "queretaro",
@@ -30485,6 +30618,13 @@
   "qid": "Q2659531"
  },
  {
+  "id": "salgueiros",
+  "nome": "Salgueiros",
+  "pais": "PT",
+  "escudo": "salgueiros.png",
+  "qid": null
+ },
+ {
   "id": "salsa-ballers-football-club",
   "nome": "Salsa Ballers Football Club",
   "pais": "EN",
@@ -31997,6 +32137,13 @@
   "qid": "Q16934120"
  },
  {
+  "id": "sg-blaubach-diedelkopf",
+  "nome": "Blaubach-Diedelkopf",
+  "pais": "DE",
+  "escudo": "sg-blaubach-diedelkopf.png",
+  "qid": null
+ },
+ {
   "id": "shaanxi-union-f-c",
   "nome": "Shaanxi Union F.C.",
   "pais": "CN",
@@ -32478,6 +32625,13 @@
   "pais": "BR",
   "escudo": "sobradinho-esporte-clube.png",
   "qid": "Q652528"
+ },
+ {
+  "id": "sochaux",
+  "nome": "Sochaux",
+  "pais": "FR",
+  "escudo": "sochaux.png",
+  "qid": null
  },
  {
   "id": "sochi",
@@ -32996,6 +33150,13 @@
   "pais": "EN",
   "escudo": "solihull-moors-football-club.png",
   "qid": "Q2975959"
+ },
+ {
+  "id": "sona",
+  "nome": "Sona",
+  "pais": "IT",
+  "escudo": "sona.png",
+  "qid": null
  },
  {
   "id": "sonderjyske",
@@ -34865,6 +35026,13 @@
   "pais": "IN",
   "escudo": "trau-f-c.png",
   "qid": "Q55634555"
+ },
+ {
+  "id": "tre-penne",
+  "nome": "Tre Penne",
+  "pais": "SM",
+  "escudo": "tre-penne.png",
+  "qid": null
  },
  {
   "id": "trefelin-bgc",
@@ -37679,6 +37847,13 @@
   "pais": "UA",
   "escudo": "zorya-lugansk.png",
   "qid": "Q754307"
+ },
+ {
+  "id": "zrinjski-mostar",
+  "nome": "Zrinjski Mostar",
+  "pais": "BA",
+  "escudo": "zrinjski-mostar.png",
+  "qid": null
  },
  {
   "id": "zulia-futbol-club",

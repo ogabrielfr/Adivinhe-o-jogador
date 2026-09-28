@@ -752,7 +752,7 @@
     "apelidos": ["elano"],
     "nivel": "intermediario",
     "clubes": ["santos","shakhtar","manchester-city","galatasaray","santos","gremio","flamengo","chennaiyin-football-club","santos","chennaiyin-football-club","santos"],
-    "dicas": ["Meia brasileiro nascido em 1981.","Campeão da Libertadores de 2011 pelo Santos. Fez mais de 250 jogos e mais de 60 gols pelo Santos."],
+    "dicas": ["Meia brasileiro nascido em 1981.","Campeão da Libertadores de 2011 pelo Santos. Disputou a Copa do Mundo de 2010."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/20053"
   },
@@ -1175,7 +1175,7 @@
     "apelidos": ["marco van basten","marco basten"],
     "nivel": "facil",
     "clubes": ["ajax","milan"],
-    "dicas": ["Centroavante nascido na Holanda em 1964.","Marcou 2 gols na final da Champions League de 1989. Ganhou a Bola de Ouro em 1988, 1989 e 1992."],
+    "dicas": ["Centroavante nascido na Holanda em 1964.","Marcou 2 gols na final da Copa dos Campeões da Europa de 1989. Ganhou a Bola de Ouro em 1988, 1989 e 1992."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/74471"
   },
@@ -1859,7 +1859,7 @@
     "apelidos": ["capone"],
     "nivel": "dificil",
     "clubes": ["ponte-preta","mogi-mirim","sao-paulo","kyoto-sanga","esporte-clube-juventude","galatasaray","kocaelispor","corinthians","club-athletico-paranaense","beitar-jerusalem"],
-    "dicas": ["Lateral brasileiro nascido em 1972.","Campeão da Copa da Uefa de 2000 pelo Galatasaray. É de Campinas."],
+    "dicas": ["Lateral brasileiro nascido em 1972.","Campeão da Copa da Uefa de 2000 pelo Galatasaray. Rodou o profissionalismo de 1990 a 2004."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/99854"
   },
@@ -2346,6 +2346,7 @@
   {
     "id": "paulo-henrique-sampaio-filho",
     "nome": "Paulinho",
+    "complemento": "Atacante, Atlético-MG",
     "apelidos": ["paulo henrique sampaio filho","paulinho"],
     "nivel": "intermediario",
     "clubes": ["vasco","bayer-leverkusen","clube-atletico-mineiro","palmeiras"],
@@ -2629,7 +2630,7 @@
     "apelidos": ["kenny dalglish"],
     "nivel": "dificil",
     "clubes": ["celtic-football-club","liverpool"],
-    "dicas": ["Atacante nascido na Escócia em 1951.","Marcou na final da Champions League de 1978. Fez mais de 500 jogos e mais de 150 gols pelo Liverpool."],
+    "dicas": ["Atacante nascido na Escócia em 1951.","Marcou na final da Copa dos Campeões da Europa de 1978. Fez mais de 500 jogos e mais de 150 gols pelo Liverpool."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/135269"
   },
@@ -2769,7 +2770,7 @@
     "apelidos": ["federico chiesa"],
     "nivel": "dificil",
     "clubes": ["fiorentina","juventus","liverpool"],
-    "dicas": ["Ponta nascido na Itália em 1997.","Marcou na final da Copa da Itália de 2021. Fez mais de 150 jogos pela Fiorentina."],
+    "dicas": ["Ponta nascido na Itália em 1997.","Marcou na final da Copa da Itália de 2021. Campeão da Eurocopa de 2020."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/341092"
   },
@@ -3192,5 +3193,906 @@
     "dicas": ["Meia nascido na Argentina em 1981.","Marcou na final do Campeonato Gaúcho de 2014. Fez mais de 500 jogos e mais de 90 gols pelo Internacional."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3445"
+  },
+  {
+    "id": "toni-kroos",
+    "nome": "Toni Kroos",
+    "apelidos": ["toni kroos"],
+    "nivel": "facil",
+    "clubes": ["bayern","bayer-leverkusen","bayern","real-madrid"],
+    "dicas": ["Meio-campista nascido na RDA em 1990, que defendeu a seleção alemã.","Campeão do mundo em 2014. Fez mais de 450 jogos pelo Real Madrid."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/31909"
+  },
+  {
+    "id": "kevin-de-bruyne",
+    "nome": "Kevin De Bruyne",
+    "apelidos": ["kevin de bruyne"],
+    "nivel": "facil",
+    "clubes": ["krc-genk","werder-bremen","chelsea","wolfsburg","manchester-city","napoli"],
+    "dicas": ["Meia nascido na Bélgica em 1991.","Marcou na final da Copa da Inglaterra de 2019. Campeão da Champions League de 2023 pelo Manchester City."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/88755"
+  },
+  {
+    "id": "antoine-griezmann",
+    "nome": "Antoine Griezmann",
+    "apelidos": ["antoine griezmann"],
+    "nivel": "facil",
+    "clubes": ["real-sociedad","atletico-madrid","barcelona","atletico-madrid","orlando-city"],
+    "dicas": ["Atacante nascido na França em 1991.","Marcou na final da Copa do Mundo de 2018. Fez mais de 500 jogos e mais de 200 gols pelo Atlético de Madrid."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/125781"
+  },
+  {
+    "id": "eden-hazard",
+    "nome": "Eden Hazard",
+    "apelidos": ["eden hazard"],
+    "nivel": "facil",
+    "clubes": ["lille","chelsea","real-madrid"],
+    "dicas": ["Ponta nascido na Bélgica em 1991.","Marcou 2 gols na final da Liga Europa de 2019. Campeão da Champions League de 2022 pelo Real Madrid."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/50202"
+  },
+  {
+    "id": "thibaut-courtois",
+    "nome": "Thibaut Courtois",
+    "apelidos": ["thibaut courtois"],
+    "nivel": "facil",
+    "clubes": ["krc-genk","atletico-madrid","chelsea","real-madrid"],
+    "dicas": ["Goleiro nascido na Bélgica em 1992.","Campeão da Champions League de 2022 e 2024 pelo Real Madrid. Fez mais de 300 jogos pelo Real Madrid."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/108390"
+  },
+  {
+    "id": "gerard-pique",
+    "nome": "Gerard Piqué",
+    "apelidos": ["gerard piqué"],
+    "nivel": "facil",
+    "clubes": ["manchester-united","zaragoza","manchester-united","barcelona"],
+    "dicas": ["Zagueiro nascido na Espanha em 1987.","Campeão do mundo em 2010. Fez mais de 600 jogos e mais de 50 gols pelo Barcelona."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/18944"
+  },
+  {
+    "id": "james-rodriguez",
+    "nome": "James Rodríguez",
+    "apelidos": ["james rodríguez"],
+    "nivel": "facil",
+    "clubes": ["corporacion-deportiva-envigado-futbol-club","banfield","porto","monaco","real-madrid","bayern","real-madrid","everton","al-rayyan-sports-club","olympiacos-piraeus","sao-paulo","vallecano","club-leon","minnesota-united","corporacion-deportiva-club-atletico-nacional"],
+    "dicas": ["Meia nascido na Colômbia em 1991.","Marcou 3 gols na final da Taça de Portugal de 2011. Campeão da Champions League de 2016 e 2017 pelo Real Madrid."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/88103"
+  },
+  {
+    "id": "sergio-busquets",
+    "nome": "Sergio Busquets",
+    "apelidos": ["sergio busquets"],
+    "nivel": "facil",
+    "clubes": ["barcelona","inter-miami"],
+    "dicas": ["Volante nascido na Espanha em 1988.","Campeão do mundo em 2010. Fez mais de 700 jogos pelo Barcelona."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/65230"
+  },
+  {
+    "id": "gabriel-martinelli",
+    "nome": "Gabriel Martinelli",
+    "apelidos": ["gabriel martinelli","gabriel teodoro martinelli silva"],
+    "nivel": "facil",
+    "clubes": ["ituano-futebol-clube","arsenal","al-hilal"],
+    "dicas": ["Ponta brasileiro nascido em 2001.","Campeão olímpico em 2021. Fez mais de 250 jogos e mais de 60 gols pelo Arsenal."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/655488"
+  },
+  {
+    "id": "dante",
+    "nome": "Dante",
+    "apelidos": ["dante"],
+    "nivel": "facil",
+    "clubes": ["capivariano-futebol-clube","esporte-clube-juventude","lille","r-charleroi-sc","standard-liege","bor-m-gladbach","bayern","wolfsburg","nice"],
+    "dicas": ["Zagueiro brasileiro nascido em 1983.","Marcou na final do Mundial de Clubes de 2013. Campeão da Champions League de 2013 pelo Bayern de Munique."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/16136"
+  },
+  {
+    "id": "pepe",
+    "nome": "Pepe",
+    "apelidos": ["pepe"],
+    "nivel": "facil",
+    "clubes": ["maritimo","porto","real-madrid","besiktas","porto"],
+    "dicas": ["Zagueiro brasileiro nascido em 1984, que defendeu a seleção portuguesa.","Campeão da Champions League de 2014, 2016 e 2017 pelo Real Madrid. Fez mais de 300 jogos pelo Real Madrid."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/14132"
+  },
+  {
+    "id": "julio-baptista",
+    "nome": "Júlio Baptista",
+    "apelidos": ["júlio baptista"],
+    "nivel": "facil",
+    "clubes": ["sao-paulo","sevilla","real-madrid","arsenal","real-madrid","roma","malaga","cruzeiro","orlando-city","cfr-cluj"],
+    "dicas": ["Meia brasileiro nascido em 1981.","Marcou na final da Copa América de 2007. Campeão da Copa América de 2004 e 2007."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/15952"
+  },
+  {
+    "id": "paul-pogba",
+    "nome": "Paul Pogba",
+    "apelidos": ["paul pogba"],
+    "nivel": "intermediario",
+    "clubes": ["juventus","manchester-united","juventus","monaco"],
+    "dicas": ["Meio-campista nascido na França em 1993.","Marcou na final da Copa do Mundo de 2018. Fez mais de 200 jogos pelo Manchester United."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/122153"
+  },
+  {
+    "id": "robin-van-persie",
+    "nome": "Robin van Persie",
+    "apelidos": ["robin van persie"],
+    "nivel": "intermediario",
+    "clubes": ["feyenoord","arsenal","manchester-united","fenerbahce","feyenoord"],
+    "dicas": ["Centroavante nascido na Holanda em 1983.","Campeão da Copa da Uefa de 2002 pelo Feyenoord. Disputou as Copas do Mundo de 2006, 2010 e 2014."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/4380"
+  },
+  {
+    "id": "sadio-mane",
+    "nome": "Sadio Mané",
+    "apelidos": ["sadio mané"],
+    "nivel": "intermediario",
+    "clubes": ["fc-metz","rb-salzburg","southampton","liverpool","bayern","al-nassr"],
+    "dicas": ["Ponta nascido no Senegal em 1992.","Marcou na final da Champions League de 2018. Campeão da Champions League de 2019 pelo Liverpool."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/200512"
+  },
+  {
+    "id": "david-villa",
+    "nome": "David Villa",
+    "apelidos": ["david villa"],
+    "nivel": "intermediario",
+    "clubes": ["gijon","zaragoza","valencia","barcelona","atletico-madrid","new-york-city","melbourne-city-football-club","new-york-city","vissel-kobe"],
+    "dicas": ["Centroavante nascido na Espanha em 1981.","Marcou na final da Champions League de 2011. Campeão do mundo em 2010."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/7980"
+  },
+  {
+    "id": "xabi-alonso",
+    "nome": "Xabi Alonso",
+    "apelidos": ["xabi alonso"],
+    "nivel": "intermediario",
+    "clubes": ["eibar","real-sociedad","liverpool","real-madrid","bayern"],
+    "dicas": ["Volante nascido na Espanha em 1981.","Marcou na final da Champions League de 2005. Campeão do mundo em 2010."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/7476"
+  },
+  {
+    "id": "cesc-fabregas",
+    "nome": "Cesc Fàbregas",
+    "apelidos": ["cesc fàbregas"],
+    "nivel": "intermediario",
+    "clubes": ["arsenal","barcelona","chelsea","monaco","como"],
+    "dicas": ["Meio-campista nascido na Espanha em 1987.","Campeão do mundo em 2010. Fez mais de 300 jogos e mais de 50 gols pelo Arsenal."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/8806"
+  },
+  {
+    "id": "raul",
+    "nome": "Raúl",
+    "apelidos": ["raúl","raúl gonzález"],
+    "nivel": "intermediario",
+    "clubes": ["real-madrid","schalke","al-sadd-sports-club","new-york-cosmos"],
+    "dicas": ["Atacante nascido na Espanha em 1977.","Marcou na final da Champions League de 2002. Fez mais de 700 jogos e mais de 300 gols pelo Real Madrid."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/7349"
+  },
+  {
+    "id": "bastian-schweinsteiger",
+    "nome": "Bastian Schweinsteiger",
+    "apelidos": ["bastian schweinsteiger"],
+    "nivel": "intermediario",
+    "clubes": ["bayern","manchester-united","chicago-fire"],
+    "dicas": ["Meio-campista nascido na Alemanha em 1984.","Marcou na final da Copa da Alemanha de 2010. Campeão do mundo em 2014."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/2514"
+  },
+  {
+    "id": "david-silva",
+    "nome": "David Silva",
+    "apelidos": ["david silva"],
+    "nivel": "intermediario",
+    "clubes": ["valencia","eibar","celta-de-vigo","valencia","manchester-city","real-sociedad"],
+    "dicas": ["Meia nascido na Espanha em 1986.","Marcou na final da Eurocopa de 2012. Fez mais de 400 jogos e mais de 70 gols pelo Manchester City."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/35518"
+  },
+  {
+    "id": "alexis-sanchez",
+    "nome": "Alexis Sánchez",
+    "apelidos": ["alexis sánchez"],
+    "nivel": "intermediario",
+    "clubes": ["club-de-deportes-cobreloa","colo-colo","river-plate","udinese","barcelona","arsenal","manchester-united","inter","marseille","inter","udinese","sevilla","cf-montreal-q167615"],
+    "dicas": ["Atacante nascido no Chile em 1988.","Marcou na final da Copa da Inglaterra de 2017. Campeão da Copa América de 2015 e 2016."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/40433"
+  },
+  {
+    "id": "memphis-depay",
+    "nome": "Memphis Depay",
+    "apelidos": ["memphis depay"],
+    "nivel": "intermediario",
+    "clubes": ["psv","manchester-united","olympique-lyon","barcelona","atletico-madrid","corinthians"],
+    "dicas": ["Centroavante nascido na Holanda em 1994.","Marcou na final da Copa do Brasil de 2025. Campeão espanhol de 2023 pelo Barcelona."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/167850"
+  },
+  {
+    "id": "philipp-lahm",
+    "nome": "Philipp Lahm",
+    "apelidos": ["philipp lahm"],
+    "nivel": "intermediario",
+    "clubes": ["bayern","stuttgart","bayern"],
+    "dicas": ["Lateral nascido na Alemanha em 1983.","Campeão do mundo em 2014. Fez mais de 500 jogos pelo Bayern de Munique."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/2219"
+  },
+  {
+    "id": "virgil-van-dijk",
+    "nome": "Virgil van Dijk",
+    "apelidos": ["virgil van dijk"],
+    "nivel": "intermediario",
+    "clubes": ["fc-groningen","celtic-football-club","southampton","liverpool"],
+    "dicas": ["Zagueiro nascido na Holanda em 1991.","Campeão da Champions League de 2019 pelo Liverpool. Vestiu a camisa da seleção holandesa 98 vezes."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/139208"
+  },
+  {
+    "id": "edilson",
+    "nome": "Edílson",
+    "apelidos": ["edílson"],
+    "nivel": "intermediario",
+    "clubes": ["tanabi-esporte-clube","guarani-futebol-clube","palmeiras","benfica","palmeiras","kashiwa-reysol","corinthians","flamengo","cruzeiro","kashiwa-reysol","flamengo","vitoria","al-ain","associacao-desportiva-sao-caetano","vasco","nagoya-grampus","vitoria","bahia","clube-atletico-taboao-da-serra"],
+    "dicas": ["Centroavante brasileiro nascido em 1970.","Marcou 2 gols na final do Campeonato Carioca de 2001. Campeão do mundo em 2002."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/130295"
+  },
+  {
+    "id": "vagner-love",
+    "nome": "Vágner Love",
+    "apelidos": ["vágner love"],
+    "nivel": "intermediario",
+    "clubes": ["palmeiras","cska-moscow","palmeiras","flamengo","cska-moscow","flamengo","cska-moscow","shandong-luneng","corinthians","monaco","alanyaspor","besiktas","corinthians","fc-kairat","fc-midtjylland","sport","atletico-clube-goianiense","avai","retro-futebol-clube-brasil"],
+    "dicas": ["Centroavante brasileiro nascido em 1984.","Marcou na final da Copa da Uefa de 2005. Campeão da Copa América de 2004 e 2007."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/18829"
+  },
+  {
+    "id": "savio",
+    "nome": "Sávio",
+    "apelidos": ["sávio"],
+    "nivel": "intermediario",
+    "clubes": ["flamengo","real-madrid","bordeaux","zaragoza","flamengo","real-sociedad","levante","associacao-desportiva-ferroviaria-vale-do-rio-doce","anorthosis-famagusta-fc","avai"],
+    "dicas": ["Ponta brasileiro nascido em 1974.","Campeão da Champions League de 1998, 2000 e 2002 pelo Real Madrid. Fez mais de 150 jogos pelo Real Madrid."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/7976"
+  },
+  {
+    "id": "mazinho",
+    "nome": "Mazinho",
+    "apelidos": ["mazinho","iomar do nascimento"],
+    "nivel": "intermediario",
+    "clubes": ["vasco","lecce","fiorentina","palmeiras","valencia","celta-de-vigo","elche","vitoria"],
+    "dicas": ["Volante brasileiro nascido em 1966.","Campeão do mundo em 1994. Vestiu a camisa da seleção brasileira 35 vezes."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/102588"
+  },
+  {
+    "id": "andriy-shevchenko",
+    "nome": "Andriy Shevchenko",
+    "apelidos": ["andriy shevchenko"],
+    "nivel": "dificil",
+    "clubes": ["dynamo-kyiv","milan","chelsea","milan","dynamo-kyiv"],
+    "dicas": ["Centroavante nascido na União Soviética em 1976, que defendeu a seleção da Ucrânia.","Marcou na final da Copa da Itália de 2003. Ganhou a Bola de Ouro em 2004."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3522"
+  },
+  {
+    "id": "patrick-vieira",
+    "nome": "Patrick Vieira",
+    "apelidos": ["patrick vieira"],
+    "nivel": "dificil",
+    "clubes": ["as-cannes","milan","arsenal","juventus","inter","manchester-city"],
+    "dicas": ["Volante nascido no Senegal em 1976, que defendeu a seleção francesa.","Marcou na final da Copa das Confederações de 2001. Campeão do mundo em 1998."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3183"
+  },
+  {
+    "id": "diego-simeone",
+    "nome": "Diego Simeone",
+    "apelidos": ["diego simeone"],
+    "nivel": "dificil",
+    "clubes": ["velez-sarsfield","pisa","sevilla","atletico-madrid","inter","lazio","atletico-madrid","racing"],
+    "dicas": ["Meio-campista nascido na Argentina em 1970.","Marcou na final da Copa da Itália de 2000. Campeão da Copa América de 1991 e 1993."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/5841"
+  },
+  {
+    "id": "claude-makelele",
+    "nome": "Claude Makélélé",
+    "apelidos": ["claude makélélé"],
+    "nivel": "dificil",
+    "clubes": ["nantes","marseille","celta-de-vigo","real-madrid","chelsea","psg"],
+    "dicas": ["Volante nascido no Zaire em 1973, que defendeu a seleção francesa.","Campeão da Champions League de 2002 pelo Real Madrid. Fez mais de 200 jogos pelo Chelsea."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/4182"
+  },
+  {
+    "id": "marcelinho-carioca",
+    "nome": "Marcelinho Carioca",
+    "apelidos": ["marcelinho carioca"],
+    "nivel": "dificil",
+    "clubes": ["flamengo","corinthians","valencia","corinthians","santos","gamba-osaka","vasco","al-nassr","vasco","ac-ajaccio","brasiliense-futebol-clube","corinthians","esporte-clube-santo-andre"],
+    "dicas": ["Meia brasileiro nascido em 1971.","Marcou na final da Copa do Brasil de 2001. Campeão mundial de clubes de 2000 pelo Corinthians."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/17894"
+  },
+  {
+    "id": "renato-gaucho",
+    "nome": "Renato Gaúcho",
+    "apelidos": ["renato gaúcho"],
+    "nivel": "dificil",
+    "clubes": ["clube-esportivo-bento-goncalves","gremio","flamengo","roma","flamengo","botafogo","gremio","botafogo","cruzeiro","flamengo","clube-atletico-mineiro","fluminense","gremio","fluminense","flamengo","bangu-atletico-clube"],
+    "dicas": ["Ponta brasileiro nascido em 1962.","Marcou 2 gols na final do Mundial de Clubes de 1983. Campeão da Libertadores de 1983 pelo Grêmio."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/181703"
+  },
+  {
+    "id": "evair",
+    "nome": "Evair",
+    "apelidos": ["evair","evair aparecido paulino"],
+    "nivel": "dificil",
+    "clubes": ["guarani-futebol-clube","atalanta","palmeiras","yokohama-flugels","clube-atletico-mineiro","vasco","portuguesa","palmeiras","sao-paulo","goias","coritiba","goias","figueirense"],
+    "dicas": ["Centroavante brasileiro nascido em 1965.","Marcou na final da Libertadores de 1999. Vestiu a camisa da seleção brasileira 9 vezes."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/222767"
+  },
+  {
+    "id": "baltazar",
+    "nome": "Baltazar",
+    "apelidos": ["baltazar"],
+    "nivel": "dificil",
+    "clubes": ["atletico-clube-goianiense","gremio","palmeiras","flamengo","palmeiras","botafogo","celta-de-vigo","atletico-madrid","porto","rennais","goias","kyoto-sanga"],
+    "dicas": ["Centroavante brasileiro nascido em 1959.","Campeão da Copa América de 1989. Vestiu a camisa da seleção brasileira 6 vezes."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/135738"
+  },
+  {
+    "id": "giorgian-de-arrascaeta",
+    "nome": "Giorgian de Arrascaeta",
+    "apelidos": ["giorgian de arrascaeta"],
+    "nivel": "dificil",
+    "clubes": ["defensor-sporting-club","cruzeiro","flamengo"],
+    "dicas": ["Meia nascido no Uruguai em 1994.","Marcou na final da Copa do Brasil de 2024. Campeão da Libertadores de 2019, 2022 e 2025 pelo Flamengo."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/248410"
+  },
+  {
+    "id": "juan-pablo-sorin",
+    "nome": "Juan Pablo Sorín",
+    "apelidos": ["juan pablo sorín"],
+    "nivel": "dificil",
+    "clubes": ["argentinos-juniors","juventus","river-plate","cruzeiro","lazio","barcelona","psg","villarreal","hamburgo","cruzeiro"],
+    "dicas": ["Lateral nascido na Argentina em 1976.","Campeão da Libertadores de 1996 pelo River Plate. Disputou as Copas do Mundo de 2002 e 2006."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/7925"
+  },
+  {
+    "id": "carlos-gamarra",
+    "nome": "Carlos Gamarra",
+    "apelidos": ["carlos gamarra"],
+    "nivel": "dificil",
+    "clubes": ["cerro-porteno","independiente","cerro-porteno","internacional","benfica","corinthians","atletico-madrid","flamengo","aek-athens","inter","palmeiras","olimpia"],
+    "dicas": ["Zagueiro nascido no Paraguai em 1971.","Campeão brasileiro de 1998 pelo Corinthians. Disputou as Copas do Mundo de 1998, 2002 e 2006."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/5779"
+  },
+  {
+    "id": "luka-modric",
+    "nome": "Luka Modrić",
+    "apelidos": ["luka modrić"],
+    "nivel": "facil",
+    "clubes": ["gnk-dinamo-zagreb","zrinjski-mostar","nk-inter-zapresic","gnk-dinamo-zagreb","hotspur","real-madrid","milan"],
+    "dicas": ["Meio-campista nascido na Iugoslávia em 1985, que defendeu a seleção croata.","Marcou na final do Mundial de Clubes de 2018. Eleito o melhor jogador do mundo em 2018."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/27992"
+  },
+  {
+    "id": "miroslav-klose",
+    "nome": "Miroslav Klose",
+    "apelidos": ["miroslav klose"],
+    "nivel": "facil",
+    "clubes": ["sg-blaubach-diedelkopf","fc-08-homburg","kaiserslautern","werder-bremen","bayern","lazio"],
+    "dicas": ["Centroavante nascido na Polônia em 1978, que defendeu a seleção alemã.","Marcou na final da Copa da Alemanha de 2003. Campeão do mundo em 2014."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/10"
+  },
+  {
+    "id": "julio-cesar",
+    "nome": "Júlio César",
+    "apelidos": ["júlio césar","júlio césar soares espíndola"],
+    "nivel": "facil",
+    "clubes": ["flamengo","inter","queens-park-rangers","toronto-fc-q327238","benfica","flamengo"],
+    "dicas": ["Goleiro brasileiro nascido em 1979.","Campeão da Champions League de 2010 pela Inter de Milão. Fez mais de 300 jogos pela Inter de Milão."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/22412"
+  },
+  {
+    "id": "lucio",
+    "nome": "Lúcio",
+    "apelidos": ["lúcio"],
+    "nivel": "facil",
+    "clubes": ["planaltina-esporte-clube","clube-de-regatas-guara","sociedade-esportiva-do-gama","internacional","bayer-leverkusen","bayern","inter","juventus","sao-paulo","palmeiras","football-club-goa","sociedade-esportiva-do-gama","brasiliense-futebol-clube"],
+    "dicas": ["Zagueiro brasileiro nascido em 1978.","Marcou na final da Champions League de 2002. Campeão do mundo em 2002."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/77"
+  },
+  {
+    "id": "maicon",
+    "nome": "Maicon",
+    "apelidos": ["maicon","maicon douglas sisenando"],
+    "nivel": "facil",
+    "clubes": ["cruzeiro","monaco","inter","manchester-city","roma","avai","criciuma","villa-nova-atletico-clube","sona","tre-penne"],
+    "dicas": ["Lateral brasileiro nascido em 1981.","Campeão da Champions League de 2010 pela Inter de Milão. Fez mais de 200 jogos pela Inter de Milão."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/18301"
+  },
+  {
+    "id": "willian",
+    "nome": "Willian",
+    "apelidos": ["willian","willian borges da silva"],
+    "nivel": "facil",
+    "clubes": ["mauaense","corinthians","shakhtar","fc-anji-makhachkala","chelsea","arsenal","corinthians","fulham","olympiacos-piraeus","fulham","gremio"],
+    "dicas": ["Ponta brasileiro nascido em 1988.","Campeão da Copa América de 2019. Fez mais de 300 jogos e mais de 60 gols pelo Chelsea."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/52769"
+  },
+  {
+    "id": "fernandinho",
+    "nome": "Fernandinho",
+    "apelidos": ["fernandinho"],
+    "nivel": "facil",
+    "clubes": ["pstc","club-athletico-paranaense","shakhtar","manchester-city","club-athletico-paranaense"],
+    "dicas": ["Volante brasileiro nascido em 1985.","Marcou na final do Campeonato Paranaense de 2024. Campeão da Copa América de 2019."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/26267"
+  },
+  {
+    "id": "paulinho",
+    "nome": "Paulinho",
+    "complemento": "Meio-campista, Corinthians",
+    "apelidos": ["paulinho"],
+    "nivel": "facil",
+    "clubes": ["audax","fc-vilnius","lks-lodz","bragantino","corinthians","hotspur","guangzhou-evergrande","barcelona","guangzhou-evergrande","al-ahli-saudi","corinthians"],
+    "dicas": ["Meio-campista brasileiro nascido em 1988.","Marcou na final do Campeonato Paulista de 2013. Campeão da Libertadores de 2012 pelo Corinthians."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/57229"
+  },
+  {
+    "id": "ramires",
+    "nome": "Ramires",
+    "apelidos": ["ramires"],
+    "nivel": "facil",
+    "clubes": ["joinville","cruzeiro","benfica","chelsea","jiangsu-football-club","palmeiras"],
+    "dicas": ["Meio-campista brasileiro nascido em 1987.","Marcou na final da Copa da Inglaterra de 2012. Campeão da Champions League de 2012 pelo Chelsea."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/54170"
+  },
+  {
+    "id": "miranda",
+    "nome": "Miranda",
+    "apelidos": ["miranda"],
+    "nivel": "facil",
+    "clubes": ["coritiba","sochaux","sao-paulo","atletico-madrid","inter","jiangsu-football-club","sao-paulo"],
+    "dicas": ["Zagueiro brasileiro nascido em 1984.","Marcou na final da Copa do Rei de 2013. Campeão da Copa América de 2019."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/33357"
+  },
+  {
+    "id": "felipe-melo",
+    "nome": "Felipe Melo",
+    "apelidos": ["felipe melo"],
+    "nivel": "facil",
+    "clubes": ["flamengo","cruzeiro","gremio","mallorca","santander","almeria","fiorentina","juventus","galatasaray","inter","palmeiras","fluminense"],
+    "dicas": ["Volante brasileiro nascido em 1983.","Campeão da Libertadores de 2020 e 2021 pelo Palmeiras e de 2023 pelo Fluminense. Fez mais de 200 jogos pelo Palmeiras."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/35537"
+  },
+  {
+    "id": "juninho-paulista",
+    "nome": "Juninho Paulista",
+    "apelidos": ["juninho paulista"],
+    "nivel": "facil",
+    "clubes": ["ituano-futebol-clube","sao-paulo","middlesbrough","atletico-madrid","middlesbrough","vasco","flamengo","middlesbrough","celtic-football-club","palmeiras","flamengo","sydney-football-club","ituano-futebol-clube"],
+    "dicas": ["Meia brasileiro nascido em 1973.","Marcou 2 gols na final do Campeonato Carioca de 2001. Fez mais de 150 jogos pelo Middlesbrough."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3505"
+  },
+  {
+    "id": "deco",
+    "nome": "Deco",
+    "apelidos": ["deco"],
+    "nivel": "facil",
+    "clubes": ["nacional-atletico-clube-sao-paulo","corinthians","fc-alverca","salgueiros","porto","barcelona","chelsea","fluminense"],
+    "dicas": ["Meia brasileiro nascido em 1977, que defendeu a seleção portuguesa.","Marcou na final da Champions League de 2004. Campeão da Champions League de 2004 pelo Porto e de 2006 pelo Barcelona."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/8564"
+  },
+  {
+    "id": "diego-costa",
+    "nome": "Diego Costa",
+    "apelidos": ["diego costa"],
+    "nivel": "facil",
+    "clubes": ["barcelona-esportivo-capela","penafiel","sc-braga","celta-de-vigo","albacete","real-valladolid","atletico-madrid","vallecano","atletico-madrid","chelsea","atletico-madrid","clube-atletico-mineiro","wolverhampton-wanderers","botafogo","gremio"],
+    "dicas": ["Centroavante brasileiro nascido em 1988, que defendeu a seleção espanhola.","Marcou na final da Copa do Rei de 2013. Campeão da Liga Europa de 2018 pelo Atlético de Madrid."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/44779"
+  },
+  {
+    "id": "denilson",
+    "nome": "Denílson",
+    "apelidos": ["denilson","denílson de oliveira","denílson"],
+    "nivel": "facil",
+    "clubes": ["sao-paulo","real-betis","flamengo","real-betis","bordeaux","al-nassr","fc-dallas","palmeiras","itumbiara-esporte-clube","xi-mang-hai-phong-fc","ao-kavala","ibis"],
+    "dicas": ["Ponta brasileiro nascido em 1977.","Campeão do mundo em 2002. Fez mais de 150 jogos pelo Real Betis."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/7660"
+  },
+  {
+    "id": "luiz-gustavo",
+    "nome": "Luiz Gustavo",
+    "apelidos": ["luiz gustavo"],
+    "nivel": "facil",
+    "clubes": ["ipanema-atletico-clube","associacao-atletica-coruripe","miguelense","corinthians-alagoano","crb","hoffenheim","bayern","wolfsburg","marseille","fenerbahce","al-nassr","sao-paulo","club-athletico-paranaense"],
+    "dicas": ["Volante brasileiro nascido em 1987.","Marcou na final da Copa da Alemanha de 2015. Campeão da Champions League de 2013 pelo Bayern de Munique."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/10471"
+  },
+  {
+    "id": "ousmane-dembele",
+    "nome": "Ousmane Dembélé",
+    "apelidos": ["ousmane dembélé"],
+    "nivel": "facil",
+    "clubes": ["rennais","dortmund","barcelona","psg"],
+    "dicas": ["Centroavante nascido na França em 1997.","Marcou na final da Champions League de 2026. Campeão do mundo em 2018."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/288230"
+  },
+  {
+    "id": "son-heung-min",
+    "nome": "Son Heung-min",
+    "apelidos": ["son heung-min","heung-min son"],
+    "nivel": "facil",
+    "clubes": ["hamburgo","bayer-leverkusen","hotspur","los-angeles-football-club"],
+    "dicas": ["Ponta nascido na Coreia do Sul em 1992.","Campeão da Liga Europa de 2025 pelo Tottenham. Fez mais de 450 jogos e mais de 150 gols pelo Tottenham."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/91845"
+  },
+  {
+    "id": "giovane-elber",
+    "nome": "Giovane Élber",
+    "apelidos": ["giovane élber"],
+    "nivel": "intermediario",
+    "clubes": ["londrina","milan","grasshopper-club-zurich","stuttgart","bayern","olympique-lyon","bor-m-gladbach","cruzeiro"],
+    "dicas": ["Centroavante brasileiro nascido em 1972.","Marcou 2 gols na final da Copa da Alemanha de 1997. Campeão da Champions League de 2001 pelo Bayern de Munique."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/198"
+  },
+  {
+    "id": "thiago-neves",
+    "nome": "Thiago Neves",
+    "apelidos": ["thiago neves"],
+    "nivel": "intermediario",
+    "clubes": ["parana-clube","vegalta-sendai","fluminense","hamburgo","fluminense","al-hilal","flamengo","fluminense","al-hilal","al-jazira","cruzeiro","gremio","sport"],
+    "dicas": ["Meia brasileiro nascido em 1985.","Marcou 4 gols na final da Libertadores de 2008. Campeão brasileiro de 2012 pelo Fluminense."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/53262"
+  },
+  {
+    "id": "luizao",
+    "nome": "Luizão",
+    "apelidos": ["luizão"],
+    "nivel": "intermediario",
+    "clubes": ["guarani-futebol-clube","parana-clube","guarani-futebol-clube","palmeiras","deportivo-a-coruna","vasco","corinthians","gremio","hertha-bsc","botafogo","sao-paulo","nagoya-grampus","santos","flamengo","associacao-desportiva-sao-caetano","guaratingueta-futebol-ltda","rio-branco-esporte-clube"],
+    "dicas": ["Centroavante brasileiro nascido em 1975.","Marcou 2 gols na final da Libertadores de 1998. Campeão do mundo em 2002."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/1727"
+  },
+  {
+    "id": "viola",
+    "nome": "Viola",
+    "apelidos": ["viola"],
+    "nivel": "intermediario",
+    "clubes": ["corinthians","sao-jose-esporte-clube","corinthians","olimpia-futebol-clube","corinthians","valencia","palmeiras","santos","vasco","santos","gaziantepspor-kulubu","guarani-futebol-clube","bahia","clube-atletico-juventus","uberlandia-esporte-clube","duque-de-caxias-futebol-clube","angra-dos-reis-esporte-clube","resende-futebol-clube","brusque-futebol-clube","mixto-esporte-clube","auto-esporte-clube-piaui","audax","tanabi-esporte-clube","clube-atletico-taboao-da-serra"],
+    "dicas": ["Centroavante brasileiro nascido em 1969.","Marcou na final do Campeonato Carioca de 2001. Campeão do mundo em 1994."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/7283"
+  },
+  {
+    "id": "didier-drogba",
+    "nome": "Didier Drogba",
+    "apelidos": ["didier drogba"],
+    "nivel": "intermediario",
+    "clubes": ["levallois","le-mans-fc","guingamp","marseille","chelsea","shanghai-shenhua","galatasaray","chelsea","cf-montreal-q167615","phoenix-rising"],
+    "dicas": ["Centroavante nascido na Costa do Marfim em 1978.","Marcou na final da Champions League de 2012. Fez mais de 350 jogos e mais de 150 gols pelo Chelsea."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3924"
+  },
+  {
+    "id": "franck-ribery",
+    "nome": "Franck Ribéry",
+    "apelidos": ["franck ribéry"],
+    "nivel": "intermediario",
+    "clubes": ["boulogne","ales","stade-brestois-29","fc-metz","galatasaray","marseille","bayern","fiorentina","us-salernitana-1919"],
+    "dicas": ["Ponta nascido na França em 1983.","Marcou na final da Copa da Alemanha de 2010. Campeão da Champions League de 2013 pelo Bayern de Munique."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/22068"
+  },
+  {
+    "id": "keylor-navas",
+    "nome": "Keylor Navas",
+    "apelidos": ["keylor navas"],
+    "nivel": "intermediario",
+    "clubes": ["saprissa","albacete","levante","real-madrid","psg","nottingham","psg","newell-s","club-universidad-nacional"],
+    "dicas": ["Goleiro nascido na Costa Rica em 1986.","Campeão da Champions League de 2016, 2017 e 2018 pelo Real Madrid. Fez mais de 150 jogos pelo Real Madrid."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/79422"
+  },
+  {
+    "id": "bruno-fernandes",
+    "nome": "Bruno Fernandes",
+    "apelidos": ["bruno fernandes"],
+    "nivel": "intermediario",
+    "clubes": ["novara-f-c","udinese","sampdoria","sporting-cp","manchester-united"],
+    "dicas": ["Meia nascido em Portugal em 1994.","Marcou na final da Copa da Inglaterra de 2023. Campeão da Liga das Nações de 2019 e 2025."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/240306"
+  },
+  {
+    "id": "rodri",
+    "nome": "Rodri",
+    "apelidos": ["rodri"],
+    "nivel": "intermediario",
+    "clubes": ["villarreal","atletico-madrid","manchester-city","barcelona"],
+    "dicas": ["Volante nascido na Espanha em 1996.","Marcou na final da Champions League de 2023. Campeão do mundo em 2026."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/357565"
+  },
+  {
+    "id": "juan-sebastian-veron",
+    "nome": "Juan Sebastián Verón",
+    "apelidos": ["juan sebastián verón"],
+    "nivel": "intermediario",
+    "clubes": ["estudiantes","boca-juniors","sampdoria","parma","lazio","manchester-united","chelsea","inter","estudiantes"],
+    "dicas": ["Meio-campista nascido na Argentina em 1975.","Campeão da Libertadores de 2009 pelo Estudiantes. Fez mais de 200 jogos pelo Estudiantes."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3143"
+  },
+  {
+    "id": "david-trezeguet",
+    "nome": "David Trezeguet",
+    "apelidos": ["david trezeguet"],
+    "nivel": "intermediario",
+    "clubes": ["platense","monaco","juventus","hercules","baniyas-sports-e-culture-club","river-plate","newell-s","football-club-of-pune-city"],
+    "dicas": ["Centroavante nascido na França em 1977.","Marcou na final da Eurocopa de 2000. Campeão do mundo em 1998."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/4146"
+  },
+  {
+    "id": "diego-tardelli",
+    "nome": "Diego Tardelli",
+    "apelidos": ["diego tardelli"],
+    "nivel": "intermediario",
+    "clubes": ["sao-paulo","real-betis","associacao-desportiva-sao-caetano","psv","sao-paulo","flamengo","clube-atletico-mineiro","fc-anji-makhachkala","al-gharafa","clube-atletico-mineiro","shandong-luneng","gremio","clube-atletico-mineiro","santos"],
+    "dicas": ["Centroavante brasileiro nascido em 1985.","Marcou na final da Libertadores de 2005. Campeão da Libertadores de 2005 pelo São Paulo e de 2013 pelo Atlético-MG."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/37536"
+  },
+  {
+    "id": "jude-bellingham",
+    "nome": "Jude Bellingham",
+    "apelidos": ["jude bellingham"],
+    "nivel": "intermediario",
+    "clubes": ["birmingham-city","dortmund","real-madrid"],
+    "dicas": ["Meia nascido na Inglaterra em 2003.","Campeão da Champions League de 2024 pelo Real Madrid. Foi jogar fora do país aos 17 anos."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/581678"
+  },
+  {
+    "id": "emerson-sheik",
+    "nome": "Emerson Sheik",
+    "apelidos": ["emerson sheik","emerson"],
+    "nivel": "dificil",
+    "clubes": ["sao-paulo","consadole-sapporo","kawasaki-frontale","urawa-red-diamonds","al-sadd-sports-club","rennais","al-sadd-sports-club","flamengo","al-ain","fluminense","corinthians","botafogo","corinthians","flamengo","ponte-preta","corinthians"],
+    "dicas": ["Ponta brasileiro nascido em 1978, que defendeu a seleção do Catar.","Marcou 2 gols na final da Libertadores de 2012. Fez mais de 150 jogos pelo Corinthians."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/57159"
+  },
+  {
+    "id": "victor",
+    "nome": "Victor",
+    "apelidos": ["victor"],
+    "nivel": "dificil",
+    "clubes": ["paulista-futebol-clube","gremio","clube-atletico-mineiro"],
+    "dicas": ["Goleiro brasileiro nascido em 1983.","Campeão da Libertadores de 2013 pelo Atlético-MG. Fez mais de 400 jogos pelo Atlético-MG."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/67867"
+  },
+  {
+    "id": "carlos-alberto-torres",
+    "nome": "Carlos Alberto Torres",
+    "apelidos": ["carlos alberto torres"],
+    "nivel": "dificil",
+    "clubes": ["fluminense","santos","botafogo","fluminense","flamengo","new-york-cosmos","california-surf","new-york-cosmos"],
+    "dicas": ["Lateral brasileiro nascido em 1944.","Marcou na final da Copa do Mundo de 1970. Foi jogar fora do país aos 33 anos."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/229662"
+  },
+  {
+    "id": "tostao",
+    "nome": "Tostão",
+    "apelidos": ["tostão"],
+    "nivel": "dificil",
+    "clubes": ["cruzeiro","vasco"],
+    "dicas": ["Centroavante brasileiro nascido em 1947.","Campeão do mundo em 1970. Disputou também a Copa do Mundo de 1966."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/229675"
+  },
+  {
+    "id": "charles-aranguiz",
+    "nome": "Charles Aránguiz",
+    "apelidos": ["charles aránguiz"],
+    "nivel": "dificil",
+    "clubes": ["club-de-deportes-cobreloa","club-de-deportes-cobresal","club-de-deportes-cobreloa","colo-colo","quilmes","club-universidad-de-chile","internacional","bayer-leverkusen","internacional","club-universidad-de-chile"],
+    "dicas": ["Meio-campista nascido no Chile em 1989.","Campeão da Copa América de 2015 e 2016. Fez mais de 200 jogos pelo U. de Chile."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/89701"
+  },
+  {
+    "id": "nicolas-anelka",
+    "nome": "Nicolas Anelka",
+    "apelidos": ["nicolas anelka"],
+    "nivel": "dificil",
+    "clubes": ["psg","arsenal","real-madrid","psg","liverpool","manchester-city","fenerbahce","bolton-wanderers-football-club","chelsea","shanghai-shenhua","juventus","west-bromwich-albion-football-club","mumbai-city-football-club"],
+    "dicas": ["Centroavante nascido na França em 1979.","Marcou na final da Copa da Inglaterra de 1998. Fez mais de 150 jogos e mais de 50 gols pelo Chelsea."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3226"
+  },
+  {
+    "id": "ronald-koeman",
+    "nome": "Ronald Koeman",
+    "apelidos": ["ronald koeman"],
+    "nivel": "dificil",
+    "clubes": ["fc-groningen","ajax","psv","barcelona","feyenoord"],
+    "dicas": ["Zagueiro nascido na Holanda em 1963.","Marcou na final da Copa dos Campeões da Europa de 1992. Campeão da Copa dos Campeões da Europa de 1988 pelo PSV e de 1992 pelo Barcelona."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/7940"
+  },
+  {
+    "id": "patrick-kluivert",
+    "nome": "Patrick Kluivert",
+    "apelidos": ["patrick kluivert"],
+    "nivel": "dificil",
+    "clubes": ["ajax","milan","barcelona","newcastle","valencia","psv","lille"],
+    "dicas": ["Centroavante nascido na Holanda em 1976.","Marcou na final da Champions League de 1995. Fez mais de 250 jogos e mais de 100 gols pelo Barcelona."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/4385"
+  },
+  {
+    "id": "nani",
+    "nome": "Nani",
+    "apelidos": ["nani"],
+    "nivel": "dificil",
+    "clubes": ["sporting-cp","manchester-united","sporting-cp","fenerbahce","valencia","lazio","sporting-cp","orlando-city","venezia","melbourne-victory-football-club","adana-demirspor","cf-estrela-amadora","fc-aktobe"],
+    "dicas": ["Ponta nascido em Portugal em 1986.","Campeão da Champions League de 2008 pelo Manchester United. Fez mais de 200 jogos pelo Manchester United."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/33706"
+  },
+  {
+    "id": "diego-milito",
+    "nome": "Diego Milito",
+    "apelidos": ["diego milito"],
+    "nivel": "dificil",
+    "clubes": ["racing","genoa","zaragoza","genoa","inter","racing"],
+    "dicas": ["Centroavante nascido na Argentina em 1979.","Marcou 2 gols na final da Champions League de 2010. Fez mais de 200 jogos e mais de 50 gols pelo Racing."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/22202"
+  },
+  {
+    "id": "washington",
+    "nome": "Washington",
+    "apelidos": ["washington","washington stecanela cerqueira"],
+    "nivel": "dificil",
+    "clubes": ["sociedade-esportiva-e-recreativa-caxias-do-sul","internacional","ponte-preta","sociedade-esportiva-e-recreativa-caxias-do-sul","parana-clube","ponte-preta","fenerbahce","club-athletico-paranaense","tokyo-verdy","urawa-red-diamonds","fluminense","sao-paulo","fluminense"],
+    "dicas": ["Centroavante brasileiro nascido em 1975.","Campeão brasileiro de 2010 pelo Fluminense. Vestiu a camisa da seleção brasileira 9 vezes."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/7080"
+  },
+  {
+    "id": "dodo",
+    "nome": "Dodô",
+    "apelidos": ["dodô"],
+    "nivel": "dificil",
+    "clubes": ["nacional-atletico-clube-sao-paulo","fluminense","sao-paulo","parana-clube","sao-paulo","santos","botafogo","palmeiras","ulsan-hd","oita-trinita","goias","botafogo","al-ain","botafogo","fluminense","vasco","portuguesa","guaratingueta-futebol-ltda"],
+    "dicas": ["Centroavante brasileiro nascido em 1974.","Marcou 2 gols na final do Campeonato Carioca de 2007. Campeão paulista de 1998 pelo São Paulo."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/52666"
+  },
+  {
+    "id": "roberto-dinamite",
+    "nome": "Roberto Dinamite",
+    "apelidos": ["roberto dinamite"],
+    "nivel": "dificil",
+    "clubes": ["vasco","barcelona","vasco","portuguesa","vasco","campo-grande-atletico-clube","vasco"],
+    "dicas": ["Centroavante brasileiro nascido em 1954.","Marcou 3 gols na final do Campeonato Carioca de 1981. Campeão brasileiro de 1974 pelo Vasco da Gama."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/135003"
+  },
+  {
+    "id": "jorge-valdivia",
+    "nome": "Jorge Valdivia",
+    "apelidos": ["jorge valdivia"],
+    "nivel": "dificil",
+    "clubes": ["corporacion-club-deportivo-universidad-de-concepcion","servette-fc","colo-colo","palmeiras","al-ain","palmeiras","al-wahda-sports-cultural-club","colo-colo","morelia","mazatlan-futbol-club","colo-colo","club-de-deportes-union-la-calera","necaxa"],
+    "dicas": ["Meia nascido na Venezuela em 1983, que defendeu a seleção chilena.","Marcou na final da Copa do Brasil de 2012. Campeão da Copa América de 2015."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/20758"
+  },
+  {
+    "id": "cassio",
+    "nome": "Cássio",
+    "apelidos": ["cássio","cássio ramos"],
+    "nivel": "dificil",
+    "clubes": ["gremio","psv","sparta-rotterdam","psv","corinthians","cruzeiro"],
+    "dicas": ["Goleiro brasileiro nascido em 1987.","Campeão da Libertadores de 2012 pelo Corinthians. Fez mais de 650 jogos pelo Corinthians."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/50144"
+  },
+  {
+    "id": "park-ji-sung",
+    "nome": "Park Ji-sung",
+    "apelidos": ["park ji-sung","ji-sung park"],
+    "nivel": "dificil",
+    "clubes": ["kyoto-sanga","psv","manchester-united","queens-park-rangers","psv"],
+    "dicas": ["Meia nascido na Coreia do Sul em 1981.","Campeão da Champions League de 2008 pelo Manchester United. Disputou as Copas do Mundo de 2002, 2006 e 2010."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/4592"
+  },
+  {
+    "id": "rio-ferdinand",
+    "nome": "Rio Ferdinand",
+    "apelidos": ["rio ferdinand"],
+    "nivel": "dificil",
+    "clubes": ["west-ham","bournemouth","west-ham","leeds-united","manchester-united","queens-park-rangers"],
+    "dicas": ["Zagueiro nascido na Inglaterra em 1978.","Fez mais de 450 jogos pelo Manchester United. Disputou as Copas do Mundo de 2002 e 2006."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3235"
+  },
+  {
+    "id": "michael-ballack",
+    "nome": "Michael Ballack",
+    "apelidos": ["michael ballack"],
+    "nivel": "dificil",
+    "clubes": ["chemnitzer-fc","kaiserslautern","bayer-leverkusen","bayern","chelsea","bayer-leverkusen"],
+    "dicas": ["Meio-campista nascido na RDA em 1976, que defendeu a seleção alemã.","Marcou 2 gols na final da Copa da Alemanha de 2003. Campeão inglês de 2010 pelo Chelsea."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/63"
+  },
+  {
+    "id": "jardel",
+    "nome": "Jardel",
+    "apelidos": ["jardel"],
+    "nivel": "dificil",
+    "clubes": ["vasco","gremio","porto","galatasaray","sporting-cp","bolton-wanderers-football-club","ssc-ancona","newell-s","goias","beira-mar","anorthosis-famagusta-fc","newcastle-united-jets-football-club","criciuma","ferroviario-atletico-clube-ceara","cherno-more-varna","atletico-rio-negro-clube-amazonas"],
+    "dicas": ["Centroavante brasileiro nascido em 1973.","Marcou na final da Libertadores de 1995. Fez mais de 150 jogos e mais de 150 gols pelo Porto."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/3625"
   }
 ]

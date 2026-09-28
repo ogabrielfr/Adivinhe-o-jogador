@@ -82,10 +82,10 @@ Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
 
 - Jogo completo: tela inicial, partida, derrota (com o nome revelado), vitória, compartilhamento estilo Wordle, streak e estatísticas em `localStorage`.
 - **Agenda do jogador do dia** (`npm run agenda`): dia marcado não muda mais, então mexer na biblioteca só afeta os dias que ainda não estão nela. Fora da agenda vale o sorteio determinístico por data. A partida guarda o id do jogador e continua com ele mesmo que o dia seja trocado.
-- **318 jogadores, 106 em cada nível**, com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e todos têm `verificado: true`. Jogador pedido pelo nome entra por `npm run trazer`. A biblioteca é dado (`src/dados/jogadores.json`), lida e gravada por `scripts/biblioteca.mjs`.
+- **408 jogadores, 136 em cada nível**, com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e todos têm `verificado: true`. Jogador pedido pelo nome entra por `npm run trazer`. A biblioteca é dado (`src/dados/jogadores.json`), lida e gravada por `scripts/biblioteca.mjs`.
 - **Um resolvedor de clube só** (`scripts/resolver-clube.mjs`) para gerar, reparar e repor. Casa por id do Transfermarkt; por nome, só com nome contido, país e época conferidos.
 - **Mapa do Transfermarkt conferido por duas testemunhas** (`npm run mapa-tm`): o Wikidata diz de quem é cada id, e o par que ele desmente sai; o nome que o próprio Transfermarkt dá ao id é conferido para todo id em uso, e o que não bate vai para uma lista de leitura. Foi essa lista que achou o CRB do Marcos Rocha ligado ao Brasil de Pelotas e o Instituto do Dybala ao Central Córdoba.
-- **Catálogo de 5381 clubes de 66 países**, sendo 1155 brasileiros. Dos 405 que o jogo usa, só o Miami FC de 2006 fica com o brasão desenhado, de propósito: as duas fontes mostram o escudo do Fort Lauderdale Strikers, que o clube virou depois.
+- **Catálogo de 5412 clubes de 69 países**, sendo 1163 brasileiros. Dos 527 que o jogo usa, só o Miami FC de 2006 fica com o brasão desenhado, de propósito: as duas fontes mostram o escudo do Fort Lauderdale Strikers, que o clube virou depois.
 - **Duas dicas por jogador.** A primeira diz posição, país de **nascimento** e ano, e, quando o jogador defendeu a seleção de outro país, qual ("Lateral brasileiro nascido em 1990, que defendeu a seleção russa"). A segunda abre com o **fato específico** que o cliente pediu — gol em final, título com ano e clube, clube de que foi ídolo em jogos ("Campeão da Libertadores de 2013 pelo Atlético-MG e de 2020 e 2021 pelo Palmeiras. Fez mais de 300 jogos pelo Palmeiras.") — e cai para naturalidade, Copa e o resto só quando não há nenhum. Tudo do Transfermarkt: página de títulos, registro de partidas e API.
 - **Estatísticas com tela própria**, no rodapé da tela inicial: partidas, aproveitamento, sequência atual e maior, e em que chute acertou, por nível.
 - **Prévia do link no WhatsApp**: tags `og:` no `index.html` e `public/previa.png`, gerada por `npm run previa`.
@@ -155,9 +155,9 @@ dados, com o peso que as marcações deram.
 
 ### 4. Tamanho do repositório
 
-`public/escudos/` está em **77 MB** com os 5381 clubes. Dentro dos limites do
+`public/escudos/` está em **77 MB** com os 5412 clubes. Dentro dos limites do
 GitHub Pages com folga, e o pacote enviado ao navegador **não** cresce com
-isso: `clubes.ts` leva só os 405 clubes em uso.
+isso: `clubes.ts` leva só os 527 clubes em uso.
 
 O custo é de repositório, não de carregamento — clone mais lento e 77 MB
 publicados a cada push. Se incomodar, o corte natural é gravar em
@@ -168,7 +168,7 @@ acesso a essas fontes se mostrou frágil.
 
 ### 5. Decisões de produto
 
-- **Volume da biblioteca.** O combinado era 300 e depois ~900 se o cliente gostasse. Os 318 estão no ar; os 900 dependem de ele pedir.
+- **Volume da biblioteca.** O combinado era 300 e depois ~900 se o cliente gostasse. Em 28/09 ele pediu mais 30 por nível, e são 408 no ar; o caminho está no README.
 
 Levados ao cliente em 25/09, que deu as pendências por respondidas sem pedir mudança. Seguem como estão:
 
@@ -179,7 +179,8 @@ Levados ao cliente em 25/09, que deu as pendências por respondidas sem pedir mu
 
 ## Armadilhas conhecidas
 
-- **A `main` recebe commit do github-actions toda segunda** ("Estende a agenda"). Puxe antes de publicar, senão o push é recusado.
+- **A `main` recebe commit do github-actions toda segunda** ("Estende a agenda"). Puxe antes de publicar, senão o push é recusado. Em 28/09 o push dessa execução levou erro interno do GitHub e a semana ficou sem publicar (o site seguiu no ar com a versão anterior); o passo agora tenta de novo até quatro vezes.
+- **Nome que casa com o clube errado passa calado.** O resolvedor liga pelo id do Transfermarkt e, sem par, pelo nome: o "Generation Foot" do Mané casou com o Generation Adidas, dos Estados Unidos. Ao trazer jogador novo, confira as passagens resolvidas pelo nome, e prefira acrescentar o par em `PARES_TM` (e em `clubes-transfermarkt.json`) a confiar no nome.
 - **Mexer na lista de um nível sem rodar `npm run agenda` antes** congela o mês seguinte já com a lista nova. Só é problema se a agenda tiver vencido — o deploy recusa agenda que não cubra 7 dias à frente, e a execução semanal a mantém em 30.
 - **`npm run catalogo` demora bastante** (baixa milhares de imagens e processa com sharp). Rode em background. O `.cache/` guarda os originais, então a segunda vez é rápida.
 - **`npm run coletar` demora ~25 min** e refaz `scripts/clubes-externos.json` do zero. Só precisa rodar quando quiser ampliar países ou atualizar a fonte.
