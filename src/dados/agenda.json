@@ -35,6 +35,13 @@
     "2026-10-24": {"facil":"son-heung-min","intermediario":"ricardo-gomes","dificil":"nemanja-vidic"},
     "2026-10-25": {"facil":"miranda","intermediario":"kai-havertz","dificil":"anderson-futebolista"},
     "2026-10-26": {"facil":"edmundo","intermediario":"giovane-elber","dificil":"dodo"},
-    "2026-10-27": {"facil":"manuel-neuer","intermediario":"jordan-henderson","dificil":"karl-heinz-rummenigge"}
+    "2026-10-27": {"facil":"manuel-neuer","intermediario":"jordan-henderson","dificil":"karl-heinz-rummenigge"},
+    "2026-10-28": {"facil":"gareth-bale","intermediario":"julian-alvarez","dificil":"rio-ferdinand"},
+    "2026-10-29": {"facil":"rodrygo","intermediario":"marco-asensio","dificil":"nani"},
+    "2026-10-30": {"facil":"angel-di-maria","intermediario":"sergio-aguero","dificil":"victor"},
+    "2026-10-31": {"facil":"taffarel","intermediario":"jefferson-de-oliveira-galvao","dificil":"jack-wilshere"},
+    "2026-11-01": {"facil":"pele","intermediario":"thiago-motta","dificil":"charles-aranguiz"},
+    "2026-11-02": {"facil":"kylian-mbappe","intermediario":"giorgio-chiellini","dificil":"phil-jones"},
+    "2026-11-03": {"facil":"luis-fabiano","intermediario":"viola","dificil":"benedikt-howedes"}
   }
 }
