@@ -42,6 +42,13 @@
     "2026-10-31": {"facil":"taffarel","intermediario":"jefferson-de-oliveira-galvao","dificil":"jack-wilshere"},
     "2026-11-01": {"facil":"pele","intermediario":"thiago-motta","dificil":"charles-aranguiz"},
     "2026-11-02": {"facil":"kylian-mbappe","intermediario":"giorgio-chiellini","dificil":"phil-jones"},
-    "2026-11-03": {"facil":"luis-fabiano","intermediario":"viola","dificil":"benedikt-howedes"}
+    "2026-11-03": {"facil":"luis-fabiano","intermediario":"viola","dificil":"benedikt-howedes"},
+    "2026-11-04": {"facil":"gabigol","intermediario":"mazinho","dificil":"giorgian-de-arrascaeta"},
+    "2026-11-05": {"facil":"juninho-paulista","intermediario":"philipp-lahm","dificil":"arda-guler"},
+    "2026-11-06": {"facil":"zlatan-ibrahimovic","intermediario":"michael-owen","dificil":"patrick-vieira"},
+    "2026-11-07": {"facil":"diego","intermediario":"doni","dificil":"rafael-pereira-da-silva"},
+    "2026-11-08": {"facil":"arjen-robben","intermediario":"marcelo-antonio-guedes-filho","dificil":"anderson-lima"},
+    "2026-11-09": {"facil":"alexandre-pato","intermediario":"luke-shaw","dificil":"bordon"},
+    "2026-11-10": {"facil":"roberto-firmino","intermediario":"gianluigi-buffon","dificil":"baltazar"}
   }
 }
