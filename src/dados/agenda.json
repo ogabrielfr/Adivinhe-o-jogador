@@ -49,6 +49,13 @@
     "2026-11-07": {"facil":"diego","intermediario":"doni","dificil":"rafael-pereira-da-silva"},
     "2026-11-08": {"facil":"arjen-robben","intermediario":"marcelo-antonio-guedes-filho","dificil":"anderson-lima"},
     "2026-11-09": {"facil":"alexandre-pato","intermediario":"luke-shaw","dificil":"bordon"},
-    "2026-11-10": {"facil":"roberto-firmino","intermediario":"gianluigi-buffon","dificil":"baltazar"}
+    "2026-11-10": {"facil":"roberto-firmino","intermediario":"gianluigi-buffon","dificil":"baltazar"},
+    "2026-11-11": {"facil":"ze-roberto","intermediario":"xabi-alonso","dificil":"claudio-marchisio"},
+    "2026-11-12": {"facil":"diego-costa","intermediario":"christian-eriksen","dificil":"nacho"},
+    "2026-11-13": {"facil":"marco-van-basten","intermediario":"jose-carlos-nepomuceno-mozer","dificil":"ashley-young"},
+    "2026-11-14": {"facil":"juan-silveira-dos-santos","intermediario":"pablo-felipe-teixeira","dificil":"allan-marques-loureiro"},
+    "2026-11-15": {"facil":"arthur-henrique-ramos-de-oliveira-melo","intermediario":"vagner-love","dificil":"adilson-batista"},
+    "2026-11-16": {"facil":"pedro-guilherme-abreu-dos-santos","intermediario":"abner-vinicius-da-silva-santos","dificil":"renato-gaucho"},
+    "2026-11-17": {"facil":"robinho","intermediario":"enner-valencia","dificil":"alex-rodrigo-dias-da-costa"}
   }
 }
