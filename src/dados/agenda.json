@@ -63,6 +63,13 @@
     "2026-11-21": {"facil":"dunga","intermediario":"gonzalo-higuain","dificil":"michael-olise"},
     "2026-11-22": {"facil":"kaka","intermediario":"xherdan-shaqiri","dificil":"jamie-vardy"},
     "2026-11-23": {"facil":"romario","intermediario":"granit-xhaka","dificil":"arthur-mendonca-cabral"},
-    "2026-11-24": {"facil":"luis-figo","intermediario":"savio","dificil":"andre-cruz"}
+    "2026-11-24": {"facil":"luis-figo","intermediario":"savio","dificil":"andre-cruz"},
+    "2026-11-25": {"facil":"erling-haaland","intermediario":"tim-cahill","dificil":"ronald-koeman"},
+    "2026-11-26": {"facil":"carlos-tevez","intermediario":"alex-de-souza","dificil":"denis-marques"},
+    "2026-11-27": {"facil":"thierry-henry","intermediario":"alessandro-del-piero","dificil":"orlando-pecanha-de-carvalho"},
+    "2026-11-28": {"facil":"gerard-pique","intermediario":"roberto-rivellino","dificil":"tostao"},
+    "2026-11-29": {"facil":"robert-lewandowski","intermediario":"luiz-adriano","dificil":"diego-milito"},
+    "2026-11-30": {"facil":"kevin-de-bruyne","intermediario":"hugo-lloris","dificil":"patrick-kluivert"},
+    "2026-12-01": {"facil":"denilson","intermediario":"jude-bellingham","dificil":"andre-bahia"}
   }
 }
