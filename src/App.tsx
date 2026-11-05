@@ -1,14 +1,24 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { NIVEIS } from './dados/tipos'
 import type { Jogador, Nivel } from './dados/tipos'
-import { chaveDoDia, jogadorDoDia, jogadorPorId, numeroDoDia, PALPITES_AMBIGUOS } from './logica/diario'
+import { chaveDoDia, jogadorDaRevisao, jogadorDoDia, jogadorPorId, numeroDoDia, PALPITES_AMBIGUOS } from './logica/diario'
 import { formasDerivadas, formasExatas, normalizar, pareceIgual } from './logica/texto'
 import { carregar, DICAS, partidaNova, registrarResultado, salvar, TENTATIVAS } from './logica/armazenamento'
+import type { Estado, Partida } from './logica/armazenamento'
 import { textoDeCompartilhamento } from './logica/compartilhar'
 import { TelaInicial } from './componentes/TelaInicial'
 import { TelaPartida } from './componentes/TelaPartida'
 import { TelaEstatisticas } from './componentes/TelaEstatisticas'
 import type { ResultadoChute } from './componentes/TelaPartida'
+
+/** As partidas que estão valendo: as da rodada de revisão, quando há uma, ou as do dia. */
+const partidasAtivas = (e: Estado) => (e.revisao ? e.revisao.partidas : e.partidas)
+
+/** O estado com a partida de um nível trocada, no lugar certo. */
+function comPartida(e: Estado, nivel: Nivel, partida: Partida): Estado {
+  const partidas = { ...partidasAtivas(e), [nivel]: partida }
+  return e.revisao ? { ...e, revisao: { ...e.revisao, partidas } } : { ...e, partidas }
+}
 
 export function App() {
   const [agora] = useState(() => new Date())
@@ -43,6 +53,9 @@ export function App() {
     salvar(estado)
   }, [estado])
 
+  const revisao = estado.revisao ?? null
+  const partidas = partidasAtivas(estado)
+
   /**
    * A partida começada continua com o jogador com que começou. A agenda já
    * impede que o jogador do dia mude com uma atualização da biblioteca; isto
@@ -51,12 +64,13 @@ export function App() {
    */
   const jogadores = useMemo(
     () => Object.fromEntries(NIVEIS.map((n) => [
-      n, jogadorPorId(estado.partidas[n]?.jogador) ?? jogadorDoDia(n, dia),
+      n, jogadorPorId(partidas[n]?.jogador) ??
+        (revisao ? jogadorDaRevisao(n, dia, revisao.semente) : jogadorDoDia(n, dia)),
     ])) as Record<Nivel, Jogador>,
-    [dia, estado.partidas],
+    [dia, partidas, revisao],
   )
 
-  const partidaDe = useCallback((nivel: Nivel) => estado.partidas[nivel] ?? partidaNova(), [estado.partidas])
+  const partidaDe = useCallback((nivel: Nivel) => partidas[nivel] ?? partidaNova(), [partidas])
 
   const aoChutar = useCallback(
     (nivel: Nivel, texto: string): ResultadoChute => {
@@ -87,12 +101,12 @@ export function App() {
        * voltava como erro. A função de atualização continua conferindo tudo
        * de novo, e é ela que vale para o estado.
        */
-      const naTela = estado.partidas[nivel] ?? partidaNova()
+      const naTela = partidas[nivel] ?? partidaNova()
       if (naTela.status !== 'jogando') return 'vazio'
       if (naTela.palpites.some((p) => normalizar(p) === palpite)) return 'repetido'
 
       setEstado((anterior) => {
-        const atual = anterior.partidas[nivel] ?? partidaNova()
+        const atual = partidasAtivas(anterior)[nivel] ?? partidaNova()
         if (atual.status !== 'jogando') return anterior
         // o mesmo palpite repetido não consome chute
         if (atual.palpites.some((p) => normalizar(p) === palpite)) return anterior
@@ -100,12 +114,12 @@ export function App() {
         const palpites = [...atual.palpites, limpo]
         const status = acertou ? 'ganhou' : palpites.length >= TENTATIVAS ? 'perdeu' : 'jogando'
 
-        const partidas = { ...anterior.partidas, [nivel]: { ...atual, jogador: jogador.id, palpites, status } }
-        if (status === 'jogando') return { ...anterior, partidas }
+        const novo = comPartida(anterior, nivel, { ...atual, jogador: jogador.id, palpites, status })
+        // a rodada de revisão não entra nas estatísticas
+        if (status === 'jogando' || anterior.revisao) return novo
 
         return {
-          ...anterior,
-          partidas,
+          ...novo,
           estatisticas: {
             ...anterior.estatisticas,
             [nivel]: registrarResultado(anterior.estatisticas[nivel], acertou, palpites.length, dia),
@@ -115,7 +129,7 @@ export function App() {
 
       return acertou ? 'acertou' : 'errou'
     },
-    [jogadores, dia, estado.partidas],
+    [jogadores, dia, partidas],
   )
 
   /**
@@ -126,16 +140,15 @@ export function App() {
   const aoDesistir = useCallback(
     (nivel: Nivel) => {
       setEstado((anterior) => {
-        const atual = anterior.partidas[nivel] ?? partidaNova()
+        const atual = partidasAtivas(anterior)[nivel] ?? partidaNova()
         if (atual.status !== 'jogando') return anterior
 
-        const partidas = {
-          ...anterior.partidas,
-          [nivel]: { ...atual, jogador: jogadores[nivel].id, status: 'perdeu' as const, desistiu: true },
-        }
+        const novo = comPartida(anterior, nivel, {
+          ...atual, jogador: jogadores[nivel].id, status: 'perdeu' as const, desistiu: true,
+        })
+        if (anterior.revisao) return novo
         return {
-          ...anterior,
-          partidas,
+          ...novo,
           estatisticas: {
             ...anterior.estatisticas,
             [nivel]: registrarResultado(anterior.estatisticas[nivel], false, atual.palpites.length, dia),
@@ -148,17 +161,23 @@ export function App() {
 
   const aoPedirDica = useCallback((nivel: Nivel) => {
     setEstado((anterior) => {
-      const atual = anterior.partidas[nivel] ?? partidaNova()
+      const atual = partidasAtivas(anterior)[nivel] ?? partidaNova()
       if (atual.dicasUsadas >= DICAS || atual.status !== 'jogando') return anterior
-      return {
-        ...anterior,
-        partidas: {
-          ...anterior.partidas,
-          [nivel]: { ...atual, jogador: jogadores[nivel].id, dicasUsadas: atual.dicasUsadas + 1 },
-        },
-      }
+      return comPartida(anterior, nivel, { ...atual, jogador: jogadores[nivel].id, dicasUsadas: atual.dicasUsadas + 1 })
     })
   }, [jogadores])
+
+  /**
+   * Provisório, para revisar o conteúdo: sorteia outros jogadores nos três
+   * níveis, numa rodada à parte. O jogo do dia fica guardado como estava.
+   */
+  const aoRefazer = useCallback(() => {
+    setEstado((anterior) => ({ ...anterior, revisao: { semente: Math.floor(Math.random() * 2 ** 31), partidas: {} } }))
+  }, [])
+
+  const aoVoltarAoDia = useCallback(() => {
+    setEstado((anterior) => ({ ...anterior, revisao: null }))
+  }, [])
 
   if (nivelAtivo) {
     const restantes = NIVEIS.filter((n) => n !== nivelAtivo && partidaDe(n).status === 'jogando')
@@ -167,7 +186,8 @@ export function App() {
         nivel={nivelAtivo}
         jogador={jogadores[nivelAtivo]}
         partida={partidaDe(nivelAtivo)}
-        textoCompartilhar={textoDeCompartilhamento(dia, estado.partidas)}
+        emRevisao={Boolean(revisao)}
+        textoCompartilhar={revisao ? null : textoDeCompartilhamento(dia, estado.partidas)}
         proximoNivel={restantes[0] ?? null}
         aoChutar={(texto) => aoChutar(nivelAtivo, texto)}
         aoPedirDica={() => aoPedirDica(nivelAtivo)}
@@ -186,10 +206,13 @@ export function App() {
     <TelaInicial
       dia={dia}
       data={agora}
-      partidas={estado.partidas}
+      partidas={partidas}
       estatisticas={estado.estatisticas}
+      emRevisao={Boolean(revisao)}
       aoEscolher={setNivelAtivo}
       aoVerEstatisticas={() => setVerEstatisticas(true)}
+      aoRefazer={aoRefazer}
+      aoVoltarAoDia={aoVoltarAoDia}
     />
   )
 }

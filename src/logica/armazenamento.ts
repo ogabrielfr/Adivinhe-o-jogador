@@ -37,12 +37,24 @@ export interface Estatistica {
   porTentativa: [number, number, number]
 }
 
+/**
+ * Provisório, para revisar a biblioteca: uma rodada de jogadores sorteados, à
+ * parte do jogo do dia. A partida do dia e as estatísticas ficam como estavam,
+ * e a rodada some na virada do dia.
+ */
+export interface Revisao {
+  /** muda a cada "refazer"; é a semente do sorteio dos três níveis */
+  semente: number
+  partidas: Partial<Record<Nivel, Partida>>
+}
+
 interface Estado {
   versao: 1
   /** só o dia corrente é guardado; partidas antigas não têm mais uso */
   dia: string | null
   partidas: Partial<Record<Nivel, Partida>>
   estatisticas: Record<Nivel, Estatistica>
+  revisao?: Revisao | null
 }
 
 const CHAVE = 'acerte-o-jogador:v1'
@@ -84,12 +96,13 @@ export function carregar(diaAtual: string): Estado {
     const salvo = JSON.parse(bruto) as Estado
     if (salvo.versao !== 1) return { ...estadoInicial(), dia: diaAtual }
     const estatisticas = { ...estadoInicial().estatisticas, ...salvo.estatisticas }
-    // virou o dia: as partidas de ontem não valem mais
+    // virou o dia: as partidas de ontem não valem mais, nem a rodada de revisão
     if (salvo.dia !== diaAtual) return { versao: 1, dia: diaAtual, partidas: {}, estatisticas }
-    const partidas = Object.fromEntries(
-      Object.entries(salvo.partidas ?? {}).map(([n, p]) => [n, migrar(p as Partida)]),
+    const migradas = (lista: Estado['partidas'] | undefined) => Object.fromEntries(
+      Object.entries(lista ?? {}).map(([n, p]) => [n, migrar(p as Partida)]),
     ) as Partial<Record<Nivel, Partida>>
-    return { versao: 1, dia: diaAtual, partidas, estatisticas }
+    const revisao = salvo.revisao ? { semente: salvo.revisao.semente, partidas: migradas(salvo.revisao.partidas) } : null
+    return { versao: 1, dia: diaAtual, partidas: migradas(salvo.partidas), estatisticas, revisao }
   } catch {
     return { ...estadoInicial(), dia: diaAtual }
   }

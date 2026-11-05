@@ -11,8 +11,12 @@ interface Props {
   data: Date
   partidas: Partial<Record<Nivel, Partida>>
   estatisticas: Record<Nivel, Estatistica>
+  /** a rodada provisória de revisão, com jogadores sorteados fora do jogo do dia */
+  emRevisao: boolean
   aoEscolher: (nivel: Nivel) => void
   aoVerEstatisticas: () => void
+  aoRefazer: () => void
+  aoVoltarAoDia: () => void
 }
 
 function Resultado({ partida }: { partida: Partida }) {
@@ -33,7 +37,9 @@ function Resultado({ partida }: { partida: Partida }) {
   )
 }
 
-export function TelaInicial({ dia, data, partidas, estatisticas, aoEscolher, aoVerEstatisticas }: Props) {
+export function TelaInicial({
+  dia, data, partidas, estatisticas, emRevisao, aoEscolher, aoVerEstatisticas, aoRefazer, aoVoltarAoDia,
+}: Props) {
   const concluidos = NIVEIS.filter((n) => partidas[n] && partidas[n]!.status !== 'jogando').length
   const totalSequencia = Math.max(...NIVEIS.map((n) => sequenciaAtual(estatisticas[n], dia)))
 
@@ -55,7 +61,20 @@ export function TelaInicial({ dia, data, partidas, estatisticas, aoEscolher, aoV
         </p>
       </header>
 
-      <nav className="mt-9 border-t border-relva-700" aria-label="Escolha o nível">
+      {emRevisao && (
+        <p className="mt-8 border-l-2 border-dica pl-4 text-[14px] leading-snug text-cal">
+          Rodada de revisão: jogadores sorteados, fora do desafio do dia. Não conta nas estatísticas.{' '}
+          <button
+            type="button"
+            onClick={aoVoltarAoDia}
+            className="t-rotulo cursor-pointer text-cal-500 underline underline-offset-2 transition-colors hover:text-cal"
+          >
+            Voltar aos jogadores do dia
+          </button>
+        </p>
+      )}
+
+      <nav className={`${emRevisao ? 'mt-5' : 'mt-9'} border-t border-relva-700`} aria-label="Escolha o nível">
         {NIVEIS.map((nivel) => {
           const partida = partidas[nivel]
           return (
@@ -89,6 +108,20 @@ export function TelaInicial({ dia, data, partidas, estatisticas, aoEscolher, aoV
           )
         })}
       </nav>
+
+      {/* provisório, para revisar o conteúdo da biblioteca */}
+      <div className="mt-6">
+        <button
+          type="button"
+          onClick={aoRefazer}
+          className="t-rotulo w-full cursor-pointer rounded-xl border border-relva-600 px-4 py-3 text-sm text-cal transition-colors hover:bg-relva-850"
+        >
+          Refazer jogo com novos jogadores
+        </button>
+        <p className="mt-2 text-center text-xs text-cal-700">
+          Sorteia outros jogadores nos três níveis. O jogo do dia fica guardado.
+        </p>
+      </div>
 
       <footer className="mt-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 text-[13px] text-cal-700">
         <span>

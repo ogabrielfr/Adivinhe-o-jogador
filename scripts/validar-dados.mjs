@@ -5,6 +5,7 @@ import { CLUBES } from '../src/dados/clubes.ts'
 import { formasDerivadas, formasExatas } from '../src/logica/texto.ts'
 import { dataDoDia, numeroDoDia } from '../src/logica/sorteio.ts'
 import { NIVEIS } from '../src/dados/tipos.ts'
+import { defeitoDoSvg } from './svg-escudo.mjs'
 
 const erros = []
 const avisos = []
@@ -164,6 +165,19 @@ const presentes = existsSync(dir)
   : new Set()
 const semEscudo = [...usados].filter((c) => !presentes.has(c))
 if (semEscudo.length) avisos.push(`sem arquivo de escudo (usam brasão de reserva): ${semEscudo.join(', ')}`)
+
+/**
+ * SVG que o navegador não lê some da tela sem erro nenhum: o jogo tenta de
+ * novo e cai no brasão desenhado. Foi assim com o Elche, cujo arquivo usava o
+ * prefixo "sodipodi" sem declarar. O catálogo agora conserta isso ao gravar;
+ * aqui a regressão não passa.
+ */
+for (const c of CLUBES.filter((x) => usados.has(x.id) && x.escudo?.endsWith('.svg'))) {
+  const arquivo = new URL(`../public/escudos/${c.escudo}`, import.meta.url)
+  if (!existsSync(arquivo)) continue
+  const defeito = defeitoDoSvg(readFileSync(arquivo, 'utf8'))
+  if (defeito) erros.push(`escudo que o navegador recusa: ${c.escudo} (${defeito})`)
+}
 
 function normalizar(s) {
   return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim()

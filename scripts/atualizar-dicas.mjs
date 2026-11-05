@@ -1,12 +1,19 @@
 /**
- * Refaz a dica de todos os jogadores sem mexer no elenco.
+ * Escreve a dica de cada jogador sem mexer no elenco.
  *
- *   npm run dicas
+ *   npm run dicas                # dica para quem não tem; as outras ficam
+ *   npm run dicas -- --todas     # refaz todas, mesmo sem os títulos
  *
  * Existe separado do gerador porque trocar a dica não deveria custar um elenco
- * novo: a montagem depende do WAF do Transfermarkt liberar, e cada execução
- * devolve um conjunto de jogadores um pouco diferente. Aqui os trezentos ficam
- * como estão e só o texto muda.
+ * novo. Aqui a biblioteca fica como está e só o texto muda.
+ *
+ * **Os títulos só vêm do site do Transfermarkt**, que fica desligado
+ * (`titulosDoTransfermarkt`, em transfermarkt.mjs). Sem eles, refazer a dica
+ * de quem já tem uma a deixaria pior: o "Campeão da Libertadores de 2013 pelo
+ * Atlético-MG" sumiria. Então a dica de quem já tem fica como está, e a de
+ * quem acabou de entrar sai com o que a API tem — finais, jogos por clube,
+ * tempo de casa, Copas, seleção, naturalidade. Com `TITULOS_DO_SITE=1` (e o
+ * site respondendo), os títulos voltam e todas são refeitas, como antes.
  */
 import { readFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
@@ -125,6 +132,12 @@ const competicoes = await competicoesDoTransfermarkt(
   [...desempenhoDe.values()].flatMap((d) => d?.finais.map((f) => f.competicao) ?? []),
 )
 
+/** Quem fica com a dica que tem: já tem as duas, e os títulos dele não estão à mão. */
+const REFAZER_TODAS = process.argv.includes('--todas')
+const mantidas = new Set(REFAZER_TODAS ? [] : jogadores
+  .filter((j) => titulosDe.get(j.id) == null && j.dicas?.length === 2 && j.dicas.every((d) => d?.trim()))
+  .map((j) => j.id))
+
 // ------------------------------------------------------- torneios disputados
 /**
  * Copa do Mundo é o fato mais forte da biblioteca para a segunda dica. Vem do
@@ -214,6 +227,8 @@ for (const j of jogadores) {
       clubeDaCasa: nomePorTm.get(String(fatos.clubeDaPermanencia)) ?? fatos.nomeDaPermanencia ?? null,
       // carreira corrigida à mão: a linha do tempo do Transfermarkt não vale
       historicoSuspeito: j.id in CARREIRA_FIXA,
+      // a segunda dica não repete palavra do nome que aparece na tela
+      nomeNaTela: NOME_FIXO[j.id] ?? j.nome,
     },
   })
 }
@@ -250,23 +265,27 @@ for (const c of coletado) {
 const escala = escalaDosFatos(coletado.map((c) => c.dados))
 
 // ------------------------------------- segunda passada: escrever cada dica
+// a frase de quem fica como está já é dele: a dica nova não pode repeti-la
+for (const j of jogadores) if (mantidas.has(j.id)) dicas.set(j.dicas[1], j.id)
+
 for (const { jogador: j, perfil, dados } of coletado) {
   const id = j.id
 
   // DICA=id mostra os fatos que o jogador tinha e a nota de cada um
   if (process.env.DICA === id) console.log(id, candidatosDaSegunda(dados, escala))
 
-  // dica repetida não é dica; a segunda é a que precisa distinguir, e troca
-  // de fato quando a frase já é de outro
-  const par = montarDicas(dados, escala, dicas)
-  if (dicas.has(par[1])) semFato++
-  dicas.set(par[1], id)
+  if (!mantidas.has(id)) {
+    // dica repetida não é dica; a segunda é a que precisa distinguir, e troca
+    // de fato quando a frase já é de outro
+    const par = montarDicas(dados, escala, dicas)
+    if (dicas.has(par[1])) semFato++
+    dicas.set(par[1], id)
+    j.dicas = par
+  }
 
   if (perfil?.posicao && !papelConhecido(perfil.posicao)) {
     posicoesSoltas.set(perfil.posicao, (posicoesSoltas.get(perfil.posicao) ?? 0) + 1)
   }
-
-  j.dicas = par
 
   /**
    * O nome da camisa vira o nome canônico quando é mais curto que o de
@@ -309,6 +328,10 @@ gravarBiblioteca(jogadores)
 
 const distintas = new Set(dicas.keys()).size
 console.log(`\n${distintas} segundas dicas distintas para ${jogadores.length} jogadores`)
+if (mantidas.size) {
+  console.log(`  ${jogadores.length - mantidas.size} escritas agora; ${mantidas.size} ficaram como estavam, porque os títulos` +
+    ' só vêm do site (TITULOS_DO_SITE=1 refaz todas)')
+}
 if (semFato) console.log(`  ${semFato} continuam repetidas: faltam fatos para separá-las`)
 if (semPerfil) console.log(`  ${semPerfil} sem posição no Transfermarkt`)
 console.log(`${renomeados} passaram a usar o nome da camisa em vez do de registro`)

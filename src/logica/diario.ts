@@ -67,6 +67,16 @@ export function sorteado(nivel: Nivel, dia: number): Jogador {
   return embaralhar(lista, semente(`${nivel}:${ciclo}`))[posicao]
 }
 
+/**
+ * Provisório, para revisar a biblioteca: um jogador qualquer do nível,
+ * sorteado pela semente da rodada. Nunca o do dia, que quem revisa já viu.
+ */
+export function jogadorDaRevisao(nivel: Nivel, dia: number, rodada: number): Jogador {
+  const doDia = jogadorDoDia(nivel, dia)
+  const lista = POR_NIVEL[nivel].filter((j) => j.id !== doDia.id)
+  return embaralhar(lista, semente(`revisao:${nivel}:${rodada}`))[0]
+}
+
 /** Jogador pelo id, para a partida salva continuar com quem ela começou. */
 export const jogadorPorId = (id: string | undefined): Jogador | undefined =>
   id ? POR_ID.get(id) : undefined

@@ -2,24 +2,28 @@
  * Carreira a partir do Transfermarkt, que é a referência de mercado e a fonte
  * mais completa das três em fim de carreira e em passagem curta.
  *
- * Duas decisões que valem explicar:
+ * Três decisões que valem explicar:
  *
  * **O id do jogador vem do Wikidata (P2446), não da busca deles.** Além de
  * evitar raspar a busca do site, é mais confiável: "Elkeson" está lá como "Ai
  * Kesen", o nome com que ele se naturalizou chinês, e uma busca por "Elkeson"
  * teria que adivinhar isso.
  *
- * **O 405 é intermitente e se resolve repetindo.** O site fica atrás do AWS
- * WAF, que amostra as requisições e devolve uma página "Human Verification"
- * em vez de 200 — mais ou menos uma em cinco. Repetir devagar resolve; o
- * robots.txt deles declara `Allow: /` para agente genérico. O que este módulo
- * NÃO faz é resolver o desafio do WAF: se a repetição não passar, o jogador
- * fica sem esta fonte e o relatório diz isso.
+ * **Tudo vem da API aberta (`tmapi.transfermarkt.technology`), não do site.**
+ * O site fica atrás de uma verificação contra robôs (AWS WAF), que recusava a
+ * maior parte dos pedidos: em novembro de 2026, a atualização da base baixou
+ * 25 históricos em meia hora. A API serve o mesmo dado — o histórico de
+ * transferências, o perfil, as partidas, a seleção, o nome de clube e de
+ * competição — sem verificação nenhuma, em português, e em minutos para a
+ * biblioteca inteira. O histórico da API foi conferido contra o do site nos
+ * 25 jogadores que ainda estavam em cache: as mesmas transferências, nas
+ * mesmas datas, entre os mesmos clubes, com o mesmo valor.
  *
- * **O pedido sai por `curl`, não pelo `fetch` do Node.** O WAF recusa o fetch
- * quase sempre e aceita o curl quase sempre, com os mesmos cabeçalhos — a
- * diferença está no cliente, não no que se pede. Ambos são cliente HTTP
- * comum; isto não é disfarce, e o ritmo abaixo é deliberadamente lento.
+ * **A única coisa que a API não tem é a página de títulos.** Ela só existe no
+ * site, e por isso fica desligada: `titulosDoTransfermarkt` lê o que estiver
+ * em cache e, sem cache, devolve null — e `npm run dicas` mantém a dica de
+ * quem já tem uma. `TITULOS_DO_SITE=1` volta a pedir a página ao site, para
+ * quem roda de uma máquina onde ele responde.
  */
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
@@ -39,6 +43,42 @@ const NAVEGADOR = {
 }
 
 const espera = (ms) => new Promise((r) => setTimeout(r, ms))
+
+const API = 'https://tmapi.transfermarkt.technology'
+/** Quem pede, com endereço para contato: a API não tem verificação, e o pedido não se passa por navegador. */
+const AGENTE = 'acerte-o-jogador/1.0 (https://github.com/ogabrielfr/Adivinhe-o-jogador)'
+
+/**
+ * Um recurso da API, em português (o nome de posição, de clube e de
+ * competição vem traduzido pelo `Accept-Language`). Repete só falha de rede,
+ * limite de pedidos e erro do servidor; resposta de "não existe" volta como
+ * veio, e quem chamou lê o `success`.
+ */
+async function pedirApi(caminho, tentativas = 4) {
+  for (let i = 0; i < tentativas; i++) {
+    try {
+      const resposta = await fetch(`${API}/${caminho}`, {
+        headers: { 'User-Agent': AGENTE, 'Accept-Language': 'pt-BR,pt;q=0.9', Accept: 'application/json' },
+        signal: AbortSignal.timeout(25_000),
+      })
+      if (resposta.status !== 429 && resposta.status < 500) return await resposta.text()
+    } catch {
+      // rede ou tempo esgotado: tenta de novo
+    }
+    await espera(1000 * 2 ** i)
+  }
+  return null
+}
+
+/** O `data` de um recurso da API, ou null quando ela não respondeu ou disse que não tem. */
+async function apiDoTransfermarkt(caminho) {
+  try {
+    const dados = JSON.parse(await pedirApi(caminho))
+    return dados?.success ? dados.data : null
+  } catch {
+    return null
+  }
+}
 
 /**
  * O nome do clube no histórico vem abreviado para caber na tabela do site:
@@ -167,7 +207,13 @@ export async function idsDoTransfermarkt(qids) {
 const CACHE = join(dirname(fileURLToPath(import.meta.url)), '..', '.cache', 'transfermarkt')
 mkdirSync(CACHE, { recursive: true })
 
-/** Histórico cru de transferências, do cache quando já foi buscado. */
+/**
+ * Histórico de transferências, do cache quando já foi buscado.
+ *
+ * Vem da API e é gravado no formato da tabela do site, que é o que o resto do
+ * código lê desde o começo: `{ transfers: [{ from, to, fee, ... }] }`, do mais
+ * recente para o mais antigo.
+ */
 export async function historicoDoTransfermarkt(tmId, { forcar = false } = {}) {
   const arquivo = join(CACHE, `${tmId}.json`)
   if (!forcar && existsSync(arquivo)) {
@@ -177,19 +223,119 @@ export async function historicoDoTransfermarkt(tmId, { forcar = false } = {}) {
       // cache corrompido: busca de novo
     }
   }
-  const bruto = await pedirComInsistencia(`${BASE}/ceapi/transferHistory/list/${tmId}`)
-  if (!bruto) return null
-  let dados
-  try {
-    dados = JSON.parse(bruto)
-  } catch {
-    return null
-  }
-  writeFileSync(arquivo, JSON.stringify(dados))
-  return dados
+  const dados = await apiDoTransfermarkt(`transfer/history/player/${tmId}`)
+  if (!dados?.history) return null
+  const historico = await historicoNoFormatoDoSite(dados.history)
+  writeFileSync(arquivo, JSON.stringify(historico))
+  return historico
 }
 
-/** Repete enquanto o WAF responder com a página de verificação. */
+/**
+ * Do mais recente para o mais antigo, como a tabela do site. Duas no mesmo
+ * dia vão na ordem da cadeia — a que sai de onde a outra chegou é a de
+ * depois —, e sem cadeia, na ordem do id. O Coutinho foi vendido à Inter e
+ * emprestado ao Vasco no mesmo 23 de julho de 2008; na ordem em que a API
+ * devolve, o empréstimo vinha antes da compra, e a carreira dele começava na
+ * Inter.
+ */
+function emOrdem(linhas) {
+  const dia = (l) => String(l.details?.date ?? '').slice(0, 10)
+  const porDia = new Map()
+  for (const l of linhas) porDia.set(dia(l), [...(porDia.get(dia(l)) ?? []), l])
+  const saida = []
+  for (const d of [...porDia.keys()].sort().reverse()) {
+    const resto = porDia.get(d).sort((a, b) => Number(a.id) - Number(b.id))
+    // do mais antigo para o mais novo: começa pela que não sai de onde outra chegou
+    const cadeia = []
+    while (resto.length) {
+      const anterior = cadeia.at(-1)
+      let i = anterior ? resto.findIndex((l) => l.transferSource?.clubId === anterior.transferDestination?.clubId) : -1
+      if (i < 0) {
+        i = resto.findIndex((l) => !resto.some((o) => o !== l && o.transferDestination?.clubId === l.transferSource?.clubId))
+      }
+      cadeia.push(resto.splice(Math.max(i, 0), 1)[0])
+    }
+    saida.push(...cadeia.reverse())
+  }
+  return saida
+}
+
+/** "€37.00mi", "€900mil": o valor como a tabela do site escreve, que é o que `emEuros` lê. */
+function valorNoFormatoDoSite(valor) {
+  const n = Number(valor?.value)
+  if (!Number.isFinite(n) || n <= 0) {
+    const texto = String(valor?.compact?.content ?? '').trim()
+    // a API manda "Custo zero"; o site escrevia em minúscula
+    return texto ? texto.toLowerCase() : '-'
+  }
+  if (n >= 1e6) return `€${(n / 1e6).toFixed(2)}mi`
+  if (n >= 1e3) return `€${Math.round(n / 1e3)}mil`
+  return `€${n}`
+}
+
+/**
+ * A linha da API vira a linha da tabela do site. O que o código usa de cada
+ * uma: as datas, a temporada, a taxa (é por ela que se reconhece o empréstimo
+ * e a volta dele), o valor de mercado e, de cada clube, o link com o id, o
+ * nome e a bandeira do país.
+ */
+async function historicoNoFormatoDoSite(historico) {
+  // a que ainda vai acontecer — a volta de um empréstimo em curso — vem à parte, e no site vinha no topo
+  const linhas = [
+    ...emOrdem(historico.pending ?? []),
+    ...emOrdem(historico.terminated ?? []),
+  ]
+  const clubes = await clubesDoTransfermarkt(
+    linhas.flatMap((l) => [l.transferSource?.clubId, l.transferDestination?.clubId]).filter(Boolean),
+  )
+  const lado = (l, temporada) => {
+    const clube = clubes[l?.clubId] ?? {}
+    // o Levallois do Drogba vem com o nome curto vazio
+    const nome = clube.curto || clube.nome || null
+    // o link do site levava o nome curto ("/sao-paulo/", "/barcelona/"), sem o "(1954 - 2024)" de clube extinto
+    const slug = String(nome ?? 'clube').replace(/\s*\([^)]*\)/g, '').normalize('NFD')
+      .replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    return {
+      href: `/${slug || 'clube'}/transfers/verein/${l?.clubId}/saison_id/${temporada}`,
+      clubName: nome,
+      countryFlag: Number(l?.countryId) > 0 ? `https://img.a.transfermarkt.technology/flagge/verysmall/${l.countryId}.png` : null,
+      ...(clube.tipo >= 2 && clube.mae && clube.mae !== String(l?.clubId) && { subordinado: true }),
+    }
+  }
+  const taxa = (l) => {
+    const tipo = l.typeDetails?.type
+    if (tipo === 'RETURNED_FROM_PREVIOUS_LOAN') return 'Fim do empréstimo'
+    if (tipo === 'ACTIVE_LOAN_TRANSFER') {
+      const valor = valorNoFormatoDoSite(l.details?.fee)
+      return valor.startsWith('€')
+        ? `Valor de empréstimo:<br /><i class="normaler-text">${valor}</i>`
+        : 'Empréstimo'
+    }
+    return valorNoFormatoDoSite(l.details?.fee)
+  }
+  return {
+    fonte: 'api',
+    transfers: linhas.map((l) => {
+      const dia = String(l.details?.date ?? '').slice(0, 10)
+      const temporada = l.details?.season?.id ?? l.details?.seasonId ?? ''
+      const futura = Boolean(l.details?.isPending)
+      return {
+        from: lado(l.transferSource, temporada),
+        to: lado(l.transferDestination, temporada),
+        date: dia.split('-').reverse().join('/'),
+        dateUnformatted: dia,
+        season: l.details?.season?.display ?? '',
+        fee: taxa(l),
+        marketValue: valorNoFormatoDoSite(l.details?.marketValue),
+        upcoming: futura,
+        futureTransfer: futura ? 1 : 0,
+        tipo: l.typeDetails?.type ?? null,
+      }
+    }),
+  }
+}
+
+/** Repete enquanto o WAF responder com a página de verificação. Só a página de títulos, e só com TITULOS_DO_SITE=1. */
 async function pedirComInsistencia(url, tentativas = 6) {
   const cabecalhos = Object.entries(NAVEGADOR).flatMap(([k, v]) => ['-H', `${k}: ${v}`])
   for (let i = 0; i < tentativas; i++) {
@@ -255,7 +401,7 @@ export async function passagensDoTransfermarkt(tmId) {
   const sequencia = []
   const acrescentar = (clube, ano, volta = false, desde = null) => {
     const nome = nomeDoClube(clube)
-    if (!nome || NAO_E_CLUBE.test(nome) || ehCategoriaDeBase(nome)) return
+    if (!nome || NAO_E_CLUBE.test(nome) || ehCategoriaDeBase(nome) || clube?.subordinado) return
     if (sequencia.at(-1)?.nome === nome) return
     const idTm = idDoClube(clube)
     sequencia.push({
@@ -329,18 +475,11 @@ export async function jogosPorClube(tmId) {
       // cache corrompido: busca de novo
     }
   }
-  const bruto = await pedirComInsistencia(`https://tmapi.transfermarkt.technology/player/${tmId}/performance-game`)
-  if (!bruto) return null
-  let dados
-  try {
-    dados = JSON.parse(bruto)
-  } catch {
-    return null
-  }
-  if (!dados?.success) return null
+  const dados = await apiDoTransfermarkt(`player/${tmId}/performance-game`)
+  if (!dados) return null
 
   const porClube = {}
-  for (const jogo of dados.data?.performance ?? []) {
+  for (const jogo of dados.performance ?? []) {
     if (jogo.gameInformation?.isNationalGame) continue
     const clube = jogo.clubsInformation?.club?.clubId
     if (!clube) continue
@@ -361,17 +500,6 @@ export async function jogosPorClube(tmId) {
   for (const registro of Object.values(porClube)) registro.datas.sort()
   writeFileSync(arquivo, JSON.stringify(porClube))
   return porClube
-}
-
-/** Um recurso da API do Transfermarkt, que não passa pelo WAF. */
-async function apiDoTransfermarkt(caminho) {
-  const bruto = await pedirComInsistencia(`https://tmapi.transfermarkt.technology/${caminho}`)
-  try {
-    const dados = JSON.parse(bruto)
-    return dados?.success ? dados.data : null
-  } catch {
-    return null
-  }
 }
 
 /**
@@ -565,7 +693,11 @@ const anoPassado = (ano) => (ano > new Date().getFullYear() + 1 ? ano - 100 : an
  * Libertadores 12/13 é a de 2013, a Champions 12/13 também.
  *
  * Volta `[{ titulo, conquistas: [{ ano, clubeTm, clube }] }]`, ou `[]` para quem
- * não ganhou nada; `null` quando o site não respondeu.
+ * não ganhou nada; `null` quando não há como saber.
+ *
+ * É o único dado que a API não tem, e o site fica atrás da verificação contra
+ * robôs. Por isso o pedido ao site só sai com `TITULOS_DO_SITE=1`; sem isso,
+ * vale o que estiver em cache, e quem não tem cache volta null.
  */
 export async function titulosDoTransfermarkt(tmId) {
   const arquivo = join(CACHE, `titulos-${tmId}.json`)
@@ -579,6 +711,7 @@ export async function titulosDoTransfermarkt(tmId) {
       // cache corrompido: busca de novo
     }
   }
+  if (process.env.TITULOS_DO_SITE !== '1') return null
   const html = await pedirComInsistencia(`${BASE}/-/erfolge/spieler/${tmId}`)
   if (!html || html.length < 20_000) return null
 
@@ -611,32 +744,43 @@ export async function titulosDoTransfermarkt(tmId) {
 /**
  * O nome em português de cada país, pelo id do Transfermarkt.
  *
- * A API dá o país de nascimento e a nacionalidade só pelo id. O nome sai de
- * duas fontes do próprio site: o nome da seleção principal do país, que a API
- * devolve em português, e, para o país sem seleção entre os times nacionais
- * que já conhecemos, o título da bandeira no perfil de um jogador de lá.
+ * A API dá o país de nascimento e a nacionalidade só pelo id. O nome é o da
+ * seleção principal do país, que a API devolve em português ("Brasil",
+ * "Holanda"). Para o país cuja seleção principal não está entre os times
+ * conhecidos, o caminho é a seleção de base: ela aponta a principal
+ * (`principalId`), que vem pela mesma API. País sem seleção nenhuma entre os
+ * times conhecidos fica sem nome, e a dica cai na nacionalidade do Wikidata.
  *
- * `quem` diz, para cada id que faltar, o jogador em cujo perfil procurar.
+ * O segundo argumento ficou da época em que o nome vinha da bandeira no perfil
+ * do site; hoje não é usado.
  */
-export async function paisesDoTransfermarkt(times, quem = new Map()) {
-  const arquivo = join(CACHE, 'paises.json')
-  let nomes = {}
-  try {
-    nomes = JSON.parse(readFileSync(arquivo, 'utf8'))
-  } catch {
-    // sem cache: monta de novo
-  }
+export async function paisesDoTransfermarkt(times, _quem = new Map()) {
+  const nomes = lerPaises()
   for (const time of Object.values(times)) {
     if (time?.principal && time.pais && !nomes[time.pais]) nomes[time.pais] = time.nome
   }
-  for (const [pais, tmId] of quem) {
-    if (nomes[pais]) continue
-    const html = await pedirComInsistencia(`${BASE}/-/profil/spieler/${tmId}`)
-    const titulo = html?.match(new RegExp(`/flagge/[a-z]+/${pais}\\.png[^>]*?title="([^"]+)"`))?.[1]
-    if (titulo) nomes[pais] = titulo
+  const principais = [...new Set(Object.values(times)
+    .filter((t) => t?.pais && !nomes[t.pais] && t.principalId)
+    .map((t) => String(t.principalId)))]
+  if (principais.length) {
+    for (const time of Object.values(await clubesDoTransfermarkt(principais))) {
+      if (time?.principal && time.pais && !nomes[time.pais]) nomes[time.pais] = time.nome
+    }
   }
-  writeFileSync(arquivo, JSON.stringify(nomes))
+  writeFileSync(join(CACHE, 'paises.json'), JSON.stringify(nomes))
   return nomes
+}
+
+let paisesEmMemoria = null
+function lerPaises() {
+  if (!paisesEmMemoria) {
+    try {
+      paisesEmMemoria = JSON.parse(readFileSync(join(CACHE, 'paises.json'), 'utf8'))
+    } catch {
+      paisesEmMemoria = {}
+    }
+  }
+  return paisesEmMemoria
 }
 
 /**
@@ -658,7 +802,7 @@ export async function clubesDoTransfermarkt(ids) {
   } catch {
     // sem cache: busca tudo
   }
-  const faltando = [...new Set(ids.map(String))].filter((id) => !guardado[id] || !('principal' in guardado[id]))
+  const faltando = [...new Set(ids.map(String))].filter((id) => !guardado[id] || !('tipo' in guardado[id]))
   for (let i = 0; i < faltando.length; i += 40) {
     const lote = faltando.slice(i, i + 40)
     for (const clube of (await apiDoTransfermarkt(`clubs?${lote.map((id) => `ids%5B%5D=${id}`).join('&')}`)) ?? []) {
@@ -668,6 +812,17 @@ export async function clubesDoTransfermarkt(ids) {
         curto: base.shortName ?? null,
         pais: base.countryId ?? null,
         principal: base.isNationalTeam === true && String(base.mainClubId) === String(clube.id),
+        // a seleção de base aponta a principal; é por ela que se acha o nome do país
+        principalId: base.isNationalTeam === true && base.mainClubId ? String(base.mainClubId) : null,
+        /**
+         * Time B e base apontam o time principal do clube (`mainClubId`), e o
+         * tipo deles não é o 1 do time principal: a Zébra Élites é a base do
+         * Charleroi, o SL16 FC a do Standard, o Sporting Atlético o B do Sporting
+         * de Gijón. O nome sozinho não diz isso, e é pelo nome que o resto da
+         * biblioteca reconhecia base.
+         */
+        mae: base.mainClubId ? String(base.mainClubId) : null,
+        tipo: base.clubTypeId ?? null,
       }
     }
   }
@@ -676,68 +831,48 @@ export async function clubesDoTransfermarkt(ids) {
 }
 
 /**
- * Posição e nacionalidade do perfil.
+ * Nome, posição, nacionalidade, naturalidade e pé, do perfil.
  *
- * Vêm daqui e não do Wikidata porque lá as duas propriedades aceitam vários
+ * Vêm daqui e não do Wikidata porque lá as propriedades aceitam vários
  * valores e a escolha do primeiro saía errada: o Zico aparecia como "nascido
  * em Portugal" na mesma frase que citava a seleção brasileira. O Transfermarkt
  * guarda um valor só, que é o que o jogo precisa.
+ *
+ * O nome é o pelo qual o jogador é conhecido — o da camisa. O rótulo do
+ * Wikidata costuma trazer o nome de registro, e "Paulo Henrique Sampaio
+ * Filho" não é palpite que alguém digite. A posição vem em português, como no
+ * site ("Lateral Esq.", "Centroavante"). Naturalidade entrou porque a dica de
+ * quem tem carreira magra não entregava nada: "Nasceu em Cubatão" é
+ * específico, verificável e o mural de escudos não mostra.
+ *
+ * A nacionalidade fica guardada pelo id e ganha o nome na leitura, pela lista
+ * de países que `paisesDoTransfermarkt` monta.
  */
 export async function perfilDoTransfermarkt(tmId) {
   const arquivo = join(CACHE, `perfil-${tmId}.json`)
+  let perfil = null
   if (existsSync(arquivo)) {
     try {
       const guardado = JSON.parse(readFileSync(arquivo, 'utf8'))
-      // perfil gravado antes de naturalidade e pé existirem: vale rebuscar
-      if ('naturalidade' in guardado) return guardado
+      // perfil gravado do site, com a nacionalidade por extenso: vale rebuscar pela API
+      if ('nacionalidadeId' in guardado) perfil = guardado
     } catch {
       // cache corrompido: busca de novo
     }
   }
-
-  const html = await pedirComInsistencia(`${BASE}/-/profil/spieler/${tmId}`)
-  if (!html || html.length < 20_000) return null
-
-  const posicao =
-    html.match(/Posi[çc][ãa]o:?\s*<\/span>\s*<span[^>]*>([^<]+)/i)?.[1]?.trim() ??
-    html.match(/data-header__label"[^>]*>\s*Posição[\s\S]{0,120}?content"[^>]*>([^<]+)/i)?.[1]?.trim() ??
-    null
-
-  const nacionalidade =
-    html.match(/Naci?onalidade:?[\s\S]{0,300}?title="([^"]+)"/i)?.[1]?.trim() ?? null
-
-  /**
-   * O nome do cabeçalho é o nome pelo qual o jogador é conhecido — o da
-   * camisa. O rótulo do Wikidata costuma trazer o nome de registro, e
-   * "Paulo Henrique Sampaio Filho" não é palpite que alguém digite.
-   */
-  const nome = html
-    .match(/<h1[^>]*data-header__headline-wrapper[^>]*>([\s\S]*?)<\/h1>/i)?.[1]
-    ?.replace(/<[^>]+>/g, ' ')
-    .replace(/#\d+\s*/g, '')
-    .replace(/\s+/g, ' ')
-    .trim() ?? null
-
-  /**
-   * Naturalidade e pé vêm da tabela lateral do perfil. Entraram porque a
-   * dica de quem tem carreira magra não entregava nada: o Ademilson não tem
-   * jogo de seleção nem torneio, e sobravam dois números de dinheiro. "Nasceu
-   * em Cubatão" é específico, verificável e o mural de escudos não mostra.
-   */
-  const campo = (rotulo) => {
-    const re = new RegExp(
-      `${rotulo}:?\\s*</span>\\s*<span[^>]*info-table__content--bold[^>]*>([\\s\\S]*?)</span>`, 'i')
-    const bruto = html.match(re)?.[1]
-    if (!bruto) return null
-    const limpo = bruto.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim()
-    return limpo || null
+  if (!perfil) {
+    const dados = await apiDoTransfermarkt(`player/${tmId}`)
+    if (!dados) return null
+    const atributos = dados.attributes ?? {}
+    perfil = {
+      nome: dados.name ?? null,
+      // sem posição exata, o site mostrava o setor ("Atacante")
+      posicao: atributos.position?.name ?? atributos.positionGroupName ?? null,
+      nacionalidadeId: dados.nationalityDetails?.nationalities?.nationalityId || null,
+      naturalidade: dados.birthPlaceDetails?.placeOfBirth?.trim() || null,
+      pe: atributos.preferredFoot?.name ?? null,
+    }
+    writeFileSync(arquivo, JSON.stringify(perfil))
   }
-
-  const perfil = {
-    nome, posicao, nacionalidade,
-    naturalidade: campo('Local de nascimento'),
-    pe: campo('P[ée]'),
-  }
-  writeFileSync(arquivo, JSON.stringify(perfil))
-  return perfil
+  return { ...perfil, nacionalidade: perfil.nacionalidadeId ? lerPaises()[perfil.nacionalidadeId] ?? null : null }
 }

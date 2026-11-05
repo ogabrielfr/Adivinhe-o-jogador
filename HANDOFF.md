@@ -56,13 +56,21 @@ zerozero, do mesmo grupo, faz igual. O Transfermarkt devolve 405.
 
 Trocar de ambiente não muda isso. Não tente de novo por esse caminho.
 
-**O Transfermarkt, ao contrário, dá para usar.** Ele fica atrás do AWS WAF, que
-amostra as requisições e devolve uma página "Human Verification" em vez de 200
-mais ou menos uma em cinco — repetir devagar resolve. O `robots.txt` deles
-declara `Allow: /` para agente genérico. Dois detalhes que custaram tempo:
+**O Transfermarkt vem da API aberta, não do site** (desde 05/11). O site fica
+atrás do AWS WAF, uma verificação contra robôs, e em novembro recusava quase
+tudo: a atualização baixou 25 históricos em meia hora. Além disso, a política
+de segurança das sessões do Claude recusa pedido que tente passar pela
+verificação. A API (`tmapi.transfermarkt.technology`) não tem verificação e
+serve o mesmo dado — histórico de transferências, perfil, partidas, seleção,
+nomes de clube e competição, em português —, e o código pede com um agente
+honesto (`acerte-o-jogador/1.0`, com o endereço do repositório). O histórico
+foi conferido contra o do site em 25 jogadores: as 204 transferências batem.
 
-- **O pedido precisa sair por `curl`, não pelo `fetch` do Node.** Com os mesmos
-  cabeçalhos, o WAF recusa o fetch quase sempre e aceita o curl quase sempre.
+**A única coisa que fica no site é a página de títulos.** Por isso ela só é
+pedida com `TITULOS_DO_SITE=1`; sem isso, `npm run dicas` mantém a dica de quem
+já tem e escreve a dos novos sem título (README, "De onde vem o dado do
+Transfermarkt").
+
 - **O id do jogador vem do Wikidata (P2446), não da busca deles.** Mais
   confiável: o Elkeson está lá como "Ai Kesen", o nome com que se naturalizou
   chinês.
@@ -72,9 +80,10 @@ JavaScript (200 com 92 KB e nenhum resultado no HTML), e o resumo de IA é texto
 gerado sem citação estável — reintroduz exatamente o problema que a conferência
 existe para eliminar.
 
-O que responde 200 da mesma máquina: `tmssl.akamaized.net`, Wikipédia,
-Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
-`ogabrielfr.github.io`.
+O que responde 200 da mesma máquina: `tmssl.akamaized.net` (escudos do
+Transfermarkt), `tmapi.transfermarkt.technology`, Wikipédia, Wikidata (SPARQL e
+API), a API de visualizações da Wikimedia, Commons (miniaturas; o original às
+vezes vem 429) e `ogabrielfr.github.io`.
 
 ---
 
@@ -82,10 +91,12 @@ Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
 
 - Jogo completo: tela inicial, partida, derrota (com o nome revelado), vitória, compartilhamento estilo Wordle, streak e estatísticas em `localStorage`.
 - **Agenda do jogador do dia** (`npm run agenda`): dia marcado não muda mais, então mexer na biblioteca só afeta os dias que ainda não estão nela. Fora da agenda vale o sorteio determinístico por data. A partida guarda o id do jogador e continua com ele mesmo que o dia seja trocado.
-- **408 jogadores, 136 em cada nível**, com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e todos têm `verificado: true`. Jogador pedido pelo nome entra por `npm run trazer`. A biblioteca é dado (`src/dados/jogadores.json`), lida e gravada por `scripts/biblioteca.mjs`.
+- **900 jogadores, 300 em cada nível** (05/11; eram 408), com carreira montada a partir do histórico do Transfermarkt. `EXIGIR_VERIFICACAO` está ligado e todos têm `verificado: true`. Jogador pedido pelo nome entra por `npm run trazer`. A biblioteca é dado (`src/dados/jogadores.json`), lida e gravada por `scripts/biblioteca.mjs`. Como os 492 novos foram escolhidos está no README.
+- **A atualização de fevereiro e setembro em um comando** (`npm run atualizar`): carreira, escudo, dica, nível e agenda, com relatório em `relatorios/`. A primeira rodou em 05/11, em menos de dois minutos, e mudou 7 carreiras (`relatorios/atualizacao-2026-11-05.md`).
+- **Rodada de revisão provisória**: "Refazer jogo com novos jogadores" na tela inicial sorteia outros três, fora do desafio do dia e das estatísticas. **Planilha de revisão** por amostragem: `npm run planilha`.
 - **Um resolvedor de clube só** (`scripts/resolver-clube.mjs`) para gerar, reparar e repor. Casa por id do Transfermarkt; por nome, só com nome contido, país e época conferidos.
 - **Mapa do Transfermarkt conferido por duas testemunhas** (`npm run mapa-tm`): o Wikidata diz de quem é cada id, e o par que ele desmente sai; o nome que o próprio Transfermarkt dá ao id é conferido para todo id em uso, e o que não bate vai para uma lista de leitura. Foi essa lista que achou o CRB do Marcos Rocha ligado ao Brasil de Pelotas e o Instituto do Dybala ao Central Córdoba.
-- **Catálogo de 5412 clubes de 69 países**, sendo 1163 brasileiros. Dos 527 que o jogo usa, só o Miami FC de 2006 fica com o brasão desenhado, de propósito: as duas fontes mostram o escudo do Fort Lauderdale Strikers, que o clube virou depois.
+- **Catálogo de 5650 clubes de 87 países**, sendo 1204 brasileiros. Dos 1082 que o jogo usa, três ficam com o brasão desenhado: o Miami FC de 2006, de propósito (as duas fontes mostram o escudo do Fort Lauderdale Strikers, que o clube virou depois), e o Toronto Italia do Mazzola e o Olimpia de Minas do Abreu, que o Transfermarkt não tem escudo. O Elche voltou a aparecer e o Palmeiras está com o escudo de depois de 2012, com a estrela vermelha.
 - **Duas dicas por jogador.** A primeira diz posição, país de **nascimento** e ano, e, quando o jogador defendeu a seleção de outro país, qual ("Lateral brasileiro nascido em 1990, que defendeu a seleção russa"). A segunda abre com o **fato específico** que o cliente pediu — gol em final, título com ano e clube, clube de que foi ídolo em jogos ("Campeão da Libertadores de 2013 pelo Atlético-MG e de 2020 e 2021 pelo Palmeiras. Fez mais de 300 jogos pelo Palmeiras.") — e cai para naturalidade, Copa e o resto só quando não há nenhum. Tudo do Transfermarkt: página de títulos, registro de partidas e API.
 - **Estatísticas com tela própria**, no rodapé da tela inicial: partidas, aproveitamento, sequência atual e maior, e em que chute acertou, por nível.
 - **Prévia do link no WhatsApp**: tags `og:` no `index.html` e `public/previa.png`, gerada por `npm run previa`.
@@ -100,6 +111,29 @@ Wikidata (SPARQL e API), Commons, Transfermarkt (com repetição) e
 ---
 
 ## Pontos em aberto, por prioridade
+
+### 0. O que vem agora: o design system do cliente
+
+O cliente vai mandar um pacote de design system para o jogo usar. Ficou para
+depois das mudanças de 05/11 (900 jogadores, escudos, atualização, botão de
+revisão, planilha), que estão no ar. O visual hoje vem de `src/index.css` (as
+cores `relva`, `cal`, `dica`, as classes `t-rotulo`, `t-camisa`, `t-nota`) e
+das classes Tailwind dos componentes em `src/componentes/`.
+
+### 0.1. A revisão da base pelo cliente
+
+Com a planilha e a rodada de revisão. O que ele marcar como "tirar" sai e entra
+alguém da reserva — os 79 que ficaram fora só pelo corte, em ordem e com o
+comando para trazer cada um, em `relatorios/reserva-2026-11-05.md`. Quando a
+revisão acabar, o botão "Refazer jogo
+com novos jogadores" sai (`TelaInicial.tsx`, e `revisao` em `App.tsx` e em
+`armazenamento.ts`).
+
+**As dicas dos 492 novos não usam título**: a página de títulos só existe no
+site do Transfermarkt, que está desligado (ver "Rede"). Elas saíram com final,
+jogos por clube, Copas, seleção, naturalidade. Para pôr título nelas, rode
+`TITULOS_DO_SITE=1 npm run dicas -- --todas` de uma máquina onde o site
+responda.
 
 ### 1. Os grandes nomes: feito, com duas pendências
 
@@ -155,9 +189,10 @@ dados, com o peso que as marcações deram.
 
 ### 4. Tamanho do repositório
 
-`public/escudos/` está em **77 MB** com os 5412 clubes. Dentro dos limites do
+`public/escudos/` está em **82 MB** com os 5650 clubes. Dentro dos limites do
 GitHub Pages com folga, e o pacote enviado ao navegador **não** cresce com
-isso: `clubes.ts` leva só os 527 clubes em uso.
+isso: `clubes.ts` leva só os 1082 clubes em uso. O JavaScript do jogo, com os
+900 jogadores, tem 763 kB (180 kB comprimido).
 
 O custo é de repositório, não de carregamento — clone mais lento e 77 MB
 publicados a cada push. Se incomodar, o corte natural é gravar em
@@ -168,7 +203,7 @@ acesso a essas fontes se mostrou frágil.
 
 ### 5. Decisões de produto
 
-- **Volume da biblioteca.** O combinado era 300 e depois ~900 se o cliente gostasse. Em 28/09 ele pediu mais 30 por nível, e são 408 no ar; o caminho está no README.
+- **Volume da biblioteca.** O combinado era 300 e depois ~900 se o cliente gostasse. Em 28/09 ele pediu mais 30 por nível; em 05/11, 300 por nível, e são 900 no ar.
 
 Levados ao cliente em 25/09, que deu as pendências por respondidas sem pedir mudança. Seguem como estão:
 
@@ -182,10 +217,14 @@ Levados ao cliente em 25/09, que deu as pendências por respondidas sem pedir mu
 - **A `main` recebe commit do github-actions toda segunda** ("Estende a agenda"). Puxe antes de publicar, senão o push é recusado. Em 28/09 o push dessa execução levou erro interno do GitHub e a semana ficou sem publicar (o site seguiu no ar com a versão anterior); o passo agora tenta de novo até quatro vezes.
 - **Nome que casa com o clube errado passa calado.** O resolvedor liga pelo id do Transfermarkt e, sem par, pelo nome: o "Generation Foot" do Mané casou com o Generation Adidas, dos Estados Unidos. Ao trazer jogador novo, confira as passagens resolvidas pelo nome, e prefira acrescentar o par em `PARES_TM` (e em `clubes-transfermarkt.json`) a confiar no nome.
 - **Mexer na lista de um nível sem rodar `npm run agenda` antes** congela o mês seguinte já com a lista nova. Só é problema se a agenda tiver vencido — o deploy recusa agenda que não cubra 7 dias à frente, e a execução semanal a mantém em 30.
-- **`npm run catalogo` demora bastante** (baixa milhares de imagens e processa com sharp). Rode em background. O `.cache/` guarda os originais, então a segunda vez é rápida.
+- **`npm run catalogo` mantém o escudo que já existe** e só baixa o que falta, em cerca de um minuto. `-- --baixar-de-novo` baixa todos, e aí demora (milhares de imagens, com o Wikimedia limitando pedidos).
+- **Clube novo no catálogo pode deixar ambíguo um nome que resolvia.** Em 05/11 o Lyon - La Duchère fez "Lyon" casar com dois clubes, e 23 carreiras que passam pelo Olympique Lyonnais travariam; o Lyon passou a resolver pelo id. Depois de acrescentar clube, rode `npm run reparar -- --simular` e leia o que mudou ou travou.
+- **O id de clube novo não pode colidir na chave de deduplicação do catálogo**, que ignora sigla (`fc`, `ec`, `sc`…): `botafogo-fc` (o de Brasília) tomou o lugar do `botafogo`, e o catálogo avisou "jogador aponta para clube que o catálogo não tem: botafogo". O id virou `botafogo-df`.
+- **Não apague `.cache/transfermarkt` inteiro.** A primeira versão de `npm run atualizar` fazia isso; hoje ela apaga só o que vem da API (histórico, perfil, partidas, seleção), porque o título que veio do site não teria como voltar.
 - **`npm run coletar` demora ~25 min** e refaz `scripts/clubes-externos.json` do zero. Só precisa rodar quando quiser ampliar países ou atualizar a fonte.
 - **`src/dados/clubes.ts` é gerado e só tem os clubes em uso.** O catálogo completo, para consultar ao escrever carreira nova, está em `scripts/catalogo-completo.json`. Ao acrescentar jogador, rode `npm run catalogo` de novo para os clubes novos entrarem no pacote.
 - **O registro de partidas do Transfermarkt engana em época antiga.** `jogosPorClube` lê cada partida oficial com a participação do jogador, e é o que tira da carreira o clube onde ele não jogou. Mas temporada sem escalação no site vem inteira como "fora da lista": o Zanetti aparece com zero jogos no Banfield de 1993, onde jogou 66. Só conta como prova quando há escalação de verdade. O endereço (`tmapi.transfermarkt.technology`) não passa pelo WAF.
+- **Base e time B pelo dado do clube, não pelo nome.** Pela API, a academia vem com nome próprio ("Zébra Élites" do Charleroi, "SL16 FC" do Standard), que o filtro por nome não reconhece. O clube da API diz de quem é subordinado (`mainClubId`, com tipo diferente de 1), e `passagensDoTransfermarkt` tira esses da carreira.
 - **A página de títulos do Transfermarkt erra o ano de título de jogo único.** O Mundial de Clubes de dezembro de 2007 do Milan está como 2007 no Emerson e 2008 no Kaká; o Messi aparece com os Mundiais de 2010, 2012 e 2016. Para Mundial, Intercontinental e Supercopa da Uefa, o ano vem da data da final (`titulosConferidos` em `scripts/dicas.mjs`), e o título sem final jogada fica fora da dica. Título de temporada ela dá também a quem saiu no meio dela (o Seedorf aparecia campeão da Champions de 2000 pelo Real Madrid, que deixou em dezembro de 1999): quando o registro de partidas mostra o jogador por outro clube no ano do título e nenhuma vez pelo campeão, a conquista fica fora. No registro de partidas, final é `FF` (jogo único), `FFH` e `FFR` (ida e volta), e a edição sai de `season.display` quando é um ano só — a temporada europeia ("15/16") não diz em que ano foi a final.
 - **O nome do Transfermarkt abrevia até no endereço** ("/man-utd/"), e o código do Wikidata guardado no catálogo foi dado por nome e errou em dezenas de clubes. Para ligar clube a id, confie no dono do id (P7223), não no nome — é o que `npm run mapa-tm` faz. Quando o Wikidata não conhece o dono, o par errado passa: leia a lista de "pares em uso com nome diferente no Transfermarkt" que o comando imprime.
 - **Carreira que não resolve fica congelada, e isso já escondeu erro por semanas.** `npm run reparar` não reescreve uma carreira quando algum clube dela não tem id — a regra existe para não gravar lista com buraco, mas congela junto os clubes que o mapa já sabia corrigir. Foi assim que o Chicharito seguiu com o escudo do Western United depois de o West Ham já estar certo no mapa. O comando agora **lista o que congelou e o nome que travou**; leia essa lista toda vez.

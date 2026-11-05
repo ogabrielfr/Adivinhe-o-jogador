@@ -13,7 +13,9 @@ interface Props {
   nivel: Nivel
   jogador: Jogador
   partida: Partida
-  textoCompartilhar: string
+  /** a rodada provisória de revisão: não compartilha, porque não é o desafio do dia */
+  emRevisao?: boolean
+  textoCompartilhar: string | null
   proximoNivel: Nivel | null
   aoChutar: (texto: string) => ResultadoChute
   aoPedirDica: () => void
@@ -26,6 +28,7 @@ export function TelaPartida({
   nivel,
   jogador,
   partida,
+  emRevisao = false,
   textoCompartilhar,
   proximoNivel,
   aoChutar,
@@ -150,14 +153,14 @@ export function TelaPartida({
             )}
 
             <div className="mt-8 flex flex-col items-center gap-3">
-              <Compartilhar texto={textoCompartilhar} />
+              {textoCompartilhar && <Compartilhar texto={textoCompartilhar} />}
               {proximoNivel ? (
                 <button
                   type="button"
                   onClick={() => aoIrPara(proximoNivel)}
                   className="t-rotulo cursor-pointer px-3 py-1.5 text-sm text-cal-500 transition-colors hover:text-cal"
                 >
-                  Jogar o {ROTULO_NIVEL[proximoNivel].toLowerCase()} de hoje
+                  Jogar o {ROTULO_NIVEL[proximoNivel].toLowerCase()}{emRevisao ? '' : ' de hoje'}
                 </button>
               ) : (
                 <button

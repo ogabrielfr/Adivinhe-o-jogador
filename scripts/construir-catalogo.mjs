@@ -9,11 +9,12 @@
  *   npm run catalogo
  */
 import { execFileSync } from 'node:child_process'
-import { mkdirSync, existsSync, readFileSync, writeFileSync, readdirSync, rmSync, statSync } from 'node:fs'
+import { mkdirSync, existsSync, readFileSync, writeFileSync, readdirSync, rmSync, statSync, renameSync, copyFileSync } from 'node:fs'
 import { join, dirname, extname, basename } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
 import { optimize } from 'svgo'
+import { declararPrefixos } from './svg-escudo.mjs'
 import { FONTES } from './fontes-escudos.mjs'
 import { mesmoClube } from './nomes-clube.mjs'
 import { pareceEscudo } from './wikidata.mjs'
@@ -25,8 +26,24 @@ const cache = join(raiz, '.cache')
 const saida = join(raiz, 'public', 'escudos')
 
 mkdirSync(cache, { recursive: true })
-rmSync(saida, { recursive: true, force: true })
+
+/**
+ * O escudo que cada clube já tem fica guardado, e o clube do Wikidata que já
+ * tinha escudo não é baixado de novo. Em novembro de 2026 o Wikimedia passou a
+ * devolver 429 aos arquivos originais pedidos daqui, e a reconstrução do zero
+ * tirava do catálogo todo clube cujo download falhasse — clube em uso
+ * inclusive. `npm run catalogo -- --baixar-de-novo` ignora os guardados, para
+ * trazer escudo que o clube trocou.
+ */
+const BAIXAR_DE_NOVO = process.argv.includes('--baixar-de-novo')
+const anteriores = join(cache, 'escudos-anteriores')
+rmSync(anteriores, { recursive: true, force: true })
+if (existsSync(saida)) renameSync(saida, anteriores)
 mkdirSync(saida, { recursive: true })
+const escudoAnterior = new Map(
+  (existsSync(anteriores) && !BAIXAR_DE_NOVO ? readdirSync(anteriores) : [])
+    .map((f) => [f.replace(/\.(svg|png|gif|jpe?g)$/, ''), join(anteriores, f)]),
+)
 
 function clonar(chave, url) {
   const destino = join(cache, chave)
@@ -172,29 +189,68 @@ const AGENTE = 'acerte-o-jogador/1.0 (https://github.com/ogabrielfr/Adivinhe-o-j
 const espera = (ms) => new Promise((r) => setTimeout(r, ms))
 const TETO_ESCUDO = 3 * 1024 * 1024
 
+/**
+ * O Wikimedia serve a este IP só a miniatura em tamanho padrão: o arquivo
+ * original e a largura fora da tabela voltam 429. A de 330 pixels passa do
+ * lado de 256 em que o escudo é gravado; o original fica por último.
+ */
+function variantesDoEndereco(url) {
+  const larguras = [330, 250, 500]
+  const pagina = url.match(/^(https:\/\/commons\.wikimedia\.org\/wiki\/Special:FilePath\/[^?]+)/)
+  if (pagina) return [...larguras.map((w) => `${pagina[1]}?width=${w}`), url]
+  const upload = url.match(/^https:\/\/upload\.wikimedia\.org\/wikipedia\/([^/]+)\/([0-9a-f])\/([0-9a-f]{2})\/([^/?]+)$/)
+  if (upload) {
+    const [, projeto, a, ab, arquivo] = upload
+    const miniatura = (w) => `${w}px-${arquivo}${/\.svg$/i.test(arquivo) ? '.png' : ''}`
+    return [...larguras.map((w) => `https://upload.wikimedia.org/wikipedia/${projeto}/thumb/${a}/${ab}/${arquivo}/${miniatura(w)}`), url]
+  }
+  return [url]
+}
+
+/** A extensão pelo conteúdo: a miniatura de um SVG é PNG. */
+function extensaoDoConteudo(dados) {
+  if (dados[0] === 0x89 && dados[1] === 0x50) return 'png'
+  if (dados[0] === 0xff && dados[1] === 0xd8) return 'jpg'
+  if (dados.subarray(0, 4).toString('latin1') === 'GIF8') return 'gif'
+  return /<svg[\s>]/i.test(dados.subarray(0, 4096).toString('utf8')) ? 'svg' : null
+}
+
+/** Baixa o escudo e devolve onde ele ficou (a extensão segue o conteúdo), ou null. */
 async function baixar(url, destino) {
-  if (existsSync(destino) && statSync(destino).size > 0) return true
-  for (let tentativa = 0; tentativa < 5; tentativa++) {
-    try {
-      const r = await fetch(url, { headers: { 'User-Agent': AGENTE }, redirect: 'follow' })
-      if (r.status === 429 || r.status === 503) {
-        const pedido = Number(r.headers.get('retry-after')) * 1000
-        await espera(Math.min(pedido || 1500 * 2 ** tentativa, 20000))
-        continue
+  const semExtensao = destino.replace(/\.(svg|png|gif|jpe?g)$/i, '')
+  for (const ext of ['svg', 'png', 'jpg', 'jpeg', 'gif']) {
+    const guardado = `${semExtensao}.${ext}`
+    if (existsSync(guardado) && statSync(guardado).size > 0) return guardado
+  }
+  const variantes = variantesDoEndereco(url)
+  for (const endereco of variantes) {
+    // no Wikimedia, insistir no 429 só atrasa: a próxima variante é que passa
+    const tentativas = variantes.length > 1 ? 2 : 5
+    for (let tentativa = 0; tentativa < tentativas; tentativa++) {
+      try {
+        const r = await fetch(endereco, { headers: { 'User-Agent': AGENTE }, redirect: 'follow' })
+        if (r.status === 429 || r.status === 503) {
+          const pedido = Number(r.headers.get('retry-after')) * 1000
+          await espera(Math.min(pedido || 1500 * 2 ** tentativa, 20000))
+          continue
+        }
+        if (!r.ok) break
+        // brasão não pesa megabytes; o que pesa é foto entrando por engano
+        const anunciado = Number(r.headers.get('content-length'))
+        if (anunciado > TETO_ESCUDO) return null
+        const dados = Buffer.from(await r.arrayBuffer())
+        if (!dados.length || dados.length > TETO_ESCUDO) return null
+        const ext = extensaoDoConteudo(dados)
+        if (!ext) break
+        const final = `${semExtensao}.${ext}`
+        writeFileSync(final, dados)
+        return final
+      } catch {
+        await espera(1000 * 2 ** tentativa)
       }
-      if (!r.ok) return false
-      // brasão não pesa megabytes; o que pesa é foto entrando por engano
-      const anunciado = Number(r.headers.get('content-length'))
-      if (anunciado > TETO_ESCUDO) return false
-      const dados = Buffer.from(await r.arrayBuffer())
-      if (!dados.length || dados.length > TETO_ESCUDO) return false
-      writeFileSync(destino, dados)
-      return true
-    } catch {
-      await espera(1000 * 2 ** tentativa)
     }
   }
-  return false
+  return null
 }
 
 /** O nome bom é o do artigo quando ele desambigua ("... (Ribeirão Preto)"). */
@@ -275,7 +331,9 @@ if (existsSync(ARQ_EXTERNOS)) {
     idsUsados.add(id)
 
     const ext = (c.url.match(/\.(svg|png|gif|jpe?g)(?:$|\?)/i)?.[1] ?? 'png').toLowerCase()
-    fila.push({ ...c, id, nome, arquivo: join(cacheExternos, `${c.qid}.${ext}`) })
+    // o clube que já tinha escudo fica com ele, sem novo download
+    const anterior = escudoAnterior.get(id)
+    fila.push({ ...c, id, nome, arquivo: anterior ?? join(cacheExternos, `${c.qid}.${ext}`), pronto: Boolean(anterior) })
   }
 
   /**
@@ -305,7 +363,13 @@ if (existsSync(ARQ_EXTERNOS)) {
       Array.from({ length: f.paralelas }, async () => {
         while (f.i < f.itens.length) {
           const c = f.itens[f.i++]
-          if (await baixar(c.url, c.arquivo)) {
+          if (c.pronto) {
+            c.ok = true
+            continue
+          }
+          const salvo = await baixar(c.url, c.arquivo)
+          if (salvo) {
+            c.arquivo = salvo
             c.ok = true
             if (++baixados % 400 === 0) console.log(`  ${baixados}/${fila.length}`)
           } else {
@@ -321,7 +385,7 @@ if (existsSync(ARQ_EXTERNOS)) {
     if (!c.ok) continue
     candidatos.set(`wd:${c.qid}`, {
       id: c.id, nome: c.nome, pais: c.pais, qid: c.qid,
-      fonte: 'wd', qualidade: QUALIDADE.wd, origem: c.arquivo,
+      fonte: 'wd', qualidade: QUALIDADE.wd, origem: c.arquivo, pronto: c.pronto,
     })
   }
   console.log(`  +${baixados} novos | ${repetidos} já no catálogo | ${naoEhEscudo} imagem que não é escudo | ${falhas} falharam`)
@@ -332,7 +396,7 @@ if (existsSync(ARQ_EXTERNOS)) {
 // ------------------------------- 5. ids e nomes fixados dos clubes em uso
 // FIXOS aponta id canônico -> caminho na fonte; garante que "flamengo",
 // "barcelona" etc. mantenham o id que os jogadores já referenciam.
-import { CANONICOS, SEM_ESCUDO, DESCARTAR } from './clubes-canonicos.mjs'
+import { CANONICOS, SEM_ESCUDO, DESCARTAR, ESCUDO_ARQUIVO } from './clubes-canonicos.mjs'
 import { nomeCurto } from './nomes-curtos.mjs'
 for (const [id, dados] of Object.entries(CANONICOS)) {
   const entrada = [...candidatos.entries()].find(([, c]) => c.id === dados.de)
@@ -349,6 +413,17 @@ for (const [id, dados] of Object.entries(CANONICOS)) {
 for (const id of DESCARTAR) {
   const entrada = [...candidatos.entries()].find(([, c]) => c.id === id)
   if (entrada) candidatos.delete(entrada[0])
+}
+
+// o escudo guardado no repositório vence o da fonte (o Palmeiras atual)
+for (const [id, arquivo] of Object.entries(ESCUDO_ARQUIVO)) {
+  const entrada = [...candidatos.entries()].find(([, c]) => c.id === id)
+  if (!entrada) {
+    console.warn(`  escudo fixo sem clube: ${id}`)
+    continue
+  }
+  const [chave, achado] = entrada
+  candidatos.set(chave, { ...achado, svgInline: undefined, origem: join(raiz, 'scripts', 'escudos-fixos', arquivo), fonte: 'arquivo' })
 }
 
 /**
@@ -377,8 +452,8 @@ for (const [id, dados] of Object.entries(SEM_ESCUDO)) {
    * desenhado.
    */
   if (dados.tm) {
-    const arquivo = join(cacheExternos, `tm-${dados.tm}.png`)
-    if (await baixar(`https://tmssl.akamaized.net/images/wappen/head/${dados.tm}.png`, arquivo)) {
+    const arquivo = await baixar(`https://tmssl.akamaized.net/images/wappen/head/${dados.tm}.png`, join(cacheExternos, `tm-${dados.tm}.png`))
+    if (arquivo) {
       const c = { id, nome: dados.nome, pais: dados.pais, cores: dados.cores, fonte: 'tm', qualidade: QUALIDADE.wd, origem: arquivo }
       candidatos.set(chaveDedup(c), c)
       continue
@@ -445,7 +520,16 @@ const CONFIG_SVGO = {
 }
 
 async function gravarEscudo(c, destinoSemExt) {
-  const svgBruto = c.svgInline ?? (extname(c.origem ?? '').toLowerCase() === '.svg' ? readFileSync(c.origem, 'utf8') : null)
+  // escudo guardado da construção anterior: já foi tratado, vai como está
+  if (c.pronto) {
+    const nome = `${basename(destinoSemExt)}${extname(c.origem)}`
+    copyFileSync(c.origem, join(dirname(destinoSemExt), nome))
+    return nome
+  }
+
+  const lido = c.svgInline ?? (extname(c.origem ?? '').toLowerCase() === '.svg' ? readFileSync(c.origem, 'utf8') : null)
+  // prefixo de editor sem declaração quebra o arquivo no navegador e no svgo (o Elche)
+  const svgBruto = lido && declararPrefixos(lido)
 
   if (svgBruto) {
     let texto = svgBruto

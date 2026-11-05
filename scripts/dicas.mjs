@@ -952,6 +952,14 @@ function primeiraDica({ posicao, pais, nasc, selecao }) {
 function segundaDica(dados, escala, evitar) {
   const candidatos = orações(dados)
   if (!candidatos.length) return 'Não temos outro fato desse jogador.'
+  /**
+   * A dica não pode ter palavra do nome do jogador — a mesma regra do
+   * validar-dados. "Marcou 2 gols na final do Campeonato Baiano" é fato do
+   * Neto Baiano e não entrega ninguém, mas diz metade do nome na tela.
+   */
+  const semAcento = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+  const partes = semAcento(dados.nomeNaTela ?? '').split(/[^a-z0-9]+/).filter((p) => p.length > 3)
+  const entrega = (texto) => partes.some((p) => new RegExp(`\\b${p}\\b`).test(semAcento(texto)))
 
   const nota = (c) => (escala ? destaque(c.tipo, c.valor, escala) * 10 : 0) + PESO[c.tipo]
   /**
@@ -978,7 +986,7 @@ function segundaDica(dados, escala, evitar) {
   for (let i = 0; i < ordenados.length; i++) {
     for (let k = i + 1; k <= ordenados.length; k++) {
       const texto = frase([ordenados[i], ordenados[k]].filter(Boolean))
-      if (!texto) continue
+      if (!texto || entrega(texto)) continue
       primeira ??= texto
       if (!evitar?.has(texto)) return texto
     }

@@ -20,7 +20,9 @@ npm run dev
 | `npm run dev` | sobe o servidor de desenvolvimento |
 | `npm run build` | verifica os tipos e gera `dist/` |
 | `npm run validar-dados` | confere a integridade da biblioteca de jogadores |
-| `npm run catalogo` | rebaixa os escudos e regenera `src/dados/clubes.ts` |
+| `npm run catalogo` | regenera o catálogo e `src/dados/clubes.ts`, baixando só o escudo que falta (`-- --baixar-de-novo` baixa todos) |
+| `npm run atualizar` | a atualização de fevereiro e setembro: carreira, escudo, dica, nível e agenda de uma vez, com relatório |
+| `npm run planilha` | gera `relatorios/planilha-revisao.xlsx`, a planilha de revisão por amostragem (`-- --novos-desde <commit>` marca quem entrou depois) |
 | `npm run verificar` | confere as carreiras contra o Wikidata e relata as divergências |
 | `npm run teste-nomes` | testa o comparador de nomes de clube |
 | `npm run coletar` | remonta `scripts/clubes-externos.json` a partir do Wikidata |
@@ -102,9 +104,26 @@ terminada, e quem pulou ontem a teria na tela já quebrada.
 Wordle original: quem quiser abrir o código-fonte encontra a lista. Se isso
 virar um problema, a saída é mover o sorteio para um endpoint.
 
+### A revisão do conteúdo (provisória)
+
+**"Refazer jogo com novos jogadores"**, embaixo dos três níveis na tela
+inicial, abre uma rodada de revisão: um jogador sorteado em cada nível, fora
+do desafio do dia (`jogadorDaRevisao`, em `src/logica/diario.ts`). Cada toque
+sorteia outros três. A rodada não conta nas estatísticas, não tem botão de
+compartilhar, e o jogo do dia fica guardado — "Voltar aos jogadores do dia"
+traz de volta a partida como estava. É para o cliente revisar a base jogando;
+sai quando a revisão acabar.
+
+A revisão por amostragem tem também uma planilha, **`npm run planilha`**: uma
+aba por nível, com o jogador, os clubes da carreira na ordem e com o nome que
+aparece embaixo do escudo, as duas dicas, e duas colunas para marcar (OK,
+corrigir carreira, corrigir dica, mudar de nível, tirar do jogo) e explicar.
+Com `-- --novos-desde <commit>`, a coluna "Novo" marca quem entrou depois
+daquela versão.
+
 ## A biblioteca
 
-`src/dados/jogadores.json` tem **408 jogadores, 136 em cada nível**. É dado, não
+`src/dados/jogadores.json` tem **900 jogadores, 300 em cada nível**. É dado, não
 código: o jogo importa o arquivo por `src/dados/jogadores.ts`, que só dá tipo a
 ele, e os scripts leem e gravam por `scripts/biblioteca.mjs`. Até setembro a
 biblioteca era um arquivo TypeScript que quatro scripts reescreviam por
@@ -155,6 +174,55 @@ conserto ficou nos dados, não em cada jogador: 18 pares novos em `PARES_TM`
 para clubes que o catálogo já tinha com outro nome, e 25 clubes que ele não
 tinha (Middlesbrough, Sochaux, Paraná Clube, Zrinjski Mostar...) em
 `SEM_ESCUDO`, com o escudo baixado do Transfermarkt.
+
+**900 jogadores, em 05/11.** O cliente pediu 300 por nível, e entraram 492. A
+piscina ganhou os 283 jogadores da seleção brasileira que o Wikidata conhece e
+que ainda não estavam nela, e foram 1.561 candidatos. A escolha:
+
+1. **a régua** (a do nível, abaixo) dá a chance de o cliente marcar "tirar":
+   ficou quem tem menos de 30%;
+2. **procura em português**: pelo menos 400 visualizações por mês na
+   Wikipédia em português, para não entrar o que só a régua acha conhecido —
+   o Takashi Usami passava nela;
+3. **na ordem da régua**, do mais reconhecível para o menos, até fechar 492.
+
+Técnico com carreira de jogador modesta foi conferido um a um: os 23 que a
+consulta apontou (Ramon Menezes, Cléber, Danilo do Corinthians, Helton…)
+jogaram de verdade e ficaram. Carreira de um clube só não entra (Lamine Yamal,
+Saka, Foden, Koke). Os 79 seguintes na fila, que passaram em tudo e ficaram
+fora só pelo corte — Rudi Völler, Mkhitaryan, Lacazette, Donnarumma, Oblak,
+Vavá, Clodoaldo, Zetti… —, são a reserva para quem o cliente tirar, em
+`relatorios/reserva-2026-11-05.md`, com o comando para trazer cada um.
+
+O nível de todos saiu da régua de novo, em terços de 300. Dos 408 de antes, 58
+foram do intermediário para o fácil e 30 do difícil para o intermediário, e
+nenhum desceu: os novos são, na média, menos conhecidos que os antigos. A
+agenda foi refeita a partir de 07/11, com hoje e amanhã como estavam.
+
+Os clubes foram o trabalho de verdade. Na primeira tentativa, 235 carreiras
+travaram, quase todas em clube que o catálogo não tinha — Chievo, Ipatinga,
+Kuban, ASEC Mimosas —, e 229 deles entraram em `SEM_ESCUDO`, com nome, país e
+escudo do Transfermarkt. Outros 23 eram clubes que o catálogo já tinha com outro nome, e
+viraram par em `PARES_TM` só quando o país e as palavras do nome batiam e o
+clube do catálogo não era par de outro id: a comparação solta por nome casava o
+Grêmio Barueri com o Grêmio e o Chievo com o Hellas Verona. Três lições ficaram
+no código:
+
+- **clube novo pode deixar ambíguo um nome que resolvia.** O Lyon - La Duchère
+  do Abidal fez "Lyon" casar com dois clubes, e 23 carreiras que passavam pelo
+  Olympique Lyonnais travariam no próximo reparo. O Lyon passou a resolver pelo
+  id. Depois de acrescentar clube, rode `npm run reparar -- --simular`: carreira
+  que travou ou mudou aparece ali;
+- **o país também protege.** O Stella Club do Kessié, da Costa do Marfim,
+  tinha virado o Stella brasileiro; com os clubes marfinenses no catálogo, a
+  bandeira passou a valer e o reparo pegou;
+- **o id do clube novo não pode colidir na chave do catálogo.** Ela ignora
+  sigla, e "botafogo-fc" tomou o lugar do "botafogo": o Botafogo-DF virou
+  `botafogo-df`.
+
+E 157 nomes compridos ganharam o nome curto que vai embaixo do escudo, em
+`scripts/nomes-curtos.mjs` — com o estado ou o país no homônimo (América-SP,
+Botafogo-PB, Liverpool (URU)).
 
 **Sem teto de escudos.** O gerador recusava carreira com mais de 12 escudos,
 porque no celular a partir de 13 o campo de palpite descia para fora da tela.
@@ -267,9 +335,10 @@ quem chegou há pouco ainda não estreou.
 
 ### A dica
 
-`npm run dicas` refaz a dica de todos sem tocar no elenco — trocar texto não
-deveria custar um elenco novo, já que cada geração depende do WAF do
-Transfermarkt liberar e devolve um conjunto um pouco diferente.
+`npm run dicas` escreve a dica sem tocar no elenco — trocar texto não deveria
+custar um elenco novo. Sem os títulos, que só o site do Transfermarkt tem, ele
+escreve só a de quem ainda não tem dica e mantém as outras (ver "De onde vem o
+dado do Transfermarkt").
 
 São **duas dicas, e o cliente escolheu esse modelo**: a primeira situa, a
 segunda entrega, e quem joga decide até onde quer ajuda.
@@ -328,9 +397,9 @@ Ela também não pode entregar de graça: `naturalidadeSegura` recusa o lugar qu
 repete clube à mostra ("é de Santos" com o escudo do Santos na tela) ou que
 carrega o nome do jogador — o Alexandre Pato nasceu em **Pato Branco**.
 
-Posição vem do **perfil do Transfermarkt**, e país de nascimento e seleção,
-da **API do Transfermarkt** — a mesma dos jogos por clube, que não passa pelo
-WAF. Não do Wikidata: lá as propriedades aceitam vários valores e pegar o
+Posição, país de nascimento e seleção vêm da **API do Transfermarkt** — a
+posição em português, como no site ("Lateral Esq.", "Centroavante"). Não do
+Wikidata: lá as propriedades aceitam vários valores e pegar o
 primeiro saía errado — o Zico aparecia como "nascido em Portugal" na mesma
 frase que citava a seleção brasileira.
 
@@ -537,11 +606,80 @@ termina a partida sem saber quem é o nome revelado.
 mesmo caminho de aceitação do gerador com procura bem acima do piso
 (`PISO_NOVO=`, 800 por padrão). Quem sai não é apagado: só sai da vez.
 
+### A atualização de fevereiro e setembro
+
+A base vai inteira dentro do pacote publicado — jogadores, clubes e agenda no
+JavaScript, escudos em `public/escudos/` —, e o jogo não busca nada sozinho.
+Carreira nova só entra rodando, na sua máquina ou aqui:
+
+```bash
+npm run atualizar                 # baixa de novo os dados de cada jogador e refaz tudo
+npm run atualizar -- --continuar  # retoma sem baixar de novo o que já veio
+```
+
+Duas vezes por ano, depois que fecham as janelas de transferência da Europa:
+em **fevereiro** e em **setembro**. Leva poucos minutos. Os passos são os
+comandos de sempre, na ordem: `catalogo` (o clube acrescentado à mão desde a
+última vez passa a existir), `reparar`, `catalogo` de novo (o escudo de quem
+entrou nas carreiras), `dicas`, `regua -- --gravar`, `agenda`, e no fim
+`validar-dados`, `teste-palpites` e `teste-nomes`.
+
+O que mudou vai para **`relatorios/atualizacao-AAAA-MM-DD.md`**: carreira por
+carreira, clube por clube; o que travou e ficou como estava; clube novo; nível
+e dica que mudaram. Leia antes de publicar. Carreira travada pede o clube: o
+par id-do-Transfermarkt → clube do catálogo em `PARES_TM` (e em
+`scripts/clubes-transfermarkt.json`), ou o clube em `SEM_ESCUDO`
+(`scripts/clubes-canonicos.mjs`), e depois `--continuar`.
+
+A primeira, em 05/11, mudou 7 carreiras: o Carvajal foi para o Getafe, o Neto
+voltou à Juventus, o David Silva saiu da aposentadoria para o Sha Tin, de Hong
+Kong (o clube atual entra mesmo antes da estreia: é lá que ele está), e o
+Transfermarkt completou ou corrigiu o começo das carreiras do Bernard, do
+Dante, do Deco e do Leandro Euzébio.
+
+**A dica de quem já está na base não muda na atualização**, a não ser com os
+títulos — ver abaixo.
+
+### De onde vem o dado do Transfermarkt
+
+De **`tmapi.transfermarkt.technology`**, a API aberta do Transfermarkt: o
+histórico de transferências (`transfer/history/player/{id}`), o perfil, as
+partidas, a seleção e o nome de clube e de competição, em português. O site
+fica atrás de uma verificação contra robôs (AWS WAF), que em novembro recusava
+quase tudo — a atualização baixou 25 históricos em meia hora antes de parar.
+Pela API, os 900 vêm em minutos.
+
+O histórico da API foi conferido contra o do site nos 25 jogadores que ainda
+estavam em cache: as 204 transferências batem em data, clube de origem e de
+destino, país, taxa, valor e temporada, e as 25 carreiras saem iguais.
+`scripts/transfermarkt.mjs` grava o histórico da API no formato da tabela do
+site, que é o que o resto do código lê. Três coisas da API pediram cuidado:
+
+- **time B e base pelo dado, não pelo nome.** O site traduz o nome da base
+  ("Sporting Atl.", "OB Juventude"), e o filtro de base é pelo nome; a API dá o
+  nome próprio da academia ("Zébra Élites", "SL16 FC"). Mas ela diz também de
+  que clube o time é subordinado (`mainClubId`), e é isso que tira a base da
+  carreira agora;
+- **duas transferências no mesmo dia** vão na ordem da cadeia: o Coutinho foi
+  comprado pela Inter e emprestado ao Vasco em 23/07/2008, e na ordem da API o
+  empréstimo vinha antes da compra;
+- **nome curto vazio**: o do Levallois do Drogba vem vazio, e o nome inteiro
+  entra no lugar.
+
+**Os títulos só existem no site.** A página de títulos não tem par na API, e
+por isso `titulosDoTransfermarkt` lê o cache e, sem ele, devolve null.
+`npm run dicas` então **mantém a dica de quem já tem uma** — refazê-la sem os
+títulos tiraria o "Campeão da Libertadores de 2013 pelo Atlético-MG" — e
+escreve a de quem acabou de entrar com o que a API tem: final em que marcou,
+jogos pelo clube, tempo de casa, Copas, seleção, naturalidade. Com
+`TITULOS_DO_SITE=1`, numa máquina onde o site responda, os títulos voltam e
+todas as dicas são refeitas; `npm run dicas -- --todas` refaz todas mesmo sem
+eles.
+
 ### Consertar sem gerar elenco novo
 
-Cada geração depende do WAF do Transfermarkt liberar e devolve um conjunto de
-jogadores um pouco diferente, então trocar texto ou nível não deveria custar um
-elenco novo:
+Gerar o elenco de novo devolve um conjunto de jogadores um pouco diferente,
+então trocar texto ou nível não deveria custar um elenco novo:
 
 | Comando | O que faz |
 | --- | --- |
@@ -596,10 +734,29 @@ nunca os anos, que é onde erros de dados se escondem.
 ## Escudos
 
 `scripts/construir-catalogo.mjs` monta `public/escudos/` e o catálogo de clubes
-a partir de quatro repositórios públicos **e do Wikidata** — **5412 clubes
-de 69 países**, sendo **1163 brasileiros**. O catálogo é de propósito
-muito maior que o uso atual: o escudo é a informação principal do jogo, e uma
-carreira costuma começar ou terminar num clube pequeno.
+a partir de quatro repositórios públicos **e do Wikidata** — **5650 clubes
+de 87 países**, sendo **1204 brasileiros**, 1082 deles em uso. O catálogo é de
+propósito muito maior que o uso atual: o escudo é a informação principal do
+jogo, e uma carreira costuma começar ou terminar num clube pequeno.
+
+**O catálogo não apaga escudo para refazer.** Cada clube que já tinha escudo
+fica com ele, e só o que falta é baixado; `npm run catalogo -- --baixar-de-novo`
+baixa todos. Antes, cada rodada apagava `public/escudos/` e baixava os 5 mil de
+novo — e com o Wikimedia limitando os pedidos, o clube cujo download falhasse
+perdia o escudo que tinha. Quando o original passa do limite, ele tenta as
+miniaturas de 330, 250 e 500 pixels.
+
+**Dois escudos que estavam errados, em novembro:**
+
+- **o Elche não aparecia.** O SVG usava o prefixo `sodipodi` (do Inkscape) sem
+  declarar, e para o navegador isso é XML malformado: a imagem inteira não
+  carrega, e o jogo cai no brasão desenhado. `scripts/svg-escudo.mjs` declara o
+  prefixo que falta ao gravar, e o `validar-dados` recusa SVG em uso que o
+  navegador não leria;
+- **o Palmeiras era o de antes de 2012**, sem a estrela vermelha em cima. As
+  fontes ainda têm o antigo; o atual, o da Wikipédia (Wikimedia Commons), fica
+  em `scripts/escudos-fixos/palmeiras.png`, e `ESCUDO_ARQUIVO`
+  (`scripts/clubes-canonicos.mjs`) faz ele vencer qualquer fonte.
 
 O catálogo se divide em dois arquivos, porque o jogo mostra uns dez escudos por
 dia e mandar milhares para o navegador seria peso morto:

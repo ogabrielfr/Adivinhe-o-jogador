@@ -22,7 +22,9 @@
     "agenda": "node scripts/agenda.mjs",
     "trazer": "node scripts/trazer.mjs",
     "previa": "node scripts/previa.mjs",
-    "regua": "node scripts/regua.mjs"
+    "regua": "node scripts/regua.mjs",
+    "atualizar": "node scripts/atualizar-base.mjs",
+    "planilha": "python3 scripts/planilha-revisao.py"
   },
   "repository": {
     "type": "git",

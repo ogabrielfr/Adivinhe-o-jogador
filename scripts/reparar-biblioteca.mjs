@@ -64,6 +64,8 @@ const mudancas = []
 const travas = new Map()
 /** Carreira que ficaria com um clube só: não é charada, e fica como estava até alguém decidir. */
 const umClubeSo = []
+/** O Transfermarkt não devolveu o histórico: a carreira fica como estava, e isso também precisa aparecer. */
+const semResposta = []
 let nivelMudado = 0
 
 for (const j of jogadores) {
@@ -73,6 +75,7 @@ for (const j of jogadores) {
 
   let novos = null
   let motivo = ''
+  if (!passagens && idTmDe(j)) semResposta.push(j.nome)
   if (passagens) {
     const r = resolvedor.montarCarreira(passagens, { nasc, jogos: jogosDe.get(j.id) })
     // carreira escrita inteira à mão não depende do que travou
@@ -130,6 +133,11 @@ if (travas.size) {
 if (umClubeSo.length) {
   console.log(`\n${umClubeSo.length} carreiras ficariam com um clube só e ficam como estavam: ${umClubeSo.join(', ')}`)
   console.log('  um escudo não é charada: troque o jogador ou corrija a carreira à mão')
+}
+
+if (semResposta.length) {
+  console.log(`\n${semResposta.length} carreiras sem resposta do Transfermarkt ficam como estavam: ${semResposta.join(', ')}`)
+  console.log('  rode de novo (`npm run reparar`, ou `npm run atualizar -- --continuar`)')
 }
 
 if (nivelMudado) console.log(`\n${nivelMudado} jogadores mudaram de nível por niveis-fixos.mjs`)
