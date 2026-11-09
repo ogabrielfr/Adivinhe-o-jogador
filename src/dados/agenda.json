@@ -73,6 +73,10 @@
     "2026-12-01": {"facil":"mario-gotze","intermediario":"wojciech-szczesny","dificil":"jakub-blaszczykowski"},
     "2026-12-02": {"facil":"carlos-tevez","intermediario":"carlos-vela","dificil":"hidetoshi-nakata"},
     "2026-12-03": {"facil":"arthur-henrique-ramos-de-oliveira-melo","intermediario":"wesley-moraes","dificil":"helder-postiga"},
-    "2026-12-04": {"facil":"cris","intermediario":"per-mertesacker","dificil":"leonardo-bonucci"}
+    "2026-12-04": {"facil":"cris","intermediario":"per-mertesacker","dificil":"leonardo-bonucci"},
+    "2026-12-05": {"facil":"rai","intermediario":"marcelinho-carioca","dificil":"mason-mount"},
+    "2026-12-06": {"facil":"gil","intermediario":"declan-rice","dificil":"bismarck-barreto-faria"},
+    "2026-12-07": {"facil":"pepe","intermediario":"christian","dificil":"teddy-sheringham"},
+    "2026-12-08": {"facil":"sergio-busquets","intermediario":"peter-crouch","dificil":"divock-origi"}
   }
 }
