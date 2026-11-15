@@ -108,7 +108,7 @@ def aba_de_instrucoes(livro, contagem, total, novos):
     linhas = [
         ('Acerte o jogador pela carreira', None),
         ('Biblioteca', f'{total} jogadores: ' + ', '.join(f'{n} {c}' for n, c in contagem)),
-        ('Novo', f'"sim" nos {novos} que entraram nesta ampliação; vale começar a amostra por eles.' if novos
+        ('Novo', f'"sim" nos {novos} que entraram desde a versão anterior; vale começar a amostra por eles.' if novos
          else 'Vazia: a planilha foi gerada sem comparar com uma versão anterior.'),
         (None, None),
         ('Como revisar', 'Escolha alguns jogadores de cada aba e confira a carreira e as duas dicas.'),

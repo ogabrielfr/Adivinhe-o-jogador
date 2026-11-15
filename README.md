@@ -69,9 +69,15 @@ ainda não estão nela.
   que sai, troca de nível —, com a biblioteca ainda igual à publicada. É isso
   que congela o mês seguinte com o sorteio que já está no ar.
 - **Trocar quem cai num dia é trocar um id** no arquivo. Tirar um jogador da
-  biblioteca pede trocar os dias em que ele está agendado.
+  biblioteca pede trocar os dias futuros em que ele está agendado; se ele é o
+  de hoje, ele fica até o dia acabar — quem já jogou veria "Era ele:" com outro
+  nome. Foi o caso do Edinho na terceira rodada de marcações: o fácil de
+  15/11, ficou até a manhã de 16/11.
 - **`npm run validar-dados` recusa** agenda que aponte jogador fora da
-  biblioteca ou que não cubra os próximos 7 dias — e o deploy roda o validador.
+  biblioteca num dia que ainda não acabou em algum lugar do mundo, ou que não
+  cubra os próximos 7 dias — e o deploy roda o validador. O dia acaba de vez
+  quando vira no último fuso (UTC-12): às 9h de Brasília o dia anterior já
+  acabou em toda parte, e o jogador dele pode sair.
 
 Fora da agenda, vale o sorteio: `src/logica/diario.ts` converte a data local
 em um número de dia e usa esse número para indexar a lista do nível. A lista é
@@ -191,8 +197,10 @@ consulta apontou (Ramon Menezes, Cléber, Danilo do Corinthians, Helton…)
 jogaram de verdade e ficaram. Carreira de um clube só não entra (Lamine Yamal,
 Saka, Foden, Koke). Os 79 seguintes na fila, que passaram em tudo e ficaram
 fora só pelo corte — Rudi Völler, Mkhitaryan, Lacazette, Donnarumma, Oblak,
-Vavá, Clodoaldo, Zetti… —, são a reserva para quem o cliente tirar, em
-`relatorios/reserva-2026-11-05.md`, com o comando para trazer cada um.
+Vavá, Clodoaldo, Zetti… —, ficaram de reserva para quem o cliente tirasse. Na
+terceira rodada de marcações ele tirou 55, e entraram 55 da reserva (ver "O
+nível"); os 23 que sobraram estão em `relatorios/reserva-2026-11-15.md`, com o
+comando para trazer cada um.
 
 O nível de todos saiu da régua de novo, em terços de 300. Dos 408 de antes, 58
 foram do intermediário para o fácil e 30 do difícil para o intermediário, e
@@ -492,51 +500,79 @@ Barcelona" para o outro Adriano. Só "ADRIANO" não dizia qual dos dois era. O
 ### O nível
 
 Sai da **opinião do cliente**, por amostragem (`npm run regua`,
-`scripts/regua.mjs`). Ele marcou 66 jogadores numa página — fácil,
-intermediário, difícil ou tirar — e as marcações estão em
-`scripts/amostra-nivel.json`. A régua acha os pesos que melhor reproduzem essas
-marcações e com eles ordena a biblioteca inteira, inclusive quem entrar depois,
-sem ninguém marcar de novo.
+`scripts/regua.mjs`). Ele marca jogadores numa página — fácil, intermediário,
+difícil ou tirar — e as marcações estão em `scripts/amostra-nivel.json`. A
+régua acha os pesos que melhor reproduzem essas marcações e com eles ordena a
+biblioteca inteira, inclusive quem entrar depois, sem ninguém marcar de novo.
 
-Os dados são sete, todos do Transfermarkt e do Wikidata, e o peso de cada um sai
-das marcações (negativo deixa mais fácil):
+| Rodada | Quando | Marcações | De quem |
+| --- | --- | --- | --- |
+| 1 | setembro de 2026 | 66 | amostra da biblioteca de 400 |
+| 2 | setembro de 2026 | 51 | os 35 em que a régua tinha pouca certeza, os 14 que entraram e 2 reservas |
+| 3 | novembro de 2026 | 269 | 180 dos que entraram na ampliação para 900 (60 por nível), 58 nascidos antes de 1965, 30 da base e 1 que ele buscou |
+
+A segunda só foi aplicada junto com a terceira. Na terceira o cliente
+discordou de dois terços do que o jogo mostrava: dos 269 que ele marcou, 89
+estavam no nível dele, 127 em outro e 53 ele mandou tirar. Hoje 322 dos 900
+estão no nível que ele marcou; os outros 578, a régua põe.
+
+**Quem o cliente marca para tirar sai do jogo** e vai para `foraDaBiblioteca`,
+com o id do Transfermarkt, para continuar no ajuste: são eles que ensinam à
+régua onde fica o obscuro demais. Saíram 64, 55 na terceira rodada — muitos
+antigos (25 dos 58 nascidos antes de 1965 que ele marcou, inclusive Zagallo,
+Gérson, Zoff e Rummenigge), brasileiros de muitos clubes (Kayke, Wesley,
+Andrei Girotto) e estrangeiros de carreira europeia sem passagem pelo Brasil
+(Vlahović, Brozović, Kjær, Mertens). No lugar entram os próximos da reserva,
+na ordem da régua (`relatorios/reserva-2026-11-15.md`), menos homônimo de
+alguém que já está no jogo: o Zé Roberto da reserva, de Mirassol e Schalke,
+ficou fora porque quem digitasse "Zé Roberto" acertaria pelo do Bayern.
+
+Os dados são oito, todos do Transfermarkt e do Wikidata, e o peso de cada um
+sai das marcações (negativo deixa mais fácil; os dados são padronizados, então
+os pesos se comparam):
 
 | Dado | Peso |
 | --- | --- |
-| nasceu no Brasil | −1,23 |
-| quão recente é a carreira (último ano com jogo) | −1,02 |
-| Copas do Mundo em que entrou em campo | −0,97 |
-| jogos pela seleção brasileira | −0,80 |
-| idiomas em que a Wikipédia tem artigo sobre ele | −0,53 |
-| jogos nas cinco ligas grandes da Europa | −0,44 |
-| jogos pela seleção principal de qualquer país | +0,06 |
+| idiomas em que a Wikipédia tem artigo sobre ele | −0,77 |
+| jogos pelos clubes do Brasil | −0,73 |
+| quão recente é a carreira (último ano com jogo) | −0,52 |
+| nasceu no Brasil | −0,29 |
+| jogos pela seleção brasileira | −0,27 |
+| jogos pela seleção principal de qualquer país | −0,16 |
+| Copas do Mundo em que entrou em campo | −0,08 |
+| jogos nas cinco ligas grandes da Europa | +0,07 |
+
+Os jogos pelos clubes do Brasil entraram na terceira rodada. Sem eles a régua
+não enxergava fama feita aqui e mandava ídolos estrangeiros do futebol
+brasileiro (D'Alessandro, Guerrero, Lugano) para o difícil.
 
 O modelo é ordinal (fácil < intermediário < difícil < tirar), com freio contra
-amostra pequena. Tirando cada jogador da amostra do ajuste e prevendo o dele,
-acerta 50 das 66 marcações (76%); a régua anterior acertava 38 (58%). Os 9 que
-o cliente mandou tirar já saíram da biblioteca, mas continuam no ajuste pelo id
-do Transfermarkt (`foraDaBiblioteca`): são eles que ensinam onde fica o obscuro
-demais.
+amostra pequena. **Quanto acerta**: tirando cada marcação do ajuste e vendo em
+que nível a régua poria o jogador, acerta 174 das 322 marcações de quem está
+no jogo (54%), e 124 dos 148 erros são de um nível só; sem os jogos pelos
+clubes do Brasil, acertava 152 (47%). Na primeira rodada acertava 76%, mas de
+66 marcações: as rodadas seguintes foram de propósito nos casos difíceis, e é
+neles que ela erra. Ela erra também com os antigos que o cliente tira — jogou
+pela seleção e nasceu no Brasil, para ela, é fácil. Por isso a marcação vale
+mais que a régua, e cada rodada nova ajuda.
 
 O cliente quer **o mesmo número de jogadores por nível**. A régua ordena e corta
 onde cada nível fecha com um terço. Vencem o cálculo, nesta ordem:
 
 - a marcação do cliente;
 - `scripts/niveis-fixos.mjs`, a decisão à mão com o motivo escrito;
-- `EM_DUVIDA`, em `scripts/regua.mjs`: 35 jogadores que a régua mudaria com
-  pouca certeza. São craques que ela joga para baixo, porque a amostra tinha
-  poucos (aplicada direto, punha o Bale e o Figo no difícil), brasileiros que
-  ela subiria do difícil direto para o fácil e estrangeiros de muitas Copas que
-  ela punha no fácil (Shaqiri, Cahill, Xhaka). Ficam no nível de antes;
-- `PROVISORIO`: Guerrero, D'Alessandro, Lugano e Seedorf, ídolos no Brasil que
-  entraram na reposição. A régua não enxerga fama feita num clube brasileiro e
-  mandava os quatro para o difícil; ficam no intermediário.
+- `EM_DUVIDA` e `PROVISORIO`, em `scripts/regua.mjs`, que seguram quem a régua
+  põe com pouca certeza até o cliente marcar. As duas estão vazias: os 35 em
+  dúvida da primeira rodada (Bale, Figo, Shaqiri, Cahill…) e os quatro
+  provisórios (Guerrero, D'Alessandro, Lugano, Seedorf) foram marcados na
+  segunda.
 
-Os dois últimos esperam a **segunda rodada** de marcações, que está na mesma
-página, com os 14 que entraram e os 2 reservas. Marcação nova vai para
-`scripts/amostra-nivel.json`; depois, `npm run regua -- --gravar` e
-`npm run agenda` para os dias ainda não agendados. Quem o cliente marcar sai
-de `EM_DUVIDA` e `PROVISORIO` sem precisar mexer neles, porque a marcação vence.
+**Para aplicar uma rodada nova**: as marcações da página vão para
+`scripts/amostra-nivel.json` (a página vence); quem foi marcado para tirar
+sai da biblioteca e vai para `foraDaBiblioteca`, e entra o próximo da reserva
+com `npm run trazer`; depois `npm run catalogo`, `npm run dicas`,
+`npm run regua -- --gravar` e, com os dias ainda não jogados tirados da
+agenda, `npm run agenda`.
 
 #### A régua anterior: visualizações da Wikipédia
 

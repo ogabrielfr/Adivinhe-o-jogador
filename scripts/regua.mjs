@@ -14,21 +14,27 @@
  *   - Copas do Mundo em que entrou em campo;
  *   - se nasceu no Brasil;
  *   - jogos pelos clubes das cinco ligas grandes da Europa;
+ *   - jogos pelos clubes do Brasil;
  *   - quão recente é a carreira (o último ano com jogo);
  *   - em quantos idiomas a Wikipédia tem artigo sobre ele.
  *
  * O modelo é ordinal — fácil < intermediário < difícil < tirar — e os pesos
  * saem por máxima verossimilhança com um freio (L2) contra a amostra pequena.
- * Deixando cada jogador da amostra de fora do ajuste e prevendo o dele, a
- * régua acerta 50 das 66 marcações (76%), contra 38 (58%) dos níveis da régua
- * antiga — "tirar" conta como acerto quando cai no difícil, já que o jogo não
- * tem nível abaixo dele.
+ *
+ * Quanto acerta: deixando cada marcação de fora do ajuste e vendo em que
+ * nível a régua poria o jogador, ela acerta 174 das 322 marcações de quem está
+ * no jogo (54%); 124 dos erros são de um nível só. Sem os jogos pelos clubes
+ * do Brasil, que entraram na terceira rodada, acertava 152 (47%). Na primeira
+ * rodada acertava 76%, mas de 66 marcações; as rodadas seguintes foram de
+ * propósito nos casos difíceis — os que ela punha em dúvida, os que entraram
+ * na ampliação para 900 e os mais antigos —, e é neles que ela erra. Por isso
+ * a marcação do cliente vale mais que a régua, e cada rodada nova ajuda.
  *
  * O cliente quer o mesmo número de jogadores por nível. A régua então ordena, e
  * o corte fica onde cada nível fecha com um terço da biblioteca. Quem o
  * cliente marcou fica exatamente como ele marcou; `scripts/niveis-fixos.mjs`
  * também vence o cálculo, e `EM_DUVIDA` e `PROVISORIO`, abaixo, seguram quem
- * espera a segunda rodada de marcações.
+ * espera uma rodada de marcações (as duas estão vazias desde a terceira).
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
@@ -96,8 +102,10 @@ export async function fatoresDe(jogadores) {
 
   return brutos.map(({ j, qid, desempenho, jogos, selecao, nasc }) => {
     let europa = 0
+    let brasil = 0
     for (const [clube, r] of Object.entries(desempenho?.porClube ?? {})) {
       if (EUROPA.has(clubes[clube]?.pais)) europa += r.jogos
+      if (clubes[clube]?.pais === BRASIL) brasil += r.jogos
     }
     const anos = Object.values(jogos).flatMap((r) => [r.de, r.ate]).filter(Boolean)
     // sem registro de partidas, a carreira termina por volta dos 33 anos
@@ -113,6 +121,9 @@ export async function fatoresDe(jogadores) {
         europa: Math.log1p(europa),
         recente: (ultimo - 2000) / 10,
         idiomas: Math.log(Math.max(idiomas[qid] ?? 1, 1)),
+        // a fama feita aqui, que os outros dados não enxergam: o D'Alessandro
+        // e o Guerrero iam para o difícil sem ela
+        brasil: Math.log1p(brasil),
       },
     }
   })
@@ -200,38 +211,23 @@ export function niveisPelaRegua(fatores, marcacoes, fixos = {}, fora = []) {
 }
 
 /**
- * Jogadores em que a régua mudaria o nível com pouca certeza, em três grupos:
- * craques que ela joga para baixo, porque a amostra do cliente tinha poucos
- * (aplicada direto, punha o Bale e o Figo no difícil); brasileiros que ela
- * subiria do difícil direto para o fácil (Maxwell, Neto, Gomes); e
- * estrangeiros de muitas Copas que ela punha no fácil (Shaqiri, Cahill,
- * Xhaka). Até o cliente marcar estes na segunda rodada, ficam no nível que já
- * tinham.
+ * Quem a régua mudaria de nível com pouca certeza fica no nível que já tinha
+ * até o cliente marcar. A primeira lista teve 35: craques que ela jogava para
+ * baixo (Bale, Figo), brasileiros que ela subia do difícil direto para o fácil
+ * (Maxwell, Neto, Gomes) e estrangeiros de muitas Copas que ela punha no fácil
+ * (Shaqiri, Cahill, Xhaka). O cliente marcou os 35 na segunda rodada; a lista
+ * fica vazia até a próxima dúvida.
  */
-export const EM_DUVIDA = [
-  'maxwell', 'allan-marques-loureiro', 'josue-anunciado-de-oliveira',
-  'anderson-futebolista', 'rafael-pereira-da-silva', 'neto', 'gomes', 'estevao',
-  'gareth-bale', 'luis-enrique-martinez-garcia', 'thiago-alcantara',
-  'radamel-falcao-garcia', 'luis-figo', 'zagallo', 'marco-van-basten', 'zinedine-zidane',
-  'zlatan-ibrahimovic', 'mohamed-salah', 'robert-lewandowski', 'erling-haaland',
-  'arjen-robben', 'rogerio-ceni', 'paulo-roberto-falcao', 'carlos-tevez', 'diego-forlan',
-  'garrincha', 'hugo-lloris', 'jordan-henderson', 'xherdan-shaqiri', 'raheem-sterling',
-  'raphael-varane', 'adriano-correia-claro', 'alex-rodrigo-dias-da-costa',
-  'tim-cahill', 'granit-xhaka',
-]
+export const EM_DUVIDA = []
 
 /**
- * Estrangeiros que foram ídolos no Brasil. A régua não enxerga fama feita num
- * clube brasileiro — os dados dela são seleção, Copa, Europa e Wikipédia —, e
- * mandava os quatro para o difícil. Entraram na reposição de setembro e ficam
- * no intermediário até o cliente marcar.
+ * Nível provisório, até o cliente marcar, de quem a régua sabidamente põe
+ * errado. Os primeiros foram quatro estrangeiros ídolos no Brasil (Guerrero,
+ * D'Alessandro, Lugano e Seedorf), que ela mandava para o difícil antes de
+ * contar os jogos por clubes brasileiros. O cliente marcou os quatro na
+ * segunda rodada.
  */
-export const PROVISORIO = {
-  'paolo-guerrero': 'intermediario',
-  'andres-d-alessandro': 'intermediario',
-  'diego-lugano': 'intermediario',
-  'clarence-seedorf': 'intermediario',
-}
+export const PROVISORIO = {}
 
 // ------------------------------------------------------------ execução
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

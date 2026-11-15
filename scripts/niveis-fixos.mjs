@@ -24,12 +24,9 @@ export const NIVEL_FIXO = {
    */
   'roger-machado': 'dificil',
 
-  /**
-   * Razão infinita — nenhum jogo de seleção, nenhuma transferência com
-   * valor. Toda a procura pelo nome é pelo treinador; o lateral do Vasco e
-   * do Olaria dos anos 1970 não é o que o torcedor lembra.
-   */
-  'joel-santana': 'dificil',
+  // O Joel Santana, lateral do Vasco e do Olaria dos anos 1970 que só o
+  // treinador fez conhecido, estava aqui no difícil; o cliente o tirou do
+  // jogo na terceira rodada de marcações.
 
   /**
    * Razão 3,3. O caso mais discutível dos três, e por isso está aqui e não

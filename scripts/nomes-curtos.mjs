@@ -222,6 +222,21 @@ export const NOME_CURTO = {
   'brasil-de-pelotas': 'Brasil de Pelotas',
   'serrano-foot-ball-club': 'Serrano',
   'abc': 'ABC',
+  // a terceira rodada de marcações (novembro de 2026): os que entraram no lugar dos que o cliente tirou
+  'barretos-esporte-clube': 'Barretos',
+  'esporte-clube-primavera': 'Primavera',
+  'uniao-agricola-barbarense-futebol-clube': 'União Barbarense',
+  'bec-tero-sasana-football-club': 'BEC Tero Sasana',
+  'bursaspor-kulubu-dernegi': 'Bursaspor',
+  'club-sportivo-luqueno': 'Sportivo Luqueño',
+  'club-sportivo-trinidense': 'Sportivo Trinidense',
+  'football-club-esperia-viareggio': 'Esperia Viareggio',
+  'qingdao-qingchundao-f-c': 'Qingdao Qingchundao',
+  'sc-tavriya-simferopol': 'Tavriya',
+  'sociedad-deportiva-ponferradina': 'Ponferradina',
+  'societa-polisportiva-ars-et-labor-1907': 'SPAL',
+  'southport-football-club': 'Southport',
+  'tractor-sazi-tabriz-football-club': 'Tractor',
   // os clubes que entraram com os 90 de 28/09
   'associacao-desportiva-ferroviaria-vale-do-rio-doce': 'Desportiva',
   'sociedade-esportiva-e-recreativa-caxias-do-sul': 'Caxias',
@@ -331,6 +346,8 @@ export const NOME_CURTO = {
   'toluca': 'Toluca',
   'emelec': 'Emelec',
   'millonarios': 'Millonarios',
+  // e o Gimnasia y Esgrima de La Plata do Lucas Barrios
+  'gimnasia': 'Gimnasia LP',
   // os clubes que entraram com a reposição de setembro
   'club-alianza-lima': 'Alianza Lima',
   'club-deportivo-universidad-cesar-vallejo': 'César Vallejo',

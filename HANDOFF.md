@@ -116,20 +116,24 @@ vezes vem 429) e `ogabrielfr.github.io`.
 
 O cliente vai mandar um pacote de design system para o jogo usar. Ficou para
 depois das mudanças de 05/11 (900 jogadores, escudos, atualização, botão de
-revisão, planilha), que estão no ar. O visual hoje vem de `src/index.css` (as
+revisão, planilha) e da terceira rodada de marcações de nível (15/11), que
+estão no ar. O visual hoje vem de `src/index.css` (as
 cores `relva`, `cal`, `dica`, as classes `t-rotulo`, `t-camisa`, `t-nota`) e
 das classes Tailwind dos componentes em `src/componentes/`.
 
 ### 0.1. A revisão da base pelo cliente
 
 Com a planilha e a rodada de revisão. O que ele marcar como "tirar" sai e entra
-alguém da reserva — os 79 que ficaram fora só pelo corte, em ordem e com o
-comando para trazer cada um, em `relatorios/reserva-2026-11-05.md`. Quando a
-revisão acabar, o botão "Refazer jogo
-com novos jogadores" sai (`TelaInicial.tsx`, e `revisao` em `App.tsx` e em
-`armazenamento.ts`).
+alguém da reserva — os 23 que sobraram depois da terceira rodada, em ordem e
+com o comando para trazer cada um, em `relatorios/reserva-2026-11-15.md`. A
+reserva está no fim: são os menos reconhecíveis, e 10 nasceram antes de 1965,
+o perfil que o cliente mais tira. Se ele tirar muitos mais, vale uma busca
+nova de candidatos, como a da ampliação. Quando a revisão acabar, o botão
+"Refazer jogo com novos jogadores" sai (`TelaInicial.tsx`, e `revisao` em
+`App.tsx` e em `armazenamento.ts`).
 
-**As dicas dos 492 novos não usam título**: a página de títulos só existe no
+**As dicas de quem entrou desde a ampliação não usam título** (492 em 05/11 e
+55 em 15/11): a página de títulos só existe no
 site do Transfermarkt, que está desligado (ver "Rede"). Elas saíram com final,
 jogos por clube, Copas, seleção, naturalidade. Para pôr título nelas, rode
 `TITULOS_DO_SITE=1 npm run dicas -- --todas` de uma máquina onde o site
@@ -148,39 +152,46 @@ Três carreiras vieram com o fim novo que o Transfermarkt já registra: Salah no
 Trabzonspor (agosto de 2026), Lewandowski no Chicago Fire (julho de 2026) e
 Thiago Silva de volta ao Fluminense depois de meio ano no Porto.
 
-### 2. A régua do nível: aplicada, falta a segunda rodada
+### 2. A régua do nível: três rodadas aplicadas
 
 O cliente recusou as visualizações da Wikipédia e escolheu a régua por
 amostragem: ele marca uma amostra, e os pesos de cada dado saem das marcações
-(`scripts/regua.mjs`, explicado no README). Na primeira rodada marcou 66
-jogadores (`scripts/amostra-nivel.json`); a régua acerta 76% deles quando cada
-um fica de fora do ajuste, contra 58% da régua antiga. Aplicada em 24/09, com
-106 jogadores em cada nível e a agenda refeita a partir de 26/09.
+(`scripts/regua.mjs`, explicado no README). As três rodadas foram na mesma
+página de marcação, com as marcações num banco (coleção `votos`, id do jogador
+→ `{nivel, rodada}`; a terceira grava `rodada: 3`):
 
-Mandou tirar 9 e evitar carreira dos anos 1940 para trás, o que tirou mais 4;
-entraram 14 no lugar (lista no README). **Dudu e James Rodríguez** passaram no
-caminho de aceitação e ficaram de reserva.
+- **1ª (setembro)**: 66 marcações, aplicada em 24/09. Mandou tirar 9 e evitar
+  carreira dos anos 1940 para trás, o que tirou mais 4; entraram 14 no lugar.
+- **2ª (setembro)**: 51 — os 35 de `EM_DUVIDA`, os 14 que entraram (4 em
+  `PROVISORIO`) e 2 reservas. Ficou no banco, sem aplicar, até a terceira.
+- **3ª (novembro)**: 269, quase todas dos que entraram na ampliação para 900 e
+  dos nascidos antes de 1965. Aplicada em 15/11 junto com a segunda: 322 dos
+  900 ficaram no nível que ele marcou, a régua refez os outros em terços de
+  300 (209 mudaram) e a agenda foi refeita a partir de 17/11.
 
-**Falta a segunda rodada**, que já está na página de marcação, com 51 jogadores:
+Na terceira ele discordou de dois terços do que o jogo mostrava e mandou tirar
+55 (Zagallo, Gérson, Zoff, Rummenigge, Vlahović, Brozović…). Entraram 55 da
+reserva, na ordem da régua; o Zé Roberto da reserva ficou fora por ser
+homônimo do que já está no jogo. O **Edinho**, um dos 55, era o fácil de 15/11
+e ficou na biblioteca até a manhã de 16/11, quando o dia dele acabou em todo
+fuso (ver "A agenda" no README).
 
-- os 35 de `EM_DUVIDA`, que a régua mudaria com pouca certeza e ficaram no
-  nível de antes;
-- os 14 que entraram, 4 deles em `PROVISORIO` (Guerrero, D'Alessandro, Lugano
-  e Seedorf, que a régua mandava para o difícil por não enxergar fama feita em
-  clube brasileiro);
-- os 2 reservas. Num jogador novo, "tirar" quer dizer trocar por um reserva.
+A régua ganhou um oitavo dado, os jogos pelos clubes do Brasil, e acerta 54%
+das marcações quando cada uma fica de fora do ajuste (47% sem ele). É pouco:
+ela erra sobretudo nos antigos que o cliente tira, que para ela são fáceis
+(jogaram pela seleção e nasceram no Brasil), e na fronteira entre níveis
+vizinhos. A marcação vence a régua, então cada rodada melhora o jogo
+diretamente. Testado nesta rodada e descartado: tirar os "tirar" do ajuste
+(45%) ou contá-los como difícil (46%). `EM_DUVIDA` e `PROVISORIO` estão
+vazias.
 
-As marcações ficam no banco da página (coleção `votos`, id do jogador → nível).
-Para aplicar: passe-as para `scripts/amostra-nivel.json` — quem sair da
-biblioteca vai também para `foraDaBiblioteca`, com o id do Transfermarkt, para
-seguir no ajuste —, rode `npm run regua` para ver o que muda,
-`npm run regua -- --gravar` e `npm run agenda`. Quem foi marcado deixa de
-depender de `EM_DUVIDA` e `PROVISORIO`, porque a marcação vence; depois da
-rodada, as duas listas podem ser esvaziadas.
+**Uma quarta rodada, se o cliente quiser**, teria como candidatos os 578 que a
+régua pôs, começando pelos 209 que ela mudou de nível agora. O caminho para
+aplicar está no README ("Para aplicar uma rodada nova").
 
 Testado e descartado como régua sozinha: **número de idiomas da Wikipédia com
 artigo do jogador**. Mede fama no mundo e mandaria Pedro, Bruno Henrique,
-Gerson e Everton Ribeiro para o difícil; na régua de hoje ele é um dos sete
+Gerson e Everton Ribeiro para o difícil; na régua de hoje ele é um dos oito
 dados, com o peso que as marcações deram.
 
 ### 3. Texto que vem das fontes e lê mal
@@ -215,6 +226,8 @@ Levados ao cliente em 25/09, que deu as pendências por respondidas sem pedir mu
 ## Armadilhas conhecidas
 
 - **A `main` recebe commit do github-actions toda segunda** ("Estende a agenda"). Puxe antes de publicar, senão o push é recusado. Em 28/09 o push dessa execução levou erro interno do GitHub e a semana ficou sem publicar (o site seguiu no ar com a versão anterior); o passo agora tenta de novo até quatro vezes.
+- **O jogador do dia não sai da biblioteca no dia dele.** Quem já jogou veria "Era ele:" com outro nome. Tire-o dos dias futuros da agenda já; da biblioteca, só quando o dia acabar no último fuso (UTC-12, 9h de Brasília do dia seguinte) — antes disso o `validar-dados` recusa, e o deploy não sai. Na terceira rodada foi o Edinho, fácil de 15/11.
+- **Homônimo de quem já está no jogo não entra pela reserva.** O nome inteiro sempre vale como palpite, então quem digitasse "Zé Roberto" no dia do Zé Roberto de Mirassol e Schalke acertaria pensando no do Bayern. O `npm run trazer` não barra; confira o nome na tela de quem entra contra a biblioteca.
 - **Nome que casa com o clube errado passa calado.** O resolvedor liga pelo id do Transfermarkt e, sem par, pelo nome: o "Generation Foot" do Mané casou com o Generation Adidas, dos Estados Unidos. Ao trazer jogador novo, confira as passagens resolvidas pelo nome, e prefira acrescentar o par em `PARES_TM` (e em `clubes-transfermarkt.json`) a confiar no nome.
 - **Mexer na lista de um nível sem rodar `npm run agenda` antes** congela o mês seguinte já com a lista nova. Só é problema se a agenda tiver vencido — o deploy recusa agenda que não cubra 7 dias à frente, e a execução semanal a mantém em 30.
 - **`npm run catalogo` mantém o escudo que já existe** e só baixa o que falta, em cerca de um minuto. `-- --baixar-de-novo` baixa todos, e aí demora (milhares de imagens, com o Wikimedia limitando pedidos).

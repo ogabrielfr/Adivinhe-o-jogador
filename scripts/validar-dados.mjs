@@ -118,6 +118,12 @@ for (const lista of mesmoNome.values()) {
  * já jogou, que é exatamente o que a agenda existe para impedir. O passado
  * fica de fora: é registro, e pode citar quem já saiu da biblioteca.
  *
+ * Passado é o dia que já acabou no mundo inteiro, até no último fuso, doze
+ * horas atrás de Greenwich. Antes valia "de ontem para a frente" pelo relógio
+ * daqui, que segurava o dia doze horas a mais que o necessário: às 15h de
+ * Greenwich o dia anterior já acabou até no Havaí, e o jogador dele já pode
+ * sair da biblioteca.
+ *
  * E ela precisa estar à frente. A publicação semanal a estende; se ela parou,
  * o dia que sair da agenda volta ao sorteio, que muda com qualquer troca na
  * biblioteca.
@@ -125,9 +131,11 @@ for (const lista of mesmoNome.values()) {
 const AGENDA = JSON.parse(readFileSync(new URL('../src/dados/agenda.json', import.meta.url), 'utf8')).dias
 const MINIMO_A_FRENTE = 7
 const hoje = numeroDoDia()
+// a data no fuso UTC-12, o último a virar o dia
+const diaMaisAtrasado = new Date(Date.now() - 12 * 3600 * 1000).toISOString().slice(0, 10)
 const porId = new Map(JOGADORES.map((j) => [j.id, j]))
 for (const [data, dia] of Object.entries(AGENDA)) {
-  if (data < dataDoDia(hoje - 1)) continue
+  if (data < diaMaisAtrasado) continue
   for (const [nivel, id] of Object.entries(dia)) {
     const j = porId.get(id)
     if (!j) erros.push(`agenda ${data}: "${id}" (${nivel}) não está na biblioteca`)
