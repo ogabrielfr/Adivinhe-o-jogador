@@ -9047,15 +9047,5 @@
     "dicas": ["Volante nascido na Argentina em 1980.","Marcou na final da Copa da Itália de 2006. Fez mais de 400 jogos e mais de 50 gols pela Inter de Milão."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/7520"
-  },
-  {
-    "id": "edinho",
-    "nome": "Edinho",
-    "apelidos": ["edinho","edino nazareth filho"],
-    "nivel": "facil",
-    "clubes": ["fluminense","udinese","flamengo","fluminense","gremio","toronto-blizzard"],
-    "dicas": ["Zagueiro brasileiro nascido em 1955.","Fez mais de 150 jogos pela Udinese. Disputou as Copas do Mundo de 1978, 1982 e 1986."],
-    "verificado": true,
-    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/117620"
   }
 ]

@@ -986,7 +986,6 @@ export const CLUBES: Clube[] = [
   { id: 'toluca', nome: "Toluca", pais: 'MX', escudo: 'toluca.png' },
   { id: 'tombense-futebol-clube', nome: "Tombense", pais: 'BR', escudo: 'tombense-futebol-clube.svg' },
   { id: 'torino', nome: "Torino", pais: 'IT', escudo: 'torino.svg' },
-  { id: 'toronto-blizzard', nome: "Toronto Blizzard", pais: 'CA', escudo: 'toronto-blizzard.png', cores: ['#C02040', '#002060'] },
   { id: 'toronto-fc-q327238', nome: "Toronto FC", pais: 'CA', escudo: 'toronto-fc-q327238.png' },
   { id: 'toros-neza-futbol-club', nome: "Toros Neza", pais: 'MX', escudo: 'toros-neza-futbol-club.png' },
   { id: 'torpedo-moscow', nome: "Torpedo Moscow", pais: 'RU', escudo: 'torpedo-moscow.png' },
