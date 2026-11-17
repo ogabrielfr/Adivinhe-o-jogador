@@ -510,22 +510,30 @@ biblioteca inteira, inclusive quem entrar depois, sem ninguém marcar de novo.
 | 1 | setembro de 2026 | 66 | amostra da biblioteca de 400 |
 | 2 | setembro de 2026 | 51 | os 35 em que a régua tinha pouca certeza, os 14 que entraram e 2 reservas |
 | 3 | novembro de 2026 | 269 | 180 dos que entraram na ampliação para 900 (60 por nível), 58 nascidos antes de 1965, 30 da base e 1 que ele buscou |
+| 4 | novembro de 2026 | 264 | os 209 que a régua mudou de nível ao aplicar a terceira e os 55 que entraram da reserva |
 
 A segunda só foi aplicada junto com a terceira. Na terceira o cliente
 discordou de dois terços do que o jogo mostrava: dos 269 que ele marcou, 89
-estavam no nível dele, 127 em outro e 53 ele mandou tirar. Hoje 322 dos 900
-estão no nível que ele marcou; os outros 578, a régua põe.
+estavam no nível dele, 127 em outro e 53 ele mandou tirar. Na quarta, dos 209
+que a régua tinha mudado, ele concordou com o nível novo em 92, voltou ao
+antigo em 61 e mandou tirar 19; dos 55 que entraram, concordou em 24 e tirou
+13. Hoje 554 dos 868 estão no nível que ele marcou; os outros 314, a régua põe.
 
 **Quem o cliente marca para tirar sai do jogo** e vai para `foraDaBiblioteca`,
 com o id do Transfermarkt, para continuar no ajuste: são eles que ensinam à
-régua onde fica o obscuro demais. Saíram 64, 55 na terceira rodada — muitos
-antigos (25 dos 58 nascidos antes de 1965 que ele marcou, inclusive Zagallo,
-Gérson, Zoff e Rummenigge), brasileiros de muitos clubes (Kayke, Wesley,
-Andrei Girotto) e estrangeiros de carreira europeia sem passagem pelo Brasil
-(Vlahović, Brozović, Kjær, Mertens). No lugar entram os próximos da reserva,
-na ordem da régua (`relatorios/reserva-2026-11-15.md`), menos homônimo de
-alguém que já está no jogo: o Zé Roberto da reserva, de Mirassol e Schalke,
-ficou fora porque quem digitasse "Zé Roberto" acertaria pelo do Bayern.
+régua onde fica o obscuro demais. Saíram 96. Na terceira rodada foram 55 —
+muitos antigos (25 dos 58 nascidos antes de 1965 que ele marcou, inclusive
+Zagallo, Gérson, Zoff e Rummenigge), brasileiros de muitos clubes (Kayke,
+Wesley, Andrei Girotto) e estrangeiros de carreira europeia sem passagem pelo
+Brasil (Vlahović, Brozović, Kjær, Mertens) —, e no lugar entraram os próximos
+da reserva, na ordem da régua (`relatorios/reserva-2026-11-15.md`), menos
+homônimo de alguém que já está no jogo: o Zé Roberto da reserva, de Mirassol e
+Schalke, ficou fora porque quem digitasse "Zé Roberto" acertaria pelo do
+Bayern. Na quarta foram 32: 13 recém-chegados (Mkhitaryan, Diogo Jota, Kepa,
+Bellerín, Nainggolan) e 19 dos que a régua tinha mudado, estrangeiros
+(Çalhanoğlu, Kolarov, Jović, Tomiyasu) e brasileiros (Neto Baiano, Marcos
+Júnior, Giovane Élber). A biblioteca ficou com 868 até a próxima busca de
+candidatos.
 
 Os dados são oito, todos do Transfermarkt e do Wikidata, e o peso de cada um
 sai das marcações (negativo deixa mais fácil; os dados são padronizados, então
@@ -533,14 +541,14 @@ os pesos se comparam):
 
 | Dado | Peso |
 | --- | --- |
-| idiomas em que a Wikipédia tem artigo sobre ele | −0,77 |
-| jogos pelos clubes do Brasil | −0,73 |
-| quão recente é a carreira (último ano com jogo) | −0,52 |
-| nasceu no Brasil | −0,29 |
-| jogos pela seleção brasileira | −0,27 |
-| jogos pela seleção principal de qualquer país | −0,16 |
-| Copas do Mundo em que entrou em campo | −0,08 |
-| jogos nas cinco ligas grandes da Europa | +0,07 |
+| jogos pelos clubes do Brasil | −0,87 |
+| idiomas em que a Wikipédia tem artigo sobre ele | −0,57 |
+| quão recente é a carreira (último ano com jogo) | −0,50 |
+| jogos pela seleção brasileira | −0,26 |
+| jogos pela seleção principal de qualquer país | −0,25 |
+| nasceu no Brasil | −0,17 |
+| Copas do Mundo em que entrou em campo | −0,13 |
+| jogos nas cinco ligas grandes da Europa | +0,13 |
 
 Os jogos pelos clubes do Brasil entraram na terceira rodada. Sem eles a régua
 não enxergava fama feita aqui e mandava ídolos estrangeiros do futebol
@@ -548,13 +556,27 @@ brasileiro (D'Alessandro, Guerrero, Lugano) para o difícil.
 
 O modelo é ordinal (fácil < intermediário < difícil < tirar), com freio contra
 amostra pequena. **Quanto acerta**: tirando cada marcação do ajuste e vendo em
-que nível a régua poria o jogador, acerta 174 das 322 marcações de quem está
-no jogo (54%), e 124 dos 148 erros são de um nível só; sem os jogos pelos
-clubes do Brasil, acertava 152 (47%). Na primeira rodada acertava 76%, mas de
-66 marcações: as rodadas seguintes foram de propósito nos casos difíceis, e é
+que nível a régua poria o jogador, acerta 268 das 554 marcações de quem está
+no jogo (48%), e 225 dos 286 erros são de um nível só. Na terceira rodada
+acertava 54% de 322 (47% antes dos jogos pelos clubes do Brasil) e, na
+primeira, 76% de 66: cada rodada foi de propósito nos casos difíceis, e é
 neles que ela erra. Ela erra também com os antigos que o cliente tira — jogou
-pela seleção e nasceu no Brasil, para ela, é fácil. Por isso a marcação vale
-mais que a régua, e cada rodada nova ajuda.
+pela seleção e nasceu no Brasil, para ela, é fácil — e subestima craque
+estrangeiro: o cliente pôs Salah, Haaland, Lewandowski e Benzema no fácil, e
+ela dá 34% de fácil ao Mbappé. Por isso a marcação vale mais que a régua.
+
+#### Onde falta jogador: o fácil
+
+Depois da quarta rodada, o fácil tem 289 jogadores: 127 que o cliente marcou e
+162 que a régua pôs. Desses 162, só 75 têm o fácil como nível mais provável
+(Neymar, Hulk, Daniel Alves, Casemiro, Kaká); os outros 87 (Nilmar, Luiz
+Adriano, Deco, Mascherano, Modrić, Mbappé…) estão lá para o nível fechar um
+terço. Somando a marcação de quem foi marcado e o nível mais provável dos
+outros, a biblioteca tem por natureza cerca de **200 fáceis, 340
+intermediários e 325 difíceis**. Para 300 fáceis de verdade faltam uns 100
+jogadores de fácil; intermediário e difícil sobram. O fácil do cliente é
+quase só de craque: 127 das 554 marcações (23%), 77 de brasileiros e 50 de
+estrangeiros.
 
 O cliente quer **o mesmo número de jogadores por nível**. A régua ordena e corta
 onde cada nível fecha com um terço. Vencem o cálculo, nesta ordem:

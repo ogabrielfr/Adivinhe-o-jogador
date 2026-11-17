@@ -22,13 +22,13 @@
  * saem por máxima verossimilhança com um freio (L2) contra a amostra pequena.
  *
  * Quanto acerta: deixando cada marcação de fora do ajuste e vendo em que
- * nível a régua poria o jogador, ela acerta 174 das 322 marcações de quem está
- * no jogo (54%); 124 dos erros são de um nível só. Sem os jogos pelos clubes
- * do Brasil, que entraram na terceira rodada, acertava 152 (47%). Na primeira
- * rodada acertava 76%, mas de 66 marcações; as rodadas seguintes foram de
- * propósito nos casos difíceis — os que ela punha em dúvida, os que entraram
- * na ampliação para 900 e os mais antigos —, e é neles que ela erra. Por isso
- * a marcação do cliente vale mais que a régua, e cada rodada nova ajuda.
+ * nível a régua poria o jogador, ela acerta 268 das 554 marcações de quem está
+ * no jogo (48%); 225 dos 286 erros são de um nível só. Na terceira rodada
+ * acertava 54% de 322 (47% antes dos jogos pelos clubes do Brasil) e, na
+ * primeira, 76% de 66. As rodadas seguintes foram de propósito nos casos
+ * difíceis — os que ela punha em dúvida, os que entraram na ampliação, os mais
+ * antigos e, na quarta, os 209 que ela tinha mudado de nível —, e é neles que
+ * ela erra. Por isso a marcação do cliente vale mais que a régua.
  *
  * O cliente quer o mesmo número de jogadores por nível. A régua então ordena, e
  * o corte fica onde cada nível fecha com um terço da biblioteca. Quem o

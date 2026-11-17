@@ -123,12 +123,13 @@ das classes Tailwind dos componentes em `src/componentes/`.
 
 ### 0.1. A revisão da base pelo cliente
 
-Com a planilha e a rodada de revisão. O que ele marcar como "tirar" sai e entra
-alguém da reserva — os 23 que sobraram depois da terceira rodada, em ordem e
-com o comando para trazer cada um, em `relatorios/reserva-2026-11-15.md`. A
-reserva está no fim: são os menos reconhecíveis, e 10 nasceram antes de 1965,
-o perfil que o cliente mais tira. Se ele tirar muitos mais, vale uma busca
-nova de candidatos, como a da ampliação. Quando a revisão acabar, o botão
+Com a planilha e as rodadas de marcação. Depois da quarta rodada a biblioteca
+está com **868**: os 32 que ele tirou não foram repostos. A reserva
+(`relatorios/reserva-2026-11-15.md`, 23 nomes) está no fim — são os menos
+reconhecíveis, e 10 nasceram antes de 1965, o perfil que ele mais tira —, e o
+que falta é fácil, não difícil (item 2). **Próximo passo, à espera do
+cliente**: uma busca nova de candidatos mirada no fácil. Ele pediu para ver a
+divisão por nível antes de decidir. Quando a revisão acabar, o botão
 "Refazer jogo com novos jogadores" sai (`TelaInicial.tsx`, e `revisao` em
 `App.tsx` e em `armazenamento.ts`).
 
@@ -152,13 +153,13 @@ Três carreiras vieram com o fim novo que o Transfermarkt já registra: Salah no
 Trabzonspor (agosto de 2026), Lewandowski no Chicago Fire (julho de 2026) e
 Thiago Silva de volta ao Fluminense depois de meio ano no Porto.
 
-### 2. A régua do nível: três rodadas aplicadas
+### 2. A régua do nível: quatro rodadas aplicadas
 
 O cliente recusou as visualizações da Wikipédia e escolheu a régua por
 amostragem: ele marca uma amostra, e os pesos de cada dado saem das marcações
-(`scripts/regua.mjs`, explicado no README). As três rodadas foram na mesma
-página de marcação, com as marcações num banco (coleção `votos`, id do jogador
-→ `{nivel, rodada}`; a terceira grava `rodada: 3`):
+(`scripts/regua.mjs`, explicado no README). As rodadas foram na mesma página
+de marcação, com as marcações num banco (coleção `votos`, id do jogador →
+`{nivel, rodada}`; da terceira em diante grava o número da rodada):
 
 - **1ª (setembro)**: 66 marcações, aplicada em 24/09. Mandou tirar 9 e evitar
   carreira dos anos 1940 para trás, o que tirou mais 4; entraram 14 no lugar.
@@ -176,18 +177,32 @@ homônimo do que já está no jogo. O **Edinho**, um dos 55, era o fácil de 15/
 e ficou na biblioteca até a manhã de 16/11, quando o dia dele acabou em todo
 fuso (ver "A agenda" no README).
 
-A régua ganhou um oitavo dado, os jogos pelos clubes do Brasil, e acerta 54%
-das marcações quando cada uma fica de fora do ajuste (47% sem ele). É pouco:
-ela erra sobretudo nos antigos que o cliente tira, que para ela são fáceis
-(jogaram pela seleção e nasceram no Brasil), e na fronteira entre níveis
-vizinhos. A marcação vence a régua, então cada rodada melhora o jogo
-diretamente. Testado nesta rodada e descartado: tirar os "tirar" do ajuste
-(45%) ou contá-los como difícil (46%). `EM_DUVIDA` e `PROVISORIO` estão
-vazias.
+- **4ª (novembro)**: 264 — os 209 que a régua mudou de nível ao aplicar a
+  terceira e os 55 que entraram. Aplicada em 16/11: ele concordou com a régua
+  em 92 dos 209 e mandou tirar 32 (Mkhitaryan, Diogo Jota, Kepa,
+  Çalhanoğlu…), que não foram repostos. 554 dos 868 ficaram no nível que ele
+  marcou, a régua refez os outros 314 em terços (289, 290 e 289) e a agenda
+  foi refeita a partir de 18/11.
 
-**Uma quarta rodada, se o cliente quiser**, teria como candidatos os 578 que a
-régua pôs, começando pelos 209 que ela mudou de nível agora. O caminho para
-aplicar está no README ("Para aplicar uma rodada nova").
+A régua ganhou um oitavo dado na terceira rodada, os jogos pelos clubes do
+Brasil, e acerta 48% das 554 marcações quando cada uma fica de fora do ajuste.
+É pouco: ela erra nos antigos que o cliente tira, que para ela são fáceis
+(jogaram pela seleção e nasceram no Brasil), subestima craque estrangeiro
+(Mbappé com 34% de fácil, quando o cliente pôs Salah e Haaland no fácil) e
+erra na fronteira entre níveis vizinhos. A marcação vence a régua, então cada
+rodada melhora o jogo diretamente. Testado e descartado na terceira: tirar os
+"tirar" do ajuste (45%) ou contá-los como difícil (46%). `EM_DUVIDA` e
+`PROVISORIO` estão vazias.
+
+**O gargalo é o fácil.** O cliente marca fácil quase só craque: 127 das 554
+marcações. Dos 289 do fácil, 127 são dele e 162 da régua, e só 75 desses 162
+têm o fácil como nível mais provável; os outros 87 (Nilmar, Deco, Mascherano,
+Modrić…) estão lá para fechar o terço. Pela marcação mais o nível mais
+provável, a biblioteca tem cerca de 200 fáceis, 340 intermediários e 325
+difíceis: para 300 fáceis de verdade faltam uns 100. A próxima busca deve
+mirar fácil — brasileiro recente com muitos jogos no Brasil e passagem pela
+seleção, e craque estrangeiro de primeira linha —, não antigo nem
+estrangeiro de carreira só europeia, que é o que ele mais tira.
 
 Testado e descartado como régua sozinha: **número de idiomas da Wikipédia com
 artigo do jogador**. Mede fama no mundo e mandaria Pedro, Bruno Henrique,
