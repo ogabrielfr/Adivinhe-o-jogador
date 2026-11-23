@@ -85,6 +85,12 @@
     "2026-12-13": {"facil":"cesc-fabregas","intermediario":"mauro-icardi","dificil":"gareth-barry"},
     "2026-12-14": {"facil":"marcelinho-carioca","intermediario":"roger-silva","dificil":"tomas-rosicky"},
     "2026-12-15": {"facil":"liedson","intermediario":"gonzalo-higuain","dificil":"timo-werner"},
-    "2026-12-16": {"facil":"philippe-coutinho","intermediario":"thiago-mendes","dificil":"dirk-kuyt"}
+    "2026-12-16": {"facil":"philippe-coutinho","intermediario":"thiago-mendes","dificil":"dirk-kuyt"},
+    "2026-12-17": {"facil":"robin-van-persie","intermediario":"diego-lugano","dificil":"mauro-galvao"},
+    "2026-12-18": {"facil":"giuliano","intermediario":"radamel-falcao-garcia","dificil":"donizete"},
+    "2026-12-19": {"facil":"mineiro","intermediario":"samuel-eto-o","dificil":"pierre-emerick-aubameyang"},
+    "2026-12-20": {"facil":"jo","intermediario":"ricardo-roberto-barreto-da-rocha","dificil":"geovanni"},
+    "2026-12-21": {"facil":"mesut-ozil","intermediario":"luiz-gustavo","dificil":"chris-smalling"},
+    "2026-12-22": {"facil":"lucas-paqueta","intermediario":"jean","dificil":"javi-martinez"}
   }
 }
