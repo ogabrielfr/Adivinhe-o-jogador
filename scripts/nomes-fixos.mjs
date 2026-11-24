@@ -17,4 +17,7 @@ export const NOME_FIXO = {
   'son-heung-min': 'Son Heung-min',
   // a camisa vem sem o acento
   denilson: 'Denílson',
+  // a camisa diz "Gabriel", e a biblioteca já tem o Gabriel goleiro; aqui ele é o Gabriel
+  // Magalhães, e "Gabriel" sozinho fica fora dos palpites dele para não acertar pelo outro
+  'gabriel-magalhaes': 'Gabriel Magalhães',
 }

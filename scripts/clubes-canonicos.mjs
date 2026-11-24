@@ -440,6 +440,23 @@ export const SEM_ESCUDO = {
   'xj-t-leopard': { nome: "Xinjiang Tianshan", pais: 'CN', cores: ['#FFFFFF', '#8080A0'], tm: '36879' }, // José Antonio Reyes
   'zeljeznicar': { nome: "Zeljeznicar", pais: 'BA', cores: ['#E0E0E0', '#004080'], tm: '2573' }, // Edin Džeko
   'zeljeznicar-sb': { nome: "Zeljeznicar SB", pais: 'HR', cores: ['#FFFFFF', '#8020A0'], tm: '27246' }, // Mario Mandžukić
+
+  /*
+   * A busca de fáceis (novembro de 2026): clubes das carreiras novas que o
+   * catálogo não tinha, do mesmo jeito da ampliação — nome e país do
+   * Transfermarkt, escudo do Transfermarkt, cores tiradas do escudo.
+   */
+  'all-boys': { nome: "All Boys", pais: 'AR', cores: ['#FFFFFF', '#202020'], tm: '12100' }, // Jonathan Calleri
+  'chacarita-juniors': { nome: "Chacarita Juniors", pais: 'AR', cores: ['#000000', '#E00000'], tm: '2154' }, // Germán Cano
+  'dinamo-batumi': { nome: "Dinamo Batumi", pais: 'GE', cores: ['#FFFFFF', '#0020C0'], tm: '11344' }, // Khvicha Kvaratskhelia
+  'dinamo-tbilisi': { nome: "Dinamo Tbilisi", pais: 'GE', cores: ['#002040', '#FFFFFF'], tm: '663' }, // Khvicha Kvaratskhelia
+  'fc-rustavi': { nome: "Rustavi", pais: 'GE', cores: ['#E02020', '#FFFFFF'], tm: '1799' }, // Khvicha Kvaratskhelia
+  'gremio-esportivo-anapolis': { nome: "Grêmio Anápolis", pais: 'BR', cores: ['#002060', '#FFA020'], tm: '25243' }, // Carlos Vinícius
+  'mangaratibense': { nome: "Mangaratibense", pais: 'BR', cores: ['#0020E0', '#FFFFFF'], tm: '37996' }, // Deyverson
+  // "Patriotas" sozinho casava com o Patriotas brasileiro
+  'patriotas-boyaca': { nome: "Patriotas Boyacá", pais: 'CO', cores: ['#C02020', '#FFFFFF'], tm: '18231' }, // Jhon Arias
+  'penedense': { nome: "Penedense", pais: 'BR', cores: ['#C02020', '#FFFFFF'], tm: '85388' }, // Marinho
+  'real-sport-clube': { nome: "Real SC", pais: 'PT', cores: ['#FFE040', '#4060A0'], tm: '11085' }, // Carlos Vinícius
 }
 
 /**
@@ -818,6 +835,18 @@ export const PARES_TM = {
   36879: 'xj-t-leopard',
   2573: 'zeljeznicar',
   27246: 'zeljeznicar-sb',
+  // a busca de fáceis (novembro de 2026); o Cruzeiro-RS já estava no catálogo e não casava pelo nome
+  12100: 'all-boys',
+  2154: 'chacarita-juniors',
+  11344: 'dinamo-batumi',
+  663: 'dinamo-tbilisi',
+  1799: 'fc-rustavi',
+  25243: 'gremio-esportivo-anapolis',
+  37996: 'mangaratibense',
+  18231: 'patriotas-boyaca',
+  85388: 'penedense',
+  11085: 'real-sport-clube',
+  27835: 'esporte-clube-cruzeiro-porto-alegre',
 }
 
 /**

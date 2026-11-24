@@ -199,8 +199,8 @@ Saka, Foden, Koke). Os 79 seguintes na fila, que passaram em tudo e ficaram
 fora só pelo corte — Rudi Völler, Mkhitaryan, Lacazette, Donnarumma, Oblak,
 Vavá, Clodoaldo, Zetti… —, ficaram de reserva para quem o cliente tirasse. Na
 terceira rodada de marcações ele tirou 55, e entraram 55 da reserva (ver "O
-nível"); os 23 que sobraram estão em `relatorios/reserva-2026-11-15.md`, com o
-comando para trazer cada um.
+nível"). Os 23 que sobraram deram lugar, em 24/11, aos seguintes da busca de
+fáceis, em `relatorios/reserva-2026-11-24.md`, com o comando para trazer cada um.
 
 O nível de todos saiu da régua de novo, em terços de 300. Dos 408 de antes, 58
 foram do intermediário para o fácil e 30 do difícil para o intermediário, e
@@ -526,7 +526,7 @@ muitos antigos (25 dos 58 nascidos antes de 1965 que ele marcou, inclusive
 Zagallo, Gérson, Zoff e Rummenigge), brasileiros de muitos clubes (Kayke,
 Wesley, Andrei Girotto) e estrangeiros de carreira europeia sem passagem pelo
 Brasil (Vlahović, Brozović, Kjær, Mertens) —, e no lugar entraram os próximos
-da reserva, na ordem da régua (`relatorios/reserva-2026-11-15.md`), menos
+da reserva da ampliação, na ordem da régua, menos
 homônimo de alguém que já está no jogo: o Zé Roberto da reserva, de Mirassol e
 Schalke, ficou fora porque quem digitasse "Zé Roberto" acertaria pelo do
 Bayern. Na quarta foram 32: 13 recém-chegados (Mkhitaryan, Diogo Jota, Kepa,
@@ -535,48 +535,66 @@ Bellerín, Nainggolan) e 19 dos que a régua tinha mudado, estrangeiros
 Júnior, Giovane Élber). A biblioteca ficou com 868 até a próxima busca de
 candidatos.
 
-Os dados são oito, todos do Transfermarkt e do Wikidata, e o peso de cada um
-sai das marcações (negativo deixa mais fácil; os dados são padronizados, então
-os pesos se comparam):
+Os dados são nove, do Transfermarkt, do Wikidata e da Wikipédia, e o peso de
+cada um sai das marcações (negativo deixa mais fácil; os dados são
+padronizados, então os pesos se comparam):
 
 | Dado | Peso |
 | --- | --- |
-| jogos pelos clubes do Brasil | −0,87 |
-| idiomas em que a Wikipédia tem artigo sobre ele | −0,57 |
+| procura na Wikipédia em português (mediana mensal de doze meses) | −1,18 |
+| jogos pelos clubes do Brasil | −0,74 |
 | quão recente é a carreira (último ano com jogo) | −0,50 |
-| jogos pela seleção brasileira | −0,26 |
-| jogos pela seleção principal de qualquer país | −0,25 |
-| nasceu no Brasil | −0,17 |
-| Copas do Mundo em que entrou em campo | −0,13 |
-| jogos nas cinco ligas grandes da Europa | +0,13 |
+| idiomas em que a Wikipédia tem artigo sobre ele | −0,31 |
+| jogos pela seleção principal de qualquer país | −0,19 |
+| nasceu no Brasil | −0,13 |
+| jogos pela seleção brasileira | −0,03 |
+| Copas do Mundo em que entrou em campo | −0,02 |
+| jogos nas cinco ligas grandes da Europa | +0,12 |
 
 Os jogos pelos clubes do Brasil entraram na terceira rodada. Sem eles a régua
 não enxergava fama feita aqui e mandava ídolos estrangeiros do futebol
-brasileiro (D'Alessandro, Guerrero, Lugano) para o difícil.
+brasileiro (D'Alessandro, Guerrero, Lugano) para o difícil. A procura em
+português entrou em 24/11: sem ela a régua não enxergava a fama de hoje, e
+dava 20% de chance de fácil ao Yuri Alberto, com 17 mil visualizações por mês.
+O cliente recusou a procura como régua sozinha (abaixo); como um dos dados,
+com o peso que as marcações dão, ela é o que mais pesa. A medição fica em
+`scripts/procura-jogadores.json`, com a janela; a atualização de fevereiro e
+setembro mede de novo. Artigo que mudou de título há poucos meses tem quase
+nenhuma visita antes da mudança — o do Dante dava 7 por mês —, então, abaixo de
+200, vale a mediana dos últimos seis meses se for maior; artigo que o Wikidata
+não liga ao jogador vai em `ARTIGO_SEM_LIGACAO`, em `scripts/regua.mjs`.
 
 O modelo é ordinal (fácil < intermediário < difícil < tirar), com freio contra
 amostra pequena. **Quanto acerta**: tirando cada marcação do ajuste e vendo em
-que nível a régua poria o jogador, acerta 268 das 554 marcações de quem está
-no jogo (48%), e 225 dos 286 erros são de um nível só. Na terceira rodada
-acertava 54% de 322 (47% antes dos jogos pelos clubes do Brasil) e, na
-primeira, 76% de 66: cada rodada foi de propósito nos casos difíceis, e é
-neles que ela erra. Ela erra também com os antigos que o cliente tira — jogou
-pela seleção e nasceu no Brasil, para ela, é fácil — e subestima craque
-estrangeiro: o cliente pôs Salah, Haaland, Lewandowski e Benzema no fácil, e
-ela dá 34% de fácil ao Mbappé. Por isso a marcação vale mais que a régua.
+que nível a régua poria o jogador, acerta 351 das 554 marcações de quem está
+no jogo (63%), e só 11 erram por dois níveis. Sem a procura acertava 268
+(48%), com 61 erros de dois níveis; na primeira rodada, 76% de 66 — cada
+rodada seguinte foi de propósito nos casos difíceis. Ela ainda erra com os
+antigos que o cliente tira (jogou pela seleção e nasceu no Brasil, para ela, é
+fácil). Por isso a marcação vale mais que a régua.
 
-#### Onde falta jogador: o fácil
+#### Onde faltava jogador: o fácil
 
-Depois da quarta rodada, o fácil tem 289 jogadores: 127 que o cliente marcou e
-162 que a régua pôs. Desses 162, só 75 têm o fácil como nível mais provável
-(Neymar, Hulk, Daniel Alves, Casemiro, Kaká); os outros 87 (Nilmar, Luiz
-Adriano, Deco, Mascherano, Modrić, Mbappé…) estão lá para o nível fechar um
-terço. Somando a marcação de quem foi marcado e o nível mais provável dos
-outros, a biblioteca tem por natureza cerca de **200 fáceis, 340
-intermediários e 325 difíceis**. Para 300 fáceis de verdade faltam uns 100
-jogadores de fácil; intermediário e difícil sobram. O fácil do cliente é
-quase só de craque: 127 das 554 marcações (23%), 77 de brasileiros e 50 de
-estrangeiros.
+Depois da quarta rodada, o fácil tinha 289 jogadores, e 87 deles só estavam lá
+para o nível fechar um terço: pela marcação do cliente e o nível mais provável
+dos outros, a biblioteca tinha por natureza uns 200 fáceis para 340
+intermediários e 325 difíceis. O fácil do cliente é quase só de craque: 127
+das 554 marcações.
+
+A **busca de 24/11** foi atrás de fácil: quem passou por clube brasileiro,
+brasileiros nascidos de 1985 em diante e os conhecidos no mundo, com pelo
+menos 700 visualizações por mês em português — 687 candidatos pontuados pela
+régua. Só 43 ela punha no fácil; os seguintes já são intermediários. Entraram
+39 (Endrick, Yuri Alberto, Bruno Guimarães, Antony, Jhon Arias, Matheus Cunha,
+Kvaratskhelia, Germán Cano…), todos no fácil; para os 868 voltarem a 900 saíram
+os 7 que a régua mais achava que o cliente tiraria, nenhum marcado por ele
+(Owen Hargreaves, Sheringham, Höwedes, Capone, Ayala, Sirigu e o Dedê do
+Dortmund). Hoje o fácil tem 127 marcados pelo cliente e 173 pela régua, dos
+quais 134 são fáceis para ela e 39 completam o terço. Por natureza, a
+biblioteca tem uns **261 fáceis, 335 intermediários e 302 difíceis**: o
+gargalo diminuiu, e o que falta não está mais entre os candidatos que
+passaram por clube brasileiro ou são conhecidos no mundo. Os seguintes da
+busca estão em `relatorios/reserva-2026-11-24.md`.
 
 O cliente quer **o mesmo número de jogadores por nível**. A régua ordena e corta
 onde cada nível fecha com um terço. Vencem o cálculo, nesta ordem:
@@ -676,7 +694,10 @@ npm run atualizar -- --continuar  # retoma sem baixar de novo o que já veio
 ```
 
 Duas vezes por ano, depois que fecham as janelas de transferência da Europa:
-em **fevereiro** e em **setembro**. Leva poucos minutos. Os passos são os
+em **fevereiro** e em **setembro**. Leva uns quinze minutos: a régua mede de
+novo a procura de cada jogador na Wikipédia em português, com a janela dos
+doze meses mais recentes (`scripts/procura-jogadores.json` é apagado no
+começo). Os passos são os
 comandos de sempre, na ordem: `catalogo` (o clube acrescentado à mão desde a
 última vez passa a existir), `reparar`, `catalogo` de novo (o escudo de quem
 entrou nas carreiras), `dicas`, `regua -- --gravar`, `agenda`, e no fim

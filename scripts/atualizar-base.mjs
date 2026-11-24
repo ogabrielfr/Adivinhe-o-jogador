@@ -62,6 +62,9 @@ if (!CONTINUAR) {
   const velhos = existsSync(cache) ? readdirSync(cache).filter((f) => DO_JOGADOR.test(f)) : []
   for (const f of velhos) rmSync(join(cache, f))
   console.log(`${velhos.length} arquivos de jogador apagados do cache: os dados vêm de novo da API`)
+  // a procura na Wikipédia é medida de novo no passo da régua, com a janela dos últimos doze meses
+  const procura = join(raiz, 'scripts/procura-jogadores.json')
+  if (existsSync(procura)) rmSync(procura)
 }
 
 const antes = lerJson('src/dados/jogadores.json')

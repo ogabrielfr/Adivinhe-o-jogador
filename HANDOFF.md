@@ -116,25 +116,32 @@ vezes vem 429) e `ogabrielfr.github.io`.
 
 O cliente vai mandar um pacote de design system para o jogo usar. Ficou para
 depois das mudanças de 05/11 (900 jogadores, escudos, atualização, botão de
-revisão, planilha) e da terceira rodada de marcações de nível (15/11), que
-estão no ar. O visual hoje vem de `src/index.css` (as
+revisão, planilha) e das rodadas de marcações de nível, que estão no ar. O
+visual hoje vem de `src/index.css` (as
 cores `relva`, `cal`, `dica`, as classes `t-rotulo`, `t-camisa`, `t-nota`) e
 das classes Tailwind dos componentes em `src/componentes/`.
 
+**E o jogo vai para o site do cliente** (avisado em 24/11). Lá não há GitHub
+Actions, e a manutenção da base tem que ser trocar arquivo. Hoje a base está
+dentro do JavaScript (`src/dados/*.json` e `clubes.ts` entram no pacote do
+Vite) e o GitHub estende a agenda toda segunda. A proposta mandada a ele:
+o jogo lê uma pasta `dados/` ao abrir — `base.json` com jogadores, clubes e
+agenda, e `escudos/` só com os escudos em uso —, a agenda sai com um ano à
+frente, e um comando (`npm run pacote`) confere tudo e gera a pasta para subir.
+Está à espera da resposta dele, e de como é o site.
+
 ### 0.1. A revisão da base pelo cliente
 
-Com a planilha e as rodadas de marcação. Depois da quarta rodada a biblioteca
-está com **868**: os 32 que ele tirou não foram repostos. A reserva
-(`relatorios/reserva-2026-11-15.md`, 23 nomes) está no fim — são os menos
-reconhecíveis, e 10 nasceram antes de 1965, o perfil que ele mais tira —, e o
-que falta é fácil, não difícil (item 2). **Próximo passo, à espera do
-cliente**: uma busca nova de candidatos mirada no fácil. Ele pediu para ver a
-divisão por nível antes de decidir. Quando a revisão acabar, o botão
+Com a planilha e as rodadas de marcação. A biblioteca voltou a **900** em
+24/11 com a busca de fáceis (item 2): entraram 39, saíram 7 que a régua achava
+que o cliente tiraria. A reserva agora são os seguintes dessa busca, em
+`relatorios/reserva-2026-11-24.md` — quase todos intermediários para a régua.
+O que ele marcar como "tirar" sai e entra o próximo dela. Quando a revisão acabar, o botão
 "Refazer jogo com novos jogadores" sai (`TelaInicial.tsx`, e `revisao` em
 `App.tsx` e em `armazenamento.ts`).
 
-**As dicas de quem entrou desde a ampliação não usam título** (492 em 05/11 e
-55 em 15/11): a página de títulos só existe no
+**As dicas de quem entrou desde a ampliação não usam título** (492 em 05/11,
+55 em 15/11 e 39 em 24/11): a página de títulos só existe no
 site do Transfermarkt, que está desligado (ver "Rede"). Elas saíram com final,
 jogos por clube, Copas, seleção, naturalidade. Para pôr título nelas, rode
 `TITULOS_DO_SITE=1 npm run dicas -- --todas` de uma máquina onde o site
@@ -184,25 +191,30 @@ fuso (ver "A agenda" no README).
   marcou, a régua refez os outros 314 em terços (289, 290 e 289) e a agenda
   foi refeita a partir de 18/11.
 
-A régua ganhou um oitavo dado na terceira rodada, os jogos pelos clubes do
-Brasil, e acerta 48% das 554 marcações quando cada uma fica de fora do ajuste.
-É pouco: ela erra nos antigos que o cliente tira, que para ela são fáceis
-(jogaram pela seleção e nasceram no Brasil), subestima craque estrangeiro
-(Mbappé com 34% de fácil, quando o cliente pôs Salah e Haaland no fácil) e
-erra na fronteira entre níveis vizinhos. A marcação vence a régua, então cada
-rodada melhora o jogo diretamente. Testado e descartado na terceira: tirar os
-"tirar" do ajuste (45%) ou contá-los como difícil (46%). `EM_DUVIDA` e
-`PROVISORIO` estão vazias.
+A régua tem nove dados: os jogos pelos clubes do Brasil entraram na terceira
+rodada e a **procura na Wikipédia em português** em 24/11. Com ela, acerta 63%
+das 554 marcações quando cada uma fica de fora do ajuste (48% sem ela), e só
+11 erram por dois níveis. Ela ainda erra nos antigos que o cliente tira, que
+para ela são fáceis (jogaram pela seleção e nasceram no Brasil), e na
+fronteira entre níveis vizinhos. A marcação vence a régua. Testado e
+descartado na terceira: tirar os "tirar" do ajuste (45%) ou contá-los como
+difícil (46%). `EM_DUVIDA` e `PROVISORIO` estão vazias.
 
-**O gargalo é o fácil.** O cliente marca fácil quase só craque: 127 das 554
-marcações. Dos 289 do fácil, 127 são dele e 162 da régua, e só 75 desses 162
-têm o fácil como nível mais provável; os outros 87 (Nilmar, Deco, Mascherano,
-Modrić…) estão lá para fechar o terço. Pela marcação mais o nível mais
-provável, a biblioteca tem cerca de 200 fáceis, 340 intermediários e 325
-difíceis: para 300 fáceis de verdade faltam uns 100. A próxima busca deve
-mirar fácil — brasileiro recente com muitos jogos no Brasil e passagem pela
-seleção, e craque estrangeiro de primeira linha —, não antigo nem
-estrangeiro de carreira só europeia, que é o que ele mais tira.
+**O gargalo era o fácil.** O cliente marca fácil quase só craque: 127 das 554
+marcações. Depois da quarta rodada, 87 dos 289 do fácil só fechavam o terço,
+e a biblioteca tinha por natureza uns 200 fáceis. Ele escolheu buscar fáceis e
+tirar os mais fracos do excedente. A **busca de 24/11** pontuou 687 candidatos
+(passaram por clube brasileiro, brasileiros de 1985 em diante e os conhecidos
+no mundo, com 700+ visualizações por mês em português) e só 43 a régua punha
+no fácil — os seguintes já são intermediários. Entraram 39 (Endrick, Yuri
+Alberto, Bruno Guimarães, Antony, Jhon Arias, Matheus Cunha, Kvaratskhelia,
+Germán Cano…), dez clubes novos em `SEM_ESCUDO` para as carreiras deles, e
+saíram os 7 que a régua mais achava que ele tiraria, nenhum marcado por ele.
+Hoje: 300 por nível; o fácil tem 127 dele e 173 da régua, dos quais 134 são
+fáceis para ela e 39 completam o terço; por natureza, uns 261 fáceis, 335
+intermediários e 302 difíceis. Ficaram de fora de propósito, e a reserva diz
+por quê: Marcos e Breno Bidon (um clube só), Allan e Wesley (homônimos), Bruno
+goleiro e Fernando Diniz (procura que não é pela carreira de jogador).
 
 Testado e descartado como régua sozinha: **número de idiomas da Wikipédia com
 artigo do jogador**. Mede fama no mundo e mandaria Pedro, Bruno Henrique,
@@ -242,7 +254,9 @@ Levados ao cliente em 25/09, que deu as pendências por respondidas sem pedir mu
 
 - **A `main` recebe commit do github-actions toda segunda** ("Estende a agenda"). Puxe antes de publicar, senão o push é recusado. Em 28/09 o push dessa execução levou erro interno do GitHub e a semana ficou sem publicar (o site seguiu no ar com a versão anterior); o passo agora tenta de novo até quatro vezes.
 - **O jogador do dia não sai da biblioteca no dia dele.** Quem já jogou veria "Era ele:" com outro nome. Tire-o dos dias futuros da agenda já; da biblioteca, só quando o dia acabar no último fuso (UTC-12, 9h de Brasília do dia seguinte) — antes disso o `validar-dados` recusa, e o deploy não sai. Na terceira rodada foi o Edinho, fácil de 15/11.
-- **Homônimo de quem já está no jogo não entra pela reserva.** O nome inteiro sempre vale como palpite, então quem digitasse "Zé Roberto" no dia do Zé Roberto de Mirassol e Schalke acertaria pensando no do Bayern. O `npm run trazer` não barra; confira o nome na tela de quem entra contra a biblioteca.
+- **Homônimo de quem já está no jogo não entra pela reserva.** O nome inteiro sempre vale como palpite, então quem digitasse "Zé Roberto" no dia do Zé Roberto de Mirassol e Schalke acertaria pensando no do Bayern. O `npm run trazer` não barra; confira o nome na tela de quem entra contra a biblioteca. Quando os dois são conhecidos, o nome de tela separa: o Gabriel do Arsenal entrou como Gabriel Magalhães (`scripts/nomes-fixos.mjs`), sem "Gabriel" entre os palpites dele.
+- **Tire jogador pelo id que o cálculo devolveu, nunca pelo nome.** Em 24/11 a lista dos que sair trazia o Dedê do Dortmund (`leonardo-de-deus-santos`), e o id escrito à mão, `dede`, era o do Dedé do Cruzeiro, que o cliente marcou fácil. Foi pego porque a conta de marcações no jogo caiu de 127 para 126; confira essa conta depois de tirar alguém.
+- **A procura em português erra quando o artigo muda de título.** A mediana de doze meses pega os meses antes da mudança quase vazios (o Dante dava 7 por mês). Abaixo de 200 a régua olha os últimos seis meses; artigo sem ligação no Wikidata vai em `ARTIGO_SEM_LIGACAO`. Procura alta pode ser de outra coisa: a do Vozinha é da palavra, a do Bruno goleiro é do crime e a do Fernando Diniz é do treinador.
 - **Nome que casa com o clube errado passa calado.** O resolvedor liga pelo id do Transfermarkt e, sem par, pelo nome: o "Generation Foot" do Mané casou com o Generation Adidas, dos Estados Unidos. Ao trazer jogador novo, confira as passagens resolvidas pelo nome, e prefira acrescentar o par em `PARES_TM` (e em `clubes-transfermarkt.json`) a confiar no nome.
 - **Mexer na lista de um nível sem rodar `npm run agenda` antes** congela o mês seguinte já com a lista nova. Só é problema se a agenda tiver vencido — o deploy recusa agenda que não cubra 7 dias à frente, e a execução semanal a mantém em 30.
 - **`npm run catalogo` mantém o escudo que já existe** e só baixa o que falta, em cerca de um minuto. `-- --baixar-de-novo` baixa todos, e aí demora (milhares de imagens, com o Wikimedia limitando pedidos).

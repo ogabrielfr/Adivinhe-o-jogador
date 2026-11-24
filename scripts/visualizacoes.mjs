@@ -23,6 +23,14 @@ const API = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article'
 
 const espera = (ms) => new Promise((r) => setTimeout(r, ms))
 
+/** Os últimos `n` meses fechados, no formato da API. */
+export function ultimosMeses(n, hoje = new Date()) {
+  const fim = new Date(Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), 0))
+  const inicio = new Date(Date.UTC(fim.getUTCFullYear(), fim.getUTCMonth() - (n - 1), 1))
+  const dia = (d) => `${d.toISOString().slice(0, 10).replace(/-/g, '')}00`
+  return { de: dia(inicio), ate: dia(fim) }
+}
+
 /** Os últimos doze meses fechados: em setembro de 2026, de setembro de 2025 a agosto de 2026. */
 export function ultimosDozeMeses(hoje = new Date()) {
   const fim = new Date(Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), 0))

@@ -2135,10 +2135,10 @@
   "qid": "Q17414600"
  },
  {
-  "id": "allboys",
-  "nome": "allboys",
+  "id": "all-boys",
+  "nome": "All Boys",
   "pais": "AR",
-  "escudo": "allboys.png",
+  "escudo": "all-boys.png",
   "qid": null
  },
  {
@@ -8029,6 +8029,13 @@
   "qid": "Q1058221"
  },
  {
+  "id": "chacarita-juniors",
+  "nome": "Chacarita Juniors",
+  "pais": "AR",
+  "escudo": "chacarita-juniors.png",
+  "qid": null
+ },
+ {
   "id": "chadormalu-s-c",
   "nome": "Chadormalu S.C.",
   "pais": "IR",
@@ -12887,11 +12894,25 @@
   "qid": null
  },
  {
+  "id": "dinamo-batumi",
+  "nome": "Dinamo Batumi",
+  "pais": "GE",
+  "escudo": "dinamo-batumi.png",
+  "qid": null
+ },
+ {
   "id": "dinamo-makhachkala",
   "nome": "Dinamo Makhachkala",
   "pais": "RU",
   "escudo": "dinamo-makhachkala.png",
   "qid": "Q2494171"
+ },
+ {
+  "id": "dinamo-tbilisi",
+  "nome": "Dinamo Tbilisi",
+  "pais": "GE",
+  "escudo": "dinamo-tbilisi.png",
+  "qid": null
  },
  {
   "id": "dinamo-zagreb",
@@ -16548,6 +16569,13 @@
   "qid": "Q21491024"
  },
  {
+  "id": "fc-rustavi",
+  "nome": "Rustavi",
+  "pais": "GE",
+  "escudo": "fc-rustavi.png",
+  "qid": null
+ },
+ {
   "id": "fc-ryukyu",
   "nome": "FC Ryukyu",
   "pais": "JP",
@@ -19709,6 +19737,13 @@
   "nome": "Grêmio Catanduvense",
   "pais": "BR",
   "escudo": "gremio-catanduvense.png",
+  "qid": null
+ },
+ {
+  "id": "gremio-esportivo-anapolis",
+  "nome": "Grêmio Anápolis",
+  "pais": "BR",
+  "escudo": "gremio-esportivo-anapolis.png",
   "qid": null
  },
  {
@@ -24591,6 +24626,13 @@
   "qid": "Q371176"
  },
  {
+  "id": "mangaratibense",
+  "nome": "Mangaratibense",
+  "pais": "BR",
+  "escudo": "mangaratibense.png",
+  "qid": null
+ },
+ {
   "id": "manhattan-soccer-club",
   "nome": "Manhattan Soccer Club",
   "pais": "US",
@@ -28406,6 +28448,13 @@
   "qid": "Q7145138"
  },
  {
+  "id": "patriotas-boyaca",
+  "nome": "Patriotas Boyacá",
+  "pais": "CO",
+  "escudo": "patriotas-boyaca.png",
+  "qid": null
+ },
+ {
   "id": "patriotas-futebol-clube",
   "nome": "Patriotas Futebol Clube",
   "pais": "BR",
@@ -28593,6 +28642,13 @@
   "pais": "TR",
   "escudo": "pendikspor.png",
   "qid": "Q1347349"
+ },
+ {
+  "id": "penedense",
+  "nome": "Penedense",
+  "pais": "BR",
+  "escudo": "penedense.png",
+  "qid": null
  },
  {
   "id": "pennsylvania-stoners",
@@ -30672,6 +30728,13 @@
   "pais": "BR",
   "escudo": "real-sport-club-tramandai.png",
   "qid": "Q48867219"
+ },
+ {
+  "id": "real-sport-clube",
+  "nome": "Real SC",
+  "pais": "PT",
+  "escudo": "real-sport-clube.png",
+  "qid": null
  },
  {
   "id": "real-union-club",

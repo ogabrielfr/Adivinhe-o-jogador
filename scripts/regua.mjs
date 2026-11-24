@@ -16,19 +16,20 @@
  *   - jogos pelos clubes das cinco ligas grandes da Europa;
  *   - jogos pelos clubes do Brasil;
  *   - quão recente é a carreira (o último ano com jogo);
- *   - em quantos idiomas a Wikipédia tem artigo sobre ele.
+ *   - em quantos idiomas a Wikipédia tem artigo sobre ele;
+ *   - quanto ele é procurado na Wikipédia em português.
  *
  * O modelo é ordinal — fácil < intermediário < difícil < tirar — e os pesos
  * saem por máxima verossimilhança com um freio (L2) contra a amostra pequena.
  *
  * Quanto acerta: deixando cada marcação de fora do ajuste e vendo em que
- * nível a régua poria o jogador, ela acerta 268 das 554 marcações de quem está
- * no jogo (48%); 225 dos 286 erros são de um nível só. Na terceira rodada
- * acertava 54% de 322 (47% antes dos jogos pelos clubes do Brasil) e, na
- * primeira, 76% de 66. As rodadas seguintes foram de propósito nos casos
- * difíceis — os que ela punha em dúvida, os que entraram na ampliação, os mais
- * antigos e, na quarta, os 209 que ela tinha mudado de nível —, e é neles que
- * ela erra. Por isso a marcação do cliente vale mais que a régua.
+ * nível a régua poria o jogador, ela acerta 351 das 554 marcações de quem está
+ * no jogo (63%), e só 11 erram por dois níveis. Sem a procura em português,
+ * que entrou em 24/11, acertava 268 (48%), e 61 erravam por dois níveis. Na
+ * terceira rodada acertava 54% de 322 e, na primeira, 76% de 66: as rodadas
+ * seguintes foram de propósito nos casos difíceis — os que ela punha em
+ * dúvida, os que entraram na ampliação, os mais antigos e, na quarta, os 209
+ * que ela tinha mudado de nível. A marcação do cliente vale mais que a régua.
  *
  * O cliente quer o mesmo número de jogadores por nível. A régua então ordena, e
  * o corte fica onde cada nível fecha com um terço da biblioteca. Quem o
@@ -45,6 +46,7 @@ import {
   desempenhoDoJogador, jogosPorClube, selecaoDoTransfermarkt, clubesDoTransfermarkt,
 } from './transfermarkt.mjs'
 import { consultar, qidDe } from './wikidata.mjs'
+import { visualizacoesMensais, ultimosDozeMeses, ultimosMeses } from './visualizacoes.mjs'
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..')
 const ler = (arquivo) => JSON.parse(readFileSync(join(raiz, 'scripts', arquivo), 'utf8'))
@@ -79,6 +81,57 @@ async function idiomasDe(qids) {
   return guardado
 }
 
+// ------------------------------------------------------------- procura
+/**
+ * Quanto o torcedor brasileiro procura o jogador: a mediana mensal de
+ * visualizações do artigo na Wikipédia em português, nos doze meses fechados
+ * da medição (`scripts/visualizacoes.mjs`). É o dado que enxerga a fama de
+ * hoje no Brasil — o Yuri Alberto, com 17 mil por mês, tinha 20% de chance de
+ * fácil sem ele. O cliente recusou a procura como régua sozinha; como um dos
+ * dados, com o peso que as marcações dão, ela levou o acerto de 48% a 61%.
+ *
+ * Fica guardado no repositório (`scripts/procura-jogadores.json`) com a janela
+ * da medição, para o nível não mudar a cada mês; só quem falta é medido. A
+ * atualização de fevereiro e setembro apaga o arquivo e mede todos de novo.
+ */
+/**
+ * Artigo em português que o Wikidata não liga ao jogador. O do Alex do
+ * Internacional e do Corinthians mudou de título em 2026 e perdeu a ligação;
+ * o título antigo guarda a procura do ano.
+ */
+const ARTIGO_SEM_LIGACAO = {
+  Q553754: 'Alex Raphael Meschini',
+}
+
+export async function procuraDe(qids) {
+  const arquivo = join(raiz, 'scripts/procura-jogadores.json')
+  const guardado = existsSync(arquivo) ? JSON.parse(readFileSync(arquivo, 'utf8')) : { views: {} }
+  const faltando = [...new Set(qids)].filter((q) => q && !(q in guardado.views))
+  if (!faltando.length) return guardado.views
+  const { de, ate } = ultimosDozeMeses()
+  guardado.janela ??= `${de}-${ate}`
+  const artigos = new Map()
+  for (let i = 0; i < faltando.length; i += 150) {
+    const fatia = faltando.slice(i, i + 150)
+    const linhas = await consultar(`SELECT ?j ?artigo WHERE { VALUES ?j { ${fatia.map((q) => `wd:${q}`).join(' ')} } ?artigo schema:about ?j ; schema:isPartOf <https://pt.wikipedia.org/> . }`)
+    for (const l of linhas) artigos.set(qidDe(l.j), decodeURIComponent(String(l.artigo).split('/wiki/').pop()).replace(/_/g, ' '))
+  }
+  for (const [q, a] of Object.entries(ARTIGO_SEM_LIGACAO)) if (!artigos.has(q)) artigos.set(q, a)
+  for (const q of faltando) {
+    // sem artigo em português, ninguém procura; com artigo, zero pode ser falha de rede: mede de novo uma vez
+    if (!artigos.has(q)) { guardado.views[q] = 0; continue }
+    let views = (await visualizacoesMensais(artigos.get(q))) || (await visualizacoesMensais(artigos.get(q)))
+    // artigo que mudou de título há poucos meses tem quase nada antes da mudança, e a mediana de doze
+    // meses sai perto de zero (o do Dante dava 7 por mês): vale a dos últimos seis, se for maior
+    if (views < 200) views = Math.max(views, await visualizacoesMensais(artigos.get(q), ultimosMeses(6)))
+    guardado.views[q] = views
+    await new Promise((r) => setTimeout(r, 300))
+  }
+  guardado.views = Object.fromEntries(Object.entries(guardado.views).sort(([a], [b]) => a.localeCompare(b)))
+  writeFileSync(arquivo, JSON.stringify({ janela: guardado.janela, views: guardado.views }, null, 1) + '\n')
+  return guardado.views
+}
+
 // -------------------------------------------------------------- fatores
 /** Os dados de cada jogador que entram na régua, já na escala do ajuste. */
 export async function fatoresDe(jogadores) {
@@ -86,6 +139,7 @@ export async function fatoresDe(jogadores) {
   const qidPorTm = new Map(Object.entries(tmPorQid).map(([q, t]) => [String(t), q]))
   const meta = ler('meta-jogadores.json')
   const idiomas = await idiomasDe(jogadores.map((j) => qidPorTm.get(idTmDe(j))))
+  const procura = await procuraDe(jogadores.map((j) => qidPorTm.get(idTmDe(j))))
 
   const brutos = []
   for (const j of jogadores) {
@@ -124,6 +178,7 @@ export async function fatoresDe(jogadores) {
         // a fama feita aqui, que os outros dados não enxergam: o D'Alessandro
         // e o Guerrero iam para o difícil sem ela
         brasil: Math.log1p(brasil),
+        procura: Math.log1p(procura[qid] ?? 0),
       },
     }
   })
