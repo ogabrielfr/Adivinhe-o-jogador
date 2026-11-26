@@ -6482,7 +6482,7 @@
     "id": "olivier-giroud",
     "nome": "Olivier Giroud",
     "apelidos": ["olivier giroud"],
-    "nivel": "facil",
+    "nivel": "intermediario",
     "clubes": ["grenoble-foot-38","istres-football-club","tours-fc","montpellier","arsenal","chelsea","milan","los-angeles-football-club","lille"],
     "dicas": ["Centroavante nascido na França em 1986.","Marcou na final da Liga Europa de 2019. Disputou as Copas do Mundo de 2014, 2018 e 2022."],
     "verificado": true,
@@ -6970,16 +6970,6 @@
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/170986"
   },
   {
-    "id": "arkadiusz-milik",
-    "nome": "Arkadiusz Milik",
-    "apelidos": ["arkadiusz milik"],
-    "nivel": "dificil",
-    "clubes": ["rozwoj-katowice","gornik-zabrze","bayer-leverkusen","augsburg","ajax","napoli","marseille","juventus"],
-    "dicas": ["Centroavante nascido na Polônia em 1994.","Disputou as Copas do Mundo de 2018 e 2022. Foi jogar fora do país aos 19 anos."],
-    "verificado": true,
-    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/191891"
-  },
-  {
     "id": "gianluca-zambrotta",
     "nome": "Gianluca Zambrotta",
     "apelidos": ["gianluca zambrotta"],
@@ -7013,7 +7003,7 @@
     "id": "felipe-santana",
     "nome": "Felipe Santana",
     "apelidos": ["felipe santana","felipe augusto santana"],
-    "nivel": "intermediario",
+    "nivel": "dificil",
     "clubes": ["figueirense","dortmund","schalke","olympiacos-piraeus","kuban-krasnodar","clube-atletico-mineiro","chapecoense","clube-atletico-catarinense-sao-jose"],
     "dicas": ["Zagueiro brasileiro nascido em 1986.","É de Rio Claro. Custou € 2,1 milhões na transferência mais cara (2008)."],
     "verificado": true,
@@ -9044,5 +9034,15 @@
     "dicas": ["Centroavante nascido na Argentina em 1988.","Marcou na final da Libertadores de 2023. Fez mais de 200 jogos e mais de 100 gols pelo Fluminense."],
     "verificado": true,
     "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/54590"
+  },
+  {
+    "id": "luiz-araujo",
+    "nome": "Luiz Araújo",
+    "apelidos": ["luiz araújo"],
+    "nivel": "facil",
+    "clubes": ["gremio-novorizontino","sao-paulo","lille","atlanta-united","flamengo"],
+    "dicas": ["Ponta brasileiro nascido em 1996.","Fez mais de 150 jogos pelo Flamengo. Já soma 13 anos de estrada desde 2013."],
+    "verificado": true,
+    "fonte": "https://www.transfermarkt.com.br/-/transfers/spieler/435485"
   }
 ]
