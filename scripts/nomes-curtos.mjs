@@ -237,6 +237,11 @@ export const NOME_CURTO = {
   'societa-polisportiva-ars-et-labor-1907': 'SPAL',
   'southport-football-club': 'Southport',
   'tractor-sazi-tabriz-football-club': 'Tractor',
+  // a busca de fáceis (24/11)
+  'changchun-yatai-football-club': 'Changchun Yatai',
+  'clube-atletico-penapolense': 'Penapolense',
+  'esporte-clube-cruzeiro-porto-alegre': 'Cruzeiro-RS',
+  'shenzhen-football-club': 'Shenzhen',
   // os clubes que entraram com os 90 de 28/09
   'associacao-desportiva-ferroviaria-vale-do-rio-doce': 'Desportiva',
   'sociedade-esportiva-e-recreativa-caxias-do-sul': 'Caxias',
