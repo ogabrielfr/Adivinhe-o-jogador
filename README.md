@@ -576,13 +576,28 @@ biblioteca inteira, inclusive quem entrar depois, sem ninguém marcar de novo.
 | 2 | setembro de 2026 | 51 | os 35 em que a régua tinha pouca certeza, os 14 que entraram e 2 reservas |
 | 3 | novembro de 2026 | 269 | 180 dos que entraram na ampliação para 900 (60 por nível), 58 nascidos antes de 1965, 30 da base e 1 que ele buscou |
 | 4 | novembro de 2026 | 264 | os 209 que a régua mudou de nível ao aplicar a terceira e os 55 que entraram da reserva |
+| 5 | 27/11/2026 | 205 | **às cegas**: 137 do intermediário, 38 do fácil e 30 do difícil, marcados pela charada, sem ver o nome |
 
 A segunda só foi aplicada junto com a terceira. Na terceira o cliente
 discordou de dois terços do que o jogo mostrava: dos 269 que ele marcou, 89
 estavam no nível dele, 127 em outro e 53 ele mandou tirar. Na quarta, dos 209
 que a régua tinha mudado, ele concordou com o nível novo em 92, voltou ao
 antigo em 61 e mandou tirar 19; dos 55 que entraram, concordou em 24 e tirou
-13. Hoje 554 dos 868 estão no nível que ele marcou; os outros 314, a régua põe.
+13.
+
+**A quinta rodada foi às cegas.** Jogando, o cliente achou o intermediário às
+vezes mais difícil que o difícil — e a régua mede fama, não a charada. A página
+mostrou o mural, as duas dicas uma de cada vez e só então o nome, e guardou
+quantas dicas ele abriu antes de revelar (o campo `dicas` no banco da página).
+Foram 137 intermediários (os que a régua tinha posto lá e os de 10 clubes ou
+mais que ele marcara), os 38 fáceis que só completavam o terço e os 30 difíceis
+que a régua mais via como intermediários. Do intermediário, 95 ficaram, 33
+foram para o difícil, 7 para o fácil e 2 saíram; do fácil, 26 ficaram, 10
+subiram para o intermediário e 2 para o difícil; do difícil, 22 ficaram, 5
+foram para o intermediário e 3 saíram. Ele abriu as duas dicas em 55 dos 57
+difíceis e em 79 dos 110 intermediários; das 33 charadas que ele deu como
+fáceis, 11 saíram sem dica nenhuma. Hoje 698 dos 900 estão no nível que ele
+marcou; os outros 202, a régua põe (2 deles com o nível fixado à mão).
 
 **Quem o cliente marca para tirar sai do jogo** e vai para `foraDaBiblioteca`,
 com o id do Transfermarkt, para continuar no ajuste: são eles que ensinam à
@@ -598,23 +613,34 @@ Bayern. Na quarta foram 32: 13 recém-chegados (Mkhitaryan, Diogo Jota, Kepa,
 Bellerín, Nainggolan) e 19 dos que a régua tinha mudado, estrangeiros
 (Çalhanoğlu, Kolarov, Jović, Tomiyasu) e brasileiros (Neto Baiano, Marcos
 Júnior, Giovane Élber). A biblioteca ficou com 868 até a próxima busca de
-candidatos.
+candidatos. Na quinta, às cegas, foram 5 — Bruno Alves, Fabinho Soldado,
+Gabriel, José Antonio Reyes e Yassine Bounou —, e entraram os seguintes da reserva de
+24/11: Léo Jardim, Fabrício Bruno, Malcom, André Carrillo e Rayan Cherki. O
+Bolasie, o quinto da lista, ficou para depois: três clubes do começo da
+carreira (Hillingdon Borough, Floriana, Rushden & Diamonds) não estão no
+catálogo.
 
-Os dados são nove, do Transfermarkt, do Wikidata e da Wikipédia, e o peso de
-cada um sai das marcações (negativo deixa mais fácil; os dados são
-padronizados, então os pesos se comparam):
+Os dados são dez, do Transfermarkt, do Wikidata, da Wikipédia e do próprio
+mural, e o peso de cada um sai das marcações (negativo deixa mais fácil; os
+dados são padronizados, então os pesos se comparam):
 
 | Dado | Peso |
 | --- | --- |
-| procura na Wikipédia em português (mediana mensal de doze meses) | −1,18 |
-| jogos pelos clubes do Brasil | −0,74 |
-| quão recente é a carreira (último ano com jogo) | −0,50 |
-| idiomas em que a Wikipédia tem artigo sobre ele | −0,31 |
-| jogos pela seleção principal de qualquer país | −0,19 |
-| nasceu no Brasil | −0,13 |
-| jogos pela seleção brasileira | −0,03 |
-| Copas do Mundo em que entrou em campo | −0,02 |
-| jogos nas cinco ligas grandes da Europa | +0,12 |
+| procura na Wikipédia em português (mediana mensal de doze meses) | −1,21 |
+| jogos pelos clubes do Brasil | −0,82 |
+| quão recente é a carreira (último ano com jogo) | −0,53 |
+| idiomas em que a Wikipédia tem artigo sobre ele | −0,33 |
+| jogos pela seleção principal de qualquer país | −0,20 |
+| nasceu no Brasil | −0,14 |
+| Copas do Mundo em que entrou em campo | −0,10 |
+| jogos pela seleção brasileira | −0,08 |
+| jogos nas cinco ligas grandes da Europa | +0,09 |
+| **quantos escudos o mural mostra** | **+0,23** |
+
+O número de escudos entrou com a rodada às cegas: é o único dado que mede a
+charada, e não a fama — para o mesmo jogador, carreira de muitos clubes é mais
+difícil de reconhecer. Escudos raros (clube de dois jogadores ou menos na
+biblioteca) e clubes grandes também foram testados e não acrescentaram nada.
 
 Os jogos pelos clubes do Brasil entraram na terceira rodada. Sem eles a régua
 não enxergava fama feita aqui e mandava ídolos estrangeiros do futebol
@@ -630,13 +656,22 @@ nenhuma visita antes da mudança — o do Dante dava 7 por mês —, então, aba
 não liga ao jogador vai em `ARTIGO_SEM_LIGACAO`, em `scripts/regua.mjs`.
 
 O modelo é ordinal (fácil < intermediário < difícil < tirar), com freio contra
-amostra pequena. **Quanto acerta**: tirando cada marcação do ajuste e vendo em
-que nível a régua poria o jogador, acerta 351 das 554 marcações de quem está
-no jogo (63%), e só 11 erram por dois níveis. Sem a procura acertava 268
-(48%), com 61 erros de dois níveis; na primeira rodada, 76% de 66 — cada
-rodada seguinte foi de propósito nos casos difíceis. Ela ainda erra com os
-antigos que o cliente tira (jogou pela seleção e nasceu no Brasil, para ela, é
-fácil). Por isso a marcação vale mais que a régua.
+amostra pequena. **Quanto acerta**, em validação cruzada de dez partes — cada
+décimo das marcações fica fora do ajuste e a régua diz o nível em que poria
+cada um, sem cota: 427 das 698 marcações de quem está no jogo (61%), com 6
+erros de dois níveis; nas 200 charadas às cegas que ficaram no jogo, 125
+(62,5%). Em 84,6% dos pares de jogadores que o cliente pôs em níveis
+diferentes, ela põe o mais fácil na frente. Sem o número de escudos: 60,2%,
+10 erros de dois níveis e 83,9% dos pares.
+
+A medida mudou na quinta rodada. Até a quarta, a régua tirava uma marcação e
+via em que nível o jogador caía **com a cota de um terço**: deu 63% de 554. Com
+as marcações da quinta, sobram só 28 vagas de intermediário para 202 sem
+marcação, e essa conta passou a medir a cota, não a régua (34%). O nível sem
+cota é o que a régua acha de cada um, e é o que se compara com o cliente.
+
+Ela ainda erra com os antigos que o cliente tira (jogou pela seleção e nasceu
+no Brasil, para ela, é fácil). Por isso a marcação vale mais que a régua.
 
 #### Onde faltava jogador: o fácil
 
@@ -660,6 +695,16 @@ biblioteca tem uns **261 fáceis, 335 intermediários e 302 difíceis**: o
 gargalo diminuiu, e o que falta não está mais entre os candidatos que
 passaram por clube brasileiro ou são conhecidos no mundo. Os seguintes da
 busca estão em `relatorios/reserva-2026-11-24.md`.
+
+#### Depois da rodada às cegas: o gargalo foi para o intermediário
+
+O cliente mandou 33 intermediários para o difícil e 12 fáceis para cima, e o
+fácil deixou de ser o problema: tem 160 marcados por ele e 140 pela régua, dos
+quais só 10 estão lá para fechar o terço (eram 39). O intermediário tem 272
+marcados e 27 que a régua punha no difícil e sobem para o terço fechar —
+estrangeiros de carreira europeia, como van Bommel, Mario Gómez, Ramsey,
+Fellaini, Makélélé, Kluivert e Materazzi. Pela régua sem cota, a biblioteca
+tem 220 fáceis, 356 intermediários, 317 difíceis e 7 que ela tiraria.
 
 O cliente quer **o mesmo número de jogadores por nível**. A régua ordena e corta
 onde cada nível fecha com um terço. Vencem o cálculo, nesta ordem:

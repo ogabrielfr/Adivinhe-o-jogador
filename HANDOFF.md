@@ -168,7 +168,7 @@ Três carreiras vieram com o fim novo que o Transfermarkt já registra: Salah no
 Trabzonspor (agosto de 2026), Lewandowski no Chicago Fire (julho de 2026) e
 Thiago Silva de volta ao Fluminense depois de meio ano no Porto.
 
-### 2. A régua do nível: quatro rodadas aplicadas
+### 2. A régua do nível: cinco rodadas aplicadas
 
 O cliente recusou as visualizações da Wikipédia e escolheu a régua por
 amostragem: ele marca uma amostra, e os pesos de cada dado saem das marcações
@@ -198,13 +198,31 @@ fuso (ver "A agenda" no README).
   Çalhanoğlu…), que não foram repostos. 554 dos 868 ficaram no nível que ele
   marcou, a régua refez os outros 314 em terços (289, 290 e 289) e a agenda
   foi refeita a partir de 18/11.
+- **5ª, às cegas (27/11)**: 205 charadas — mural, dicas uma de cada vez e só
+  então o nome; o banco guarda também `cega` e `dicas` (quantas ele abriu
+  antes de revelar). Foram 137 intermediários, os 38 fáceis que só fechavam o
+  terço e os 30 difíceis que a régua mais via como intermediários. Do
+  intermediário, 33 foram para o difícil e 7 para o fácil; do fácil, 12
+  subiram; do difícil, 5 foram para o intermediário. Mandou tirar 5 (Bruno
+  Alves, Fabinho Soldado, Gabriel, José Antonio Reyes, Yassine Bounou), e
+  entraram os seguintes da reserva de 24/11 — Léo Jardim, Fabrício Bruno,
+  Malcom, André Carrillo e Rayan Cherki; o Bolasie ficou fora porque três
+  clubes do começo da carreira não estão no catálogo. Aplicada no mesmo dia:
+  698 dos 900 no nível que ele marcou, 89 mudaram de nível, e a agenda foi
+  refeita a partir de 29/11 (o Cleber, difícil de 28/11, virou intermediário,
+  mas o dia já estava no ar nos fusos adiantados e ficou como estava).
 
-A régua tem nove dados: os jogos pelos clubes do Brasil entraram na terceira
-rodada e a **procura na Wikipédia em português** em 24/11. Com ela, acerta 63%
-das 554 marcações quando cada uma fica de fora do ajuste (48% sem ela), e só
-11 erram por dois níveis. Ela ainda erra nos antigos que o cliente tira, que
-para ela são fáceis (jogaram pela seleção e nasceram no Brasil), e na
-fronteira entre níveis vizinhos. A marcação vence a régua. Testado e
+A régua tem dez dados: os jogos pelos clubes do Brasil entraram na terceira
+rodada, a **procura na Wikipédia em português** em 24/11 e o **número de
+escudos do mural** com a rodada às cegas — o único que mede a charada, e não a
+fama. Em validação cruzada de dez partes, sem cota, ela acerta o nível de 61%
+das 698 marcações (6 erram por dois níveis) e de 62,5% das charadas às cegas.
+A medida antiga, com a cota de um terço, deu 63% de 554 na quarta e deixou de
+servir: com as marcações da quinta sobram 28 vagas de intermediário para 202
+sem marcação, e ela passou a medir a cota (README, "O nível"). Ela ainda erra
+nos antigos que o cliente tira, que para ela são fáceis (jogaram pela seleção
+e nasceram no Brasil), e na fronteira entre níveis vizinhos. A marcação vence
+a régua. Testado e
 descartado na terceira: tirar os "tirar" do ajuste (45%) ou contá-los como
 difícil (46%). `EM_DUVIDA` e `PROVISORIO` estão vazias.
 
@@ -218,9 +236,13 @@ no fácil — os seguintes já são intermediários. Entraram 39 (Endrick, Yuri
 Alberto, Bruno Guimarães, Antony, Jhon Arias, Matheus Cunha, Kvaratskhelia,
 Germán Cano…), dez clubes novos em `SEM_ESCUDO` para as carreiras deles, e
 saíram os 7 que a régua mais achava que ele tiraria, nenhum marcado por ele.
-Hoje: 300 por nível; o fácil tem 127 dele e 173 da régua, dos quais 134 são
-fáceis para ela e 39 completam o terço; por natureza, uns 261 fáceis, 335
-intermediários e 302 difíceis. Ficaram de fora de propósito, e a reserva diz
+Depois da busca: 300 por nível; o fácil tinha 127 dele e 173 da régua, dos
+quais 39 completavam o terço. **Depois da rodada às cegas o gargalo foi para o
+intermediário**: o fácil tem 160 dele e 140 da régua, só 10 para fechar o
+terço; o intermediário tem 272 dele e 27 que a régua punha no difícil
+(estrangeiros como van Bommel, Mario Gómez, Ramsey, Makélélé, Materazzi). Por
+natureza, sem cota: 220 fáceis, 356 intermediários, 317 difíceis e 7 que ela
+tiraria. Ficaram de fora de propósito, e a reserva diz
 por quê: Marcos e Breno Bidon (um clube só), Allan e Wesley (homônimos), Bruno
 goleiro e Fernando Diniz (procura que não é pela carreira de jogador).
 

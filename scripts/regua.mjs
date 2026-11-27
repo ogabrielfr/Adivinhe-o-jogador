@@ -17,19 +17,24 @@
  *   - jogos pelos clubes do Brasil;
  *   - quão recente é a carreira (o último ano com jogo);
  *   - em quantos idiomas a Wikipédia tem artigo sobre ele;
- *   - quanto ele é procurado na Wikipédia em português.
+ *   - quanto ele é procurado na Wikipédia em português;
+ *   - quantos escudos o mural mostra — o único que mede a charada, e não a
+ *     fama; entrou com a rodada às cegas.
  *
  * O modelo é ordinal — fácil < intermediário < difícil < tirar — e os pesos
  * saem por máxima verossimilhança com um freio (L2) contra a amostra pequena.
  *
- * Quanto acerta: deixando cada marcação de fora do ajuste e vendo em que
- * nível a régua poria o jogador, ela acerta 351 das 554 marcações de quem está
- * no jogo (63%), e só 11 erram por dois níveis. Sem a procura em português,
- * que entrou em 24/11, acertava 268 (48%), e 61 erravam por dois níveis. Na
- * terceira rodada acertava 54% de 322 e, na primeira, 76% de 66: as rodadas
- * seguintes foram de propósito nos casos difíceis — os que ela punha em
- * dúvida, os que entraram na ampliação, os mais antigos e, na quarta, os 209
- * que ela tinha mudado de nível. A marcação do cliente vale mais que a régua.
+ * Quanto acerta, em validação cruzada de dez partes (cada décimo das
+ * marcações fora do ajuste, e o nível em que ela poria cada um, sem cota):
+ * 427 das 698 marcações de quem está no jogo (61%), com 6 erros de dois
+ * níveis, e 125 das 200 charadas da rodada às cegas (62,5%). Em 84,6% dos
+ * pares que o cliente pôs em níveis diferentes, ela põe o mais fácil na
+ * frente. Sem o número de escudos: 60,2%, 10 erros de dois níveis, 83,9%.
+ *
+ * Até a quarta rodada a medida era outra — tirar uma marcação e ver onde o
+ * jogador caía com a cota de um terço (63% de 554). Com a quinta sobram 28
+ * vagas de intermediário para 202 sem marcação, e essa conta passou a medir a
+ * cota, não a régua. A marcação do cliente vale mais que a régua.
  *
  * O cliente quer o mesmo número de jogadores por nível. A régua então ordena, e
  * o corte fica onde cada nível fecha com um terço da biblioteca. Quem o
@@ -179,6 +184,14 @@ export async function fatoresDe(jogadores) {
         // e o Guerrero iam para o difícil sem ela
         brasil: Math.log1p(brasil),
         procura: Math.log1p(procura[qid] ?? 0),
+        /**
+         * O formato da charada, não a fama: quantos escudos o mural mostra.
+         * Entrou com a rodada às cegas (27/11), em que o cliente marcou o
+         * nível sem ver o nome — carreira de muitos clubes é charada mais
+         * difícil para o mesmo jogador. Quem já saiu da biblioteca não tem
+         * mural aqui e fica na média (`padronizador`).
+         */
+        clubes: j.clubes?.length ? Math.log(new Set(j.clubes).size) : null,
       },
     }
   })
@@ -218,17 +231,20 @@ function ajustar(X, y, { lambda = 0.05, passos = 4000, taxa = 0.05 } = {}) {
   return { w, cortes }
 }
 
-/** Padroniza cada dado pela média e o desvio da biblioteca inteira. */
+/**
+ * Padroniza cada dado pela média e o desvio da biblioteca inteira. Dado que
+ * falta (o mural de quem já saiu) fica na média: não puxa para lado nenhum.
+ */
 function padronizador(fatores) {
   const nomes = Object.keys(fatores[0].valores)
   const media = {}
   const desvio = {}
   for (const n of nomes) {
-    const xs = fatores.map((f) => f.valores[n])
+    const xs = fatores.map((f) => f.valores[n]).filter((x) => x != null)
     media[n] = xs.reduce((s, x) => s + x, 0) / xs.length
     desvio[n] = Math.sqrt(xs.reduce((s, x) => s + (x - media[n]) ** 2, 0) / xs.length) || 1
   }
-  return { nomes, z: (f) => nomes.map((n) => (f.valores[n] - media[n]) / desvio[n]) }
+  return { nomes, z: (f) => nomes.map((n) => ((f.valores[n] ?? media[n]) - media[n]) / desvio[n]) }
 }
 
 /**
