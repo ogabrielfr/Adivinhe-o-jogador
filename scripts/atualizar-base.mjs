@@ -17,8 +17,9 @@
  *   1. reparar   a carreira de cada jogador, do histórico do Transfermarkt;
  *                a que trava num clube fica como estava e vai para o relatório
  *   2. catalogo  o escudo dos clubes que entraram nas carreiras
- *   3. dicas     a dica de quem ainda não tem; as outras ficam, porque os
- *                títulos só vêm do site (ver atualizar-dicas.mjs)
+ *   3. dicas     refaz as dicas com os números novos; o título de cada uma
+ *                volta de titulos-das-dicas.json, porque a página de títulos
+ *                só existe no site (ver atualizar-dicas.mjs)
  *   4. regua     o nível acompanha a carreira, que pesa pelo quão recente é
  *   5. agenda    os dias ainda não agendados, já com a base nova; os
  *                agendados não mudam

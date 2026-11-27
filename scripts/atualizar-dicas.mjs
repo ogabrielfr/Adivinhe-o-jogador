@@ -1,19 +1,20 @@
 /**
  * Escreve a dica de cada jogador sem mexer no elenco.
  *
- *   npm run dicas                # dica para quem não tem; as outras ficam
- *   npm run dicas -- --todas     # refaz todas, mesmo sem os títulos
+ *   npm run dicas                # refaz as duas dicas de todos
+ *   DICA=pele npm run dicas      # mostra os fatos do Pelé e a nota de cada um
  *
  * Existe separado do gerador porque trocar a dica não deveria custar um elenco
  * novo. Aqui a biblioteca fica como está e só o texto muda.
  *
  * **Os títulos só vêm do site do Transfermarkt**, que fica desligado
- * (`titulosDoTransfermarkt`, em transfermarkt.mjs). Sem eles, refazer a dica
- * de quem já tem uma a deixaria pior: o "Campeão da Libertadores de 2013 pelo
- * Atlético-MG" sumiria. Então a dica de quem já tem fica como está, e a de
- * quem acabou de entrar sai com o que a API tem — finais, jogos por clube,
- * tempo de casa, Copas, seleção, naturalidade. Com `TITULOS_DO_SITE=1` (e o
- * site respondendo), os títulos voltam e todas são refeitas, como antes.
+ * (`titulosDoTransfermarkt`, em transfermarkt.mjs). O título que cada dica já
+ * tinha está guardado em `titulos-das-dicas.json` — a frase que saiu da página
+ * de títulos, conferida com a final —, e volta como fato quando o site não
+ * responde. Assim todas as dicas podem ser refeitas sem perder o "Campeão da
+ * Libertadores de 2013 pelo Atlético-MG". Quem entra depois só tem título
+ * com `TITULOS_DO_SITE=1` e o site respondendo; sem isso, sai com o que a API
+ * tem — finais, jogos por clube, gols, Copas, seleção, naturalidade.
  */
 import { readFileSync } from 'node:fs'
 import { join, dirname } from 'node:path'
@@ -27,6 +28,7 @@ import {
   montarDicas, fatosDoHistorico, papelConhecido, escalaDosFatos, naturalidadeSegura, nomeDoPais,
   titulosConferidos, papelDe, candidatosDaSegunda, anoDaEdicao,
 } from './dicas.mjs'
+import { semALetra } from './letra-do-nome.mjs'
 import { torneiosDe, torneiosQueContam } from './torneios.mjs'
 import { CARREIRA_FIXA } from './carreiras-corrigidas.mjs'
 import { lerBiblioteca, gravarBiblioteca, idTmDe } from './biblioteca.mjs'
@@ -102,12 +104,14 @@ for (const j of jogadores) {
 const paises = await paisesDoTransfermarkt(times, ondePedir)
 const paisPorId = (id) => (id ? nomeDoPais(paises[id]) : null)
 
-/** A seleção principal em que o jogador mais jogou: país e jogos. */
+/** A seleção principal em que o jogador mais jogou: país, jogos e gols. */
 function selecaoPrincipal(s) {
   const [maior] = (s?.selecoes ?? [])
     .filter((x) => times[x.time]?.principal && x.jogos > 0)
     .sort((a, b) => b.jogos - a.jogos)
-  return maior ? { pais: paisPorId(times[maior.time].pais), jogos: maior.jogos } : { pais: null, jogos: 0 }
+  return maior
+    ? { pais: paisPorId(times[maior.time].pais), jogos: maior.jogos, gols: maior.gols ?? 0 }
+    : { pais: null, jogos: 0, gols: 0 }
 }
 
 // ------------------------------------------- títulos, finais e clube de ídolo
@@ -132,11 +136,12 @@ const competicoes = await competicoesDoTransfermarkt(
   [...desempenhoDe.values()].flatMap((d) => d?.finais.map((f) => f.competicao) ?? []),
 )
 
-/** Quem fica com a dica que tem: já tem as duas, e os títulos dele não estão à mão. */
-const REFAZER_TODAS = process.argv.includes('--todas')
-const mantidas = new Set(REFAZER_TODAS ? [] : jogadores
-  .filter((j) => titulosDe.get(j.id) == null && j.dicas?.length === 2 && j.dicas.every((d) => d?.trim()))
-  .map((j) => j.id))
+/**
+ * O título que a dica já tinha, para quando a página de títulos não está à
+ * mão (ver o começo do arquivo). Volta como o mesmo fato: peso, torneio e
+ * anos, que a regra da "mesma história" e a Copa disputada usam.
+ */
+const titulosGuardados = JSON.parse(readFileSync(join(raiz, 'scripts/titulos-das-dicas.json'), 'utf8'))
 
 // ------------------------------------------------------- torneios disputados
 /**
@@ -192,7 +197,15 @@ for (const j of jogadores) {
   if (!perfil?.posicao) semPerfil++
   const historico = tm ? await historicoDoTransfermarkt(tm) : null
   const passagens = passagensDe.get(j.id)
-  const fatos = fatosDoHistorico(historico?.transfers ?? [])
+  /**
+   * O registro de partidas diz quando foi o último jogo e em que clubes há
+   * jogo registrado: é o que separa quem parou sem "fim de carreira" no
+   * histórico (o Cléber Santana) de quem segue em campo.
+   */
+  const registro = jogosDe.get(j.id) ?? {}
+  const ultimoJogo = Object.values(registro).flatMap((r) => r.datas?.slice(-1) ?? []).sort().at(-1) ?? null
+  const clubesComJogo = new Set(Object.keys(registro).filter((c) => registro[c].jogou > 0))
+  const fatos = fatosDoHistorico(historico?.transfers ?? [], { ultimoJogo, clubesComJogo })
   const idsDeClube = j.clubes
   const paises = new Set(idsDeClube.map((x) => paisDoClube(x))).size
 
@@ -210,7 +223,7 @@ for (const j of jogadores) {
       ...m,
       posicao: perfil?.posicao ?? m.posicao,
       pais: paisPorId(selecaoDe.get(j.id)?.nascimento) ?? nomeDoPais(perfil?.nacionalidade) ?? m.pais,
-      jogosSelecao: sel.jogos, selecao: sel.pais, fatos, paises,
+      jogosSelecao: sel.jogos, golsSelecao: sel.gols, selecao: sel.pais, fatos, paises,
       naturalidade: naturalidadeSegura(
         perfil?.naturalidade,
         // o nome inteiro também: "Limeira" está no escudo da Inter de Limeira, com ou sem o nome curto
@@ -227,10 +240,35 @@ for (const j of jogadores) {
       clubeDaCasa: nomePorTm.get(String(fatos.clubeDaPermanencia)) ?? fatos.nomeDaPermanencia ?? null,
       // carreira corrigida à mão: a linha do tempo do Transfermarkt não vale
       historicoSuspeito: j.id in CARREIRA_FIXA,
-      // a segunda dica não repete palavra do nome que aparece na tela
+      // a segunda dica não repete palavra do nome que aparece na tela (acertado de novo na montagem)
       nomeNaTela: NOME_FIXO[j.id] ?? j.nome,
+      // os fatos fortes que a dica já tinha ficam, quando ainda valem (ver `nota` em dicas.mjs)
+      anterior: j.dicas?.[1] ?? null,
     },
   })
+}
+
+/**
+ * O registro de partidas cobre a carreira inteira? Cada escudo do mural com
+ * jogo registrado, e o primeiro jogo registrado no máximo um ano depois do
+ * começo da carreira — a primeira transferência a partir dos 16 anos. Só aí
+ * dá para dizer "o clube em que mais jogou" e somar os gols da carreira: o
+ * registro não acompanha toda liga em toda época, e o do Pelé tem 18 jogos
+ * pelo Santos. Carreira corrigida à mão não conta, porque a linha do tempo do
+ * Transfermarkt é justamente a que foi rejeitada.
+ */
+function registroCompleto(j, dados) {
+  if (dados.historicoSuspeito) return false
+  const registro = jogosDe.get(j.id) ?? {}
+  const comJogo = new Set(Object.keys(registro)
+    .filter((c) => registro[c].jogou > 0)
+    .map((c) => idPorTm.get(String(c)))
+    .filter(Boolean))
+  if (!j.clubes.every((id) => comJogo.has(id))) return false
+  const nasc = Number(dados.nasc)
+  const comeco = nasc ? (dados.fatos.anos ?? []).find((a) => a - nasc >= 16) ?? dados.fatos.estreia : dados.fatos.estreia
+  const primeiro = Math.min(...Object.values(registro).flatMap((r) => (r.datas ?? []).slice(0, 1).map((d) => Number(d.slice(0, 4)))))
+  return Boolean(comeco) && primeiro <= comeco + 1
 }
 
 /**
@@ -249,9 +287,18 @@ for (const c of coletado) {
   c.dados.finais = (desempenho?.finais ?? []).map((f) => ({
     competicao: competicoes[f.competicao] ?? null, ano: f.ano, data: f.data, gols: f.gols, saldo: f.saldo,
   }))
-  const [topo] = Object.entries(desempenho?.porClube ?? {}).sort((a, b) => b[1].jogos - a[1].jogos)
+  // sem a página de títulos, o título que a dica já tinha
+  c.dados.tituloGuardado = titulosDe.get(j.id) == null ? titulosGuardados[j.id] ?? null : null
+  const [topo, vice] = Object.entries(desempenho?.porClube ?? {}).sort((a, b) => b[1].jogos - a[1].jogos)
   const naCarreira = topo && j.clubes.includes(idPorTm.get(String(topo[0])))
-  c.dados.idolo = naCarreira ? { clube: nomeDoTm(topo[0]), jogos: topo[1].jogos, gols: topo[1].gols } : null
+  const completo = registroCompleto(j, c.dados)
+  c.dados.idolo = naCarreira
+    ? { clube: nomeDoTm(topo[0]), jogos: topo[1].jogos, gols: topo[1].gols, segundo: vice?.[1].jogos ?? 0, completo }
+    : null
+  // gols de clube no registro e os da seleção principal, quando o registro cobre a carreira
+  c.dados.golsNaCarreira = completo
+    ? Object.values(desempenho?.porClube ?? {}).reduce((soma, r) => soma + r.gols, 0) + (c.dados.golsSelecao ?? 0)
+    : null
   /**
    * O clube que diz quem ele é, para separar homônimos na revelação: o de
    * mais jogos, ou, quando o registro de partidas não alcança a época dele (o
@@ -265,33 +312,15 @@ for (const c of coletado) {
 const escala = escalaDosFatos(coletado.map((c) => c.dados))
 
 // ------------------------------------- segunda passada: escrever cada dica
-// a frase de quem fica como está já é dele: a dica nova não pode repeti-la
-for (const j of jogadores) if (mantidas.has(j.id)) dicas.set(j.dicas[1], j.id)
-
 for (const { jogador: j, perfil, dados } of coletado) {
   const id = j.id
-
-  // DICA=id mostra os fatos que o jogador tinha e a nota de cada um
-  if (process.env.DICA === id) console.log(id, candidatosDaSegunda(dados, escala))
-
-  if (!mantidas.has(id)) {
-    // dica repetida não é dica; a segunda é a que precisa distinguir, e troca
-    // de fato quando a frase já é de outro
-    const par = montarDicas(dados, escala, dicas)
-    if (dicas.has(par[1])) semFato++
-    dicas.set(par[1], id)
-    j.dicas = par
-  }
-
-  if (perfil?.posicao && !papelConhecido(perfil.posicao)) {
-    posicoesSoltas.set(perfil.posicao, (posicoesSoltas.get(perfil.posicao) ?? 0) + 1)
-  }
 
   /**
    * O nome da camisa vira o nome canônico quando é mais curto que o de
    * registro: ninguém digita "Paulo Henrique Sampaio Filho". O nome antigo
    * continua valendo como palpite, porque quem souber o nome completo também
-   * tem que acertar.
+   * tem que acertar. Vem antes da dica: a letra que fecha a segunda dica é a
+   * do nome que o jogo vai mostrar.
    */
   // sósia grego ou cirílico vira letra latina antes de virar nome na tela
   const nomeTm = perfil?.nome ? latinizar(perfil.nome) : null
@@ -301,6 +330,25 @@ for (const { jogador: j, perfil, dados } of coletado) {
     j.apelidos = [...new Set([j.nome.toLowerCase(), nomeTm.toLowerCase()])]
     j.nome = nomeTm
     renomeados++
+  }
+  dados.nomeNaTela = j.nome
+
+  // DICA=id mostra os fatos que o jogador tinha, a faixa e a nota de cada um
+  if (process.env.DICA === id) console.log(id, candidatosDaSegunda(dados, escala))
+
+  /**
+   * Dica repetida não é dica: a segunda é a que precisa distinguir, e troca
+   * de fato quando a frase já é de outro. A comparação é sem a letra do nome
+   * — os mesmos dois fatos com letras diferentes ainda são a mesma dica.
+   */
+  const par = montarDicas(dados, escala, dicas)
+  const chave = semALetra(par[1])
+  if (dicas.has(chave)) semFato++
+  dicas.set(chave, id)
+  j.dicas = par
+
+  if (perfil?.posicao && !papelConhecido(perfil.posicao)) {
+    posicoesSoltas.set(perfil.posicao, (posicoesSoltas.get(perfil.posicao) ?? 0) + 1)
   }
 }
 
@@ -328,10 +376,8 @@ gravarBiblioteca(jogadores)
 
 const distintas = new Set(dicas.keys()).size
 console.log(`\n${distintas} segundas dicas distintas para ${jogadores.length} jogadores`)
-if (mantidas.size) {
-  console.log(`  ${jogadores.length - mantidas.size} escritas agora; ${mantidas.size} ficaram como estavam, porque os títulos` +
-    ' só vêm do site (TITULOS_DO_SITE=1 refaz todas)')
-}
+const comTituloGuardado = coletado.filter((c) => c.dados.tituloGuardado).length
+if (comTituloGuardado) console.log(`  ${comTituloGuardado} com o título guardado da dica anterior (o site de títulos fica desligado)`)
 if (semFato) console.log(`  ${semFato} continuam repetidas: faltam fatos para separá-las`)
 if (semPerfil) console.log(`  ${semPerfil} sem posição no Transfermarkt`)
 console.log(`${renomeados} passaram a usar o nome da camisa em vez do de registro`)

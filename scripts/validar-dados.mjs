@@ -6,6 +6,7 @@ import { formasDerivadas, formasExatas } from '../src/logica/texto.ts'
 import { dataDoDia, numeroDoDia } from '../src/logica/sorteio.ts'
 import { NIVEIS } from '../src/dados/tipos.ts'
 import { defeitoDoSvg } from './svg-escudo.mjs'
+import { fraseDaLetra } from './letra-do-nome.mjs'
 
 const erros = []
 const avisos = []
@@ -25,6 +26,16 @@ for (const j of JOGADORES) {
   }
   if (!Array.isArray(j.dicas) || j.dicas.length !== 2) erros.push(`${j.id}: precisa de duas dicas`)
   else if (j.dicas.some((d) => !d?.trim())) erros.push(`${j.id}: dica vazia`)
+  /**
+   * A segunda dica termina com a letra do nome que o jogo mostra — o único
+   * pedaço do nome que pode aparecer, e de propósito (opção escolhida pelo
+   * cliente em novembro de 2026). Nome trocado em `nomes-fixos.mjs` sem
+   * refazer as dicas deixaria a letra errada.
+   */
+  const letra = fraseDaLetra(j.nome)
+  if (Array.isArray(j.dicas) && letra && !String(j.dicas[1] ?? '').endsWith(letra)) {
+    erros.push(`${j.id}: a 2ª dica não termina com "${letra}" (rode npm run dicas)`)
+  }
 
   // nenhuma das duas pode entregar o nome do jogador nem o de um clube exibido
   for (const [i, bruta] of (j.dicas ?? []).entries()) {
@@ -41,12 +52,13 @@ for (const j of JOGADORES) {
      * num dos escudos à mostra — foi pedido do cliente, e o clube citado é
      * sempre um que já está na tela: tempo de casa ("Ficou 6 anos seguidos no
      * São Paulo"), título ("Campeão da Libertadores de 2013 pelo
-     * Atlético-MG"), jogos pelo clube ("Fez 434 jogos pelo Grêmio") e final.
-     * Fora delas, citar clube continua sendo repetir o mural. O corte é por
-     * frase no texto original, porque a normalização tira os pontos.
+     * Atlético-MG"), jogos pelo clube ("Fez 434 jogos pelo Grêmio", "O clube
+     * em que mais jogou foi o Arsenal") e final. Fora delas, citar clube
+     * continua sendo repetir o mural. O corte é por frase no texto original,
+     * porque a normalização tira os pontos.
      */
     const semTempoDeCasa = normalizar((bruta ?? '').split('.')
-      .filter((frase) => !/^\s*(ficou \d+ anos seguidos|campeã?o|fez |marcou)/i.test(frase))
+      .filter((frase) => !/^\s*(ficou \d+ anos seguidos|campeã?o|fez |marcou|o clube em que mais jogou)/i.test(frase))
       .join('.'))
     for (const c of j.clubes) {
       const nome = normalizar(CLUBES.find((x) => x.id === c)?.nome ?? '')

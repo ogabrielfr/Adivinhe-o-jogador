@@ -67,8 +67,9 @@ honesto (`acerte-o-jogador/1.0`, com o endereço do repositório). O histórico
 foi conferido contra o do site em 25 jogadores: as 204 transferências batem.
 
 **A única coisa que fica no site é a página de títulos.** Por isso ela só é
-pedida com `TITULOS_DO_SITE=1`; sem isso, `npm run dicas` mantém a dica de quem
-já tem e escreve a dos novos sem título (README, "De onde vem o dado do
+pedida com `TITULOS_DO_SITE=1`; sem isso, `npm run dicas` refaz todas as dicas
+com o título que cada uma já tinha, guardado em `scripts/titulos-das-dicas.json`,
+e escreve a dos novos sem título (README, "De onde vem o dado do
 Transfermarkt").
 
 - **O id do jogador vem do Wikidata (P2446), não da busca deles.** Mais
@@ -97,7 +98,7 @@ vezes vem 429) e `ogabrielfr.github.io`.
 - **Um resolvedor de clube só** (`scripts/resolver-clube.mjs`) para gerar, reparar e repor. Casa por id do Transfermarkt; por nome, só com nome contido, país e época conferidos.
 - **Mapa do Transfermarkt conferido por duas testemunhas** (`npm run mapa-tm`): o Wikidata diz de quem é cada id, e o par que ele desmente sai; o nome que o próprio Transfermarkt dá ao id é conferido para todo id em uso, e o que não bate vai para uma lista de leitura. Foi essa lista que achou o CRB do Marcos Rocha ligado ao Brasil de Pelotas e o Instituto do Dybala ao Central Córdoba.
 - **Catálogo de 5650 clubes de 87 países**, sendo 1204 brasileiros. Dos 1082 que o jogo usa, três ficam com o brasão desenhado: o Miami FC de 2006, de propósito (as duas fontes mostram o escudo do Fort Lauderdale Strikers, que o clube virou depois), e o Toronto Italia do Mazzola e o Olimpia de Minas do Abreu, que o Transfermarkt não tem escudo. O Elche voltou a aparecer e o Palmeiras está com o escudo de depois de 2012, com a estrela vermelha.
-- **Duas dicas por jogador.** A primeira diz posição, país de **nascimento** e ano, e, quando o jogador defendeu a seleção de outro país, qual ("Lateral brasileiro nascido em 1990, que defendeu a seleção russa"). A segunda abre com o **fato específico** que o cliente pediu — gol em final, título com ano e clube, clube de que foi ídolo em jogos ("Campeão da Libertadores de 2013 pelo Atlético-MG e de 2020 e 2021 pelo Palmeiras. Fez mais de 300 jogos pelo Palmeiras.") — e cai para naturalidade, Copa e o resto só quando não há nenhum. Tudo do Transfermarkt: página de títulos, registro de partidas e API.
+- **Duas dicas por jogador.** A primeira diz posição, país de **nascimento** e ano, e, quando o jogador defendeu a seleção de outro país, qual ("Lateral brasileiro nascido em 1990, que defendeu a seleção russa"). A segunda abre com o **fato específico** que o cliente pediu — gol em final, título com ano e clube, clube de que foi ídolo em jogos ("Campeão da Libertadores de 2013 pelo Atlético-MG e de 2020 e 2021 pelo Palmeiras. Fez mais de 300 jogos pelo Palmeiras.") —, depois o que aponta um escudo (o clube em que mais jogou, a partir de 50 jogos; gols na carreira; seleção com os gols) e **termina com a letra do nome** ("O nome começa com R.", desde 27/11 — opção escolhida pelo cliente para a segunda dica direcionar mais; README, "A segunda dica que direciona"). Tudo do Transfermarkt: página de títulos, registro de partidas e API.
 - **Estatísticas com tela própria**, no rodapé da tela inicial: partidas, aproveitamento, sequência atual e maior, e em que chute acertou, por nível.
 - **Prévia do link no WhatsApp**: tags `og:` no `index.html` e `public/previa.png`, gerada por `npm run previa`.
 - **Homônimo com complemento na revelação**: quem divide o nome com outro jogador ganha uma linha embaixo dele ("Lateral, Barcelona").
@@ -143,9 +144,16 @@ O que ele marcar como "tirar" sai e entra o próximo dela. Quando a revisão aca
 **As dicas de quem entrou desde a ampliação não usam título** (492 em 05/11,
 55 em 15/11 e 39 em 24/11): a página de títulos só existe no
 site do Transfermarkt, que está desligado (ver "Rede"). Elas saíram com final,
-jogos por clube, Copas, seleção, naturalidade. Para pôr título nelas, rode
-`TITULOS_DO_SITE=1 npm run dicas -- --todas` de uma máquina onde o site
-responda.
+jogos e gols por clube, Copas, seleção, naturalidade. Os 336 títulos que já
+estavam nas dicas ficam em `scripts/titulos-das-dicas.json` e voltam a cada
+`npm run dicas`. Para pôr título nas outras, rode `TITULOS_DO_SITE=1 npm run
+dicas` de uma máquina onde o site responda.
+
+**A segunda dica muda pouco a cada `npm run dicas`, de propósito.** O fato
+forte que ela já tinha fica (`preferidos`, em `nota` de `scripts/dicas.mjs`); o
+que muda é o número ("mais de 250 jogos" vira "mais de 300") e o fato fraco,
+que cede a vez ao que aponta um escudo. Jogador novo, sem dica anterior, sai
+pela ordem pura dos quatro grupos (README).
 
 ### 1. Os grandes nomes: feito, com duas pendências
 

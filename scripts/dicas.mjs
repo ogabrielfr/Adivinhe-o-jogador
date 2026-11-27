@@ -15,9 +15,12 @@
  *
  * A dica nunca cita o nome do jogador, e só cita um clube à mostra para dizer
  * o que ele fez ali — título, jogos, tempo de casa; quem garante isso é
- * `npm run validar-dados`.
+ * `npm run validar-dados`. A única exceção ao nome é deliberada: a segunda
+ * dica termina com a letra com que ele começa ("O nome começa com R."), pedido
+ * do cliente de novembro de 2026 para a segunda dica direcionar mais.
  */
 import { NAO_E_CLUBE, jaAconteceu } from './transfermarkt.mjs'
+import { fraseDaLetra } from './letra-do-nome.mjs'
 
 /**
  * O rótulo de posição vem do Wikidata numa mistura de português de Portugal e
@@ -188,6 +191,14 @@ const clubeDo = (href) => String(href ?? '').match(/\/verein\/(\d+)/)?.[1] ?? nu
 const paisDaBandeira = (url) => String(url ?? '').match(/\/(\d+)\.png/)?.[1] ?? null
 
 /**
+ * Time de base: "Barça U19", "Ajax Sub-17", "Hertha BSC Juv.", "Austria Jgd.",
+ * "Osasuna F.base". O histórico do Transfermarkt registra a passagem pela base
+ * como as outras, e o Kevin-Prince Boateng saía com "ficou 6 anos seguidos no
+ * Hertha BSC Juv." — tempo de categoria de base, com o nome abreviado do site.
+ */
+const DE_BASE = /\b(?:U|Sub-?)\s?\d{2}\b|\bYouth\b|\bJuv\.|\bJgd\.|\bbase\b/i
+
+/**
  * Extrai do histórico cru os números que valem uma dica.
  *
  * O que entra aqui é o que o mural de escudos NÃO mostra. Quantos clubes o
@@ -195,7 +206,7 @@ const paisDaBandeira = (url) => String(url ?? '').match(/\/(\d+)\.png/)?.[1] ?? 
  * é dica. Tempo de casa, empréstimo e idade da mudança de país, não: são
  * forma de carreira invisível no escudo.
  */
-export function fatosDoHistorico(todas = []) {
+export function fatosDoHistorico(todas = [], { ultimoJogo = null, clubesComJogo = null } = {}) {
   // o fim de um empréstimo em curso vem com data futura e não é fato ainda
   const transferencias = todas.filter((t) => jaAconteceu(t))
   let maiorTaxa = null
@@ -221,12 +232,27 @@ export function fatosDoHistorico(todas = []) {
     if (EMPRESTIMO.test(taxaCrua) && !FIM_DE_EMPRESTIMO.test(taxaCrua)) emprestimos++
   }
 
-  const encerrou = transferencias.some((t) => /fim de carreira/i.test(t.to?.clubName ?? ''))
-
   const linha = transferencias
     .map((t) => ({ t, quando: Date.parse(t.dateUnformatted ?? '') }))
     .filter((x) => Number.isFinite(x.quando))
     .sort((a, b) => a.quando - b.quando)
+
+  /**
+   * Fim de carreira, pelo histórico ou pelo registro de partidas. O histórico
+   * só sabe que alguém parou quando registra "fim de carreira", e nem sempre
+   * registra: o Cléber Santana, que morreu no acidente da Chapecoense em
+   * 2016, saía com "já soma 26 anos de estrada" e "ficou 11 anos seguidos na
+   * Chapecoense", contados até hoje. Quando o clube atual tem jogos no
+   * registro (ou ele está sem clube) e o último jogo é de mais de um ano e
+   * meio atrás, a carreira acabou ali. Clube sem registro nenhum não prova
+   * nada — o Transfermarkt não acompanha toda liga —, e aí vale o histórico.
+   */
+  const fimDoRegistro = Date.parse(ultimoJogo ?? '')
+  const atual = linha.at(-1)
+  const semClube = NAO_E_CLUBE.test(atual?.t.to?.clubName ?? '')
+  const parou = Number.isFinite(fimDoRegistro) && Date.now() - fimDoRegistro > 1.5 * ANO &&
+    (semClube || Boolean(clubesComJogo?.has(String(clubeDo(atual?.t.to?.href)))))
+  const encerrou = transferencias.some((t) => /fim de carreira/i.test(t.to?.clubName ?? '')) || parou
 
   /**
    * Tempo de casa: da transferência que levou o jogador ao clube até a que o
@@ -240,7 +266,7 @@ export function fatosDoHistorico(todas = []) {
   for (let i = 0; i < linha.length - 1; i++) {
     const chegou = clubeDo(linha[i].t.to?.href)
     if (!chegou || chegou !== clubeDo(linha[i + 1].t.from?.href)) continue
-    if (NAO_E_CLUBE.test(linha[i].t.to?.clubName ?? '')) continue
+    if (NAO_E_CLUBE.test(linha[i].t.to?.clubName ?? '') || DE_BASE.test(linha[i].t.to?.clubName ?? '')) continue
     const dentro = (linha[i + 1].quando - linha[i].quando) / ANO
     if (dentro > maiorPermanencia) {
       maiorPermanencia = dentro
@@ -248,10 +274,11 @@ export function fatosDoHistorico(todas = []) {
       nomeDaPermanencia = linha[i].t.to?.clubName ?? null
     }
   }
-  // quem ainda está em campo segue somando no clube atual
+  // quem ainda está em campo segue somando no clube atual; quem parou, até o último jogo
   const ultima = linha.at(-1)
-  if (ultima && !encerrou && !NAO_E_CLUBE.test(ultima.t.to?.clubName ?? '')) {
-    const ateHoje = (Date.now() - ultima.quando) / ANO
+  const ateQuando = parou ? fimDoRegistro : encerrou ? null : Date.now()
+  if (ultima && ateQuando && !NAO_E_CLUBE.test(ultima.t.to?.clubName ?? '') && !DE_BASE.test(ultima.t.to?.clubName ?? '')) {
+    const ateHoje = (ateQuando - ultima.quando) / ANO
     if (ateHoje > maiorPermanencia) {
       maiorPermanencia = ateHoje
       clubeDaPermanencia = clubeDo(ultima.t.to?.href)
@@ -285,7 +312,10 @@ export function fatosDoHistorico(todas = []) {
      */
     anos: [...new Set(anos)].sort((a, b) => a - b),
     estreia: anos.length ? Math.min(...anos) : null,
-    ultimo: anos.length ? Math.max(...anos) : null,
+    // quem parou sem registro de fim de carreira parou no ano do último jogo
+    ultimo: anos.length || parou
+      ? Math.max(...anos, parou ? new Date(fimDoRegistro).getUTCFullYear() : -Infinity)
+      : null,
     encerrou,
   }
 }
@@ -725,14 +755,67 @@ function fatoDeFinal(finais) {
 const maisDe = (n) => `mais de ${n >= 100 ? Math.floor(n / 50) * 50 : Math.floor(n / 10) * 10}`
 
 /**
- * O clube de que ele foi ídolo, medido em jogos: "fez mais de 400 jogos pelo
- * Grêmio". O cliente pediu o número de partidas por clube "quando muito
- * relevante" — daí o piso de 150. Gols entram junto a partir de 50.
+ * O clube em que ele mais jogou, medido em jogos: "fez mais de 400 jogos pelo
+ * Grêmio". É o fato que diz qual dos escudos do mural é o dele.
+ *
+ * Com 150 jogos ou mais é o clube de que ele foi ídolo, e entra entre os
+ * fatos fortes (`idolo`), como o cliente pediu de início — o número de
+ * partidas "quando muito relevante". De 50 a 149 é o fato novo da opção que o
+ * cliente escolheu em novembro de 2026 (`clube`): fica abaixo dos fortes e
+ * acima dos fracos, e foi o que tirou "saiu por empréstimo 6 vezes" da dica
+ * do Victor Moses em troca dos jogos pelo Chelsea. Gols entram a partir de 10.
+ *
+ * "O clube em que mais jogou" só quando dá para afirmar: o registro de
+ * partidas cobre a carreira inteira (`completo`) e a folga sobre o segundo
+ * clube é clara. O registro conta menos do que houve — liga sem acompanhamento,
+ * época antiga —, e com o segundo clube perto, o que faltou no registro
+ * poderia inverter a ordem. Sem isso a frase diz só quantos jogos fez, que é
+ * sempre verdade: "mais de", arredondado para baixo, de um número que só
+ * pode estar abaixo do real.
  */
-function fatoDeIdolo(idolo) {
-  if (!idolo?.clube || idolo.jogos < 150) return null
-  const gols = idolo.gols >= 50 ? ` e ${maisDe(idolo.gols)} gols` : ''
-  return { valor: idolo.jogos, texto: `fez ${maisDe(idolo.jogos)} jogos${gols} ${peloClube(idolo.clube)}` }
+function fatoDoClube(idolo) {
+  if (!idolo?.clube || !(idolo.jogos >= 50)) return null
+  const gols = idolo.gols >= 10 ? ` e ${maisDe(idolo.gols)} gols` : ''
+  const folga = idolo.jogos - (idolo.segundo ?? 0)
+  const certo = idolo.completo && folga >= Math.max(20, idolo.jogos / 4)
+  const artigo = noClube(idolo.clube).replace(/^no /, 'o ').replace(/^na /, 'a ')
+  return {
+    tipo: idolo.jogos >= 150 ? 'idolo' : 'clube',
+    valor: idolo.jogos,
+    texto: certo
+      ? `o clube em que mais jogou foi ${artigo}: ${maisDe(idolo.jogos)} jogos${gols}`
+      : `fez ${maisDe(idolo.jogos)} jogos${gols} ${peloClube(idolo.clube)}`,
+  }
+}
+
+/**
+ * O título que já estava escrito na dica, de volta a fato.
+ *
+ * Os títulos só vêm do site do Transfermarkt, que fica desligado, e o cache
+ * dele não sobrevive à troca de máquina. A frase que a dica já tinha é o que
+ * sobrou do dado: "Campeão da Libertadores de 2013 pelo Atlético-MG" saiu da
+ * página de títulos, conferida com a final. Ela fica guardada em
+ * `titulos-das-dicas.json` e volta aqui com o peso, o torneio e os anos, para
+ * a dica ser refeita sem perder o título.
+ */
+export function tituloDaFrase(frase) {
+  const t = String(frase ?? '').trim().replace(/\.+$/, '')
+  const baixa = t.charAt(0).toLowerCase() + t.slice(1)
+  let melhor = null
+  for (const [titulo, [peso, , abre]] of Object.entries(TITULOS)) {
+    // "campeão inglês 4 vezes pelo Manchester City" começa sem o conector
+    const comeco = [abre, abre.replace(/ (de|em)$/, '')].find((a) => baixa.startsWith(`${a} `))
+    if (!comeco) continue
+    if (!melhor || comeco.length > melhor.tamanho || (comeco.length === melhor.tamanho && peso > melhor.peso)) {
+      melhor = { titulo, peso, tamanho: comeco.length }
+    }
+  }
+  if (!melhor) return null
+  const anos = [...baixa.matchAll(/\b(1[89]\d\d|20\d\d)\b/g)].map((m) => Number(m[1]))
+  return {
+    peso: melhor.peso, texto: baixa, evento: EVENTO_DO_TITULO[melhor.titulo] ?? null, anos,
+    copas: melhor.titulo === 'Campeão do Mundo' ? anos : [],
+  }
 }
 
 /**
@@ -752,19 +835,32 @@ function textoDaCopa(anos, tambem = false) {
  * depois do sujeito, com o número cru ao lado para o desempate de `escolher`.
  */
 function orações({
-  jogosSelecao, selecao, pais, fatos, paises, nasc, naturalidade, torneios, clubeDaCasa,
-  historicoSuspeito, titulos, finais, idolo,
+  jogosSelecao, golsSelecao, selecao, pais, fatos, paises, nasc, naturalidade, torneios, clubeDaCasa,
+  historicoSuspeito, titulos, tituloGuardado, finais, idolo, golsNaCarreira,
 }) {
   const saida = []
   const por = (tipo, valor, texto, extra = {}) => saida.push({ tipo, valor, texto, ...extra })
 
-  // o que mais aproxima do acerto: a final em que marcou, o título, o clube de que foi ídolo
+  /**
+   * O que mais aproxima do acerto: a final em que marcou, o título, o clube
+   * de que foi ídolo. Final de estadual, de copa nacional de outro país, de
+   * Recopa e de Sub-20 (peso abaixo de 60 em `FINAIS`) é `finalMenor`: quase
+   * ninguém lembra quem marcou na final da Copa do Rei de 2010, e a vaga dela
+   * vai para o clube em que ele mais jogou. A escala de raridade é a mesma
+   * das outras finais.
+   */
   const final = fatoDeFinal(finais)
-  if (final) por('final', final.peso, final.texto, { copas: final.copas, evento: final.evento, ano: final.ano })
-  const titulo = fatoDeTitulo(titulos)
+  if (final) {
+    por(final.peso >= 60 ? 'final' : 'finalMenor', final.peso, final.texto,
+      { copas: final.copas, evento: final.evento, ano: final.ano, escala: 'final' })
+  }
+  // sem a página de títulos, vale o título que a dica já tinha
+  const titulo = fatoDeTitulo(titulos) ?? tituloGuardado ?? null
   if (titulo) por('titulo', titulo.peso, titulo.texto, { copas: titulo.copas, evento: titulo.evento, anos: titulo.anos })
-  const casa = fatoDeIdolo(idolo)
-  if (casa) por('idolo', casa.valor, casa.texto)
+  const casa = fatoDoClube(idolo)
+  if (casa) por(casa.tipo, casa.valor, casa.texto, { clube: idolo.clube })
+  // gols só com o registro completo: "mais de 100" de um artilheiro antigo seria verdade pequena demais
+  if (golsNaCarreira >= 100) por('gols', golsNaCarreira, `marcou ${maisDe(golsNaCarreira)} gols na carreira`)
 
   /**
    * Naturalidade é o fato mais específico que existe para quem tem carreira
@@ -779,7 +875,11 @@ function orações({
    * "disputou a Copa do Mundo de 2014" do Höwedes, que a ganhou jogando todos
    * os minutos, dizia menos do que é.
    */
-  const ganhas = new Set((titulos ?? []).find((t) => t.titulo === 'Campeão do Mundo')?.conquistas.map((c) => c.ano) ?? [])
+  const ganhas = new Set([
+    ...((titulos ?? []).find((t) => t.titulo === 'Campeão do Mundo')?.conquistas.map((c) => c.ano) ?? []),
+    // o título guardado também: é o mesmo fato, só que da dica anterior
+    ...(tituloGuardado?.copas ?? []),
+  ])
   const copas = torneios?.copas ?? []
   const disputadas = copas.filter((a) => !ganhas.has(a))
   if (disputadas.length) {
@@ -795,7 +895,8 @@ function orações({
   // a seleção de outro país já está na primeira dica; aqui repetiria o time e só somaria o número
   if (jogosSelecao >= 1 && !(selecao && pais && selecao !== pais)) {
     por('selecao', jogosSelecao,
-      `vestiu a camisa da ${selecao ? nomeDaSelecao(selecao) : 'seleção'} ${jogosSelecao} ${jogosSelecao === 1 ? 'vez' : 'vezes'}`)
+      `vestiu a camisa da ${selecao ? nomeDaSelecao(selecao) : 'seleção'} ${jogosSelecao} ${jogosSelecao === 1 ? 'vez' : 'vezes'}` +
+        (golsSelecao >= 1 ? ` e marcou ${golsSelecao} ${golsSelecao === 1 ? 'gol' : 'gols'}` : ''))
   }
   if (fatos.maiorTaxa >= 500_000) {
     por('taxa', fatos.maiorTaxa,
@@ -869,8 +970,82 @@ function orações({
  */
 const PESO = {
   final: 30, titulo: 24, idolo: 18,
-  copa: 12, naturalidade: 11, selecao: 8, torneio: 7.5, emprestimo: 7,
+  copa: 12, naturalidade: 11, clube: 10, finalMenor: 9.5, gols: 9, selecao: 8, torneio: 7.5, emprestimo: 7,
   permanencia: 6, exterior: 5, estrada: 4, taxa: 3, paises: 2, valor: 1,
+}
+
+/**
+ * A ordem dos fatos na segunda dica, desde a opção que o cliente escolheu em
+ * novembro de 2026 para a dica direcionar mais. São quatro grupos, e nenhuma
+ * raridade cruza grupo:
+ *
+ * 1. **Os fortes** — final grande, título, Copa, clube de ídolo (150+ jogos),
+ *    naturalidade e a transferência de € 40 milhões ou mais. Entre eles vale a
+ *    raridade, como sempre valeu.
+ * 2. **Os que apontam um escudo** — o clube em que mais jogou, os gols na
+ *    carreira, a seleção com os gols e a final menor, nesta ordem fixa: a
+ *    raridade punha "vestiu a camisa 94 vezes" na frente do clube, que é o
+ *    que leva ao nome, e quase ninguém lembra quem marcou na final da Copa
+ *    do Rei.
+ * 3. **Forte que a dica anterior não usava** (abaixo).
+ * 4. **Os fracos** — empréstimos, tempo de casa, anos de estrada, idade em que
+ *    saiu do país, torneio de seleção, dinheiro. Só entram sem nada acima.
+ *
+ * Quem já tem dica (`preferidos`, os tipos que ela usava) não troca à toa: o
+ * forte que já estava fica no grupo 1, e o que não estava desce para o 3. É a
+ * regra que o cliente aprovou — o fato novo toma o lugar do fraco e da final
+ * menor; título, final grande e Copa continuam na frente — e é o que impede o
+ * Fàbregas de perder "campeão do mundo em 2010" para a final do Mundial de
+ * Clubes só porque a raridade de cada tipo se mede contra a biblioteca do dia.
+ * A final menor que já estava cede a vez ao clube, aos gols e à seleção: o
+ * Robinho troca a final do Mineiro de 2017 pelos jogos no Santos, e o Otávio,
+ * que já tinha os jogos pelo Porto e defendeu outra seleção, segue com a
+ * final da Taça de Portugal. Jogador novo, sem dica anterior, tem todos os
+ * fortes no grupo 1.
+ */
+const FORTES = new Set(['final', 'titulo', 'copa', 'idolo', 'naturalidade'])
+const forte = (c) => FORTES.has(c.tipo) || (c.tipo === 'taxa' && c.valor >= 40_000_000)
+
+/** A nota de um fato; `preferidos` é null para quem não tinha dica. */
+function nota(c, escala, preferidos = null) {
+  const raridade = escala ? destaque(c.escala ?? c.tipo, c.valor, escala) * 10 : 0
+  const fica = !preferidos || preferidos.has(c.tipo)
+  if (forte(c) && fica) return 400 + PESO[c.tipo] + raridade
+  if (c.tipo === 'idolo' || c.tipo === 'clube') return 305
+  if (c.tipo === 'gols') return 304
+  if (c.tipo === 'selecao') return 303
+  if (c.tipo === 'finalMenor' && fica) return 302
+  if (forte(c) || c.tipo === 'finalMenor') return 200 + PESO[c.tipo] + raridade
+  return (preferidos?.has(c.tipo) ? 100 : 0) + PESO[c.tipo] + raridade
+}
+
+/**
+ * De que tipo é cada fato de uma dica já escrita, pelo começo da frase — o
+ * texto é o que `orações` escreve, então o começo diz o tipo. O título se
+ * reconhece pela tabela de títulos; o jogo pelo clube vale para os dois tipos
+ * (com 150 jogos ou mais é `idolo`, abaixo é `clube`).
+ */
+export function tiposDaDica(texto) {
+  const tipos = new Set()
+  for (const bruta of String(texto ?? '').split(/(?<=\.)\s+(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ])/)) {
+    const f = bruta.charAt(0).toLowerCase() + bruta.slice(1)
+    if (/^marcou( \d+ gols)? na final /.test(f)) tipos.add('final').add('finalMenor')
+    else if (/^marcou mais de \d+ gols na carreira/.test(f)) tipos.add('gols')
+    else if (/^(fez mais de \d+ jogos|o clube em que mais jogou)/.test(f)) tipos.add('idolo').add('clube')
+    else if (/^é d[eoa]s? /.test(f)) tipos.add('naturalidade')
+    else if (/^disputou (também )?(a copa do mundo|as copas do mundo|\d+ copas do mundo)/i.test(f)) tipos.add('copa')
+    else if (/^disputou a /.test(f)) tipos.add('torneio')
+    else if (/^vestiu a camisa/.test(f)) tipos.add('selecao')
+    else if (/^saiu por empréstimo/.test(f)) tipos.add('emprestimo')
+    else if (/^ficou \d+ anos seguidos/.test(f)) tipos.add('permanencia')
+    else if (/^foi jogar fora do país/.test(f)) tipos.add('exterior')
+    else if (/^(rodou o profissionalismo|já soma)/.test(f)) tipos.add('estrada')
+    else if (/^custou /.test(f)) tipos.add('taxa')
+    else if (/^defendeu clubes de/.test(f)) tipos.add('paises')
+    else if (/^chegou a valer/.test(f)) tipos.add('valor')
+    else if (tituloDaFrase(f)) tipos.add('titulo')
+  }
+  return tipos
 }
 
 /**
@@ -907,8 +1082,9 @@ function destaque(tipo, valor, escala) {
  * identifica ninguém sozinha; serve para quem olhou o mural e não faz ideia
  * de que década está vendo.
  *
- * A segunda é a que tem que resolver. Leva os dois fatos mais raros do
- * jogador e nenhuma apresentação: quem pediu a segunda já leu a primeira.
+ * A segunda é a que tem que resolver. Leva os dois melhores fatos do
+ * jogador, sem apresentação — quem pediu a segunda já leu a primeira —, e
+ * termina com a letra com que o nome começa.
  */
 export function montarDicas(dados, escala = null, evitar = null) {
   return [primeiraDica(dados), segundaDica(dados, escala, evitar)]
@@ -940,18 +1116,35 @@ function primeiraDica({ posicao, pais, nasc, selecao }) {
 }
 
 /**
- * Dois fatos, sem apresentação: os que mais aproximam do acerto.
+ * Dois fatos, sem apresentação, e a letra do nome: o que mais aproxima do
+ * acerto.
  *
  * O cliente pediu fato específico — o gol decisivo, o título, o ídolo de um
  * time — no lugar do genérico, e é nessa ordem que eles entram: final em que
- * marcou, título, jogos pelo clube de que foi ídolo. A naturalidade vem logo
- * depois: para quem não tem nada disso, "é de Cubatão" ainda localiza, e foi
- * o que resolveu o Ademilson. Número de seleção, empréstimo e dinheiro ficam
- * para quem não tem nada acima.
+ * marcou, título, jogos pelo clube de que foi ídolo. A naturalidade vem junto:
+ * para quem não tem nada disso, "é de Cubatão" ainda localiza, e foi o que
+ * resolveu o Ademilson. Depois, o que aponta um escudo — o clube em que mais
+ * jogou, gols, seleção —, e empréstimo e dinheiro só para quem não tem nada
+ * acima (os grupos estão em `nota`). Em novembro de 2026 o cliente pediu que a
+ * segunda dica direcionasse mais, e ela passou a terminar com a letra com que
+ * o nome começa.
  */
 function segundaDica(dados, escala, evitar) {
+  /**
+   * A letra fecha a dica, depois dos fatos, e fica fora da comparação com as
+   * dicas dos outros (`evitar`): dois jogadores com os mesmos dois fatos
+   * continuam sendo dica repetida, mesmo com letras diferentes.
+   */
+  const letra = fraseDaLetra(dados.nomeNaTela)
+  const comLetra = (texto) => (letra ? `${texto} ${letra}` : texto)
+  const fatos = fatosDaSegunda(dados, escala, evitar)
+  return fatos ? comLetra(fatos) : letra ?? 'Não temos outro fato desse jogador.'
+}
+
+/** Os dois fatos da segunda dica, sem a letra; null quando não há nenhum. */
+function fatosDaSegunda(dados, escala, evitar) {
   const candidatos = orações(dados)
-  if (!candidatos.length) return 'Não temos outro fato desse jogador.'
+  if (!candidatos.length) return null
   /**
    * A dica não pode ter palavra do nome do jogador — a mesma regra do
    * validar-dados. "Marcou 2 gols na final do Campeonato Baiano" é fato do
@@ -961,7 +1154,6 @@ function segundaDica(dados, escala, evitar) {
   const partes = semAcento(dados.nomeNaTela ?? '').split(/[^a-z0-9]+/).filter((p) => p.length > 3)
   const entrega = (texto) => partes.some((p) => new RegExp(`\\b${p}\\b`).test(semAcento(texto)))
 
-  const nota = (c) => (escala ? destaque(c.tipo, c.valor, escala) * 10 : 0) + PESO[c.tipo]
   /**
    * A final e o título do mesmo torneio e ano contam a mesma história:
    * "marcou 3 gols na final da Copa de 2022. Campeão do mundo em 2022" gasta a
@@ -969,29 +1161,46 @@ function segundaDica(dados, escala, evitar) {
    * vaga ao fato seguinte; o que traz outro ano fica ("campeão do mundo em
    * 1994 e 2002", ao lado da final de 2002).
    */
-  const final = candidatos.find((c) => c.tipo === 'final')
+  const final = candidatos.find((c) => c.tipo === 'final' || c.tipo === 'finalMenor')
+  // título sem ano na frase ("campeão da Champions League 5 vezes") nunca é só a final
   const mesmaHistoria = (c) => c.tipo === 'titulo' && final && c.evento === final.evento &&
-    c.anos.every((a) => a === final.ano)
+    c.anos.length > 0 && c.anos.every((a) => a === final.ano)
+  const preferidos = dados.anterior ? tiposDaDica(dados.anterior) : null
   const ordenados = [...candidatos]
     .filter((c) => !mesmaHistoria(c))
-    .sort((a, b) => nota(b) - nota(a))
+    .sort((a, b) => nota(b, escala, preferidos) - nota(a, escala, preferidos))
 
   /**
    * Os dois melhores, em ordem de preferência. Quando a frase já é a de outro
    * jogador (`evitar`), troca o segundo fato, depois o primeiro: o Ademir e o
    * Zizinho ganharam a mesma Copa América e jogaram a mesma Copa, e dica que
    * serve para dois não é dica.
+   *
+   * O clube que entra agora não repete o clube do título: "campeão da
+   * Libertadores de 2017 pelo Grêmio. O clube em que mais jogou foi o Grêmio"
+   * aponta duas vezes o mesmo escudo, e a vaga vai para o fato seguinte. O par
+   * fica só se não houver outro. A dica que já era assim continua assim.
    */
+  const repete = (par) => {
+    const clube = par.find((c) => (c.tipo === 'idolo' || c.tipo === 'clube') && !preferidos?.has(c.tipo))
+    return Boolean(clube?.clube) && par.some((c) => c !== clube && c.texto.includes(peloClube(clube.clube)))
+  }
   let primeira = null
+  let reserva = null
   for (let i = 0; i < ordenados.length; i++) {
     for (let k = i + 1; k <= ordenados.length; k++) {
-      const texto = frase([ordenados[i], ordenados[k]].filter(Boolean))
+      const par = [ordenados[i], ordenados[k]].filter(Boolean)
+      const texto = frase(par)
       if (!texto || entrega(texto)) continue
+      if (preferidos && repete(par)) {
+        reserva ??= texto
+        continue
+      }
       primeira ??= texto
       if (!evitar?.has(texto)) return texto
     }
   }
-  return primeira ?? 'Não temos outro fato desse jogador.'
+  return primeira ?? reserva
 }
 
 /**
@@ -1017,15 +1226,18 @@ function frase(par) {
     }
   }
   return fatos
-    .sort((a, b) => PESO[b.tipo] - PESO[a.tipo])
-    .map((c) => `${c.texto.charAt(0).toUpperCase()}${c.texto.slice(1)}.`)
+    // os fortes primeiro, depois o que aponta o escudo, os fracos por último
+    .sort((a, b) => nota(b) - nota(a))
+    // "Hertha BSC Juv." já traz o ponto: sem tirar, a frase fechava com dois
+    .map((c) => `${c.texto.charAt(0).toUpperCase()}${c.texto.slice(1).replace(/\.+$/, '')}.`)
     .join(' ')
 }
 
 /** Os fatos da segunda dica, com a nota de cada um: para conferir por que um jogador saiu como saiu. */
 export function candidatosDaSegunda(dados, escala) {
+  const preferidos = dados.anterior ? tiposDaDica(dados.anterior) : null
   return orações(dados).map((c) => ({
-    tipo: c.tipo, nota: Math.round(((escala ? destaque(c.tipo, c.valor, escala) * 10 : 0) + PESO[c.tipo]) * 10) / 10, texto: c.texto,
+    tipo: c.tipo, nota: Math.round(nota(c, escala, preferidos) * 10) / 10, texto: c.texto,
   })).sort((a, b) => b.nota - a.nota)
 }
 
@@ -1033,7 +1245,8 @@ export function candidatosDaSegunda(dados, escala) {
 export function escalaDosFatos(todos) {
   const escala = {}
   for (const dados of todos) {
-    for (const { tipo, valor } of orações(dados)) (escala[tipo] ??= []).push(valor)
+    // a final menor mede raridade junto com as outras finais
+    for (const c of orações(dados)) (escala[c.escala ?? c.tipo] ??= []).push(c.valor)
   }
   return escala
 }

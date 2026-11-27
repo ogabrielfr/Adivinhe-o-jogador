@@ -344,17 +344,19 @@ quem chegou há pouco ainda não estreou.
 ### A dica
 
 `npm run dicas` escreve a dica sem tocar no elenco — trocar texto não deveria
-custar um elenco novo. Sem os títulos, que só o site do Transfermarkt tem, ele
-escreve só a de quem ainda não tem dica e mantém as outras (ver "De onde vem o
-dado do Transfermarkt").
+custar um elenco novo. Ele refaz as duas dicas de todos; o título, que só o
+site do Transfermarkt tem, volta da frase que a dica já tinha
+(`scripts/titulos-das-dicas.json`, ver "De onde vem o dado do Transfermarkt").
 
 São **duas dicas, e o cliente escolheu esse modelo**: a primeira situa, a
 segunda entrega, e quem joga decide até onde quer ajuda.
 
 A primeira é de propósito pobre — posição, país e ano de nascimento. Não
 identifica ninguém sozinha; serve para quem olhou o mural e não faz ideia de
-que década está vendo. A segunda leva os dois fatos mais raros do jogador e
-nenhuma apresentação, porque quem pediu a segunda já leu a primeira.
+que década está vendo. A segunda leva os dois melhores fatos do jogador, sem
+apresentação — quem pediu a segunda já leu a primeira —, e **termina com a
+letra com que o nome começa** ("O nome começa com R."; ver "A segunda dica que
+direciona", abaixo).
 
 Tudo verificável, do histórico do Transfermarkt e do Wikidata — **nunca texto
 gerado**, que é a mesma classe de erro que carreira inventada, só que mais
@@ -446,8 +448,9 @@ Cada um tem sua armadilha, e as três estão tratadas em código:
 - **Jogos por clube são um piso, não a conta.** O registro do Transfermarkt só
   tem a partida com escalação no site — o Pelé aparece com 18 jogos pelo
   Santos. Por isso a frase diz "mais de 300", arredondado para baixo, que é
-  sempre verdade; e o fato só entra a partir de 150 jogos, que é o "quando muito
-  relevante" que o cliente pediu.
+  sempre verdade. Com 150 jogos ou mais é o clube de ídolo, entre os fatos
+  fortes — o "quando muito relevante" que o cliente pediu; de 50 a 149, entra
+  abaixo deles (ver a seção seguinte).
 - **Final de ida e volta é uma final só.** O site marca o jogo único e as duas
   partidas de outro jeito; ler só o jogo único deixava de fora toda final da
   Copa do Brasil, dos estaduais e das Libertadores até 2018. Os gols das duas
@@ -472,6 +475,68 @@ entram: não levam a ninguém. A exceção é o Mundial Sub-20, que passa na TV
 aberta e marca geração — a do Oscar, com três gols na final de 2011. A tabela `TITULOS` em `scripts/dicas.mjs` diz o que
 cada título vale e como o torcedor brasileiro fala dele — o site escreve à moda
 de Portugal ("Taça", "Supertaça") e às vezes em inglês.
+
+#### A segunda dica que direciona (novembro de 2026)
+
+O cliente achou que a segunda dica podia revelar mais. Das 900, 135 usavam
+fato fraco ("saiu por empréstimo 3 vezes", "já soma 8 anos de estrada", "foi
+jogar fora do país aos 18 anos") e 162 citavam final que pouca gente lembra —
+estadual, copa nacional de outro país, Recopa, Sub-20. Ele escolheu, entre
+duas propostas, a que **muda os fatos e acrescenta a letra do nome**:
+
+- **A letra.** A segunda dica termina com "O nome começa com R.", do nome que
+  o jogo mostra, sem acento (`scripts/letra-do-nome.mjs`). É o que mais
+  direciona e vale para os 900: sozinha, corta para cerca de um décimo dos nomes
+  (A abre 97, R 85, M 84). É a única parte do nome que pode aparecer numa dica,
+  e o `validar-dados` confere que ela bate com o nome.
+- **O clube em que mais jogou, a partir de 50 jogos**: "O clube em que mais
+  jogou foi o Chelsea: mais de 100 jogos e mais de 10 gols." Diz qual escudo do
+  mural é o dele. "O clube em que mais jogou" só quando dá para afirmar — o
+  registro de partidas cobre a carreira inteira (cada escudo com jogo
+  registrado, primeiro jogo junto do começo da carreira) e a folga sobre o
+  segundo clube é clara (20 jogos e um quarto do total); senão, "Fez mais de 60
+  jogos pelo Newcastle", que é sempre verdade. Gols a partir de 10.
+- **Gols na carreira**, só com o registro completo: "Marcou mais de 100 gols na
+  carreira." Do artilheiro antigo, com o registro pela metade, seria verdade
+  pequena demais.
+- **Gols pela seleção** junto dos jogos: "...38 vezes e marcou 12 gols."
+
+A ordem tem quatro grupos, e nenhuma raridade cruza grupo (`nota` em
+`scripts/dicas.mjs`): **fortes** (final grande, título, Copa, clube de ídolo,
+naturalidade, transferência de € 40 milhões ou mais), **os que apontam um
+escudo** (clube, gols, seleção e final menor, nesta ordem fixa), **forte que a
+dica anterior não usava** e **fracos**. O forte que a dica já tinha fica: refazer
+não troca à toa o que estava bom, e é o que o cliente aprovou — o fato novo toma
+o lugar do fraco e da final menor; título, final grande e Copa continuam na
+frente. Sem isso, o Fàbregas perdia "campeão do mundo em 2010" para a final do
+Mundial de Clubes, só porque a raridade se mede contra a biblioteca do dia. O
+clube que entra agora também não repete o clube do título ("campeão da
+Libertadores de 2017 pelo Grêmio. O clube em que mais jogou foi o Grêmio"): a
+vaga vai para o fato seguinte.
+
+Resultado na aplicação: 363 dicas trocaram fato, 287 só ganharam a frase nova
+do clube, as dicas com fato fraco caíram de 135 para 8, nenhum título e nenhuma
+final grande saíram, e as 900 terminam com a letra.
+
+Três erros saíram junto:
+
+- **O Cléber Santana "já somava 26 anos de estrada".** Ele morreu no acidente
+  da Chapecoense, em 2016, e o histórico não registra fim de carreira. Agora,
+  quando o clube atual tem jogos no registro (ou ele está sem clube) e o último
+  jogo tem mais de um ano e meio, a carreira acabou ali (`fatosDoHistorico`).
+  Clube sem registro nenhum não prova nada, e aí vale o histórico.
+- **Tempo de casa contava a base**: o Kevin-Prince Boateng "ficou 6 anos
+  seguidos no Hertha BSC Juv.." — com dois pontos, porque o nome abreviado já
+  trazia um. Time de base ("U19", "Sub-17", "Juv.", "Jgd.", "base") não conta
+  mais, e a frase não fecha com ponto duplo.
+- **País de nascimento sem seleção na biblioteca.** A API só dá o id do país, e
+  o nome vem da seleção principal dele; quando nenhum jogador defendeu aquela
+  seleção, a primeira dica caía na nacionalidade e diria "nascido na
+  Inglaterra" do Sterling, de Kingston. `PAISES_SEM_SELECAO`, em
+  `scripts/transfermarkt.mjs`, guarda os nove que faltavam (Jamaica, Guadalupe,
+  RDA, União Soviética...), com os nomes que o perfil do Transfermarkt dava. Com
+  eles, a primeira dica do Mandanda passou a dizer o certo: nascido no Zaire,
+  defendeu a seleção francesa.
 
 ### O nome do jogador
 
@@ -746,14 +811,15 @@ site, que é o que o resto do código lê. Três coisas da API pediram cuidado:
   entra no lugar.
 
 **Os títulos só existem no site.** A página de títulos não tem par na API, e
-por isso `titulosDoTransfermarkt` lê o cache e, sem ele, devolve null.
-`npm run dicas` então **mantém a dica de quem já tem uma** — refazê-la sem os
-títulos tiraria o "Campeão da Libertadores de 2013 pelo Atlético-MG" — e
-escreve a de quem acabou de entrar com o que a API tem: final em que marcou,
-jogos pelo clube, tempo de casa, Copas, seleção, naturalidade. Com
-`TITULOS_DO_SITE=1`, numa máquina onde o site responda, os títulos voltam e
-todas as dicas são refeitas; `npm run dicas -- --todas` refaz todas mesmo sem
-eles.
+por isso `titulosDoTransfermarkt` lê o cache e, sem ele, devolve null. O cache
+não sobrevive à troca de máquina, mas o dado sobreviveu na própria dica: a
+frase de título que cada uma tinha (336 jogadores) está em
+`scripts/titulos-das-dicas.json` e volta como fato — com peso, torneio e anos —
+quando o site não responde (`tituloDaFrase` em `scripts/dicas.mjs`). Assim
+`npm run dicas` refaz todas sem tirar o "Campeão da Libertadores de 2013 pelo
+Atlético-MG". Quem entrou depois só ganha título com `TITULOS_DO_SITE=1`, numa
+máquina onde o site responda; sem isso, sai com o que a API tem: final em que
+marcou, jogos e gols pelo clube, Copas, seleção, naturalidade.
 
 ### Consertar sem gerar elenco novo
 

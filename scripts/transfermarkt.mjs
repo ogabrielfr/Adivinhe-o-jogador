@@ -772,6 +772,19 @@ export async function paisesDoTransfermarkt(times, _quem = new Map()) {
 }
 
 let paisesEmMemoria = null
+/**
+ * País de nascimento cuja seleção nenhum jogador da biblioteca defendeu: o
+ * nome não tem por onde chegar pela API, que só dá o id. Sem ele a primeira
+ * dica caía na nacionalidade e dizia "nascido na Inglaterra" do Sterling, que
+ * nasceu em Kingston. Os nomes são os que o perfil do Transfermarkt dava
+ * quando o cache guardava o país por extenso, e estavam nas dicas: a Jamaica
+ * do Sterling, a Guadalupe do Thuram, a RDA do Kroos e do Ballack.
+ */
+const PAISES_SEM_SELECAO = {
+  60: 'Guiné-Bissau', 76: 'Jamaica', 161: 'Suriname', 182: 'Venezuela', 221: 'União Soviética',
+  222: 'RDA', 251: 'Guadalupe', 254: 'Zaire', 258: 'Iugoslávia',
+}
+
 function lerPaises() {
   if (!paisesEmMemoria) {
     try {
@@ -779,6 +792,7 @@ function lerPaises() {
     } catch {
       paisesEmMemoria = {}
     }
+    for (const [id, nome] of Object.entries(PAISES_SEM_SELECAO)) paisesEmMemoria[id] ??= nome
   }
   return paisesEmMemoria
 }
